@@ -62,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         child: BottomNavigationBar(
             currentIndex: _selectedIndex,
-            selectedIconTheme: const IconThemeData(color: Colors.purpleAccent, size: 30),
-            selectedItemColor: Colors.purpleAccent,
+            selectedIconTheme: const IconThemeData(color: Colors.yellow, size: 30),
+            selectedItemColor: Colors.yellow,
             onTap: _selectScreen,
             items: [
               for (var element in _screens)
