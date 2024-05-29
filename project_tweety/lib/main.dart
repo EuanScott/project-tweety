@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './other.dart';
 import 'features/home/home.dart';
+import 'features/library/application/library.dart';
 import 'features/settings/settings.dart';
 
 void main() => runApp(const MyApp());
@@ -24,7 +25,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   final List _screens = [
     {
@@ -32,6 +33,11 @@ class _MyHomePageState extends State<MyHomePage> {
       'label': 'Home',
       'icon': const Icon(Icons.home),
     },
+    // {
+    //   'widget': const Library(),
+    //   'label': 'Library',
+    //   'icon': const Icon(Icons.library_books),
+    // },
     {
       'widget': const Other(),
       'label': 'Other',
