@@ -1,6 +1,7 @@
 import 'package:project_tweety/shared/data/services.dart';
 import 'package:test/test.dart';
 
+// TODO: Investigate the need for negative test cases
 void main() {
   group('Services', () {
     test('postData sends a POST request and handles a successful response',
@@ -80,7 +81,5 @@ void main() {
 
           expect(response, {});
     });
-
-    // TODO: Negative test cases?
   });
 }
