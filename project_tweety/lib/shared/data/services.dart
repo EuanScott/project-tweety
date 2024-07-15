@@ -6,9 +6,6 @@ import 'package:http/http.dart' as http;
 
 /// TODO:
 /// Logging (dev purposes and to sentry.io/Firebase) - Put this rather in the code itself. This file should only be for making the service call. This way it can more easily be modularized if/when required.
-/// Tests
-/// Modularization
-/// Security (?)
 
 /// A class that provides various HTTP services.
 ///
