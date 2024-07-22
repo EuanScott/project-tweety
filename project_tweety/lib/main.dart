@@ -33,11 +33,11 @@ class _MyHomePageState extends State<MyHomePage> {
       'label': 'Home',
       'icon': const Icon(Icons.home),
     },
-    // {
-    //   'widget': const Library(),
-    //   'label': 'Library',
-    //   'icon': const Icon(Icons.library_books),
-    // },
+    {
+      'widget': const Library(formData: [],formResponse: []),
+      'label': 'Library',
+      'icon': const Icon(Icons.library_books),
+    },
     {
       'widget': const Other(),
       'label': 'Other',
