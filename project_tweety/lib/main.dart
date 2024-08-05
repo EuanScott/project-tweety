@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './other.dart';
+import 'features/dynamic_form/application/dynamic_form.dart';
 import 'features/home/home.dart';
-import 'features/library/application/library.dart';
 import 'features/settings/settings.dart';
 
 void main() => runApp(const MyApp());
@@ -24,7 +24,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   int _selectedIndex = 0;
 
   final List _screens = [
@@ -34,9 +33,9 @@ class _MyHomePageState extends State<MyHomePage> {
       'icon': const Icon(Icons.home),
     },
     {
-      'widget': const Library(formData: [],formResponse: []),
-      'label': 'Library',
-      'icon': const Icon(Icons.library_books),
+      'widget': const DynamicForm(inputData: [], outputData: []),
+      'label': 'Dynamic Form',
+      'icon': const Icon(Icons.power_input),
     },
     {
       'widget': const Other(),
@@ -67,8 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         child: BottomNavigationBar(
             currentIndex: _selectedIndex,
-            selectedIconTheme: const IconThemeData(color: Colors.yellow, size: 30),
-            selectedItemColor: Colors.yellow,
+            // selectedIconTheme: const IconThemeData(color: Colors.yellow, size: 30),
+            // selectedItemColor: Colors.yellow,
             onTap: _selectScreen,
             items: [
               for (var element in _screens)
