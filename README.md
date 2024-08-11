@@ -6,8 +6,7 @@ that I find cool or interesting.
 The only real Pathway/Guideline that I am following
 is [this Flutter Roadmap](https://roadmap.sh/flutter).
 
-Ideas to work on, are logged as [Issues](https://github.com/EuanScott/project-tweety/issues) in the
-Github repo.
+Ideas to work on, are logged as [Issues](https://github.com/EuanScott/project-tweety/issues) in the GitHub repo.
 
 _Why a Flutter project_, you may ask? Well that's because at the time of writing this doc, I just
 came off a Flutter project and thought it would be cool to explore some things that I wasn't able to
