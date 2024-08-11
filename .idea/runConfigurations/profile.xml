@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Profile" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="additionalArgs" value="--profile" />
+    <option name="filePath" value="$PROJECT_DIR$/project_tweety/lib/main.dart" />
+    <method v="2" />
+  </configuration>
+</component>
