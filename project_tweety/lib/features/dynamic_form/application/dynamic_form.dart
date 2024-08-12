@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 
 import '../data/data.dart';
 
@@ -39,12 +40,21 @@ class _DynamicFormState extends State<DynamicForm> {
         type: FormInputType.dropdown,
         isRequired: true,
         errorMessage: "Dropdown selection is required",
-        inputOptions: ['Option 1', 'Option 2', 'Option 3']),
+        inputOptions: [
+          'Option 1',
+          'Option 2',
+          'Option 3',
+          'Option 4',
+          'Option 5',
+          'Option 6',
+          'Option 7'
+        ]),
     FormInputData(
       name: "Radio",
       type: FormInputType.radio,
       isRequired: true,
       errorMessage: "Checkbox is required",
+      inputOptions: ['Yes', 'No', 'Maybe'],
     ),
     FormInputData(
       name: "Checkbox",
@@ -61,6 +71,9 @@ class _DynamicFormState extends State<DynamicForm> {
     FormOutputData(key: 'radioValue', value: ''),
     FormOutputData(key: 'checkboxValue', value: [])
   ];
+
+  // TODO: Find a better way of handling this (this isn't dynamic)
+  bool? checkboxValue = false;
 
   // TODO: Update this form to correctly make use of FormInputData and formOutputData.
   @override
@@ -83,7 +96,7 @@ class _DynamicFormState extends State<DynamicForm> {
                         onChanged: (value) =>
                             formOutputData[index].value = value,
                       );
-                    // TODO: Don't all input that isn't a number. The UI should not accept non-numbers and should inform the user of as much
+                    // TODO: The UI should not accept non-numbers and should inform the user of as much
                     case FormInputType.number:
                       return TextFormField(
                         decoration: InputDecoration(labelText: formInput.name),
@@ -91,28 +104,64 @@ class _DynamicFormState extends State<DynamicForm> {
                         onChanged: (value) => formOutputData[index].value =
                             int.tryParse(value) ?? 0,
                       );
-                      // TODO: Get this to display properly
                     case FormInputType.dropdown:
-                      if (formInput.inputOptions != null) {
-                        return DropdownButtonFormField(
-                          value: formInput.inputOptions![0],
-                          onChanged: (newValue) {
-                            setState(() {
-                              formOutputData[index].value = newValue;
-                            });
-                          },
-                          items: formInput.inputOptions!
-                              .map((option) => DropdownMenuItem(
-                                    value: option,
-                                    child: Text(option),
-                                  ))
-                              .toList(),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    // TODO: Create the Radio button here
-                    // TODO: Create the Checkbox button here
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(formInput.name),
+                          DropdownButtonFormField(
+                            value: formInput.inputOptions![0],
+                            onChanged: (newValue) {
+                              setState(() {
+                                formOutputData[index].value = newValue;
+                              });
+                            },
+                            items: formInput.inputOptions!
+                                .map((option) => DropdownMenuItem(
+                                      value: option,
+                                      child: Text(option),
+                                    ))
+                                .toList(),
+                          ),
+                        ],
+                      );
+                    case FormInputType.radio:
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(formInput.name),
+                          Column(
+                            children: formInput.inputOptions!
+                                .map((option) => RadioListTile<String>(
+                                      title: Text(option),
+                                      value: option,
+                                      groupValue: formOutputData[index].value,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          formOutputData[index].value = value;
+                                        });
+                                      },
+                                    ))
+                                .toList(),
+                          ),
+                        ],
+                      );
+                    case FormInputType.checkbox:
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(formInput.name),
+                          CheckboxListTile(
+                            title: Text(formInput.name),
+                            value: checkboxValue,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                formOutputData[index].value = checkboxValue = value;
+                              });
+                            },
+                          ),
+                        ],
+                      );
                     default:
                       return const SizedBox
                           .shrink(); // This line is just a placeholder for unknown types
@@ -132,6 +181,39 @@ class _DynamicFormState extends State<DynamicForm> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class RadioButtonWidget extends StatefulWidget {
+  final String title;
+  final Function(bool) onChanged;
+
+  const RadioButtonWidget({
+    Key? key,
+    required this.title,
+    required this.onChanged,
+  }) : super(key: key);
+
+  @override
+  _RadioButtonWidgetState createState() => _RadioButtonWidgetState();
+}
+
+class _RadioButtonWidgetState extends State<RadioButtonWidget> {
+  bool _radioValue = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return RadioListTile<bool>(
+      title: Text(widget.title),
+      value: true,
+      groupValue: _radioValue,
+      onChanged: (bool? value) {
+        setState(() {
+          _radioValue = value ?? false;
+          widget.onChanged(_radioValue);
+        });
+      },
     );
   }
 }
