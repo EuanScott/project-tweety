@@ -20,6 +20,7 @@ enum FormInputType {
   text,
   number,
   dropdown,
+  // https://blog.prototypr.io/7-rules-of-using-radio-buttons-vs-drop-down-menus-fddf50d312d1
   radio,
   checkbox,
 }
