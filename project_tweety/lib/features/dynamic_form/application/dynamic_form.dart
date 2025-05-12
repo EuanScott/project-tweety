@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -162,9 +163,6 @@ class _DynamicFormState extends State<DynamicForm> {
                           ),
                         ],
                       );
-                    default:
-                      return const SizedBox
-                          .shrink(); // This line is just a placeholder for unknown types
                   }
                 }),
                 ElevatedButton(
@@ -172,7 +170,7 @@ class _DynamicFormState extends State<DynamicForm> {
                     String jsonData = jsonEncode(
                       formOutputData.map((data) => data.toJson()).toList(),
                     );
-                    print(jsonData);
+                    log(jsonData);
                   },
                   child: const Text('Submit'),
                 ),
@@ -190,16 +188,16 @@ class RadioButtonWidget extends StatefulWidget {
   final Function(bool) onChanged;
 
   const RadioButtonWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
-  _RadioButtonWidgetState createState() => _RadioButtonWidgetState();
+  RadioButtonWidgetState createState() => RadioButtonWidgetState();
 }
 
-class _RadioButtonWidgetState extends State<RadioButtonWidget> {
+class RadioButtonWidgetState extends State<RadioButtonWidget> {
   bool _radioValue = false;
 
   @override
