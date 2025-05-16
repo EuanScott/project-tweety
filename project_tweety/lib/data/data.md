@@ -89,6 +89,19 @@ class UserRepositoryImpl implements UserRepository {
 
     return UserModel.fromJson(response.data).toEntity();
   }
+
+  // In your repository implementation
+  Future<void> updateUser(User user) async {
+    // Convert domain entity to DTO
+    final userModel = UserModel(
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    );
+
+    // Send DTO to API
+    await apiService.put('/users/${user.id}', data: userModel.toJson());
+  }
 }
 ```
 
