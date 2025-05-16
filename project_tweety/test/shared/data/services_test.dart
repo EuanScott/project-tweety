@@ -1,4 +1,4 @@
-import 'package:project_tweety/shared/data/services.dart';
+import 'package:project_tweety/data/services/services.dart';
 import 'package:test/test.dart';
 
 // TODO: Investigate the need for negative test cases
