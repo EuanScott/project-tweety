@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_tweety/presentation/home/home.dart';
-import 'package:project_tweety/presentation/settings/settings.dart';
+import 'package:project_tweety/presentation/pages/home/home.dart';
+import 'package:project_tweety/presentation/pages/settings/settings.dart';
 
-import 'presentation/other.dart';
 import 'features/dynamic_form/application/dynamic_form.dart';
+import 'presentation/pages/other/other.dart';
 
 void main() => runApp(const MyApp());
 
