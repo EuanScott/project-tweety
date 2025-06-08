@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_tweety/presentation/pages/home/home.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.dart';
 
+import 'core/themes/app_theme.dart';
 import 'features/dynamic_form/application/dynamic_form.dart';
 import 'presentation/pages/other/other.dart';
 
@@ -12,7 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyHomePage());
+    return MaterialApp(
+        title: 'Project Tweety',
+        theme: AppTheme.lightTheme(),
+        darkTheme: AppTheme.darkTheme(),
+        themeMode: ThemeMode.system,
+        home: const MyHomePage()
+    );
   }
 }
 
