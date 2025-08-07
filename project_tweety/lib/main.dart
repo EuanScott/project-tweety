@@ -3,8 +3,13 @@ import 'package:project_tweety/presentation/pages/home/home.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.dart';
 
 import 'core/themes/app_theme.dart';
+import 'core/themes/color_theme.dart';
 import 'features/dynamic_form/application/dynamic_form.dart';
 import 'presentation/pages/other/other.dart';
+
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() => runApp(const MyApp());
 
@@ -18,7 +23,18 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.lightTheme(),
         darkTheme: AppTheme.darkTheme(),
         themeMode: ThemeMode.system,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('es'),
+        ],
         home: const MyHomePage()
+        // TODO: Setup navigatorObservers
     );
   }
 }
@@ -33,29 +49,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  final List _screens = [
-    {
-      'widget': const Home(),
-      'label': 'Home',
-      'icon': const Icon(Icons.home),
-    },
-    {
-      'widget': const DynamicForm(inputData: [], outputData: []),
-      'label': 'Dynamic Form',
-      'icon': const Icon(Icons.power_input),
-    },
-    {
-      'widget': const Other(),
-      'label': 'Other',
-      'icon': const Icon(Icons.other_houses),
-    },
-    {
-      'widget': const Settings(),
-      'label': 'Settings',
-      'icon': const Icon(Icons.settings),
-    }
-  ];
-
   void _selectScreen(int index) {
     setState(() {
       _selectedIndex = index;
@@ -64,6 +57,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
+    final List _screens = [
+      {
+        'widget': const Home(),
+        'label': localizations.homeTab,
+        'icon': const Icon(Icons.home),
+      },
+      {
+        'widget': const DynamicForm(inputData: [], outputData: []),
+        'label': localizations.dynamicFormTab,
+        'icon': const Icon(Icons.power_input),
+      },
+      {
+        'widget': const Other(),
+        'label': localizations.otherTab,
+        'icon': const Icon(Icons.other_houses),
+      },
+      {
+        'widget': const Settings(),
+        'label': localizations.settingsTab,
+        'icon': const Icon(Icons.settings),
+      }
+    ];
+
     return Scaffold(
       body: _screens[_selectedIndex]['widget'],
       bottomNavigationBar: ClipRRect(
@@ -74,11 +92,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: BottomNavigationBar(
             currentIndex: _selectedIndex,
             selectedIconTheme:
-                const IconThemeData(color: Color(0XFF8cd2d5), size: 30),
-            selectedItemColor: const Color(0XFF8cd2d5),
+                const IconThemeData(color: ColorTheme.primary, size: 30),
+            selectedItemColor: ColorTheme.primary,
             unselectedIconTheme:
-                const IconThemeData(color: Colors.grey, size: 25),
-            unselectedItemColor: Colors.grey,
+                const IconThemeData(color: ColorTheme.textPrimary, size: 25),
+            unselectedItemColor: ColorTheme.textPrimary,
             onTap: _selectScreen,
             items: [
               for (var element in _screens)
