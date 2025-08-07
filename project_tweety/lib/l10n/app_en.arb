@@ -1,0 +1,22 @@
+{
+  "appTitle": "Project Tweety",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "homeTab": "Home",
+  "@homeTab": {
+    "description": "Label for home tab"
+  },
+  "dynamicFormTab": "Dynamic Form",
+  "@dynamicFormTab": {
+    "description": "Label for dynamic form tab"
+  },
+  "otherTab": "Other",
+  "@otherTab": {
+    "description": "Label for other tab"
+  },
+  "settingsTab": "Settings",
+  "@settingsTab": {
+    "description": "Label for settings tab"
+  }
+}
