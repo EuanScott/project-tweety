@@ -5,11 +5,11 @@ import 'package:project_tweety/presentation/pages/settings/settings.dart';
 import 'core/themes/app_theme.dart';
 import 'core/themes/color_theme.dart';
 import 'features/dynamic_form/application/dynamic_form.dart';
+import 'l10n/app_localizations.dart';
 import 'presentation/pages/other/other.dart';
 
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() => runApp(const MyApp());
 
