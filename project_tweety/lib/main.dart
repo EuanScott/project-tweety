@@ -8,7 +8,6 @@ import 'features/dynamic_form/application/dynamic_form.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/pages/other/other.dart';
 
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(const MyApp());
@@ -19,22 +18,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Project Tweety',
-        theme: AppTheme.lightTheme(),
-        darkTheme: AppTheme.darkTheme(),
-        themeMode: ThemeMode.system,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'),
-          Locale('es'),
-        ],
-        home: const MyHomePage()
-        // TODO: Setup navigatorObservers
+      title: 'Project Tweety',
+      theme: AppTheme.lightTheme(),
+      darkTheme: AppTheme.darkTheme(),
+      themeMode: ThemeMode.system,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en'), Locale('es')],
+      home: const MyHomePage(),
+      // TODO: Setup navigatorObservers
     );
   }
 }
@@ -65,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'label': localizations.homeTab,
         'icon': const Icon(Icons.home),
       },
+      // TODO: Make this a page that calls the Dynamic Form rather.
       {
         'widget': const DynamicForm(inputData: [], outputData: []),
         'label': localizations.dynamicFormTab,
@@ -79,32 +76,31 @@ class _MyHomePageState extends State<MyHomePage> {
         'widget': const Settings(),
         'label': localizations.settingsTab,
         'icon': const Icon(Icons.settings),
-      }
+      },
     ];
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_screens[_selectedIndex]['label']),
+        elevation: 2,
+      ),
       body: _screens[_selectedIndex]['widget'],
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16.0),
           topRight: Radius.circular(16.0),
         ),
-        child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            selectedIconTheme:
-                const IconThemeData(color: ColorTheme.primary, size: 30),
-            selectedItemColor: ColorTheme.primary,
-            unselectedIconTheme:
-                const IconThemeData(color: ColorTheme.textPrimary, size: 25),
-            unselectedItemColor: ColorTheme.textPrimary,
-            onTap: _selectScreen,
-            items: [
-              for (var element in _screens)
-                BottomNavigationBarItem(
-                  icon: element['icon'],
-                  label: element['label'],
-                )
-            ]),
+        child: NavigationBar(
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: _selectScreen,
+          destinations: [
+            for (final element in _screens)
+              NavigationDestination(
+                icon: element['icon'],
+                label: element['label'] as String,
+              ),
+          ],
+        ),
       ),
     );
   }

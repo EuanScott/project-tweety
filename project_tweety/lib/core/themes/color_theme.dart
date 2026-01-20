@@ -5,9 +5,9 @@ class ColorTheme {
   ColorTheme._();
 
   // Primary colors
-  static const Color primary = Color(0xFFC8A6FA);
-  static const Color secondary = Color(0xFF002751);
-  static const Color disabledColor = Color(0xFF2E384D);
+  static const Color primary = Color(0xFF1BA6A6);
+  static const Color secondary = Color(0xFFE76F51);
+  static const Color disabledColor = Color(0xFF8A9A9A);
 
   // Text colors
   static const Color textPrimary = Colors.black87;
@@ -22,9 +22,8 @@ class ColorTheme {
   static const Color info = Color(0xFF1976D2);
 
   // Background colors
-  static const Color background = Color(0xFFF5F5F5);
-  static const Color surface = Colors.white;
-  static const Color surfaceVariant = Color(0xFFEEEEEE);
+  static const Color surface = Color(0xFFF4F6F7);
+  static const Color surfaceVariant = Color(0xFFEFF2F3);
 
   // Border colors
   static const Color outline = Color(0xFFBDBDBD);
