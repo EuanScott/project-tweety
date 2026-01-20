@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_tweety/core/themes/text_theme.dart';
 
 class CustomButtonTheme {
   static ElevatedButtonThemeData elevatedButtonTheme(ColorScheme colorScheme) {
@@ -56,11 +57,7 @@ class CustomButtonTheme {
           },
         ),
         textStyle: WidgetStateProperty.all<TextStyle>(
-          const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Open-sans',
-          ),
+          CustomTextTheme.buttonTextStyle(colorScheme),
         ),
         padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
           const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
