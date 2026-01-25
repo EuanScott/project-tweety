@@ -7,15 +7,10 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white24,
-        child: const Center(
-          child: Text(
-            'Settings',
-            style: TextStyle(fontSize: 30),
-          ),
-        ),
+    return Container(
+      color: Colors.white24,
+      child: const Center(
+        child: Text('Settings', style: TextStyle(fontSize: 30)),
       ),
     );
   }

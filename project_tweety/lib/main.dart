@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project_tweety/presentation/pages/home/home.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.dart';
 
 import 'core/themes/app_theme.dart';
-import 'core/themes/color_theme.dart';
 import 'features/dynamic_form/application/dynamic_form.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/pages/other/other.dart';
-
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(const MyApp());
 
@@ -29,20 +27,20 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('en'), Locale('es')],
-      home: const MyHomePage(),
+      home: const MyAppImpl(),
       // TODO: Setup navigatorObservers
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MyAppImpl extends StatefulWidget {
+  const MyAppImpl({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyAppImpl> createState() => _MyAppImplState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyAppImplState extends State<MyAppImpl> {
   int _selectedIndex = 0;
 
   void _selectScreen(int index) {
@@ -53,28 +51,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     final List _screens = [
       {
-        'widget': const Home(),
-        'label': localizations.homeTab,
+        'widget': Home(l10n: l10n),
+        'label': l10n.homeTab,
         'icon': const Icon(Icons.home),
       },
       // TODO: Make this a page that calls the Dynamic Form rather.
       {
         'widget': const DynamicForm(inputData: [], outputData: []),
-        'label': localizations.dynamicFormTab,
+        'label': l10n.dynamicFormTab,
         'icon': const Icon(Icons.power_input),
       },
       {
         'widget': const Other(),
-        'label': localizations.otherTab,
+        'label': l10n.otherTab,
         'icon': const Icon(Icons.other_houses),
       },
       {
         'widget': const Settings(),
-        'label': localizations.settingsTab,
+        'label': l10n.settingsTab,
         'icon': const Icon(Icons.settings),
       },
     ];
