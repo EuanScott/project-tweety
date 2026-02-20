@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/presentation/pages/home/home.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.dart';
 
@@ -8,7 +9,14 @@ import 'features/dynamic_form/application/dynamic_form.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/pages/other/other.dart';
 
-void main() => runApp(const MyApp());
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dartInit();
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

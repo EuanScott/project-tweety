@@ -1,26 +1,32 @@
 import 'package:injectable/injectable.dart';
+
 import 'error_reporting_service.dart';
 
 @lazySingleton
 class ErrorReportingFacade {
-  ErrorReportingFacade(this._services);
+  ErrorReportingFacade(Iterable<ErrorReportingService> services)
+    : _services = List.unmodifiable(services);
 
-  final Iterable<ErrorReportingService> _services;
+  final List<ErrorReportingService> _services;
 
   Future<void> setUserId(String userId) async {
-    for (final s in _services) {
-      try {
-        await s.setUserId(userId);
-      } catch (_) {}
-    }
+    await Future.wait(
+      _services.map((s) async {
+        try {
+          await s.setUserId(userId);
+        } catch (_) {}
+      }),
+    );
   }
 
   Future<void> clearUserId() async {
-    for (final s in _services) {
-      try {
-        await s.clearUserId();
-      } catch (_) {}
-    }
+    await Future.wait(
+      _services.map((s) async {
+        try {
+          await s.clearUserId();
+        } catch (_) {}
+      }),
+    );
   }
 
   Future<void> recordError(
@@ -29,15 +35,26 @@ class ErrorReportingFacade {
     Map<String, Object?>? metadata,
     bool fatal = false,
   }) async {
-    for (final s in _services) {
-      try {
-        await s.recordError(
-          error,
-          stackTrace,
-          metadata: metadata,
-          fatal: fatal,
-        );
-      } catch (_) {}
-    }
+    await Future.wait(
+      _services.map((s) async {
+        try {
+          await s.recordError(
+            error,
+            stackTrace,
+            metadata: metadata,
+            fatal: fatal,
+          );
+        } catch (_) {}
+      }),
+    );
   }
+}
+
+@module
+abstract class ErrorReportingModule {
+  @lazySingleton
+  Iterable<ErrorReportingService> errorReportingServices(
+    @Named('crashlytics') ErrorReportingService crashlytics,
+    @Named('coralogix') ErrorReportingService coralogix,
+  ) => <ErrorReportingService>[crashlytics, coralogix];
 }
