@@ -9,7 +9,6 @@ import 'features/dynamic_form/application/dynamic_form.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/pages/other/other.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -61,7 +60,7 @@ class _MyAppImplState extends State<MyAppImpl> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    final List _screens = [
+    final List screens = [
       {
         'widget': Home(l10n: l10n),
         'label': l10n.homeTab,
@@ -87,20 +86,26 @@ class _MyAppImplState extends State<MyAppImpl> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_screens[_selectedIndex]['label']),
+        title: Text(screens[_selectedIndex]['label']),
         elevation: 2,
       ),
-      body: _screens[_selectedIndex]['widget'],
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16.0),
-          topRight: Radius.circular(16.0),
+      body: screens[_selectedIndex]['widget'],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              // TODO: Make a helper to easily access the Theme.of(context)
+              color: Theme.of(context).colorScheme.outline,
+              blurRadius: 4,
+              offset: const Offset(0, -4),
+            ),
+          ],
         ),
         child: NavigationBar(
           selectedIndex: _selectedIndex,
           onDestinationSelected: _selectScreen,
           destinations: [
-            for (final element in _screens)
+            for (final element in screens)
               NavigationDestination(
                 icon: element['icon'],
                 label: element['label'] as String,
