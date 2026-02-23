@@ -16,6 +16,7 @@ dependencies:
   bloc: ^9.0.0
   equatable: ^2.0.0
   flutter_bloc: ^9.0.0
+  freezed_annotation: ^3.1.0
   get_it: ^9.2.0
   google_fonts: 6.3.0
   http: ^1.0.0
@@ -32,7 +33,14 @@ dev_dependencies:
     sdk: flutter
   freezed: ^3.2.3
   test: any
+#  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
   generate: true
+
+#flutter_launcher_icons:
+#  android: "launcher_icon"
+#  ios: true
+#  image_path: "assets/app_icon/dash.png"
+#  min_sdk_android: 21

@@ -121,6 +121,13 @@
             </list>
           </value>
         </entry>
+        <entry key="cli_util">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/cli_util-0.4.2/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="clock">
           <value>
             <list>
@@ -258,6 +265,13 @@
           <value>
             <list>
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_gen_runner-5.12.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="flutter_launcher_icons">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_launcher_icons-0.14.4/lib" />
             </list>
           </value>
         </entry>
@@ -883,6 +897,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/characters-1.4.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/checked_yaml-2.0.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cli_config-0.2.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cli_util-0.4.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/clock-1.1.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/code_assets-0.19.10/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/code_builder-4.11.1/lib" />
@@ -902,6 +917,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_bloc-9.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_gen_core-5.12.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_gen_runner-5.12.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_launcher_icons-0.14.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_lints-4.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/freezed-3.2.3/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/freezed_annotation-3.1.0/lib" />
