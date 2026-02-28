@@ -35,6 +35,7 @@ class CustomTextTheme {
   static TextTheme buildTextTheme(ColorScheme colorScheme) {
     return TextTheme(
       displayLarge: _createTextStyle(
+        color: colorScheme.primary,
         colorScheme: colorScheme,
         height: 1.2,
         size: 30,
@@ -48,18 +49,21 @@ class CustomTextTheme {
         weight: FontWeight.w700,
       ),
       titleSmall: _createTextStyle(
+        color: colorScheme.primary,
         colorScheme: colorScheme,
         height: 1.25,
         size: 16,
         weight: FontWeight.w400,
       ),
       bodyLarge: _createTextStyle(
+        color: colorScheme.onPrimary,
         colorScheme: colorScheme,
         height: 1.3,
         size: 14,
         weight: FontWeight.w400,
       ),
       bodySmall: _createTextStyle(
+        color: colorScheme.onPrimary,
         colorScheme: colorScheme,
         height: 1.4,
         size: 12,
@@ -100,7 +104,9 @@ class CustomTextTheme {
   ///
   /// This style matches bodyLarge (16px regular) to ensure consistent appearance
   /// even when styles might be missing.
-  static TextStyle defaultStyle=  GoogleFonts.openSans(
+  ///
+  /// TODO: Set a proper default style (note the color is always black)
+  static TextStyle defaultStyle = GoogleFonts.openSans(
       fontSize: 14,
       fontWeight: FontWeight.w400,
       color: Colors.black87,
