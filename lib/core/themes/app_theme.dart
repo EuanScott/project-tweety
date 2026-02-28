@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_tweety/core/themes/CustomNavigationBarTheme.dart';
+import 'package:project_tweety/core/themes/nav_bar_theme.dart';
 import 'package:project_tweety/core/themes/card_theme.dart';
 import 'package:project_tweety/core/themes/color_theme.dart';
 import 'package:project_tweety/core/themes/text_theme.dart';
@@ -12,11 +12,11 @@ class AppTheme {
     final colorScheme = ColorTheme.lightColorScheme;
     return ThemeData(
       useMaterial3: true,
-      appBarTheme: CustomAppBarTheme.appBarTheme(colorScheme),
+      appBarTheme: CustomAppBarTheme.lightAppBarTheme(colorScheme),
       cardTheme: CustomCardTheme.cardThemeData(colorScheme),
       colorScheme: ColorTheme.lightColorScheme,
       elevatedButtonTheme: CustomButtonTheme.elevatedButtonTheme(colorScheme),
-      navigationBarTheme: CustomNavigationBarTheme.customNavigationBarTheme(
+      navigationBarTheme: CustomNavigationBarTheme.navBarTheme(
         colorScheme,
       ),
       scaffoldBackgroundColor: ColorTheme.surfaceLight,
@@ -29,11 +29,11 @@ class AppTheme {
     final colorScheme = ColorTheme.darkColorScheme;
     return ThemeData(
       useMaterial3: true,
-      appBarTheme: CustomAppBarTheme.appBarTheme(colorScheme),
+      appBarTheme: CustomAppBarTheme.darkAppBarTheme(colorScheme),
       cardTheme: CustomCardTheme.cardThemeData(colorScheme),
       colorScheme: ColorTheme.darkColorScheme,
       elevatedButtonTheme: CustomButtonTheme.elevatedButtonTheme(colorScheme),
-      navigationBarTheme: CustomNavigationBarTheme.customNavigationBarTheme(
+      navigationBarTheme: CustomNavigationBarTheme.navBarTheme(
         colorScheme,
       ),
       scaffoldBackgroundColor: ColorTheme.surfaceDark,
