@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project_tweety/dart_init.dart';
-import 'package:project_tweety/presentation/pages/home/home.dart';
-import 'package:project_tweety/presentation/pages/settings/settings.dart';
+import 'package:project_tweety/presentation/pages/home/home.page.dart';
+import 'package:project_tweety/presentation/pages/other/other.page.dart';
+import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 
 import 'core/themes/app_theme.dart';
-import 'features/dynamic_form/application/dynamic_form.dart';
 import 'l10n/app_localizations.dart';
-import 'presentation/pages/other/other.dart';
+
+class NavigationItem {
+  final Widget widget;
+  final String label;
+  final IconData icon;
+
+  const NavigationItem({
+    required this.widget,
+    required this.label,
+    required this.icon,
+  });
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,68 +61,43 @@ class MyAppImpl extends StatefulWidget {
 class _MyAppImplState extends State<MyAppImpl> {
   int _selectedIndex = 0;
 
-  void _selectScreen(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    final List screens = [
-      {
-        'widget': Home(l10n: l10n),
-        'label': l10n.homeTab,
-        'icon': const Icon(Icons.home),
-      },
-      // TODO: Make this a page that calls the Dynamic Form rather.
-      {
-        'widget': const DynamicForm(inputData: [], outputData: []),
-        'label': l10n.dynamicFormTab,
-        'icon': const Icon(Icons.power_input),
-      },
-      {
-        'widget': const Other(),
-        'label': l10n.otherTab,
-        'icon': const Icon(Icons.other_houses),
-      },
-      {
-        'widget': const Settings(),
-        'label': l10n.settingsTab,
-        'icon': const Icon(Icons.settings),
-      },
+    final items = [
+      NavigationItem(
+        widget: Home(l10n: l10n),
+        label: l10n.homeTab,
+        icon: Icons.home,
+      ),
+      NavigationItem(
+        widget: const Other(),
+        label: l10n.otherTab,
+        icon: Icons.other_houses,
+      ),
+      NavigationItem(
+        widget: const Settings(),
+        label: l10n.settingsTab,
+        icon: Icons.settings,
+      ),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(screens[_selectedIndex]['label']),
-        elevation: 2,
+        title: Text(items[_selectedIndex].label),
       ),
-      body: screens[_selectedIndex]['widget'],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              // TODO: Make a helper to easily access the Theme.of(context)
-              color: Theme.of(context).colorScheme.outline,
-              blurRadius: 4,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: NavigationBar(
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: _selectScreen,
-          destinations: [
-            for (final element in screens)
-              NavigationDestination(
-                icon: element['icon'],
-                label: element['label'] as String,
-              ),
-          ],
-        ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: items.map((item) => item.widget).toList(),
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) => setState(() => _selectedIndex = index),
+        destinations: items.map((item) => NavigationDestination(
+          icon: Icon(item.icon),
+          label: item.label,
+        )).toList(),
       ),
     );
   }

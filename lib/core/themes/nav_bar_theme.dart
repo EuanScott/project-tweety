@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomNavigationBarTheme {
-  static NavigationBarThemeData customNavigationBarTheme(
-    ColorScheme colorScheme,
-  ) {
+  static NavigationBarThemeData navBarTheme(ColorScheme colorScheme) {
     return NavigationBarThemeData(
       backgroundColor: colorScheme.surface,
       elevation: 3,
