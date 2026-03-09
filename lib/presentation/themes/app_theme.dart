@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project_tweety/core/themes/nav_bar_theme.dart';
-import 'package:project_tweety/core/themes/card_theme.dart';
-import 'package:project_tweety/core/themes/color_theme.dart';
-import 'package:project_tweety/core/themes/text_theme.dart';
+import 'package:project_tweety/presentation/themes/nav_bar_theme.dart';
+import 'package:project_tweety/presentation/themes/card_theme.dart';
+import 'package:project_tweety/presentation/themes/color_theme.dart';
+import 'package:project_tweety/presentation/themes/text_theme.dart';
 
 import 'app_bar_theme.dart';
 import 'button_theme.dart';

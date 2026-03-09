@@ -30,31 +30,6 @@ class AppConstants {
 }
 ```
 
-### /themes
-
-Contains theme-related configurations.
-
-```dart
-// app_theme.dart
-import 'package:flutter/material.dart';
-
-class AppTheme {
-  static ThemeData get lightTheme {
-    return ThemeData(
-      primaryColor: Colors.blue,
-      // Other theme properties
-    );
-  }
-
-  static ThemeData get darkTheme {
-    return ThemeData.dark().copyWith(
-      primaryColor: Colors.indigo,
-      // Other theme properties
-    );
-  }
-}
-```
-
 ### /utils
 
 Contains utility functions and helper classes.

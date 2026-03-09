@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_tweety/core/themes/text_theme.dart';
+import 'package:project_tweety/presentation/themes/text_theme.dart';
 
 class CustomButtonTheme {
   static ElevatedButtonThemeData elevatedButtonTheme(ColorScheme colorScheme) {

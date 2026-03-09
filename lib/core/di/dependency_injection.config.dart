@@ -12,7 +12,7 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../presentation/blocs/home/home_bloc.dart' as _i973;
+import '../../presentation/pages/home/bloc/home_bloc.dart' as _i973;
 import '../analytics/analytics_facade.dart' as _i541;
 import '../analytics/analytics_service.dart' as _i726;
 import '../error_reporting/error_reporting_facade.dart' as _i802;
