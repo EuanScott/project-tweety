@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../themes/color_theme.dart';
+import 'package:project_tweety/presentation/themes/color_theme.dart';
 
 extension ButtonStyleExtensions on ButtonStyle {
   /// Creates a secondary button style variant by only changing the background color
