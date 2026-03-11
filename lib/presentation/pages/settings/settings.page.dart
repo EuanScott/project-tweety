@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_tweety/presentation/extensions/modal_extension.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -7,8 +8,20 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Settings', style: TextStyle(fontSize: 30)),
+    return Center(
+      child: TextButton(
+        child: const Text('Open Modal', style: TextStyle(fontSize: 30)),
+        onPressed: () {
+          context.showAppModal(
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('Modal content'),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
