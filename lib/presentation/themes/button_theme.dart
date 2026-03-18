@@ -1,72 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:project_tweety/presentation/themes/text_theme.dart';
 
 class CustomButtonTheme {
+  static const _buttonTextStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'Open-sans',
+    height: 1.25,
+  );
+
   static ElevatedButtonThemeData elevatedButtonTheme(ColorScheme colorScheme) {
     return ElevatedButtonThemeData(
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.disabled)) {
-              return colorScheme.onSurface.withAlpha(120);
-            }
-            return colorScheme.primary;
-          },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: colorScheme.primary,
+        disabledBackgroundColor: colorScheme.onSurface.withAlpha(120),
+        disabledForegroundColor: colorScheme.onSurface.withAlpha(120),
+        elevation: 2,
+        foregroundColor: colorScheme.onPrimary,
+        minimumSize: const Size.fromHeight(48),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        foregroundColor: WidgetStateProperty.all<Color>(colorScheme.onPrimary),
-        textStyle: WidgetStateProperty.all<TextStyle>(
-          const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Open-sans',
-          ),
-        ),
-        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-        ),
-        elevation: WidgetStateProperty.resolveWith<double>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.disabled)) {
-              return 1.0;
-            }
-            return 2.0;
-          },
-        ),
-        minimumSize: WidgetStateProperty.all<Size>(
-          const Size(double.infinity, 50),
-        ),
-        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-          const EdgeInsets.symmetric(vertical: 12.0),
-        ),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        textStyle: _buttonTextStyle,
       ),
     );
   }
 
-  /// Creates the text button theme data for secondary actions
+  static OutlinedButtonThemeData outlinedButtonTheme(ColorScheme colorScheme) {
+    return OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        disabledForegroundColor: colorScheme.onSurface.withAlpha(120),
+        foregroundColor: colorScheme.primary,
+        minimumSize: const Size.fromHeight(48),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        side: BorderSide(color: colorScheme.primary, width: 1.0),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        textStyle: _buttonTextStyle,
+      ),
+    );
+  }
+
   static TextButtonThemeData textButtonTheme(ColorScheme colorScheme) {
     return TextButtonThemeData(
-      style: ButtonStyle(
-        foregroundColor: WidgetStateProperty.resolveWith<Color>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.disabled)) {
-              return colorScheme.onSurface.withAlpha(120);
-            }
-            return colorScheme.primary;
-          },
+      style: TextButton.styleFrom(
+        disabledForegroundColor: colorScheme.onSurface.withAlpha(120),
+        foregroundColor: colorScheme.primary,
+        minimumSize: const Size.fromHeight(48),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        textStyle: WidgetStateProperty.all<TextStyle>(
-          CustomTextTheme.buttonTextStyle(colorScheme),
-        ),
-        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        ),
-        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-        ),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        textStyle: _buttonTextStyle,
       ),
     );
   }

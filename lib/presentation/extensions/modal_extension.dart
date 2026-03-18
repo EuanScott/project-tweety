@@ -7,7 +7,7 @@ extension ModalExtension on BuildContext {
       isScrollControlled: true,
       useSafeArea: true,
       builder: (context) => FractionallySizedBox(
-        heightFactor: 0.95,
+        heightFactor: 0.20,
         widthFactor: 1,
         child: child,
       ),

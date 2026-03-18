@@ -5,6 +5,7 @@ import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/other/other.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 import 'package:project_tweety/presentation/themes/app_theme.dart';
+import 'package:project_tweety/presentation/widgets/app_bar.dart';
 
 import 'l10n/app_localizations.dart';
 
@@ -84,7 +85,7 @@ class _MyAppImplState extends State<MyAppImpl> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: Text(items[_selectedIndex].label)),
+      appBar: CustomAppBar(title: items[_selectedIndex].label),
       body: IndexedStack(
         index: _selectedIndex,
         children: items.map((item) => item.widget).toList(),
