@@ -23,6 +23,7 @@ class AppTheme {
       scaffoldBackgroundColor: ColorTheme.surfaceLight,
       textButtonTheme: CustomButtonTheme.textButtonTheme(colorScheme),
       textTheme: CustomTextTheme.buildTextTheme(colorScheme),
+      outlinedButtonTheme: CustomButtonTheme.outlinedButtonTheme(colorScheme),
     );
   }
 
@@ -40,6 +41,7 @@ class AppTheme {
       scaffoldBackgroundColor: ColorTheme.surfaceDark,
       textButtonTheme: CustomButtonTheme.textButtonTheme(colorScheme),
       textTheme: CustomTextTheme.buildTextTheme(colorScheme),
+      outlinedButtonTheme: CustomButtonTheme.outlinedButtonTheme(colorScheme),
     );
   }
 }

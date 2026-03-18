@@ -10,16 +10,9 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: TextButton(
-        child: const Text('Open Modal', style: TextStyle(fontSize: 30)),
+        child: const Text('Open Modal'),
         onPressed: () {
-          context.showAppModal(
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Text('Modal content'),
-              ),
-            ),
-          );
+          context.showAppModal(const Center(child: Text('Modal content')));
         },
       ),
     );

@@ -1,9 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:project_tweety/presentation/utils/button_style_extension.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
-
 
 class Home extends StatelessWidget {
   const Home({super.key, required this.l10n});
@@ -14,43 +12,41 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      // child: Center(child: Text('There be dragons')),
       child: Column(
         children: [
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => log('something'),
+                  child: const Text('Cancel'),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => log('something'),
+                  child: const Text('Next'),
+                ),
+              ),
+            ],
+          ),
+          Container(height: 16),
           ElevatedButton(
             onPressed: () => log('something'),
-            child: Text(
-              '${l10n.homeTab} Elevated',
-              textAlign: TextAlign.center,
-            ),
+            // TODO: To make this a secondary button
+            // style: Theme.of(context).elevatedButtonTheme.style!.asSecondary(),
+            child: const Text('Button'),
           ),
           Container(height: 16),
-          const ElevatedButton(
-            onPressed: null,
-            child: Text('Primary Disabled', textAlign: TextAlign.center),
-          ),
-          Container(height: 16),
-          ElevatedButton(
+          OutlinedButton(
             onPressed: () => log('something'),
-            style: Theme.of(context).elevatedButtonTheme.style!.asSecondary(),
-            child: const Text(
-              'Secondary Elevated',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Container(height: 16),
-          ElevatedButton(
-            onPressed: null,
-            style: Theme.of(context).elevatedButtonTheme.style!.asSecondary(),
-            child: const Text(
-              'Secondary Disabled',
-              textAlign: TextAlign.center,
-            ),
+            child: const Text('Button'),
           ),
           Container(height: 16),
           TextButton(
             onPressed: () => log('something'),
-            child: const Text('Back', textAlign: TextAlign.center),
+            child: const Text('Back'),
           ),
         ],
       ),

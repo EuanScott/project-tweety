@@ -6,7 +6,7 @@ class ColorTheme {
 
   // Primary colors
   static const Color primary = Color(0xFF1BA6A6);
-  static const Color secondary = Color(0xFFE76F51);
+  static const Color secondary = Color(0xFFa6a61b);
   static const Color disabledColor = Color(0xFF8A9A9A);
 
   // Text colors
