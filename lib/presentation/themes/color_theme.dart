@@ -36,13 +36,14 @@ class ColorTheme {
     primary: primary,
     onPrimary: textWhite,
     secondary: secondary,
-    onSecondary: textBlack,
+    onSecondary: textWhite,
     error: error,
     onError: textWhite,
     surface: surfaceLight,
     onSurface: textBlack,
     surfaceContainerHighest: surfaceVariantLight,
     outline: outline,
+    surfaceTint: Colors.transparent,
   );
 
   /// Get the dark color scheme
@@ -52,7 +53,7 @@ class ColorTheme {
     secondary: secondary,
     onSecondary: textWhite,
     error: error,
-    onError: textBlack,
+    onError: textWhite,
     surface: surfaceVariantDark,
     onSurface: textWhite,
     surfaceContainerHighest: surfaceDark,
