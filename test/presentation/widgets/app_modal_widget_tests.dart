@@ -2,6 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/presentation/widgets/app_modal.dart';
 
+const _modalTransitionDuration = Duration(milliseconds: 250);
+
+Future<void> _tapAndFinishTransition(
+    WidgetTester tester,
+    Finder finder,
+    ) async {
+  await tester.tap(finder);
+  await tester.pump();
+  await tester.pump(_modalTransitionDuration);
+}
+
+Future<void> _handlePopRouteAndFinishTransition(WidgetTester tester) async {
+  await tester.binding.handlePopRoute();
+  await tester.pump();
+  await tester.pump(_modalTransitionDuration);
+}
+
 void main() {
   group('AppModal', () {
     group('.page', () {
@@ -10,8 +27,7 @@ void main() {
           const _TestApp(home: _ModalLauncher(variant: _ModalVariant.page)),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         expect(find.text('modal-child'), findsOneWidget);
       });
@@ -21,11 +37,8 @@ void main() {
           const _TestApp(home: _ResultHarness(variant: _ModalVariant.page)),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text('close-with-true'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+        await _tapAndFinishTransition(tester, find.text('close-with-true'));
 
         expect(find.text('result:true'), findsOneWidget);
       });
@@ -45,8 +58,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         final bottomSheet = tester.widget<BottomSheet>(
           find.byType(BottomSheet),
@@ -72,8 +84,7 @@ void main() {
             ),
           );
 
-          await tester.tap(find.text('open-modal'));
-          await tester.pumpAndSettle();
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
 
           const expectedMaxHeight = 800 * 0.5;
 
@@ -87,8 +98,8 @@ void main() {
       );
 
       testWidgets('shows the drag handle when showDragHandle is true', (
-        tester,
-      ) async {
+          tester,
+          ) async {
         await tester.pumpWidget(
           const _TestApp(
             home: _ModalLauncher(
@@ -98,8 +109,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         final bottomSheet = tester.widget<BottomSheet>(
           find.byType(BottomSheet),
@@ -108,19 +118,16 @@ void main() {
       });
 
       testWidgets('disables system back dismissal when canPop is false', (
-        tester,
-      ) async {
+          tester,
+          ) async {
         await tester.pumpWidget(
           const _TestApp(
             home: _ResultHarness(variant: _ModalVariant.page, canPop: false),
           ),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
-
-        await tester.binding.handlePopRoute();
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+        await _handlePopRouteAndFinishTransition(tester);
 
         expect(find.text('modal-child'), findsOneWidget);
         expect(find.text('result:none'), findsOneWidget);
@@ -133,23 +140,21 @@ void main() {
           const _TestApp(home: _ModalLauncher(variant: _ModalVariant.compact)),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         expect(find.text('modal-child'), findsOneWidget);
       });
 
       testWidgets(
         'passes showDragHandle as false when the caller requests it',
-        (tester) async {
+            (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               home: _ModalLauncher(variant: _ModalVariant.compact),
             ),
           );
 
-          await tester.tap(find.text('open-modal'));
-          await tester.pumpAndSettle();
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
 
           final bottomSheet = tester.widget<BottomSheet>(
             find.byType(BottomSheet),
@@ -163,8 +168,7 @@ void main() {
           const _TestApp(home: _CompactDefaultLauncher()),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         final bottomSheet = tester.widget<BottomSheet>(
           find.byType(BottomSheet),
@@ -183,8 +187,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         const expectedMaxHeight = 1000 * 0.35;
 
@@ -201,11 +204,8 @@ void main() {
           const _TestApp(home: _ResultHarness(variant: _ModalVariant.compact)),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text('close-with-true'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+        await _tapAndFinishTransition(tester, find.text('close-with-true'));
 
         expect(find.text('result:true'), findsOneWidget);
       });
@@ -217,24 +217,23 @@ void main() {
           const _TestApp(home: _ModalLauncher(variant: _ModalVariant.blocking)),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         expect(find.text('modal-child'), findsOneWidget);
       });
 
       testWidgets('is not dismissed by tapping outside the modal', (
-        tester,
-      ) async {
+          tester,
+          ) async {
         await tester.pumpWidget(
           const _TestApp(home: _ModalLauncher(variant: _ModalVariant.blocking)),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         await tester.tapAt(const Offset(10, 10));
-        await tester.pumpAndSettle();
+        await tester.pump();
+        await tester.pump(_modalTransitionDuration);
 
         expect(find.text('modal-child'), findsOneWidget);
       });
@@ -244,18 +243,15 @@ void main() {
           const _TestApp(home: _ResultHarness(variant: _ModalVariant.blocking)),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text('close-with-false'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+        await _tapAndFinishTransition(tester, find.text('close-with-false'));
 
         expect(find.text('result:false'), findsOneWidget);
       });
 
       testWidgets('disables system back dismissal when canPop is false', (
-        tester,
-      ) async {
+          tester,
+          ) async {
         await tester.pumpWidget(
           const _TestApp(
             home: _ResultHarness(
@@ -265,19 +261,16 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
-
-        await tester.binding.handlePopRoute();
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+        await _handlePopRouteAndFinishTransition(tester);
 
         expect(find.text('modal-child'), findsOneWidget);
         expect(find.text('result:none'), findsOneWidget);
       });
 
       testWidgets('uses the root navigator when useRootNavigator is true', (
-        tester,
-      ) async {
+          tester,
+          ) async {
         final rootObserver = _TestNavigatorObserver();
         final nestedObserver = _TestNavigatorObserver();
 
@@ -296,8 +289,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('open-modal'));
-        await tester.pumpAndSettle();
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
         expect(rootObserver.pushedRoutes.length, greaterThan(0));
       });
@@ -331,7 +323,10 @@ class _TestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQueryData(size: mediaQuerySize),
+      data: MediaQueryData(
+        size: mediaQuerySize,
+        disableAnimations: true,
+      ),
       child: MaterialApp(home: Scaffold(body: home)),
     );
   }
