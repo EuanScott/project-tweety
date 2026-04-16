@@ -24,15 +24,17 @@ class _OtherView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OtherBloc, OtherState>(
       builder: (context, state) {
-        return switch (state.status) {
-          OtherStatus.initial || OtherStatus.loading => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          OtherStatus.success => _OtherList(items: state.items),
-          OtherStatus.failure => _OtherError(
+        if (state.isInitial || state.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state.isFailure) {
+          return _OtherError(
             message: state.errorMessage ?? 'Something went wrong.',
-          ),
-        };
+          );
+        }
+
+        return _OtherList(items: state.items);
       },
     );
   }

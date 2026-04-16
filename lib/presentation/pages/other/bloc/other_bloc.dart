@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/domain/entities/other_card_item.dart';
-import 'package:project_tweety/domain/repositories/other_repository.dart';
+import 'package:project_tweety/domain/usecases/get_other_card_items_usecase.dart';
 
 part 'other_event.dart';
 part 'other_state.dart';
@@ -11,11 +11,11 @@ part 'other_bloc.freezed.dart';
 
 @injectable
 class OtherBloc extends Bloc<OtherEvent, OtherState> {
-  OtherBloc(this._repository) : super(const OtherState()) {
+  OtherBloc(this._getOtherCardItemsUseCase) : super(const OtherState()) {
     on<OtherStarted>(_onStarted);
   }
 
-  final OtherRepository _repository;
+  final GetOtherCardItemsUseCase _getOtherCardItemsUseCase;
 
   Future<void> _onStarted(
     OtherStarted event,
@@ -30,7 +30,7 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
     );
 
     try {
-      final items = await _repository.fetchItems();
+      final items = await _getOtherCardItemsUseCase();
 
       emit(
         state.copyWith(
