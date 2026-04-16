@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'other_bloc.dart';
+part of 'cards_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,20 +12,20 @@ part of 'other_bloc.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$OtherState {
+mixin _$CardsState {
 
- OtherStatus get status; List<OtherCardItem> get items; String? get errorMessage;
-/// Create a copy of OtherState
+ CardsStatus get status; List<CardItem> get items; String? get errorMessage;
+/// Create a copy of CardsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$OtherStateCopyWith<OtherState> get copyWith => _$OtherStateCopyWithImpl<OtherState>(this as OtherState, _$identity);
+$CardsStateCopyWith<CardsState> get copyWith => _$CardsStateCopyWithImpl<CardsState>(this as CardsState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OtherState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
@@ -34,18 +34,18 @@ int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality(
 
 @override
 String toString() {
-  return 'OtherState(status: $status, items: $items, errorMessage: $errorMessage)';
+  return 'CardsState(status: $status, items: $items, errorMessage: $errorMessage)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $OtherStateCopyWith<$Res>  {
-  factory $OtherStateCopyWith(OtherState value, $Res Function(OtherState) _then) = _$OtherStateCopyWithImpl;
+abstract mixin class $CardsStateCopyWith<$Res>  {
+  factory $CardsStateCopyWith(CardsState value, $Res Function(CardsState) _then) = _$CardsStateCopyWithImpl;
 @useResult
 $Res call({
- OtherStatus status, List<OtherCardItem> items, String? errorMessage
+ CardsStatus status, List<CardItem> items, String? errorMessage
 });
 
 
@@ -53,20 +53,20 @@ $Res call({
 
 }
 /// @nodoc
-class _$OtherStateCopyWithImpl<$Res>
-    implements $OtherStateCopyWith<$Res> {
-  _$OtherStateCopyWithImpl(this._self, this._then);
+class _$CardsStateCopyWithImpl<$Res>
+    implements $CardsStateCopyWith<$Res> {
+  _$CardsStateCopyWithImpl(this._self, this._then);
 
-  final OtherState _self;
-  final $Res Function(OtherState) _then;
+  final CardsState _self;
+  final $Res Function(CardsState) _then;
 
-/// Create a copy of OtherState
+/// Create a copy of CardsState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as OtherStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<OtherCardItem>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as CardsStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as List<CardItem>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -74,8 +74,8 @@ as String?,
 }
 
 
-/// Adds pattern-matching-related methods to [OtherState].
-extension OtherStatePatterns on OtherState {
+/// Adds pattern-matching-related methods to [CardsState].
+extension CardsStatePatterns on CardsState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -88,10 +88,10 @@ extension OtherStatePatterns on OtherState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _OtherState value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CardsState value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _OtherState() when $default != null:
+case _CardsState() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -110,10 +110,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _OtherState value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CardsState value)  $default,){
 final _that = this;
 switch (_that) {
-case _OtherState():
+case _CardsState():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -131,10 +131,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _OtherState value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CardsState value)?  $default,){
 final _that = this;
 switch (_that) {
-case _OtherState() when $default != null:
+case _CardsState() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -152,9 +152,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( OtherStatus status,  List<OtherCardItem> items,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CardsStatus status,  List<CardItem> items,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _OtherState() when $default != null:
+case _CardsState() when $default != null:
 return $default(_that.status,_that.items,_that.errorMessage);case _:
   return orElse();
 
@@ -173,9 +173,9 @@ return $default(_that.status,_that.items,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( OtherStatus status,  List<OtherCardItem> items,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CardsStatus status,  List<CardItem> items,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
-case _OtherState():
+case _CardsState():
 return $default(_that.status,_that.items,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
@@ -193,9 +193,9 @@ return $default(_that.status,_that.items,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( OtherStatus status,  List<OtherCardItem> items,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CardsStatus status,  List<CardItem> items,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
-case _OtherState() when $default != null:
+case _CardsState() when $default != null:
 return $default(_that.status,_that.items,_that.errorMessage);case _:
   return null;
 
@@ -207,13 +207,13 @@ return $default(_that.status,_that.items,_that.errorMessage);case _:
 /// @nodoc
 
 
-class _OtherState extends OtherState {
-  const _OtherState({this.status = OtherStatus.initial, final  List<OtherCardItem> items = const <OtherCardItem>[], this.errorMessage}): _items = items,super._();
+class _CardsState extends CardsState {
+  const _CardsState({this.status = CardsStatus.initial, final  List<CardItem> items = const <CardItem>[], this.errorMessage}): _items = items,super._();
   
 
-@override@JsonKey() final  OtherStatus status;
- final  List<OtherCardItem> _items;
-@override@JsonKey() List<OtherCardItem> get items {
+@override@JsonKey() final  CardsStatus status;
+ final  List<CardItem> _items;
+@override@JsonKey() List<CardItem> get items {
   if (_items is EqualUnmodifiableListView) return _items;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_items);
@@ -221,17 +221,17 @@ class _OtherState extends OtherState {
 
 @override final  String? errorMessage;
 
-/// Create a copy of OtherState
+/// Create a copy of CardsState
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$OtherStateCopyWith<_OtherState> get copyWith => __$OtherStateCopyWithImpl<_OtherState>(this, _$identity);
+_$CardsStateCopyWith<_CardsState> get copyWith => __$CardsStateCopyWithImpl<_CardsState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OtherState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CardsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
@@ -240,18 +240,18 @@ int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality(
 
 @override
 String toString() {
-  return 'OtherState(status: $status, items: $items, errorMessage: $errorMessage)';
+  return 'CardsState(status: $status, items: $items, errorMessage: $errorMessage)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$OtherStateCopyWith<$Res> implements $OtherStateCopyWith<$Res> {
-  factory _$OtherStateCopyWith(_OtherState value, $Res Function(_OtherState) _then) = __$OtherStateCopyWithImpl;
+abstract mixin class _$CardsStateCopyWith<$Res> implements $CardsStateCopyWith<$Res> {
+  factory _$CardsStateCopyWith(_CardsState value, $Res Function(_CardsState) _then) = __$CardsStateCopyWithImpl;
 @override @useResult
 $Res call({
- OtherStatus status, List<OtherCardItem> items, String? errorMessage
+ CardsStatus status, List<CardItem> items, String? errorMessage
 });
 
 
@@ -259,20 +259,20 @@ $Res call({
 
 }
 /// @nodoc
-class __$OtherStateCopyWithImpl<$Res>
-    implements _$OtherStateCopyWith<$Res> {
-  __$OtherStateCopyWithImpl(this._self, this._then);
+class __$CardsStateCopyWithImpl<$Res>
+    implements _$CardsStateCopyWith<$Res> {
+  __$CardsStateCopyWithImpl(this._self, this._then);
 
-  final _OtherState _self;
-  final $Res Function(_OtherState) _then;
+  final _CardsState _self;
+  final $Res Function(_CardsState) _then;
 
-/// Create a copy of OtherState
+/// Create a copy of CardsState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? items = null,Object? errorMessage = freezed,}) {
-  return _then(_OtherState(
+  return _then(_CardsState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as OtherStatus,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<OtherCardItem>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as CardsStatus,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as List<CardItem>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

@@ -11,9 +11,9 @@
   "@dynamicFormTab": {
     "description": "Label for dynamic form tab"
   },
-  "otherTab": "Other",
-  "@otherTab": {
-    "description": "Label for other tab"
+  "cardsTab": "Cards",
+  "@cardsTab": {
+    "description": "Label for cards tab"
   },
   "settingsTab": "Settings",
   "@settingsTab": {

@@ -1,7 +1,7 @@
-import 'package:project_tweety/domain/entities/other_card_item.dart';
+import 'package:project_tweety/domain/entities/card_item.dart';
 
-class OtherCardItemDto {
-  const OtherCardItemDto({
+class CardItemDto {
+  const CardItemDto({
     required this.title,
     required this.description,
   });
@@ -9,8 +9,8 @@ class OtherCardItemDto {
   final String title;
   final String description;
 
-  OtherCardItem toEntity() {
-    return OtherCardItem(
+  CardItem toEntity() {
+    return CardItem(
       title: title,
       description: description,
     );

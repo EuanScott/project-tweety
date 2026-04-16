@@ -18,7 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dynamicFormTab => 'Form';
 
   @override
-  String get otherTab => 'Other';
+  String get cardsTab => 'Cards';
 
   @override
   String get settingsTab => 'Settings';

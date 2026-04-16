@@ -2,39 +2,39 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/domain/entities/other_card_item.dart';
-import 'package:project_tweety/domain/usecases/get_other_card_items_usecase.dart';
+import 'package:project_tweety/domain/entities/card_item.dart';
+import 'package:project_tweety/domain/usecases/get_cards_usecase.dart';
 
-part 'other_event.dart';
-part 'other_state.dart';
-part 'other_bloc.freezed.dart';
+part 'cards_event.dart';
+part 'cards_state.dart';
+part 'cards_bloc.freezed.dart';
 
 @injectable
-class OtherBloc extends Bloc<OtherEvent, OtherState> {
-  OtherBloc(this._getOtherCardItemsUseCase) : super(const OtherState()) {
-    on<OtherStarted>(_onStarted);
+class CardsBloc extends Bloc<CardsEvent, CardsState> {
+  CardsBloc(this._getCardsUseCase) : super(const CardsState()) {
+    on<CardsStarted>(_onStarted);
   }
 
-  final GetOtherCardItemsUseCase _getOtherCardItemsUseCase;
+  final GetCardsUseCase _getCardsUseCase;
 
   Future<void> _onStarted(
-    OtherStarted event,
-    Emitter<OtherState> emit,
+    CardsStarted event,
+    Emitter<CardsState> emit,
   ) async {
     emit(
       state.copyWith(
-        status: OtherStatus.loading,
+        status: CardsStatus.loading,
         items: const [],
         errorMessage: null,
       ),
     );
 
     try {
-      final items = await _getOtherCardItemsUseCase();
+      final items = await _getCardsUseCase();
 
       emit(
         state.copyWith(
-          status: OtherStatus.success,
+          status: CardsStatus.success,
           items: items,
           errorMessage: null,
         ),
@@ -43,7 +43,7 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
       addError(error, stackTrace);
       emit(
         state.copyWith(
-          status: OtherStatus.failure,
+          status: CardsStatus.failure,
           items: const [],
           errorMessage: 'Unable to load cards right now.',
         ),
