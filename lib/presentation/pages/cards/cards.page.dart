@@ -1,49 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:project_tweety/domain/entities/other_card_item.dart';
+import 'package:project_tweety/domain/entities/card_item.dart';
 
-import 'bloc/other_bloc.dart';
+import 'bloc/cards_bloc.dart';
 
-class Other extends StatelessWidget {
-  const Other({super.key});
+class Cards extends StatelessWidget {
+  const Cards({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GetIt.I<OtherBloc>()..add(const OtherStarted()),
-      child: const _OtherView(),
+      create: (_) => GetIt.I<CardsBloc>()..add(const CardsStarted()),
+      child: const _CardsView(),
     );
   }
 }
 
-class _OtherView extends StatelessWidget {
-  const _OtherView();
+class _CardsView extends StatelessWidget {
+  const _CardsView();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OtherBloc, OtherState>(
+    return BlocBuilder<CardsBloc, CardsState>(
       builder: (context, state) {
         if (state.isInitial || state.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
         if (state.isFailure) {
-          return _OtherError(
+          return _CardsError(
             message: state.errorMessage ?? 'Something went wrong.',
           );
         }
 
-        return _OtherList(items: state.items);
+        return _CardsList(items: state.items);
       },
     );
   }
 }
 
-class _OtherList extends StatelessWidget {
-  const _OtherList({required this.items});
+class _CardsList extends StatelessWidget {
+  const _CardsList({required this.items});
 
-  final List<OtherCardItem> items;
+  final List<CardItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +76,8 @@ class _OtherList extends StatelessWidget {
   }
 }
 
-class _OtherError extends StatelessWidget {
-  const _OtherError({required this.message});
+class _CardsError extends StatelessWidget {
+  const _CardsError({required this.message});
 
   final String message;
 
@@ -93,7 +93,7 @@ class _OtherError extends StatelessWidget {
             const SizedBox(height: 12),
             FilledButton(
               onPressed: () {
-                context.read<OtherBloc>().add(const OtherStarted());
+                context.read<CardsBloc>().add(const CardsStarted());
               },
               child: const Text('Retry'),
             ),

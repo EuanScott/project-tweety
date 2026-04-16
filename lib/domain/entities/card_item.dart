@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-class OtherCardItem extends Equatable {
-  const OtherCardItem({
+class CardItem extends Equatable {
+  const CardItem({
     required this.title,
     required this.description,
   });

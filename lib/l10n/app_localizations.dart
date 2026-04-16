@@ -116,11 +116,11 @@ abstract class AppLocalizations {
   /// **'Form'**
   String get dynamicFormTab;
 
-  /// Label for other tab
+  /// Label for cards tab
   ///
   /// In en, this message translates to:
-  /// **'Other'**
-  String get otherTab;
+  /// **'Cards'**
+  String get cardsTab;
 
   /// Label for settings tab
   ///

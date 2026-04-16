@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
-import 'package:project_tweety/presentation/pages/other/other.page.dart';
+import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 import 'package:project_tweety/presentation/themes/app_theme.dart';
 import 'package:project_tweety/presentation/widgets/app_bar.dart';
@@ -73,9 +73,9 @@ class _MyAppImplState extends State<MyAppImpl> {
         icon: Icons.home,
       ),
       NavigationItem(
-        widget: const Other(),
-        label: l10n.otherTab,
-        icon: Icons.other_houses,
+        widget: const Cards(),
+        label: l10n.cardsTab,
+        icon: Icons.grid_view_rounded,
       ),
       NavigationItem(
         widget: const Settings(),
