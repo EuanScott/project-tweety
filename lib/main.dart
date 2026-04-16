@@ -68,7 +68,7 @@ class _MyAppImplState extends State<MyAppImpl> {
 
     final items = [
       NavigationItem(
-        widget: Home(l10n: l10n),
+        widget: const Home(),
         label: l10n.homeTab,
         icon: Icons.home,
       ),
