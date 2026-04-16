@@ -9,6 +9,8 @@ environment:
   flutter: ">=3.38.5"
 
 dependencies:
+  design_system:
+    path: packages/design_system
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -19,7 +21,6 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   freezed_annotation: ^3.1.0
   get_it: ^9.2.0
-  google_fonts: 6.3.0
   http: ^1.0.0
   injectable: ^2.7.1
   intl: ^0.20.2

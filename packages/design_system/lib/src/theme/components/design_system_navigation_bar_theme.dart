@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CustomNavigationBarTheme {
-  static NavigationBarThemeData navBarTheme(ColorScheme colorScheme) {
+class DesignSystemNavigationBarTheme {
+  DesignSystemNavigationBarTheme._();
+
+  static NavigationBarThemeData build(ColorScheme colorScheme) {
     return NavigationBarThemeData(
       backgroundColor: colorScheme.surface,
       elevation: 3,
       indicatorColor: colorScheme.primary,
-
       iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
         final color = states.contains(WidgetState.selected)
             ? colorScheme.onPrimary
@@ -14,7 +15,6 @@ class CustomNavigationBarTheme {
 
         return IconThemeData(color: color);
       }),
-
       labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
         final color = states.contains(WidgetState.selected)
             ? colorScheme.primary

@@ -1,10 +1,10 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
-import 'package:project_tweety/presentation/themes/app_theme.dart';
 import 'package:project_tweety/presentation/widgets/app_bar.dart';
 
 import 'l10n/app_localizations.dart';
@@ -36,8 +36,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Project Tweety',
-      theme: AppTheme.lightTheme(),
-      darkTheme: AppTheme.darkTheme(),
+      theme: DesignSystemTheme.light(
+        brand: DesignBrands.tweetyB2c,
+      ),
+      darkTheme: DesignSystemTheme.dark(
+        brand: DesignBrands.tweetyB2c,
+      ),
       themeMode: ThemeMode.system,
       localizationsDelegates: const [
         AppLocalizations.delegate,

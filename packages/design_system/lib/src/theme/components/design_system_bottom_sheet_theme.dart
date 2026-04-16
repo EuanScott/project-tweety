@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class CustomBottomSheetThemeData {
-  static BottomSheetThemeData lightBottomSheetTheme(ColorScheme colorScheme) {
+class DesignSystemBottomSheetTheme {
+  DesignSystemBottomSheetTheme._();
+
+  static BottomSheetThemeData light(ColorScheme colorScheme) {
     return BottomSheetThemeData(
       dragHandleColor: colorScheme.primary,
       clipBehavior: Clip.antiAlias,
@@ -12,7 +14,7 @@ class CustomBottomSheetThemeData {
     );
   }
 
-  static BottomSheetThemeData darkBottomSheetTheme(ColorScheme colorScheme) {
+  static BottomSheetThemeData dark(ColorScheme colorScheme) {
     return BottomSheetThemeData(
       dragHandleColor: colorScheme.primary,
       clipBehavior: Clip.antiAlias,
