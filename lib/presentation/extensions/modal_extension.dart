@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-@Deprecated("Just a tester, don't use going forward")
 /// Convenience modal helpers available directly from a [BuildContext].
 extension ModalExtension on BuildContext {
 
@@ -13,6 +12,7 @@ extension ModalExtension on BuildContext {
   ///
   /// The returned [Future<T?>] completes when the modal is dismissed and
   /// carries the optional value passed to `Navigator.pop`.
+  @Deprecated("Just a tester, don't use going forward")
   Future<T?> showAppModal<T>(Widget child) {
     return showModalBottomSheet<T>(
       context: this,
