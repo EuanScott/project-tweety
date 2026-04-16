@@ -1,10 +1,27 @@
 part of 'home_bloc.dart';
 
-sealed class HomeState extends Equatable {
-  const HomeState();
-}
+enum HomeStatus { initial, ready }
 
-final class HomeInitial extends HomeState {
+@freezed
+class HomeState with _$HomeState {
+  const HomeState._();
+
+  const factory HomeState({
+    @Default(HomeStatus.initial) HomeStatus status,
+    HomeAction? lastAction,
+  }) = _HomeState;
+
+  bool get isInitial => status == HomeStatus.initial;
+
+  bool get isReady => status == HomeStatus.ready;
+
+  bool get hasLastAction => lastAction != null;
+
   @override
-  List<Object> get props => [];
+  // TODO: implement lastAction
+  HomeAction? get lastAction => throw UnimplementedError();
+
+  @override
+  // TODO: implement status
+  HomeStatus get status => throw UnimplementedError();
 }

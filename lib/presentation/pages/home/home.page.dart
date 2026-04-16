@@ -1,51 +1,93 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
+import 'bloc/home_bloc.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key, required this.l10n});
+  const Home({super.key});
 
-  final AppLocalizations l10n;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => GetIt.I<HomeBloc>()..add(const HomeStarted()),
+      child: BlocListener<HomeBloc, HomeState>(
+        listenWhen: (previous, current) =>
+            previous.lastAction != current.lastAction && current.hasLastAction,
+        listener: (context, state) {
+          final action = state.lastAction;
+
+          if (action != null) {
+            log('Home action pressed: $action');
+          }
+        },
+        child: const _HomeView(),
+      ),
+    );
+  }
+}
+
+class _HomeView extends StatelessWidget {
+  const _HomeView();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: Column(
         children: [
           Row(
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () => log('something'),
+                  onPressed: () {
+                    context.read<HomeBloc>().add(
+                      const HomeActionPressed(HomeAction.cancel),
+                    );
+                  },
                   child: const Text('Cancel'),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => log('something'),
+                  onPressed: () {
+                    context.read<HomeBloc>().add(
+                      const HomeActionPressed(HomeAction.next),
+                    );
+                  },
                   child: const Text('Next'),
                 ),
               ),
             ],
           ),
-          Container(height: 16),
+          const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () => log('something'),
-            // TODO: To make this a secondary button
-            // style: Theme.of(context).elevatedButtonTheme.style!.asSecondary(),
+            onPressed: () {
+              context.read<HomeBloc>().add(
+                const HomeActionPressed(HomeAction.primary),
+              );
+            },
             child: const Text('Button'),
           ),
-          Container(height: 16),
+          const SizedBox(height: 16),
           OutlinedButton(
-            onPressed: () => log('something'),
+            onPressed: () {
+              context.read<HomeBloc>().add(
+                const HomeActionPressed(HomeAction.secondary),
+              );
+            },
             child: const Text('Button'),
           ),
-          Container(height: 16),
+          const SizedBox(height: 16),
           TextButton(
-            onPressed: () => log('something'),
+            onPressed: () {
+              context.read<HomeBloc>().add(
+                const HomeActionPressed(HomeAction.back),
+              );
+            },
             child: const Text('Back'),
           ),
         ],
