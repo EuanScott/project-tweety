@@ -12,7 +12,10 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../presentation/pages/home/bloc/home_bloc.dart' as _i973;
+import '../../data/repositories/dummy_other_repository.dart' as _i928;
+import '../../domain/repositories/other_repository.dart' as _i618;
+import '../../presentation/pages/home/bloc/home_bloc.dart' as _i558;
+import '../../presentation/pages/other/bloc/other_bloc.dart' as _i248;
 import '../analytics/analytics_facade.dart' as _i541;
 import '../analytics/analytics_service.dart' as _i726;
 import '../error_reporting/error_reporting_facade.dart' as _i802;
@@ -39,8 +42,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i981.CoralogixErrorReportingService(),
       instanceName: 'coralogix',
     );
+    gh.lazySingleton<_i618.OtherRepository>(() => _i928.DummyOtherRepository());
     gh.lazySingleton<_i726.AnalyticsService>(
       () => _i726.FirebaseAnalyticsService(),
+    );
+    gh.factory<_i248.OtherBloc>(
+      () => _i248.OtherBloc(gh<_i618.OtherRepository>()),
     );
     gh.lazySingleton<Iterable<_i981.ErrorReportingService>>(
       () => errorReportingModule.errorReportingServices(
@@ -59,8 +66,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i541.AnalyticsFacade>(
       () => _i541.AnalyticsFacade(gh<Iterable<_i726.AnalyticsService>>()),
     );
-    gh.factory<_i973.HomeBloc>(
-      () => _i973.HomeBloc(gh<_i802.ErrorReportingFacade>()),
+    gh.factory<_i558.HomeBloc>(
+      () => _i558.HomeBloc(gh<_i802.ErrorReportingFacade>()),
     );
     return this;
   }
