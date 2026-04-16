@@ -66,7 +66,7 @@ Contains implementations of repository interfaces defined in the Domain layer.
 import 'package:your_app/data/services/api_service.dart';
 import 'package:your_app/domain/entities/user.dart';
 import 'package:your_app/domain/repositories/user_repository.dart';
-import 'package:your_app/data/models/user_model.dart';
+import 'package:your_app/data/dtos/user_model.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final ApiService apiService;

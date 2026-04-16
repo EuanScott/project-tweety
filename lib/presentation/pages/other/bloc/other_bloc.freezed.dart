@@ -207,8 +207,8 @@ return $default(_that.status,_that.items,_that.errorMessage);case _:
 /// @nodoc
 
 
-class _OtherState implements OtherState {
-  const _OtherState({this.status = OtherStatus.initial, final  List<OtherCardItem> items = const <OtherCardItem>[], this.errorMessage}): _items = items;
+class _OtherState extends OtherState {
+  const _OtherState({this.status = OtherStatus.initial, final  List<OtherCardItem> items = const <OtherCardItem>[], this.errorMessage}): _items = items,super._();
   
 
 @override@JsonKey() final  OtherStatus status;
