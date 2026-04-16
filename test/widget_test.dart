@@ -1,30 +1,35 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:project_tweety/core/di/dependency_injection.dart';
 
 import 'package:project_tweety/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  setUpAll(() async {
+    await GetIt.I.reset();
+    await configureCoreDependencies();
+  });
+
+  tearDownAll(() async {
+    await GetIt.I.reset();
+  });
+
+  testWidgets('renders app navigation tabs', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Home'), findsWidgets);
+    expect(find.text('Cards'), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('switches to cards tab', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card Title 1'), findsOneWidget);
   });
 }

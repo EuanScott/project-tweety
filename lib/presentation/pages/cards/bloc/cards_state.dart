@@ -3,7 +3,7 @@ part of 'cards_bloc.dart';
 enum CardsStatus { initial, loading, success, failure }
 
 @freezed
-class CardsState with _$CardsState {
+abstract class CardsState with _$CardsState {
   const CardsState._();
 
   const factory CardsState({
@@ -23,16 +23,4 @@ class CardsState with _$CardsState {
   bool get hasItems => items.isNotEmpty;
 
   bool get hasError => (errorMessage?.isNotEmpty ?? false);
-
-  @override
-  // TODO: implement errorMessage
-  String? get errorMessage => throw UnimplementedError();
-
-  @override
-  // TODO: implement items
-  List<CardItem> get items => throw UnimplementedError();
-
-  @override
-  // TODO: implement status
-  CardsStatus get status => throw UnimplementedError();
 }

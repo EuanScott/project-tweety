@@ -11,11 +11,12 @@
 - Code generation is used for DI and Flutter-generated assets/localization
 
 ## Repository Layout
+- `packages/design_system`: shared Flutter design system package for reusable theming and UI-level primitives
 - `lib/core`: cross-cutting concerns such as analytics, DI, error reporting, and feature flags
 - `lib/data`: constants, models, repositories, and services
 - `lib/domain`: domain entities, repository contracts, and use cases
 - `lib/features`: feature-scoped experiments; currently includes `dynamic_form`
-- `lib/presentation`: pages, themes, widgets, extensions, and UI helpers
+- `lib/presentation`: pages, widgets, extensions, and UI helpers
 - `lib/l10n`: ARB files and generated localization output
 - `test`: widget and shared/unit tests
 
@@ -51,3 +52,4 @@
 - Keep changes surgical and relevant to the requested task.
 - Avoid committing build artifacts or platform-specific output unless the user explicitly asks for them.
 - Prefer editing source files under `lib/`, `test/`, and project config files over touching generated directories like `build/`, `.dart_tool/`, `android/build/`, or `ios/Pods/`.
+- Prefer placing reusable app-wide theming in `packages/design_system` instead of recreating it under `lib/`.
