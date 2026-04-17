@@ -2,10 +2,9 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project_tweety/dart_init.dart';
-import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
+import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
-import 'package:project_tweety/presentation/widgets/app_bar.dart';
 
 import 'l10n/app_localizations.dart';
 
@@ -36,12 +35,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Project Tweety',
-      theme: DesignSystemTheme.light(
-        brand: DesignBrands.tweetyB2c,
-      ),
-      darkTheme: DesignSystemTheme.dark(
-        brand: DesignBrands.tweetyB2c,
-      ),
+      theme: DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
+      darkTheme: DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
       themeMode: ThemeMode.system,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -89,7 +84,6 @@ class _MyAppImplState extends State<MyAppImpl> {
     ];
 
     return Scaffold(
-      appBar: CustomAppBar(title: items[_selectedIndex].label),
       body: IndexedStack(
         index: _selectedIndex,
         children: items.map((item) => item.widget).toList(),
