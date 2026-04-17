@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 import 'bloc/home_bloc.dart';
 
@@ -11,6 +13,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocProvider(
       create: (_) => GetIt.I<HomeBloc>()..add(const HomeStarted()),
       child: BlocListener<HomeBloc, HomeState>(
@@ -23,7 +27,7 @@ class Home extends StatelessWidget {
             log('Home action pressed: $action');
           }
         },
-        child: const _HomeView(),
+        child: PageScaffold(title: l10n.homeTab, body: const _HomeView()),
       ),
     );
   }
@@ -34,64 +38,62 @@ class _HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () {
-                    context.read<HomeBloc>().add(
-                      const HomeActionPressed(HomeAction.cancel),
-                    );
-                  },
-                  child: const Text('Cancel'),
-                ),
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () {
+                  context.read<HomeBloc>().add(
+                    const HomeActionPressed(HomeAction.cancel),
+                  );
+                },
+                child: const Text('Cancel'),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.read<HomeBloc>().add(
-                      const HomeActionPressed(HomeAction.next),
-                    );
-                  },
-                  child: const Text('Next'),
-                ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<HomeBloc>().add(
+                    const HomeActionPressed(HomeAction.next),
+                  );
+                },
+                child: const Text('Next'),
               ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              context.read<HomeBloc>().add(
-                const HomeActionPressed(HomeAction.primary),
-              );
-            },
-            child: const Text('Button'),
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton(
-            onPressed: () {
-              context.read<HomeBloc>().add(
-                const HomeActionPressed(HomeAction.secondary),
-              );
-            },
-            child: const Text('Button'),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {
-              context.read<HomeBloc>().add(
-                const HomeActionPressed(HomeAction.back),
-              );
-            },
-            child: const Text('Back'),
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {
+            context.read<HomeBloc>().add(
+              const HomeActionPressed(HomeAction.primary),
+            );
+          },
+          child: const Text('Button'),
+        ),
+        const SizedBox(height: 16),
+        OutlinedButton(
+          onPressed: () {
+            context.read<HomeBloc>().add(
+              const HomeActionPressed(HomeAction.secondary),
+            );
+          },
+          child: const Text('Button'),
+        ),
+        const SizedBox(height: 16),
+        TextButton(
+          onPressed: () {
+            context.read<HomeBloc>().add(
+              const HomeActionPressed(HomeAction.back),
+            );
+          },
+          child: const Text('Back'),
+        ),
+      ],
     );
   }
 }

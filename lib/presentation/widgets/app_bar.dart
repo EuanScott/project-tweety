@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 /// A small wrapper around [AppBar] that standardises title, leading, and action
 /// configuration across the app.
 ///
-/// Use the default constructor when you want normal Flutter back button
-/// behaviour via [automaticallyImplyLeading].
+/// This widget intentionally relies on Flutter's default leading behaviour, so
+/// navigation pages keep the standard platform back affordance without each
+/// caller manually configuring it.
 ///
 /// Example:
 /// ```dart
@@ -16,90 +17,54 @@ import 'package:flutter/material.dart';
 /// )
 /// ```
 ///
-/// Use [CustomAppBar.hiddenLeading] when you explicitly want no leading widget.
+/// Pass [trailingAction] when the current page needs a single trailing action.
 ///
 /// Example:
 /// ```dart
 /// Scaffold(
-///   appBar: const CustomAppBar.hiddenLeading(
-///     title: 'Root Page',
-///   ),
-///   body: const SizedBox.shrink(),
-/// )
-/// ```
-///
-/// Use [CustomAppBar.customLeading] when you want to provide your own leading
-/// widget, such as a custom back button or menu action.
-///
-/// Example:
-/// ```dart
-/// Scaffold(
-///   appBar: CustomAppBar.customLeading(
-///     title: 'Details',
-///     leadingButton: IconButton(
-///       icon: const Icon(Icons.home),
-///       onPressed: () => debugPrint('Go home'),
+///   appBar: CustomAppBar(
+///     title: 'Cards',
+///     trailingAction: CustomAppBarAction(
+///       icon: Icons.add,
+///       onPressed: _handleAddPressed,
 ///     ),
 ///   ),
 ///   body: const SizedBox.shrink(),
 /// )
 /// ```
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  /// Creates a standard app bar.
+class CustomAppBarAction {
+  /// Creates a typed trailing app-bar action.
   ///
-  /// This constructor keeps Flutter's default leading behaviour enabled unless
-  /// [automaticallyImplyLeading] is set to `false`.
-  ///
-  /// Pass [actionButton] to render a single widget in the app bar actions area.
-  const CustomAppBar({
-    required this.title,
-    this.actionButton = const SizedBox.shrink(),
-    this.leadingButton,
-    this.automaticallyImplyLeading = true,
-    super.key,
+  /// The [icon] and [onPressed] callback are required. [tooltip] is optional
+  /// and defaults to an empty string when omitted.
+  const CustomAppBarAction({
+    required this.icon,
+    required this.onPressed,
+    this.tooltip = '',
   });
 
-  /// Creates an app bar with the leading area intentionally hidden.
-  ///
-  /// This is useful for top-level pages where you do not want a back button or
-  /// any custom leading widget.
-  const CustomAppBar.hiddenLeading({
-    required this.title,
-    this.actionButton = const SizedBox.shrink(),
-    super.key,
-  }) : leadingButton = const SizedBox.shrink(),
-       automaticallyImplyLeading = false;
+  /// The icon shown for this action.
+  final IconData icon;
 
-  ///CustomAppBar.customLeading(
-  ///         title: items[_selectedIndex].label,
-  ///         leadingButton: IconButton(
-  ///           icon: const Icon(Icons.home),
-  ///           onPressed: () => debugPrint('something'),
-  ///         ),
-  ///       ),
-  /// Creates an app bar with a caller-provided leading widget.
+  /// The callback invoked when the action is pressed.
+  final VoidCallback onPressed;
+
+  /// The tooltip announced when the action is focused or long-pressed.
+  final String tooltip;
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  /// Creates a standard app bar with an optional trailing action.
   ///
-  /// Use this when the page needs custom behaviour in the leading area, such as
-  /// a home button, menu button, or bespoke navigation control.
-  const CustomAppBar.customLeading({
-    required this.title,
-    required Widget this.leadingButton,
-    this.actionButton = const SizedBox.shrink(),
-    super.key,
-  }) : automaticallyImplyLeading = false;
+  /// The leading area is not manually overridden, so Flutter can infer the
+  /// appropriate platform navigation affordance automatically.
+  const CustomAppBar({required this.title, this.trailingAction, super.key});
 
   /// The text shown in the centre of the app bar.
   final String title;
 
-  /// A single widget rendered in the app bar actions area.
-  final Widget actionButton;
-
-  /// An optional widget displayed in the leading slot.
-  final Widget? leadingButton;
-
-  /// Whether Flutter should infer the default leading widget, such as a back
-  /// button, when [leadingButton] is not provided.
-  final bool automaticallyImplyLeading;
+  /// The optional typed trailing action rendered in the app bar.
+  final CustomAppBarAction? trailingAction;
 
   /// Returns the standard Material app bar height.
   @override
@@ -108,10 +73,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   AppBar build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: automaticallyImplyLeading,
-      leading: leadingButton,
       title: Text(title),
-      actions: [actionButton],
+      actions: trailingAction != null
+          ? [
+              IconButton(
+                onPressed: trailingAction!.onPressed,
+                tooltip: trailingAction!.tooltip,
+                icon: Icon(trailingAction!.icon),
+              ),
+            ]
+          : const [],
     );
   }
 }

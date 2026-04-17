@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:project_tweety/domain/entities/card.entity.dart' as CardModel show Card;
+import 'package:project_tweety/domain/entities/card.entity.dart'
+    as card_model
+    show Card;
+import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:project_tweety/presentation/widgets/app_bar.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 import 'bloc/cards.bloc.dart';
 
@@ -12,7 +17,23 @@ class Cards extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => GetIt.I<CardsBloc>()..add(const CardsStarted()),
-      child: const _CardsView(),
+      child: Builder(
+        builder: (context) {
+          final l10n = AppLocalizations.of(context)!;
+
+          return PageScaffold(
+            title: l10n.cardsTab,
+            trailingAction: CustomAppBarAction(
+              icon: Icons.refresh,
+              tooltip: 'Refresh cards',
+              onPressed: () {
+                context.read<CardsBloc>().add(const CardsStarted());
+              },
+            ),
+            body: const _CardsView(),
+          );
+        },
+      ),
     );
   }
 }
@@ -43,14 +64,14 @@ class _CardsView extends StatelessWidget {
 class _CardsList extends StatelessWidget {
   const _CardsList({required this.items});
 
-  final List<CardModel.Card> items;
+  final List<card_model.Card> items;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ListView.builder(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.zero,
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
@@ -65,10 +86,7 @@ class _CardsList extends StatelessWidget {
               children: [
                 Text(item.title, style: theme.textTheme.titleMedium),
                 const SizedBox(height: 8),
-                Text(
-                  item.description,
-                  style: theme.textTheme.bodyMedium,
-                ),
+                Text(item.description, style: theme.textTheme.bodyMedium),
               ],
             ),
           ),
