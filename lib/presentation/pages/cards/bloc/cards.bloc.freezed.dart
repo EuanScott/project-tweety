@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'cards_bloc.dart';
+part of 'cards.bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CardsState {
 
- CardsStatus get status; List<CardItem> get items; String? get errorMessage;
+ CardsStatus get status; List<Card> get items; String? get errorMessage;
 /// Create a copy of CardsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $CardsStateCopyWith<$Res>  {
   factory $CardsStateCopyWith(CardsState value, $Res Function(CardsState) _then) = _$CardsStateCopyWithImpl;
 @useResult
 $Res call({
- CardsStatus status, List<CardItem> items, String? errorMessage
+ CardsStatus status, List<Card> items, String? errorMessage
 });
 
 
@@ -66,7 +66,7 @@ class _$CardsStateCopyWithImpl<$Res>
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CardsStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<CardItem>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as List<Card>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -152,7 +152,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CardsStatus status,  List<CardItem> items,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CardsStatus status,  List<Card> items,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CardsState() when $default != null:
 return $default(_that.status,_that.items,_that.errorMessage);case _:
@@ -173,7 +173,7 @@ return $default(_that.status,_that.items,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CardsStatus status,  List<CardItem> items,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CardsStatus status,  List<Card> items,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _CardsState():
 return $default(_that.status,_that.items,_that.errorMessage);case _:
@@ -193,7 +193,7 @@ return $default(_that.status,_that.items,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CardsStatus status,  List<CardItem> items,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CardsStatus status,  List<Card> items,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _CardsState() when $default != null:
 return $default(_that.status,_that.items,_that.errorMessage);case _:
@@ -208,12 +208,12 @@ return $default(_that.status,_that.items,_that.errorMessage);case _:
 
 
 class _CardsState extends CardsState {
-  const _CardsState({this.status = CardsStatus.initial, final  List<CardItem> items = const <CardItem>[], this.errorMessage}): _items = items,super._();
+  const _CardsState({this.status = CardsStatus.initial, final  List<Card> items = const <Card>[], this.errorMessage}): _items = items,super._();
   
 
 @override@JsonKey() final  CardsStatus status;
- final  List<CardItem> _items;
-@override@JsonKey() List<CardItem> get items {
+ final  List<Card> _items;
+@override@JsonKey() List<Card> get items {
   if (_items is EqualUnmodifiableListView) return _items;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_items);
@@ -251,7 +251,7 @@ abstract mixin class _$CardsStateCopyWith<$Res> implements $CardsStateCopyWith<$
   factory _$CardsStateCopyWith(_CardsState value, $Res Function(_CardsState) _then) = __$CardsStateCopyWithImpl;
 @override @useResult
 $Res call({
- CardsStatus status, List<CardItem> items, String? errorMessage
+ CardsStatus status, List<Card> items, String? errorMessage
 });
 
 
@@ -272,7 +272,7 @@ class __$CardsStateCopyWithImpl<$Res>
   return _then(_CardsState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CardsStatus,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<CardItem>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as List<Card>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

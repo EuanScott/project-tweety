@@ -1,4 +1,4 @@
-part of 'cards_bloc.dart';
+part of 'cards.bloc.dart';
 
 sealed class CardsEvent extends Equatable {
   const CardsEvent();
