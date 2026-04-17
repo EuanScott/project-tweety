@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 import 'core/di/dependency_injection.dart';
-import 'core/di/di_init_service.dart';
+import 'core/di/di_init.service.dart';
 
 Future<void> dartInit() async {
   // Configure DI
