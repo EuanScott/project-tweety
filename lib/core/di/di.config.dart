@@ -26,7 +26,7 @@ import '../analytics/analytics_service.dart' as _i726;
 import '../error_reporting/error_reporting_facade.dart' as _i802;
 import '../error_reporting/error_reporting_service.dart' as _i981;
 import '../feature_flags/feature_flag_service.dart' as _i349;
-import 'di_init_service.dart' as _i1027;
+import 'di_init.service.dart' as _i1027;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
