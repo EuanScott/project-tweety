@@ -1,4 +1,4 @@
-part of 'cards_bloc.dart';
+part of 'cards.bloc.dart';
 
 enum CardsStatus { initial, loading, success, failure }
 
@@ -8,7 +8,7 @@ abstract class CardsState with _$CardsState {
 
   const factory CardsState({
     @Default(CardsStatus.initial) CardsStatus status,
-    @Default(<CardItem>[]) List<CardItem> items,
+    @Default(<Card>[]) List<Card> items,
     String? errorMessage,
   }) = _CardsState;
 

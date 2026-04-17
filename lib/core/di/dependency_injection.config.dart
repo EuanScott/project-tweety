@@ -12,11 +12,14 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../data/datasources/mock_cards_data_source.dart' as _i898;
-import '../../data/repositories/cards_repository_impl.dart' as _i443;
-import '../../domain/repositories/cards_repository.dart' as _i118;
-import '../../domain/usecases/get_cards_usecase.dart' as _i68;
-import '../../presentation/pages/cards/bloc/cards_bloc.dart' as _i658;
+import '../../data/datasources/card.mock.dart' as _i1063;
+import '../../data/repositories/cards.repository_impl.dart' as _i939;
+import '../../domain/repositories/card.repository.dart' as _i518;
+import '../../domain/usecases/create_card.usecase.dart' as _i279;
+import '../../domain/usecases/delete_card.usecase.dart' as _i738;
+import '../../domain/usecases/get_card.usecase.dart' as _i670;
+import '../../domain/usecases/update_card.usecase.dart' as _i729;
+import '../../presentation/pages/cards/bloc/cards.bloc.dart' as _i152;
 import '../../presentation/pages/home/bloc/home_bloc.dart' as _i558;
 import '../analytics/analytics_facade.dart' as _i541;
 import '../analytics/analytics_service.dart' as _i726;
@@ -36,8 +39,8 @@ extension GetItInjectableX on _i174.GetIt {
     final analyticsModule = _$AnalyticsModule();
     gh.factory<_i349.FeatureFlagService>(() => _i349.FeatureFlagService());
     gh.singleton<_i1027.DiInitService>(() => _i1027.DiInitService());
-    gh.lazySingleton<_i898.MockCardsDataSource>(
-      () => _i898.MockCardsDataSource(),
+    gh.lazySingleton<_i1063.MockCardsDataSource>(
+      () => _i1063.MockCardsDataSource(),
     );
     gh.lazySingleton<_i981.ErrorReportingService>(
       () => _i981.FirebaseErrorReportingService(),
@@ -47,8 +50,29 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i981.CoralogixErrorReportingService(),
       instanceName: 'coralogix',
     );
+    gh.lazySingleton<_i518.CardsRepository>(
+      () => _i939.CardsRepositoryImpl(gh<_i1063.MockCardsDataSource>()),
+    );
+    gh.factory<_i279.CreateCardUseCase>(
+      () => _i279.CreateCardUseCase(gh<_i518.CardsRepository>()),
+    );
+    gh.factory<_i738.DeleteCardUseCase>(
+      () => _i738.DeleteCardUseCase(gh<_i518.CardsRepository>()),
+    );
+    gh.factory<_i670.GetCardsUseCase>(
+      () => _i670.GetCardsUseCase(gh<_i518.CardsRepository>()),
+    );
+    gh.factory<_i670.GetCardByIdUseCase>(
+      () => _i670.GetCardByIdUseCase(gh<_i518.CardsRepository>()),
+    );
+    gh.factory<_i729.UpdateCardUseCase>(
+      () => _i729.UpdateCardUseCase(gh<_i518.CardsRepository>()),
+    );
     gh.lazySingleton<_i726.AnalyticsService>(
       () => _i726.FirebaseAnalyticsService(),
+    );
+    gh.factory<_i152.CardsBloc>(
+      () => _i152.CardsBloc(gh<_i670.GetCardsUseCase>()),
     );
     gh.lazySingleton<Iterable<_i981.ErrorReportingService>>(
       () => errorReportingModule.errorReportingServices(
@@ -56,22 +80,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.ErrorReportingService>(instanceName: 'coralogix'),
       ),
     );
-    gh.lazySingleton<_i118.CardsRepository>(
-      () => _i443.CardsRepositoryImpl(gh<_i898.MockCardsDataSource>()),
-    );
     gh.lazySingleton<Iterable<_i726.AnalyticsService>>(
       () => analyticsModule.analyticsServices(gh<_i726.AnalyticsService>()),
-    );
-    gh.factory<_i68.GetCardsUseCase>(
-      () => _i68.GetCardsUseCase(gh<_i118.CardsRepository>()),
     );
     gh.lazySingleton<_i802.ErrorReportingFacade>(
       () => _i802.ErrorReportingFacade(
         gh<Iterable<_i981.ErrorReportingService>>(),
       ),
-    );
-    gh.factory<_i658.CardsBloc>(
-      () => _i658.CardsBloc(gh<_i68.GetCardsUseCase>()),
     );
     gh.lazySingleton<_i541.AnalyticsFacade>(
       () => _i541.AnalyticsFacade(gh<Iterable<_i726.AnalyticsService>>()),

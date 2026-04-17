@@ -2,12 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/domain/entities/card_item.dart';
-import 'package:project_tweety/domain/usecases/get_cards_usecase.dart';
+import 'package:project_tweety/domain/entities/card.entity.dart';
+import 'package:project_tweety/domain/usecases/get_card.usecase.dart';
 
-part 'cards_event.dart';
-part 'cards_state.dart';
-part 'cards_bloc.freezed.dart';
+part 'cards.event.dart';
+part 'cards.state.dart';
+part 'cards.bloc.freezed.dart';
 
 @injectable
 class CardsBloc extends Bloc<CardsEvent, CardsState> {

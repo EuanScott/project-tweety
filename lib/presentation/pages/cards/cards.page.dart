@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:project_tweety/domain/entities/card_item.dart';
+import 'package:project_tweety/domain/entities/card.entity.dart' as CardModel show Card;
 
-import 'bloc/cards_bloc.dart';
+import 'bloc/cards.bloc.dart';
 
 class Cards extends StatelessWidget {
   const Cards({super.key});
@@ -43,7 +43,7 @@ class _CardsView extends StatelessWidget {
 class _CardsList extends StatelessWidget {
   const _CardsList({required this.items});
 
-  final List<CardItem> items;
+  final List<CardModel.Card> items;
 
   @override
   Widget build(BuildContext context) {
