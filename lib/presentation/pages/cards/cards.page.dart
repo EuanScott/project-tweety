@@ -47,6 +47,8 @@ class _CardsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ListView.builder(
       padding: const EdgeInsets.all(12),
       itemCount: items.length,
@@ -61,11 +63,11 @@ class _CardsList extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.title, style: Theme.of(context).textTheme.titleMedium),
+                Text(item.title, style: theme.textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Text(
                   item.description,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: theme.textTheme.bodyMedium,
                 ),
               ],
             ),
