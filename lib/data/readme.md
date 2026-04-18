@@ -1,113 +1,106 @@
 # Data Layer
 
-The Data layer is responsible for data retrieval, whether from APIs, databases, or other sources.
+The data layer is responsible for retrieving, shaping, and returning data for the rest of the app.
 
 ## Purpose
 
-This layer implements the repository interfaces defined in the Domain layer and provides concrete
-data operations.
+This layer implements repository contracts defined in the domain layer and provides the concrete
+data operations those contracts need.
+
+## Naming Convention
+
+Use the `cards` feature as the reference and standardize filenames on `feature_or_entity.role.dart`.
+
+- use `_` inside the business name
+- use `.` before the technical role
+
+Examples:
+
+- `card.dto.dart`
+- `mock_cards.datasource.dart`
+- `cards.repository_impl.dart`
 
 ## Subdirectories
 
-### `/models`
+### `/dtos`
 
-Contains data transfer objects (DTOs) that represent external data structures.
+Contains data transfer objects that represent raw or transported data.
 
-**Examples:**
+**Example filename:** `card.dto.dart`
 
 ```dart
-// user_model.dart
-import 'package:your_app/domain/entities/user.dart';
+// card.dto.dart
+import 'package:your_app/domain/entities/card.entity.dart';
 
-class UserModel {
-  final int id;
-  final String name;
-  final String email;
-
-  UserModel({
-    required this.id,
-    required this.name,
-    required this.email,
+class CardDto {
+  const CardDto({
+    required this.title,
+    required this.description,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-    );
-  }
+  final String title;
+  final String description;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-    };
-  }
-
-  // Convert to domain entity
-  User toEntity() {
-    return User(
-      id: id,
-      name: name,
-      email: email,
+  Card toEntity() {
+    return Card(
+      title: title,
+      description: description,
     );
   }
 }
 ```
 
-### /repositories
+### `/datasources`
 
-Contains implementations of repository interfaces defined in the Domain layer.
+Contains raw data access implementations such as mock providers, API clients, local storage
+adapters, or cache readers.
+
+**Example filename:** `mock_cards.datasource.dart`
 
 ```dart
-// user_repository_impl.dart
-import 'package:your_app/data/services/api_service.dart';
-import 'package:your_app/domain/entities/user.dart';
-import 'package:your_app/domain/repositories/user_repository.dart';
-import 'package:your_app/data/dtos/user_model.dart';
+// mock_cards.datasource.dart
+import 'package:your_app/data/dtos/card.dto.dart';
 
-class UserRepositoryImpl implements UserRepository {
-  final ApiService apiService;
-
-  UserRepositoryImpl(this.apiService);
-
-  @override
-  Future<List<User>> getUsers() async {
-    final response = await apiService.get('/users');
-    final List<dynamic> data = response.data;
-
-    return data
-        .map((json) => UserModel.fromJson(json).toEntity())
-        .toList();
-  }
-
-  @override
-  Future<User> getUserById(int id) async {
-    final response = await apiService.get('/users/$id');
-
-    return UserModel.fromJson(response.data).toEntity();
-  }
-
-  // In your repository implementation
-  Future<void> updateUser(User user) async {
-    // Convert domain entity to DTO
-    final userModel = UserModel(
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    );
-
-    // Send DTO to API
-    await apiService.put('/users/${user.id}', data: userModel.toJson());
+class MockCardsDataSource {
+  Future<List<CardDto>> getCards() async {
+    return const [
+      CardDto(
+        title: 'Card Title 1',
+        description: 'Example card description.',
+      ),
+    ];
   }
 }
 ```
 
-### /services
+### `/repositories`
 
-Contains services that communicate with external data sources like APIs and databases.
+Contains implementations of repository contracts defined in the domain layer.
+
+**Example filename:** `cards.repository_impl.dart`
+
+```dart
+// cards.repository_impl.dart
+import 'package:your_app/data/datasources/mock_cards.datasource.dart';
+import 'package:your_app/domain/entities/card.entity.dart';
+import 'package:your_app/domain/repositories/cards.repository.dart';
+
+class CardsRepositoryImpl implements CardsRepository {
+  const CardsRepositoryImpl(this._mockCardsDataSource);
+
+  final MockCardsDataSource _mockCardsDataSource;
+
+  @override
+  Future<List<Card>> getCards() async {
+    final items = await _mockCardsDataSource.getCards();
+    return items.map((item) => item.toEntity()).toList();
+  }
+}
+```
+
+### `/services`
+
+Contains shared infrastructure helpers that communicate with external systems.
 
 ```dart
 // api_service.dart
@@ -125,8 +118,6 @@ class ApiService {
         receiveTimeout: ApiConstants.timeout,
       ),
     );
-
-    // Add interceptors, etc.
   }
 
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
@@ -136,7 +127,12 @@ class ApiService {
   Future<Response> post(String path, {dynamic data}) {
     return _dio.post(path, data: data);
   }
-
-// Other methods like put, delete, etc.
 }
 ```
+
+## Summary
+
+- Prefer `Dto` over `Model` in this repo.
+- Keep DTOs and datasources inside the data layer.
+- Return domain entities from repositories, not DTOs.
+- Use the cards naming pattern for new files even where older files still use legacy names.

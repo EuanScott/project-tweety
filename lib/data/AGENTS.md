@@ -2,7 +2,7 @@
 
 ## Scope
 - This file applies to everything under `lib/data/`.
-- It builds on the human-readable guidance in `data.md` and turns it into implementation rules for future work.
+- It builds on the human-readable guidance in `readme.md` and turns it into implementation rules for future work.
 
 ## Purpose
 - The data layer is responsible for retrieving, shaping, and returning data for the rest of the app.
@@ -13,21 +13,25 @@
 - `datasources/`
   - Use for raw data access such as mock providers, API clients, local storage adapters, or cache readers.
   - Data sources should describe where the data comes from, for example `MockCardsDataSource`.
+  - Prefer filenames such as `mock_cards.datasource.dart`, `cards_remote.datasource.dart`, or `cards_local.datasource.dart`.
 - `dtos/`
   - Use for transferred or raw data objects.
   - Prefer the `Dto` suffix over `Model`.
   - DTOs may provide mapping helpers such as `toEntity()`.
+  - Prefer filenames such as `card.dto.dart`.
 - `repositories/`
   - Use for concrete repository implementations that fulfill domain repository contracts.
   - Repositories coordinate data sources and map DTOs into domain entities.
+  - Prefer filenames such as `cards.repository_impl.dart`.
 - `services/`
   - Use for shared infrastructure helpers that speak to external systems, such as HTTP services.
 - `constants/`
   - Use for data-layer constants such as endpoint paths or request-related values.
 
 ## DTO Conventions
-- Prefer `Dto` naming, for example `CardItemDto`.
+- Prefer `Dto` naming, for example `CardDto`.
 - DTOs represent raw or transferred data, not app-level business objects.
+- DTO filenames should use the entity name plus `.dto.dart`.
 - DTOs may include:
   - serialization and deserialization helpers
   - mapping helpers like `toEntity()`
@@ -35,16 +39,17 @@
 - Prefer keeping DTOs immutable.
 
 ## Data Source Conventions
-- Data sources should expose raw fetch/save operations and stay close to the underlying source shape.
+- Data sources should expose raw fetch and save operations and stay close to the underlying source shape.
 - Mock data sources are acceptable and encouraged while API work is not yet in place.
 - Prefer names that make the source obvious:
   - `MockCardsDataSource`
   - `CardsRemoteDataSource`
   - `CardsLocalDataSource`
+- Prefer filenames that use `.datasource.dart`.
 - Data sources should not return widgets or presentation-specific types.
 
 ## Repository Implementation Conventions
-- Repository implementations should live in `repositories/` and end with `_impl.dart` when that fits the existing naming style.
+- Repository implementations should live in `repositories/` and end with `.repository_impl.dart`.
 - Repositories should implement contracts from `lib/domain/repositories/`.
 - Repositories should map DTOs into domain entities before returning values to the domain layer.
 - Repositories should hide datasource and transport details from callers.
@@ -71,6 +76,10 @@
 
 ## Reference Implementation
 - Use the `cards` feature as the current reference:
+  - `CardDto`
   - `MockCardsDataSource`
-  - `CardItemDto`
   - `CardsRepositoryImpl`
+- Use these preferred filenames for new data-layer files:
+  - `card.dto.dart`
+  - `mock_cards.datasource.dart`
+  - `cards.repository_impl.dart`

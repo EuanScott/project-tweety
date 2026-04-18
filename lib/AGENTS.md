@@ -2,7 +2,9 @@
 
 ## Purpose
 - This file defines the default pattern for new feature work under `lib/`.
-- Use the `cards` feature as the reference implementation for BLoC-driven presentation, DI, and clean architecture layering.
+
+[//]: # (- Use the `cards` feature as the reference implementation for BLoC-driven presentation, DI, and clean architecture layering.)
+[//]: # (- Some existing source filenames in `cards` predate this convention. Follow the naming rules below for new work and doc updates.)
 
 ## Feature Structure
 - New features should follow the layered structure already used in this repo:
@@ -17,7 +19,7 @@
 - Prefer feature names that describe the business or UI intent, not placeholders like `other`, `misc`, or `stuff`.
 
 ## BLoC Pattern
-- Prefer one Freezed state class per page/feature BLoC instead of many small state subclasses.
+- Prefer one Freezed state class per page or feature BLoC instead of many small state subclasses.
 - Use a status enum inside the state for lifecycle flow such as `initial`, `loading`, `success`, and `failure`.
 - Use Freezed-generated `copyWith`; do not manually implement `copyWith`.
 - If you need computed getters on a Freezed state, add `const MyState._();` and place only real derived getters there.
@@ -34,7 +36,10 @@
 - Trigger initial loading in the provider creation flow, for example: `GetIt.I<CardsBloc>()..add(const CardsStarted())`.
 
 ## Naming Conventions
-- Use feature-aligned names end-to-end:
+- Standardize filenames on `feature_or_entity.role.dart`.
+- Use `_` inside the business name and `.` before the technical role.
+- Keep class names and filenames aligned across presentation, domain, and data layers.
+- Use plural feature names for feature-scoped pages, repositories, and list-style use cases:
   - `Cards`
   - `CardsBloc`
   - `CardsEvent`
@@ -42,21 +47,40 @@
   - `CardsStatus`
   - `CardsRepository`
   - `GetCardsUseCase`
-  - `MockCardsDataSource`
-  - `CardItem`
-  - `CardItemDto`
-- Keep names consistent across presentation, domain, and data layers.
+- Use singular or domain-specific entity names for the actual business object:
+  - `Card`
+  - `CardDto`
+- Preferred filename examples:
+  - `cards.page.dart`
+  - `cards.bloc.dart`
+  - `cards.event.dart`
+  - `cards.state.dart`
+  - `card.entity.dart`
+  - `cards.repository.dart`
+  - `get_cards.usecase.dart`
+  - `create_card.usecase.dart`
+  - `update_card.usecase.dart`
+  - `delete_card.usecase.dart`
+  - `card.dto.dart`
+  - `mock_cards.datasource.dart`
+  - `cards.repository_impl.dart`
 
 ## Domain Layer
-- Domain entities should be framework-light and represent app concepts, for example `CardItem`.
+- Domain entities should be framework-light and represent app concepts, for example `Card`.
+- Entity filenames should use the entity name plus `.entity.dart`.
 - Repository contracts live in the domain layer and expose intent-based methods, for example `getCards()`.
+- Repository filenames should use the feature name plus `.repository.dart`.
 - Use cases wrap repository operations and provide the entry point the BLoC depends on.
+- Use case filenames should describe the action plus `.usecase.dart`.
 - BLoCs should depend on use cases, not directly on repository implementations or data sources.
 
 ## Data Layer
 - Data layer objects that represent transferred or raw data should be named `Dto`, not `Model`.
+- DTO filenames should use the entity name plus `.dto.dart`.
 - Data sources should describe where the data comes from, for example `MockCardsDataSource`.
+- Data source filenames should use the source description plus `.datasource.dart`.
 - Repository implementations should map DTOs into domain entities before returning data to the domain layer.
+- Repository implementation filenames should use the feature name plus `.repository_impl.dart`.
 - Keep mock data sources in place until a real API implementation exists; they should still follow the same contract shape as a real data source.
 
 ## Injectable and DI
@@ -67,7 +91,7 @@
   - `dart run build_runner build --delete-conflicting-outputs`
 
 ## Localization and Navigation
-- When renaming a feature/tab/page, also update:
+- When renaming a feature, tab, or page, also update:
   - navigation wiring in `main.dart`
   - localization keys in ARB files
   - generated localization output via `flutter gen-l10n`
@@ -79,7 +103,7 @@
   - repository tests for DTO-to-entity mapping
   - widget tests for page rendering of loading, success, and failure
 - Mock the use case for BLoC tests.
-- Mock or fake the repository/data source for domain/data tests.
+- Mock or fake the repository or data source for domain and data tests.
 
 ## Cards Reference
 - Use the `cards` feature as the working example for this pattern.

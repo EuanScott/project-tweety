@@ -16,16 +16,22 @@ tools/android_studio_templates/data/generate_data_feature.sh feature_name entity
 Example:
 
 ```sh
-tools/android_studio_templates/data/generate_data_feature.sh cards card_item
+tools/android_studio_templates/data/generate_data_feature.sh cards card
 ```
 
-## Generated structure
+## Generated Structure
 
-The generator creates:
+The target structure for this layer is:
 
-- `lib/data/datasources/mock_<feature_name>_data_source.dart`
-- `lib/data/dtos/<entity_name>_dto.dart`
-- `lib/data/repositories/<feature_name>_repository_impl.dart`
+- `lib/data/datasources/mock_<feature_name>.datasource.dart`
+- `lib/data/dtos/<entity_name>.dto.dart`
+- `lib/data/repositories/<feature_name>.repository_impl.dart`
+
+For `cards`, that means:
+
+- `lib/data/datasources/mock_cards.datasource.dart`
+- `lib/data/dtos/card.dto.dart`
+- `lib/data/repositories/cards.repository_impl.dart`
 
 ## Notes
 
@@ -35,17 +41,19 @@ The generator creates:
 - The package name is read from `pubspec.yaml`, so imports are generated for the current project
   instead of being hard-coded.
 - This template assumes the domain helper has already created:
-  - `domain/entities/<entity_name>.dart`
-  - `domain/repositories/<feature_name>_repository.dart`
+  - `lib/domain/entities/<entity_name>.entity.dart`
+  - `lib/domain/repositories/<feature_name>.repository.dart`
 - The generated DTO includes a `toEntity()` mapper to match the current repo pattern.
 - The generated data source is a mock data source to match the current repo pattern.
+- Some generator scripts may still emit legacy underscore-only filenames. Rename those outputs to
+  the dot-role pattern above until the helpers are updated.
 - After generating a new feature, run:
 
 ```sh
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-## Design choice
+## Design Choice
 
 This follows the current repo data layout with:
 
@@ -56,7 +64,7 @@ This follows the current repo data layout with:
 The mock data source is intentionally simple and returns placeholder DTOs until you wire in the real
 source for the feature.
 
-## Android Studio usage
+## Android Studio Usage
 
 This helper is intended to be launched from Android Studio later as an External Tool or shortcut,
 but is safe to keep as a repo-local script while you validate the scaffolding shape.

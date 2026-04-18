@@ -12,6 +12,34 @@ _Why a Flutter project_, you may ask? Well that's because at the time of writing
 came off a Flutter project and thought it would be cool to explore some things that I wasn't able to
 do on that project.
 
+## Feature Naming Convention
+
+When adding new app features, use the `cards` feature as the reference for layered structure and
+apply this filename rule consistently:
+
+- use `_` inside the business name
+- use `.` before the technical role
+- prefer `feature_or_entity.role.dart`
+
+Examples:
+
+- `card.entity.dart`
+- `cards.repository.dart`
+- `get_cards.usecase.dart`
+- `create_card.usecase.dart`
+- `update_card.usecase.dart`
+- `delete_card.usecase.dart`
+- `card.dto.dart`
+- `mock_cards.datasource.dart`
+- `cards.repository_impl.dart`
+- `cards.page.dart`
+- `cards.bloc.dart`
+- `cards.event.dart`
+- `cards.state.dart`
+
+Some existing source files still use older names from before this convention was written down. Use
+the convention above as the standard for new work and doc updates.
+
 ## Development Style
 
 Historically, I've always used the [Git FLow](https://www.gitkraken.com/learn/git/git-flow) approach
