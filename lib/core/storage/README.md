@@ -9,7 +9,6 @@ launches, such as:
 
 - theme mode
 - language choice
-- onboarding dismissed state
 
 ## Non-Goals
 
@@ -27,7 +26,6 @@ The storage is intentionally limited to app settings and lightweight UI state:
 
 - theme mode
 - selected language code
-- onboarding dismissed flag
 
 Consumers should read and write a single preferences object through the storage service instead of
 persisting arbitrary keys and values.
@@ -48,7 +46,6 @@ The stored preferences object currently contains default-backed values for:
 
 - theme mode, defaulting to `ThemeMode.system`
 - language code, defaulting to `en`
-- onboarding dismissed flag
 
 If storage is empty or contains invalid JSON, the service rewrites the default preferences object.
 
