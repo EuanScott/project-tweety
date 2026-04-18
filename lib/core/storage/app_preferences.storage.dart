@@ -11,25 +11,20 @@ class AppPreferences {
   const AppPreferences({
     this.themeMode = ThemeMode.system,
     this.languageCode = 'en',
-    this.isOnboardingDismissed = false,
   });
 
   final ThemeMode themeMode;
   final String? languageCode;
-  final bool isOnboardingDismissed;
 
   AppPreferences copyWith({
     ThemeMode? themeMode,
     Object? languageCode = _unset,
-    bool? isOnboardingDismissed,
   }) {
     return AppPreferences(
       themeMode: themeMode ?? this.themeMode,
       languageCode: identical(languageCode, _unset)
           ? this.languageCode
           : languageCode as String?,
-      isOnboardingDismissed:
-          isOnboardingDismissed ?? this.isOnboardingDismissed,
     );
   }
 
@@ -37,7 +32,6 @@ class AppPreferences {
     return <String, Object?>{
       'themeMode': themeMode.name,
       'languageCode': languageCode,
-      'isOnboardingDismissed': isOnboardingDismissed,
     }..removeWhere((_, value) => value == null);
   }
 
@@ -57,7 +51,6 @@ class AppPreferences {
     return AppPreferences(
       themeMode: _themeModeFromName(json['themeMode']) ?? ThemeMode.system,
       languageCode: json['languageCode'] as String? ?? 'en',
-      isOnboardingDismissed: json['isOnboardingDismissed'] as bool? ?? false,
     );
   }
 
