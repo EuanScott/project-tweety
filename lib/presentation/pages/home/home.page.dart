@@ -6,6 +6,9 @@ import 'package:get_it/get_it.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
+import '../../extensions/modal_extension.dart';
+import '../../widgets/app_modal.dart';
+import '../../widgets/webview_modal.dart';
 import 'bloc/home_bloc.dart';
 
 class Home extends StatelessWidget {
@@ -92,6 +95,62 @@ class _HomeView extends StatelessWidget {
             );
           },
           child: const Text('Back'),
+        ),
+        const SizedBox(height: 32),
+        const Text('Modals'),
+        TextButton(
+          child: const Text('Context Modal'),
+          onPressed: () {
+            context.showAppModal(const Center(child: Text('Modal content')));
+          },
+        ),
+        TextButton(
+          child: const Text('Page Modal'),
+          onPressed: () {
+            AppModal.page<bool>(
+              context: context,
+              child: const Center(child: Text('Modal content')),
+            );
+          },
+        ),
+        TextButton(
+          child: const Text('Blocking Modal'),
+          onPressed: () {
+            AppModal.blocking<bool>(
+              context: context,
+              child: Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text('Close Modal'),
+                ),
+              ),
+            );
+          },
+        ),
+        TextButton(
+          child: const Text('Compact Modal'),
+          onPressed: () async {
+            await AppModal.compact<bool>(
+              context: context,
+              maxHeightFactor: 0.35,
+              child: const Center(child: Text('Modal content')),
+            );
+          },
+        ),
+        TextButton(
+          child: const Text('Blocking Modal'),
+          onPressed: () async {
+            final result = await WebviewModal.show(
+              context,
+              'https://euanscott.github.io/tester.html',
+            );
+
+            if (result != null) {
+              log('User result: $result');
+            }
+          },
         ),
       ],
     );
