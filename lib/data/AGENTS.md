@@ -12,24 +12,24 @@
 ## Directory Responsibilities
 - `datasources/`
   - Use for raw data access such as mock providers, API clients, local storage adapters, or cache readers.
-  - Data sources should describe where the data comes from, for example `MockCardsDataSource`.
-  - Prefer filenames such as `mock_cards.datasource.dart`, `cards_remote.datasource.dart`, or `cards_local.datasource.dart`.
+  - Data sources should describe where the data comes from, for example `MockOrdersDataSource`.
+  - Prefer filenames such as `mock_orders.datasource.dart`, `orders_remote.datasource.dart`, or `orders_local.datasource.dart`.
 - `dtos/`
   - Use for transferred or raw data objects.
   - Prefer the `Dto` suffix over `Model`.
   - DTOs may provide mapping helpers such as `toEntity()`.
-  - Prefer filenames such as `card.dto.dart`.
+  - Prefer filenames such as `order_item.dto.dart`.
 - `repositories/`
   - Use for concrete repository implementations that fulfill domain repository contracts.
   - Repositories coordinate data sources and map DTOs into domain entities.
-  - Prefer filenames such as `cards.repository_impl.dart`.
+  - Prefer filenames such as `orders.repository_impl.dart`.
 - `services/`
   - Use for shared infrastructure helpers that speak to external systems, such as HTTP services.
 - `constants/`
   - Use for data-layer constants such as endpoint paths or request-related values.
 
 ## DTO Conventions
-- Prefer `Dto` naming, for example `CardDto`.
+- Prefer `Dto` naming, for example `OrderItemDto`.
 - DTOs represent raw or transferred data, not app-level business objects.
 - DTO filenames should use the entity name plus `.dto.dart`.
 - DTOs may include:
@@ -42,9 +42,9 @@
 - Data sources should expose raw fetch and save operations and stay close to the underlying source shape.
 - Mock data sources are acceptable and encouraged while API work is not yet in place.
 - Prefer names that make the source obvious:
-  - `MockCardsDataSource`
-  - `CardsRemoteDataSource`
-  - `CardsLocalDataSource`
+  - `MockOrdersDataSource`
+  - `OrdersRemoteDataSource`
+  - `OrdersLocalDataSource`
 - Prefer filenames that use `.datasource.dart`.
 - Data sources should not return widgets or presentation-specific types.
 

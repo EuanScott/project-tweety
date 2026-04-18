@@ -23,7 +23,7 @@
 ## Working Conventions
 - Follow the existing lint rules in `analysis_options.yaml`, especially `avoid_print: true` and `prefer_single_quotes: true`.
 - Match the current import style: package imports for app entrypoints and shared modules, relative imports where already generated or established.
-- Use the `cards` feature as the naming reference for new layered work.
+- Treat this document as the source of truth for naming and structure rules.
 - Standardize filenames on `feature_or_entity.role.dart`.
 - Use `_` inside the business name and `.` before the technical role.
 - Preferred role suffixes are:

@@ -17,14 +17,14 @@
 
 ## BLoC State Pattern
 - Prefer a single Freezed state per page BLoC.
-- Include a feature-scoped status enum such as `CardsStatus`.
+- Include a feature-scoped status enum such as `OrdersStatus`.
 - Prefer derived getters like `isLoading`, `isFailure`, `hasItems`, and `hasError` for clearer rendering logic.
 - Add `const MyState._();` when using derived getters on Freezed states.
 - Do not add placeholder getters that throw `UnimplementedError()`.
 
 ## BLoC Event Pattern
 - Keep event sets small.
-- For simple page bootstrap flows, start with a single event such as `CardsStarted`.
+- For simple page bootstrap flows, start with a single event such as `OrdersStarted`.
 - Only add more events when there is a real UI action or interaction to support.
 
 ## UI Wiring
@@ -56,5 +56,6 @@
   - `cards.event.dart`
   - `cards.state.dart`
 
-## Reference Implementation
-- Use the `cards` page as the default example for future BLoC page implementations.
+## Example
+- Example names for these conventions include `CardsPage`, `CardsBloc`, and `cards.page.dart`.
+- If an existing page differs from this document, follow the documented convention unless the deviation is intentional and documented.

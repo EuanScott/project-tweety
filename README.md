@@ -14,8 +14,7 @@ do on that project.
 
 ## Feature Naming Convention
 
-When adding new app features, use the `cards` feature as the reference for layered structure and
-apply this filename rule consistently:
+Use this documentation as the source of truth for feature naming.
 
 - use `_` inside the business name
 - use `.` before the technical role
@@ -37,8 +36,8 @@ Examples:
 - `cards.event.dart`
 - `cards.state.dart`
 
-Some existing source files still use older names from before this convention was written down. Use
-the convention above as the standard for new work and doc updates.
+Existing features may drift over time until they are intentionally updated, but the documentation is
+the standard to follow for new work.
 
 ## Development Style
 
