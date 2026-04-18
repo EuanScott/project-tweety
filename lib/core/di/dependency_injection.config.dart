@@ -12,7 +12,7 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../data/datasources/card.mock.dart' as _i1063;
+import '../../data/datasources/card.mock.dart' as _i905;
 import '../../data/repositories/cards.repository_impl.dart' as _i939;
 import '../../domain/repositories/card.repository.dart' as _i518;
 import '../../domain/usecases/create_card.usecase.dart' as _i279;
@@ -26,6 +26,7 @@ import '../analytics/analytics_service.dart' as _i726;
 import '../error_reporting/error_reporting_facade.dart' as _i802;
 import '../error_reporting/error_reporting_service.dart' as _i981;
 import '../feature_flags/feature_flag_service.dart' as _i349;
+import '../storage/app_preferences.storage.dart' as _i379;
 import 'di_init.service.dart' as _i1027;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -38,9 +39,11 @@ extension GetItInjectableX on _i174.GetIt {
     final errorReportingModule = _$ErrorReportingModule();
     final analyticsModule = _$AnalyticsModule();
     gh.factory<_i349.FeatureFlagService>(() => _i349.FeatureFlagService());
-    gh.singleton<_i1027.DiInitService>(() => _i1027.DiInitService());
-    gh.lazySingleton<_i1063.MockCardsDataSource>(
-      () => _i1063.MockCardsDataSource(),
+    gh.lazySingleton<_i379.AppPreferencesStorage>(
+      () => _i379.AppPreferencesStorage(),
+    );
+    gh.lazySingleton<_i905.MockCardsDataSource>(
+      () => _i905.MockCardsDataSource(),
     );
     gh.lazySingleton<_i981.ErrorReportingService>(
       () => _i981.FirebaseErrorReportingService(),
@@ -51,7 +54,7 @@ extension GetItInjectableX on _i174.GetIt {
       instanceName: 'coralogix',
     );
     gh.lazySingleton<_i518.CardsRepository>(
-      () => _i939.CardsRepositoryImpl(gh<_i1063.MockCardsDataSource>()),
+      () => _i939.CardsRepositoryImpl(gh<_i905.MockCardsDataSource>()),
     );
     gh.factory<_i279.CreateCardUseCase>(
       () => _i279.CreateCardUseCase(gh<_i518.CardsRepository>()),
@@ -73,6 +76,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i152.CardsBloc>(
       () => _i152.CardsBloc(gh<_i670.GetCardsUseCase>()),
+    );
+    gh.singleton<_i1027.DiInitService>(
+      () => _i1027.DiInitService(gh<_i379.AppPreferencesStorage>()),
     );
     gh.lazySingleton<Iterable<_i981.ErrorReportingService>>(
       () => errorReportingModule.errorReportingServices(

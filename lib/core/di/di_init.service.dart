@@ -1,5 +1,7 @@
 import 'package:injectable/injectable.dart';
 
+import '../storage/app_preferences.storage.dart';
+
 /// Orchestrates one-time initialization for app-level services.
 ///
 /// This class exists to keep `bootstrap.dart` lean and predictable:
@@ -8,14 +10,15 @@ import 'package:injectable/injectable.dart';
 /// - The orchestrator resolves and initializes services in a controlled order.
 @singleton
 class DiInitService {
-  DiInitService(
-  );
+  DiInitService(this._appPreferencesStorage);
+
+  final AppPreferencesStorage _appPreferencesStorage;
 
   /// Initializes all registered app-level services.
   ///
   /// Notes on ordering:
   ///   - If one service depends on another, be sure to initialize that first, to prevent weird errors.
   Future<void> initializeAllServices() async {
-    // no-op, as there is no DI setup required at this time
+    await _appPreferencesStorage.ensureDefaultsExist();
   }
 }
