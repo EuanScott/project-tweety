@@ -1,109 +1,109 @@
 # Domain Layer
 
-The Domain layer contains the business logic and rules of the application.
+The domain layer contains the business concepts, contracts, and operations that the rest of the app
+depends on.
 
 ## Purpose
 
-This layer defines the core functionality of the application and is independent of other layers. It
-contains business entities, repository interfaces, and use cases.
+This layer defines the core functionality of the application and stays independent from presentation
+details and data implementation details.
+
+## Naming Convention
+
+Use the `cards` feature as the reference and standardize filenames on `feature_or_entity.role.dart`.
+
+- use `_` inside the business name
+- use `.` before the technical role
+
+Examples:
+
+- `card.entity.dart`
+- `cards.repository.dart`
+- `get_cards.usecase.dart`
+- `create_card.usecase.dart`
+- `update_card.usecase.dart`
+- `delete_card.usecase.dart`
 
 ## Subdirectories
 
 ### `/entities`
 
-Contains business objects/models that represent core concepts in your application.
+Contains business objects that represent core concepts in the app.
 
-**Examples:**
+**Example filename:** `card.entity.dart`
 
 ```dart
-// user.dart
-class User {
-  final int id;
-  final String name;
-  final String email;
-
-  User({
-    required this.id,
-    required this.name,
-    required this.email,
-  });
-}
-
-// product.dart
-class Product {
-  final int id;
-  final String name;
-  final double price;
-  final String description;
-
-  Product({
-    required this.id,
-    required this.name,
-    required this.price,
+// card.entity.dart
+class Card {
+  const Card({
+    required this.title,
     required this.description,
   });
+
+  final String title;
+  final String description;
 }
 ```
 
-### /repositories
+### `/repositories`
 
-Contains interfaces that define contracts for data operations. Domain defines what it needs, while the implementation details live in the data layer.
+Contains contracts for data operations. The domain layer defines what it needs while the data layer
+provides the implementation.
 
-**Examples:**
+**Example filename:** `cards.repository.dart`
+
 ```dart
-// user_repository.dart
-import 'package:your_app/domain/entities/user.dart';
+// cards.repository.dart
+import 'package:your_app/domain/entities/card.entity.dart';
 
-abstract class UserRepository {
-  Future<List<User>> getUsers();
-  Future<User> getUserById(int id);
-  Future<void> saveUser(User user);
-  Future<void> deleteUser(int id);
-}
-
-// product_repository.dart
-import 'package:your_app/domain/entities/product.dart';
-
-abstract class ProductRepository {
-  Future<List<Product>> getProducts();
-  Future<Product> getProductById(int id);
-  Future<List<Product>> getProductsByCategory(String category);
-  Future<void> saveProduct(Product product);
+abstract class CardsRepository {
+  Future<List<Card>> getCards();
+  Future<Card?> getCardById(String cardId);
+  Future<Card> createCard(Card card);
+  Future<Card> updateCard(Card card);
+  Future<void> deleteCard(String cardId);
 }
 ```
 
-### /usecases
+### `/usecases`
 
-Contains business logic units or operations that can be performed in your application.
+Contains focused business operations that the presentation layer can call.
 
-**Examples:**
+**Example filenames:** `get_cards.usecase.dart` and `create_card.usecase.dart`
 
 ```dart
-// get_users_usecase.dart
-import 'package:your_app/domain/entities/user.dart';
-import 'package:your_app/domain/repositories/user_repository.dart';
+// get_cards.usecase.dart
+import 'package:your_app/domain/entities/card.entity.dart';
+import 'package:your_app/domain/repositories/cards.repository.dart';
 
-class GetUsersUseCase {
-  final UserRepository repository;
+class GetCardsUseCase {
+  const GetCardsUseCase(this._repository);
 
-  GetUsersUseCase(this.repository);
+  final CardsRepository _repository;
 
-  Future<List<User>> execute() {
-    return repository.getUsers();
+  Future<List<Card>> call() {
+    return _repository.getCards();
   }
 }
 
-// get_user_by_id_usecase.dart
-import 'package:your_app/domain/entities/user.dart';
-import 'package:your_app/domain/repositories/user_repository.dart';
+// create_card.usecase.dart
+import 'package:your_app/domain/entities/card.entity.dart';
+import 'package:your_app/domain/repositories/cards.repository.dart';
 
-class GetUserByIdUseCase {
-  final UserRepository repository;
+class CreateCardUseCase {
+  const CreateCardUseCase(this._repository);
 
-  GetUserByIdUseCase(this.repository);
+  final CardsRepository _repository;
 
-  Future<User> execute(int id) {
-    return repository.getUserById(id);
+  Future<Card> call(Card card) {
+    return _repository.createCard(card);
   }
 }
 ```
+
+## Summary
+
+- Keep entities lightweight and framework-light.
+- Keep repository contracts intent-based.
+- Prefer one use case per focused app action.
+- Use the cards naming pattern for new files even where older files still use legacy names.

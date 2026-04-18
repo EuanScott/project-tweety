@@ -9,9 +9,10 @@
 - Keep BLoC files inside `lib/presentation/pages/<feature>/bloc/`.
 - Prefer this file layout:
   - `<feature>.page.dart`
-  - `bloc/<feature>_bloc.dart`
-  - `bloc/<feature>_event.dart`
-  - `bloc/<feature>_state.dart`
+  - `bloc/<feature>.bloc.dart`
+  - `bloc/<feature>.event.dart`
+  - `bloc/<feature>.state.dart`
+- Follow the repo-wide naming rule: use `_` inside the business name and `.` before the technical role.
 - Keep page widgets small and focused; extract private widgets such as loading, error, and content sections when the page grows.
 
 ## BLoC State Pattern
@@ -49,6 +50,11 @@
   - `CardsEvent`
   - `CardsStarted`
   - `CardsStatus`
+- Preferred filenames are:
+  - `cards.page.dart`
+  - `cards.bloc.dart`
+  - `cards.event.dart`
+  - `cards.state.dart`
 
 ## Reference Implementation
 - Use the `cards` page as the default example for future BLoC page implementations.
