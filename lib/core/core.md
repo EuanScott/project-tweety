@@ -51,3 +51,20 @@ class ValidationUtils {
   }
 }
 ```
+
+### `/storage`
+
+Contains app-wide preferences persistence for small, non-secure persisted data.
+
+Use this area for lightweight values such as:
+
+- theme mode
+- locale choice
+- lightweight app flags
+- selected UI state like the last tab
+
+Do not use this area for:
+
+- secrets or auth tokens
+- API response storage
+- offline-first data sets

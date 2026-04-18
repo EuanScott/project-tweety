@@ -8,10 +8,9 @@ class Settings extends StatelessWidget {
   // TODO: Set it so that the i10n can be dynamically updated from the app and not always by changing the phone language in settings
 
   // Global UI Bloc (Theme and Language)
-  // SharedPrederences to save what the user has set (not secure_storage)
+  // Local cache for small non-secure persisted settings like theme and locale
   // Set theme and language in a settings page
   // Separate global bloc for business logic (auth and stuff)
-  // Updated agents for coding standards based off of cards page
 
   @override
   Widget build(BuildContext context) {
