@@ -2,9 +2,7 @@
 
 ## Purpose
 - This file defines the default pattern for new feature work under `lib/`.
-
-[//]: # (- Use the `cards` feature as the reference implementation for BLoC-driven presentation, DI, and clean architecture layering.)
-[//]: # (- Some existing source filenames in `cards` predate this convention. Follow the naming rules below for new work and doc updates.)
+- This document is the source of truth for feature structure, naming, and layer boundaries under `lib/`.
 
 ## Feature Structure
 - New features should follow the layered structure already used in this repo:
@@ -105,6 +103,5 @@
 - Mock the use case for BLoC tests.
 - Mock or fake the repository or data source for domain and data tests.
 
-## Cards Reference
-- Use the `cards` feature as the working example for this pattern.
-- Future BLoC-based pages should mirror its structure unless the task explicitly requires a different architecture.
+## Drift Policy
+- If an existing feature differs from this document, follow the documented convention unless the deviation is intentional and documented.

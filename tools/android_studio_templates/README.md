@@ -2,13 +2,13 @@
 
 These script-backed helpers generate the boilerplate for new feature layers in this repo.
 
-## Available helpers
+## Available Helpers
 
 - `presentation/generate_presentation_feature.sh`
 - `domain/generate_domain_feature.sh`
 - `data/generate_data_feature.sh`
 
-## Recommended order
+## Recommended Order
 
 For a brand new feature, generate in this order:
 
@@ -29,7 +29,7 @@ These helpers are intended to follow the repo-wide filename pattern `feature_or_
 - use `_` inside the business name
 - use `.` before the technical role
 
-Using `cards` as the example:
+Example naming:
 
 - domain
   - `card.entity.dart`
@@ -62,8 +62,8 @@ Each helper takes:
 1. `feature_name` for page, bloc, repository, and use-case naming
 2. `entity_name` for the domain entity and DTO naming
 
-This matches the repo pattern where a feature such as `cards` renders an entity such as
-`card`.
+This documentation defines the intended repo pattern. In the example above, the feature is `cards`
+and the entity is `card`.
 
 ## Current Scope
 
@@ -78,7 +78,7 @@ Test files are intentionally left until later in the feature workflow.
 ## Migration Note
 
 Some helper scripts and templates may still emit older underscore-style filenames. Treat the naming
-convention in this README as the target standard for the repo and update or rename generated files
+convention in this README as the source of truth for the repo and update or rename generated files
 to match it until the generators are fully aligned.
 
 ## Why These Are Script-Backed

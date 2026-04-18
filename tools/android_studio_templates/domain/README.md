@@ -16,7 +16,7 @@ tools/android_studio_templates/domain/generate_domain_feature.sh feature_name en
 Example:
 
 ```sh
-tools/android_studio_templates/domain/generate_domain_feature.sh cards card
+tools/android_studio_templates/domain/generate_domain_feature.sh orders order_item
 ```
 
 ## Generated Structure
@@ -27,14 +27,14 @@ The target structure for this layer is:
 - `lib/domain/repositories/<feature_name>.repository.dart`
 - `lib/domain/usecases/get_<feature_name>.usecase.dart`
 
-For a CRUD-style `cards` feature, the recommended domain filenames are:
+For a CRUD-style `orders` feature, the recommended domain filenames are:
 
-- `lib/domain/entities/card.entity.dart`
-- `lib/domain/repositories/cards.repository.dart`
-- `lib/domain/usecases/get_cards.usecase.dart`
-- `lib/domain/usecases/create_card.usecase.dart`
-- `lib/domain/usecases/update_card.usecase.dart`
-- `lib/domain/usecases/delete_card.usecase.dart`
+- `lib/domain/entities/order_item.entity.dart`
+- `lib/domain/repositories/orders.repository.dart`
+- `lib/domain/usecases/get_orders.usecase.dart`
+- `lib/domain/usecases/create_order.usecase.dart`
+- `lib/domain/usecases/update_order.usecase.dart`
+- `lib/domain/usecases/delete_order.usecase.dart`
 
 ## Notes
 
@@ -43,7 +43,7 @@ For a CRUD-style `cards` feature, the recommended domain filenames are:
 - The templates are intentionally generic starting points.
 - The package name is read from `pubspec.yaml`, so imports are generated for the current project
   instead of being hard-coded.
-- Generated files follow the repo convention used by the `cards` feature:
+- Generated files should follow the repo convention defined by these docs:
   - repository and use case names are feature-based
   - entity names are domain-based
 - The generated entity starts with `title` and `description` fields to match the current

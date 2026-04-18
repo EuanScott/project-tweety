@@ -23,7 +23,7 @@ tools/android_studio_templates/presentation/generate_presentation_feature.sh fea
 Example:
 
 ```sh
-tools/android_studio_templates/presentation/generate_presentation_feature.sh cards card
+tools/android_studio_templates/presentation/generate_presentation_feature.sh orders order_item
 ```
 
 ## Generated Structure
@@ -35,12 +35,12 @@ The target structure for this layer is:
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.event.dart`
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.state.dart`
 
-For `cards`, that means:
+For `orders`, that means:
 
-- `lib/presentation/pages/cards/cards.page.dart`
-- `lib/presentation/pages/cards/bloc/cards.bloc.dart`
-- `lib/presentation/pages/cards/bloc/cards.event.dart`
-- `lib/presentation/pages/cards/bloc/cards.state.dart`
+- `lib/presentation/pages/orders/orders.page.dart`
+- `lib/presentation/pages/orders/bloc/orders.bloc.dart`
+- `lib/presentation/pages/orders/bloc/orders.event.dart`
+- `lib/presentation/pages/orders/bloc/orders.state.dart`
 
 ## Notes
 
@@ -49,7 +49,7 @@ For `cards`, that means:
 - The templates are intentionally generic starting points.
 - The package name is read from `pubspec.yaml`, so imports are generated for the current project
   instead of being hard-coded.
-- The generated page follows the current repo pattern used by `cards`, `home`, and `settings`:
+- The generated page should follow the presentation conventions defined by these docs:
   - top-level page widget only
   - no nested `Scaffold`
   - page-owned `BlocProvider(create: ...)`

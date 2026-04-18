@@ -35,7 +35,7 @@
 
 ## Repository Contract Conventions
 - Repository contracts should expose intent-based operations.
-- Prefer names that describe the app need, for example `getCards()` or `saveProfile()`.
+- Prefer names that describe the app need, for example `getOrders()` or `saveProfile()`.
 - Keep repository interfaces small and cohesive.
 - Repository contracts belong in the domain layer even though implementations live in the data layer.
 - Repository filenames should use `.repository.dart`.
@@ -51,7 +51,7 @@
 ## Naming Guidance
 - Use plural feature names for feature-level files such as repositories and list-oriented use cases.
 - Use singular or domain-specific entity names for business objects and DTO partners.
-- With the `cards` feature, prefer:
+- Prefer names such as:
   - `card.entity.dart`
   - `cards.repository.dart`
   - `get_cards.usecase.dart`
@@ -75,9 +75,10 @@
 - Mock repository contracts when testing use cases.
 - Test domain logic in isolation from UI and data transport concerns.
 
-## Reference Implementation
-- Use the `cards` feature as the current reference:
+## Example
+- Example names for these conventions:
   - `Card`
   - `CardsRepository`
   - `GetCardsUseCase`
 - Use the naming convention above for new domain files even where older files still use legacy names.
+- If an existing domain feature differs from this document, follow the documented convention unless the deviation is intentional and documented.

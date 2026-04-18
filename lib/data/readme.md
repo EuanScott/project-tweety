@@ -9,7 +9,8 @@ data operations those contracts need.
 
 ## Naming Convention
 
-Use the `cards` feature as the reference and standardize filenames on `feature_or_entity.role.dart`.
+This document defines the naming convention for the data layer. Standardize filenames on
+`feature_or_entity.role.dart`.
 
 - use `_` inside the business name
 - use `.` before the technical role
@@ -135,4 +136,5 @@ class ApiService {
 - Prefer `Dto` over `Model` in this repo.
 - Keep DTOs and datasources inside the data layer.
 - Return domain entities from repositories, not DTOs.
-- Use the cards naming pattern for new files even where older files still use legacy names.
+- Treat this document as the source of truth for data-layer naming.
+- Older features may still use legacy names.
