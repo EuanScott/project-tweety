@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 
-enum SettingsThemeMode { system, light, dark }
+enum AppPreferencesThemeMode { system, light, dark }
 
-class Settings extends Equatable {
-  const Settings({
-    this.themeMode = SettingsThemeMode.system,
+class AppPreferences extends Equatable {
+  const AppPreferences({
+    this.themeMode = AppPreferencesThemeMode.system,
     this.languageCode = 'en',
   });
 
-  final SettingsThemeMode themeMode;
+  final AppPreferencesThemeMode themeMode;
   final String languageCode;
 
-  Settings copyWith({
-    SettingsThemeMode? themeMode,
+  AppPreferences copyWith({
+    AppPreferencesThemeMode? themeMode,
     String? languageCode,
   }) {
-    return Settings(
+    return AppPreferences(
       themeMode: themeMode ?? this.themeMode,
       languageCode: languageCode ?? this.languageCode,
     );
