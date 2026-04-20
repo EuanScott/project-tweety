@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/domain/entities/card.entity.dart';
-import 'package:project_tweety/domain/repositories/card.repository.dart';
+import 'package:project_tweety/domain/entities/card/card.entity.dart';
+import 'package:project_tweety/domain/repositories/card/card.repository.dart';
 
 @injectable
 class UpdateCardUseCase {

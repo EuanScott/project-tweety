@@ -6,6 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const Object _unset = Object();
 
+// TODO:
+// * core/storage currently depends on Flutter ThemeMode, which leaks UI concerns into storage.
+// * The storage key still uses cache naming even though the behavior is preferences-oriented.
+// * ensureDefaultsExist() writes defaults eagerly, which is fine for preferences but not a good default for a generic cache service.
+// * There are two different AppPreferences models, one in core storage and one in domain, which works but adds naming friction.
+
 @immutable
 class AppPreferences {
   const AppPreferences({

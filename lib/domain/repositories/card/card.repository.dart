@@ -1,4 +1,4 @@
-import 'package:project_tweety/domain/entities/card.entity.dart';
+import 'package:project_tweety/domain/entities/card/card.entity.dart';
 
 abstract class CardsRepository {
   Future<List<Card>> getCards();

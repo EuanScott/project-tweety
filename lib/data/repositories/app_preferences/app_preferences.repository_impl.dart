@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/core/storage/app_preferences.storage.dart'
     as storage;
-import 'package:project_tweety/data/datasources/app_preferences_local.datasource.dart';
-import 'package:project_tweety/domain/entities/app_preferences.entity.dart';
-import 'package:project_tweety/domain/repositories/app_preferences.repository.dart';
+import 'package:project_tweety/data/datasources/app_preferences/app_preferences_local.datasource.dart';
+import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
+import 'package:project_tweety/domain/repositories/app_preferences/app_preferences.repository.dart';
 
 @LazySingleton(as: AppPreferencesRepository)
 class AppPreferencesRepositoryImpl implements AppPreferencesRepository {

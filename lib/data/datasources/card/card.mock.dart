@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/data/dtos/card.dto.dart';
+import 'package:project_tweety/data/dtos/card/card.dto.dart';
 
 @lazySingleton
 class MockCardsDataSource {

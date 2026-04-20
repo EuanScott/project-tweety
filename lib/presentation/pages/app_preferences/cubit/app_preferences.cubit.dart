@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/domain/entities/app_preferences.entity.dart';
-import 'package:project_tweety/domain/usecases/get_app_preferences.usecase.dart';
-import 'package:project_tweety/domain/usecases/save_app_preferences.usecase.dart';
+import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
+import 'package:project_tweety/domain/usecases/app_preferences/get_app_preferences.usecase.dart';
+import 'package:project_tweety/domain/usecases/app_preferences/save_app_preferences.usecase.dart';
 
 part 'app_preferences.state.dart';
 part 'app_preferences.cubit.freezed.dart';
