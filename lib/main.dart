@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/dart_init.dart';
-import 'package:project_tweety/domain/entities/app_preferences.entity.dart'
+import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
     show AppPreferencesThemeMode;
 import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_preferences.cubit.dart';
 import 'package:project_tweety/presentation/pages/cards/cards.page.dart';

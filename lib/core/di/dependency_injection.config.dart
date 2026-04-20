@@ -12,22 +12,37 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../data/datasources/app_preferences_local.datasource.dart' as _i80;
-import '../../data/datasources/card.mock.dart' as _i905;
-import '../../data/repositories/app_preferences.repository_impl.dart' as _i360;
-import '../../data/repositories/cards.repository_impl.dart' as _i939;
-import '../../domain/repositories/app_preferences.repository.dart' as _i686;
-import '../../domain/repositories/card.repository.dart' as _i518;
-import '../../domain/usecases/create_card.usecase.dart' as _i279;
-import '../../domain/usecases/delete_card.usecase.dart' as _i738;
-import '../../domain/usecases/get_app_preferences.usecase.dart' as _i563;
-import '../../domain/usecases/get_card.usecase.dart' as _i670;
-import '../../domain/usecases/save_app_preferences.usecase.dart' as _i172;
-import '../../domain/usecases/update_card.usecase.dart' as _i729;
+import '../../data/datasources/app_preferences/app_preferences_local.datasource.dart'
+    as _i805;
+import '../../data/datasources/card/card.mock.dart' as _i295;
+import '../../data/repositories/app_preferences/app_preferences.repository_impl.dart'
+    as _i298;
+import '../../data/repositories/card/cards.repository_impl.dart' as _i461;
+import '../../data/repositories/profile/profile.repository_impl.dart' as _i362;
+import '../../data/repositories/profile_v2/profile_v2.repository_impl.dart'
+    as _i317;
+import '../../domain/repositories/app_preferences/app_preferences.repository.dart'
+    as _i355;
+import '../../domain/repositories/card/card.repository.dart' as _i174;
+import '../../domain/repositories/profile/profile.repository.dart' as _i653;
+import '../../domain/repositories/profile_v2/profile_v2.repository.dart'
+    as _i1012;
+import '../../domain/usecases/app_preferences/get_app_preferences.usecase.dart'
+    as _i473;
+import '../../domain/usecases/app_preferences/save_app_preferences.usecase.dart'
+    as _i76;
+import '../../domain/usecases/card/create_card.usecase.dart' as _i111;
+import '../../domain/usecases/card/delete_card.usecase.dart' as _i174;
+import '../../domain/usecases/card/get_card.usecase.dart' as _i275;
+import '../../domain/usecases/card/update_card.usecase.dart' as _i811;
+import '../../domain/usecases/profile/fetch_profile.usecase.dart' as _i552;
+import '../../domain/usecases/profile_v2/fetch_profile_v2.usecase.dart' as _i79;
 import '../../presentation/pages/app_preferences/cubit/app_preferences.cubit.dart'
     as _i889;
 import '../../presentation/pages/cards/bloc/cards.bloc.dart' as _i152;
 import '../../presentation/pages/home/bloc/home_bloc.dart' as _i558;
+import '../../presentation/pages/profile/bloc/profile.bloc.dart' as _i255;
+import '../../presentation/pages/profile_v2/bloc/profile_v2.bloc.dart' as _i675;
 import '../analytics/analytics_facade.dart' as _i541;
 import '../analytics/analytics_service.dart' as _i726;
 import '../error_reporting/error_reporting_facade.dart' as _i802;
@@ -49,8 +64,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i379.AppPreferencesStorage>(
       () => _i379.AppPreferencesStorage(),
     );
-    gh.lazySingleton<_i905.MockCardsDataSource>(
-      () => _i905.MockCardsDataSource(),
+    gh.lazySingleton<_i295.MockCardsDataSource>(
+      () => _i295.MockCardsDataSource(),
     );
     gh.lazySingleton<_i981.ErrorReportingService>(
       () => _i981.FirebaseErrorReportingService(),
@@ -60,41 +75,36 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i981.CoralogixErrorReportingService(),
       instanceName: 'coralogix',
     );
-    gh.lazySingleton<_i518.CardsRepository>(
-      () => _i939.CardsRepositoryImpl(gh<_i905.MockCardsDataSource>()),
-    );
-    gh.factory<_i279.CreateCardUseCase>(
-      () => _i279.CreateCardUseCase(gh<_i518.CardsRepository>()),
-    );
-    gh.factory<_i738.DeleteCardUseCase>(
-      () => _i738.DeleteCardUseCase(gh<_i518.CardsRepository>()),
-    );
-    gh.factory<_i670.GetCardsUseCase>(
-      () => _i670.GetCardsUseCase(gh<_i518.CardsRepository>()),
-    );
-    gh.factory<_i670.GetCardByIdUseCase>(
-      () => _i670.GetCardByIdUseCase(gh<_i518.CardsRepository>()),
-    );
-    gh.factory<_i729.UpdateCardUseCase>(
-      () => _i729.UpdateCardUseCase(gh<_i518.CardsRepository>()),
+    gh.lazySingleton<_i653.ProfileRepository>(
+      () => const _i362.ProfileRepositoryImpl(),
     );
     gh.lazySingleton<_i726.AnalyticsService>(
       () => _i726.FirebaseAnalyticsService(),
     );
-    gh.factory<_i152.CardsBloc>(
-      () => _i152.CardsBloc(gh<_i670.GetCardsUseCase>()),
+    gh.lazySingleton<_i1012.ProfileV2Repository>(
+      () => const _i317.ProfileV2RepositoryImpl(),
+    );
+    gh.factory<_i79.FetchProfileV2UseCase>(
+      () => _i79.FetchProfileV2UseCase(gh<_i1012.ProfileV2Repository>()),
     );
     gh.singleton<_i1027.DiInitService>(
       () => _i1027.DiInitService(gh<_i379.AppPreferencesStorage>()),
     );
-    gh.lazySingleton<_i80.AppPreferencesLocalDataSource>(
-      () =>
-          _i80.AppPreferencesLocalDataSource(gh<_i379.AppPreferencesStorage>()),
-    );
-    gh.lazySingleton<_i686.AppPreferencesRepository>(
-      () => _i360.AppPreferencesRepositoryImpl(
-        gh<_i80.AppPreferencesLocalDataSource>(),
+    gh.lazySingleton<_i805.AppPreferencesLocalDataSource>(
+      () => _i805.AppPreferencesLocalDataSource(
+        gh<_i379.AppPreferencesStorage>(),
       ),
+    );
+    gh.lazySingleton<_i355.AppPreferencesRepository>(
+      () => _i298.AppPreferencesRepositoryImpl(
+        gh<_i805.AppPreferencesLocalDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i174.CardsRepository>(
+      () => _i461.CardsRepositoryImpl(gh<_i295.MockCardsDataSource>()),
+    );
+    gh.factory<_i675.ProfileV2Bloc>(
+      () => _i675.ProfileV2Bloc(gh<_i79.FetchProfileV2UseCase>()),
     );
     gh.lazySingleton<Iterable<_i981.ErrorReportingService>>(
       () => errorReportingModule.errorReportingServices(
@@ -102,33 +112,57 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.ErrorReportingService>(instanceName: 'coralogix'),
       ),
     );
+    gh.factory<_i552.FetchProfileUseCase>(
+      () => _i552.FetchProfileUseCase(gh<_i653.ProfileRepository>()),
+    );
     gh.lazySingleton<Iterable<_i726.AnalyticsService>>(
       () => analyticsModule.analyticsServices(gh<_i726.AnalyticsService>()),
-    );
-    gh.factory<_i563.GetAppPreferencesUseCase>(
-      () =>
-          _i563.GetAppPreferencesUseCase(gh<_i686.AppPreferencesRepository>()),
-    );
-    gh.factory<_i172.SaveAppPreferencesUseCase>(
-      () =>
-          _i172.SaveAppPreferencesUseCase(gh<_i686.AppPreferencesRepository>()),
     );
     gh.lazySingleton<_i802.ErrorReportingFacade>(
       () => _i802.ErrorReportingFacade(
         gh<Iterable<_i981.ErrorReportingService>>(),
       ),
     );
+    gh.factory<_i473.GetAppPreferencesUseCase>(
+      () =>
+          _i473.GetAppPreferencesUseCase(gh<_i355.AppPreferencesRepository>()),
+    );
+    gh.factory<_i76.SaveAppPreferencesUseCase>(
+      () =>
+          _i76.SaveAppPreferencesUseCase(gh<_i355.AppPreferencesRepository>()),
+    );
+    gh.factory<_i111.CreateCardUseCase>(
+      () => _i111.CreateCardUseCase(gh<_i174.CardsRepository>()),
+    );
+    gh.factory<_i174.DeleteCardUseCase>(
+      () => _i174.DeleteCardUseCase(gh<_i174.CardsRepository>()),
+    );
+    gh.factory<_i275.GetCardsUseCase>(
+      () => _i275.GetCardsUseCase(gh<_i174.CardsRepository>()),
+    );
+    gh.factory<_i275.GetCardByIdUseCase>(
+      () => _i275.GetCardByIdUseCase(gh<_i174.CardsRepository>()),
+    );
+    gh.factory<_i811.UpdateCardUseCase>(
+      () => _i811.UpdateCardUseCase(gh<_i174.CardsRepository>()),
+    );
+    gh.factory<_i255.ProfileBloc>(
+      () => _i255.ProfileBloc(gh<_i552.FetchProfileUseCase>()),
+    );
     gh.lazySingleton<_i541.AnalyticsFacade>(
       () => _i541.AnalyticsFacade(gh<Iterable<_i726.AnalyticsService>>()),
     );
     gh.factory<_i889.AppPreferencesCubit>(
       () => _i889.AppPreferencesCubit(
-        gh<_i563.GetAppPreferencesUseCase>(),
-        gh<_i172.SaveAppPreferencesUseCase>(),
+        gh<_i473.GetAppPreferencesUseCase>(),
+        gh<_i76.SaveAppPreferencesUseCase>(),
       ),
     );
     gh.factory<_i558.HomeBloc>(
       () => _i558.HomeBloc(gh<_i802.ErrorReportingFacade>()),
+    );
+    gh.factory<_i152.CardsBloc>(
+      () => _i152.CardsBloc(gh<_i275.GetCardsUseCase>()),
     );
     return this;
   }

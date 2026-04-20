@@ -1,0 +1,4 @@
+interface:
+  display_name: "Page Scaffold"
+  short_description: "Scaffold presentation pages"
+  default_prompt: "Use $page-scaffold to scaffold a presentation page and BLoC for Project Tweety."

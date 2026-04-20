@@ -1,0 +1,4 @@
+interface:
+  display_name: "Domain Scaffold"
+  short_description: "Scaffold domain layer files"
+  default_prompt: "Use $domain-scaffold to scaffold the domain layer for a Project Tweety feature."
