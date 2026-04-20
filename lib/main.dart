@@ -1,15 +1,15 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/domain/entities/app_preferences.entity.dart'
     show AppPreferencesThemeMode;
+import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_preferences.cubit.dart';
 import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
-import 'package:project_tweety/presentation/pages/app_preferences/bloc/app_preferences.cubit.dart';
 
 import 'l10n/app_localizations.dart';
 
@@ -41,8 +41,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) =>
-              GetIt.I<AppPreferencesCubit>()..loadAppPreferences(),
+          create: (_) => GetIt.I<AppPreferencesCubit>()..loadAppPreferences(),
         ),
       ],
       child: BlocBuilder<AppPreferencesCubit, AppPreferencesState>(
