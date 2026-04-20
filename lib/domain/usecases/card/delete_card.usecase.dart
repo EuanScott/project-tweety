@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/domain/repositories/card.repository.dart';
+import 'package:project_tweety/domain/repositories/card/card.repository.dart';
 
 @injectable
 class DeleteCardUseCase {

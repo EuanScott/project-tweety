@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project_tweety/domain/entities/app_preferences.entity.dart'
+import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
 as app_preferences_entity;
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 

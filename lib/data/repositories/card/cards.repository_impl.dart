@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/data/datasources/card.mock.dart';
-import 'package:project_tweety/domain/entities/card.entity.dart';
-import 'package:project_tweety/domain/repositories/card.repository.dart';
+import 'package:project_tweety/data/datasources/card/card.mock.dart';
+import 'package:project_tweety/domain/entities/card/card.entity.dart';
+import 'package:project_tweety/domain/repositories/card/card.repository.dart';
 
 @LazySingleton(as: CardsRepository)
 class CardsRepositoryImpl implements CardsRepository {
