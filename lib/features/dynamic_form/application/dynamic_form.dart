@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../data/data.dart';
 
+@Deprecated('Just a tester, leave for now')
 class DynamicForm extends StatefulWidget {
   final List<FormInputData> inputData;
   final List<FormOutputData> outputData;

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Scaffold"
+  short_description: "Scaffold data layer files"
+  default_prompt: "Use $data-scaffold to scaffold the data layer for a Project Tweety feature."

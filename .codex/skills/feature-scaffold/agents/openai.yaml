@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Scaffold"
+  short_description: "Scaffold layered features"
+  default_prompt: "Use $feature-scaffold to scaffold a new layered feature for Project Tweety."
