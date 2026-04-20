@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_tweety/domain/entities/app_preferences.entity.dart'
-    as app_preferences_entity;
+as app_preferences_entity;
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
-import 'bloc/app_preferences.cubit.dart';
+import 'cubit/app_preferences.cubit.dart';
+
 
 // TODO: Update the docs to also include the cubit
 // TODO: Update docs so that nested pages exist within a parents page? (unsure about this one)
