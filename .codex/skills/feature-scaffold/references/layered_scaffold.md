@@ -38,6 +38,10 @@ Defaults:
 - use case can mirror that same minimal bootstrap flow
 - skip entities until the feature has a concrete domain payload
 
+If a `curl` request is supplied:
+- prefer a concrete repository operation over a payload-free bootstrap method
+- create a domain entity when the request/response shape justifies one
+
 Add entity files or extra use cases only when the requested behavior needs them now:
 - `lib/domain/entities/<entity>/<entity>.entity.dart`
 - `lib/domain/usecases/<feature-or-entity>/create_<entity>.usecase.dart`
@@ -54,6 +58,11 @@ Defaults:
 - do not create mock datasources or DTOs by default
 - repository implementation can satisfy the bootstrap fetch with a simple successful `Future<void>`
 - repository implementation is annotated as `@LazySingleton(as: ContractType)`
+
+If a `curl` request is supplied:
+- create a datasource by default
+- use the request method, URL, headers, query params, and request body as the transport source of truth
+- create DTOs when the request body or sample response has a real structure
 
 Add these only when the feature has a real data shape:
 - `lib/data/datasources/<feature-or-entity>/<source>.datasource.dart`
