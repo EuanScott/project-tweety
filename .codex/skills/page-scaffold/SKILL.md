@@ -8,6 +8,15 @@ description: Scaffold only the presentation layer for a Project Tweety feature u
 Scaffold the presentation layer only.
 Use this when the work should stay inside `lib/presentation/pages/` and the page should consume existing use cases or other already-available dependencies.
 
+## Help mode
+
+If the user invokes this skill with `--help`:
+- do not scaffold or edit files
+- return a short, human-readable help response
+- explain what the skill does
+- list the required and optional inputs
+- show one or two example invocations
+
 Start by reading:
 - Root `AGENTS.md`
 - `lib/AGENTS.md`

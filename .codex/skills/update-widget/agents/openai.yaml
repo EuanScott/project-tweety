@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Widget"
+  short_description: "Safely update existing widgets"
+  default_prompt: "Use $update-widget to update an existing shared widget for Project Tweety while preserving current behaviour by default. Optionally provide a new widget name to create a renamed successor."
