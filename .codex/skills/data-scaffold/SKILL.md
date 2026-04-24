@@ -8,6 +8,16 @@ description: Scaffold only the data layer for a Project Tweety feature using the
 Scaffold the data layer only.
 Use this when the work should stay inside `lib/data/`, or when the user is implementing storage, transport, or repository orchestration for an existing feature.
 
+## Help mode
+
+If the user invokes this skill with `--help`:
+- do not scaffold or edit files
+- return a short, human-readable help response
+- explain what the skill does
+- list the required and optional inputs
+- mention that a `curl` request can be supplied to define the API call shape
+- show one or two example invocations
+
 Start by reading:
 - Root `AGENTS.md`
 - `lib/AGENTS.md`
@@ -24,6 +34,8 @@ Collect or infer these inputs before scaffolding:
 - folder key, usually the nearest existing singular business name
 - whether the data layer needs only a repository implementation or also datasources and DTOs
 - whether the work is bootstrap-only or already has a concrete data shape
+- optional `curl` request that defines the API call to implement
+- optional sample response body when the user has one available
 
 Ask a short clarifying question only if the feature name, folder key, or required data pieces are ambiguous.
 
@@ -39,6 +51,17 @@ Use the current repo as the reference for nested paths such as:
 - `lib/data/repositories/card/cards.repository_impl.dart`
 - `lib/data/dtos/card/card.dto.dart`
 - `lib/data/datasources/card/card.mock.dart`
+
+### 1a. Parse a supplied curl request when present
+
+If the user provides a `curl` request:
+- treat it as the source of truth for the transport shape
+- extract the HTTP method, URL, headers, query params, and request body
+- preserve the request semantics unless the user explicitly asks to adapt them
+- use any supplied sample response body to shape DTOs and response mapping
+
+If a `curl` request is present, the work is no longer bootstrap-only by default.
+Treat it as concrete transport work.
 
 ### 2. Verify domain prerequisites first
 
@@ -71,6 +94,10 @@ Follow these rules:
 - keep bootstrap implementations minimal when there is no real payload yet
 - annotate the repository implementation with `@LazySingleton(as: ContractType)` unless a different lifecycle is justified
 
+If a `curl` request is present:
+- implement the repository around the concrete datasource call instead of a payload-free stub
+- preserve the API intent in the repository contract while mapping the raw transport details in the data layer
+
 ### 4. Add datasources and DTOs only when justified
 
 Create these only when the feature has a real source shape or transport model:
@@ -82,6 +109,13 @@ Follow these rules:
 - keep datasources close to source shape
 - keep DTOs responsible for mapping and serialization concerns
 - keep repository implementations responsible for orchestration
+
+If a `curl` request is present:
+- create a datasource by default
+- use the extracted URL, HTTP method, headers, and request body shape in that datasource
+- create DTOs when the request body or sample response has a concrete structure worth modelling
+- if a sample response body is available, use it to shape the DTO and repository mapping
+- if no sample response is available, keep the response handling conservative and document any assumptions in the final summary
 
 ### 5. Keep the scaffold intentionally minimal
 
@@ -98,6 +132,7 @@ After creating source files:
 - regenerate code only if Injectable annotations changed
 - run targeted tests first when tests are part of the task
 - summarize whether `$domain-scaffold` was used as part of the same flow
+- if a `curl` request was used, summarize which request details were implemented from it and whether a sample response body was available
 
 ## File Contract
 

@@ -7,6 +7,16 @@ description: Scaffold a new Project Tweety feature using the repo's layered-firs
 
 Create a new layered feature in one pass instead of treating domain, data, and presentation as separate generation steps.
 
+## Help mode
+
+If the user invokes this skill with `--help`:
+- do not scaffold or edit files
+- return a short, human-readable help response
+- explain what the skill does
+- list the required and optional inputs
+- mention that a `curl` request can be supplied for the data/API side of the feature
+- show one or two example invocations
+
 Start by reading the repo guidance that defines the contract:
 - Root `AGENTS.md`
 - `lib/AGENTS.md`
@@ -26,6 +36,8 @@ Collect or infer these inputs before scaffolding:
 - feature name in snake_case, usually plural for list-style features, such as `cards`
 - primary page intent, such as list, detail, preferences, or editor
 - initial repository operations that are actually needed now
+- optional `curl` request that defines a real API call for the feature
+- optional sample response body when the user has one available
 
 Ask a short clarifying question only if the feature name or required operations are ambiguous.
 
@@ -57,6 +69,11 @@ Follow these rules:
 - Skip domain entities until the feature has a concrete payload to represent
 - Annotate use cases with `@injectable` when they are consumed through DI
 
+If a `curl` request is supplied:
+- derive the repository operation from the API intent instead of using a payload-free bootstrap method
+- create a concrete domain entity when the request/response shape justifies one
+- let the use case reflect the real operation rather than a placeholder fetch
+
 ### 3. Scaffold the data layer second
 
 Create only the matching data files that are justified by the current scope.
@@ -70,6 +87,13 @@ Follow these rules:
 - Use `.repository_impl.dart` filenames
 - Keep the initial repository implementation minimal, for example a `Future<void>` method that completes successfully
 - Annotate datasource and repository implementation for Injectable using the repo's preferred lifecycles
+
+If a `curl` request is supplied:
+- route the data-layer scaffolding through the same rules as `$data-scaffold`
+- create a datasource by default
+- use the extracted method, URL, headers, query params, and request body in that datasource
+- create DTOs when the request body or sample response has a real structure
+- use the sample response body, when available, to shape DTO mapping and the repository implementation
 
 ### 4. Scaffold the presentation layer last
 
@@ -112,6 +136,7 @@ After creating source files:
 - regenerate localization only if ARB inputs changed
 - run targeted tests first when tests are part of the task
 - summarize any intentionally unimplemented methods or follow-up integration steps
+- if a `curl` request was used, summarize which data-layer pieces were derived from it and whether a sample response body was available
 
 ## File Contract
 

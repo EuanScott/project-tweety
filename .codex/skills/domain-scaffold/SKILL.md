@@ -8,6 +8,15 @@ description: Scaffold only the domain layer for a Project Tweety feature using t
 Scaffold the domain layer only.
 Use this when the work should stay inside `lib/domain/` and the data or presentation layers either already exist or are intentionally out of scope.
 
+## Help mode
+
+If the user invokes this skill with `--help`:
+- do not scaffold or edit files
+- return a short, human-readable help response
+- explain what the skill does
+- list the required and optional inputs
+- show one or two example invocations
+
 Start by reading:
 - Root `AGENTS.md`
 - `lib/AGENTS.md`

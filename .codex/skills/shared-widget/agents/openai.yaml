@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shared Widget Scaffold"
+  short_description: "Scaffold theme-aware shared widgets"
+  default_prompt: "Use $shared-widget to scaffold a theme-aware shared widget for Project Tweety from a widget name plus a plain-English widget description."
