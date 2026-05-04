@@ -20,6 +20,22 @@
 - `lib/l10n`: ARB files and generated localization output
 - `test`: widget and shared/unit tests
 
+## Skill Routing
+- Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
+- If an AI assistant notices a task that matches an existing skill, it may suggest or use that skill when it improves consistency. This is guidance, not a hard rule.
+- If the user wants help discovering a skill, prefer a short pointer over a long explanation.
+- If the user runs a skill with `--help`, do not edit files. Return a short explanation of what the skill does, its inputs, and example usage.
+- Prefer these skill matches when they fit the task:
+  - New feature scaffold across layers: `$feature-scaffold`
+  - Domain-only contracts or use cases: `$domain-scaffold`
+  - Data-layer work such as repositories, datasources, DTOs, or a `curl`-driven API implementation: `$data-scaffold`
+  - Page and BLoC scaffold work on top of existing lower layers: `$page-scaffold`
+  - New shared widget from a brief or screenshot/mockup: `$shared-widget`
+  - Existing shared widget update that should preserve current behavior by default: `$update-widget`
+- Prefer task-based guidance in conversation:
+  - "If you are scaffolding a new shared widget, `$shared-widget --help` will show the inputs."
+  - "If you are updating an existing shared widget without changing its behavior, `$update-widget --help` is the better starting point."
+
 ## Working Conventions
 - Follow the existing lint rules in `analysis_options.yaml`, especially `avoid_print: true` and `prefer_single_quotes: true`.
 - Match the current import style: package imports for app entrypoints and shared modules, relative imports where already generated or established.

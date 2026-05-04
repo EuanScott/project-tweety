@@ -4,6 +4,12 @@
 - This file applies to all page and page-BLoC work under `lib/presentation/pages/`.
 - Follow the broader guidance in `lib/AGENTS.md`, but prefer the rules here when working specifically on pages and their BLoCs.
 
+## Skill Hints
+- Users can build pages and BLoCs directly. `$page-scaffold` is an optional helper for the common repo pattern.
+- Prefer `$page-scaffold` when adding a new page and BLoC flow on top of existing lower-layer work.
+- If the lower layers do not exist yet, prefer `$feature-scaffold` for a full feature or route through `$domain-scaffold` and `$data-scaffold` first.
+- If the user wants to see the supported inputs and examples, run `$page-scaffold --help`.
+
 ## Page Structure
 - Each BLoC-driven page should live under `lib/presentation/pages/<feature>/`.
 - Keep BLoC files inside `lib/presentation/pages/<feature>/bloc/`.

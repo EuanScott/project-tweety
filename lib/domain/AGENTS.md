@@ -12,6 +12,12 @@
   - repository contracts
   - use cases
 
+## Skill Hints
+- Users can add domain files directly. `$domain-scaffold` is an optional helper when the work matches the repo's standard domain pattern.
+- Prefer `$domain-scaffold` for new or updated entities, repository contracts, and use cases.
+- If the task spans more than domain, prefer `$feature-scaffold` for a full feature or `$data-scaffold` when domain work is only needed to unblock data-layer scaffolding.
+- If the user wants usage examples or expected inputs, run `$domain-scaffold --help`.
+
 ## Directory Responsibilities
 - `entities/`
   - Use for business objects such as `Card`.

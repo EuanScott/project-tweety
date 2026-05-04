@@ -9,6 +9,13 @@
 - This layer implements repository contracts defined in the domain layer.
 - Data-layer code may depend on data sources, DTOs, services, and domain contracts, but domain logic should not live here.
 
+## Skill Hints
+- Users can implement data-layer code directly. `$data-scaffold` is an optional helper when the work matches the repo's existing pattern.
+- Prefer `$data-scaffold` for repository implementations, datasources, DTOs, or API-backed data work.
+- If the user provides a `curl` request, prefer `$data-scaffold` and treat that `curl` as the transport source of truth.
+- If the required domain contract is missing, use `$domain-scaffold` first or route through `$feature-scaffold` if the work is broader than data only.
+- If the user wants to understand the expected inputs, run `$data-scaffold --help`.
+
 ## Directory Responsibilities
 - `datasources/`
   - Use for raw data access such as mock providers, API clients, local storage adapters, or cache readers.
