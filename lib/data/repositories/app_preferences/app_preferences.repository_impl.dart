@@ -18,7 +18,7 @@ class AppPreferencesRepositoryImpl implements AppPreferencesRepository {
 
     return AppPreferences(
       themeMode: _mapThemeMode(appPreferences.themeMode),
-      languageCode: appPreferences.languageCode ?? 'en',
+      languageCode: appPreferences.languageCode,
     );
   }
 

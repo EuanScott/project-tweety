@@ -14,10 +14,7 @@ const Object _unset = Object();
 
 @immutable
 class AppPreferences {
-  const AppPreferences({
-    this.themeMode = ThemeMode.system,
-    this.languageCode = 'en',
-  });
+  const AppPreferences({this.themeMode = ThemeMode.system, this.languageCode});
 
   final ThemeMode themeMode;
   final String? languageCode;
@@ -56,7 +53,7 @@ class AppPreferences {
   factory AppPreferences.fromJson(Map<String, dynamic> json) {
     return AppPreferences(
       themeMode: _themeModeFromName(json['themeMode']) ?? ThemeMode.system,
-      languageCode: json['languageCode'] as String? ?? 'en',
+      languageCode: json['languageCode'] as String?,
     );
   }
 
@@ -72,8 +69,7 @@ class AppPreferences {
 
 @LazySingleton()
 class AppPreferencesStorage {
-  AppPreferencesStorage()
-    : _preferences = SharedPreferencesAsync();
+  AppPreferencesStorage() : _preferences = SharedPreferencesAsync();
 
   static const String _storageKey = 'app_cache.preferences';
 
@@ -87,15 +83,15 @@ class AppPreferencesStorage {
     final storedPreferences = await _preferences.getString(_storageKey);
 
     if (storedPreferences == null || storedPreferences.isEmpty) {
-      return ensureDefaultsExist();
+      return const AppPreferences();
     }
 
     try {
       return AppPreferences.fromStorageValue(storedPreferences);
     } on FormatException {
-      return ensureDefaultsExist();
+      return const AppPreferences();
     } on TypeError {
-      return ensureDefaultsExist();
+      return const AppPreferences();
     }
   }
 

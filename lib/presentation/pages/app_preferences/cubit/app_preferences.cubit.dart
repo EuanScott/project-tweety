@@ -58,7 +58,7 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
     await _persistAppPreferences(updatedAppPreferences);
   }
 
-  Future<void> updateLanguageCode(String languageCode) async {
+  Future<void> updateLanguageCode(String? languageCode) async {
     final currentAppPreferences = state.effectiveAppPreferences;
     final updatedAppPreferences = currentAppPreferences.copyWith(
       languageCode: languageCode,

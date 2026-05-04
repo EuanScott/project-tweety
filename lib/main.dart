@@ -49,18 +49,19 @@ class MyApp extends StatelessWidget {
           final appPreferences = state.effectiveAppPreferences;
 
           return MaterialApp(
-            title: 'Project Tweety',
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)!.appTitle,
             theme: DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
             darkTheme: DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
             themeMode: _themeMode(appPreferences.themeMode),
-            locale: Locale(appPreferences.languageCode),
+            locale: _locale(appPreferences.languageCode),
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: const [Locale('en'), Locale('es')],
+            supportedLocales: AppLocalizations.supportedLocales,
             home: const MyAppImpl(),
             // TODO: Setup navigatorObservers
           );
@@ -78,6 +79,14 @@ class MyApp extends StatelessWidget {
       case AppPreferencesThemeMode.dark:
         return ThemeMode.dark;
     }
+  }
+
+  Locale? _locale(String? languageCode) {
+    if (languageCode == null) {
+      return null;
+    }
+
+    return Locale(languageCode);
   }
 }
 

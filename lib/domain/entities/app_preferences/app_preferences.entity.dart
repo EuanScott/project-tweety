@@ -2,25 +2,29 @@ import 'package:equatable/equatable.dart';
 
 enum AppPreferencesThemeMode { system, light, dark }
 
+const Object _unset = Object();
+
 class AppPreferences extends Equatable {
   const AppPreferences({
     this.themeMode = AppPreferencesThemeMode.system,
-    this.languageCode = 'en',
+    this.languageCode,
   });
 
   final AppPreferencesThemeMode themeMode;
-  final String languageCode;
+  final String? languageCode;
 
   AppPreferences copyWith({
     AppPreferencesThemeMode? themeMode,
-    String? languageCode,
+    Object? languageCode = _unset,
   }) {
     return AppPreferences(
       themeMode: themeMode ?? this.themeMode,
-      languageCode: languageCode ?? this.languageCode,
+      languageCode: identical(languageCode, _unset)
+          ? this.languageCode
+          : languageCode as String?,
     );
   }
 
   @override
-  List<Object> get props => [themeMode, languageCode];
+  List<Object?> get props => [themeMode, languageCode];
 }

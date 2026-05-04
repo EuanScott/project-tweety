@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
-as app_preferences_entity;
+    as app_preferences_entity;
+import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
+import 'app_language_options.dart';
 import 'cubit/app_preferences.cubit.dart';
-
-
-// TODO: Update the docs to also include the cubit
-// TODO: Update docs so that nested pages exist within a parents page? (unsure about this one)
 
 class AppPreferencesPage extends StatelessWidget {
   const AppPreferencesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const PageScaffold(
-      title: 'App preferences',
-      body: _AppPreferencesView(),
+    final l10n = AppLocalizations.of(context)!;
+
+    return PageScaffold(
+      title: l10n.appPreferencesTitle,
+      body: const _AppPreferencesView(),
     );
   }
 }
@@ -54,8 +54,11 @@ class _AppPreferencesContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final platformBrightness = MediaQuery.platformBrightnessOf(context);
     final effectiveThemeMode = _effectiveThemeMode(platformBrightness);
+    final effectiveLanguageLabel = _effectiveLanguageLabel(context);
+    final direction = Directionality.of(context);
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -63,14 +66,18 @@ class _AppPreferencesContent extends StatelessWidget {
         DropdownButtonFormField<app_preferences_entity.AppPreferencesThemeMode>(
           initialValue: appPreferences.themeMode,
           decoration: InputDecoration(
-            labelText: 'Theme',
-            helperText: _themeModeHelperText(effectiveThemeMode),
+            labelText: l10n.appPreferencesThemeLabel,
+            helperText: _themeModeHelperText(l10n, effectiveThemeMode),
           ),
           selectedItemBuilder: (context) {
             return app_preferences_entity.AppPreferencesThemeMode.values
                 .map(
                   (themeMode) => Text(
-                    _selectedThemeModeLabel(themeMode, effectiveThemeMode),
+                    _selectedThemeModeLabel(
+                      l10n,
+                      themeMode,
+                      effectiveThemeMode,
+                    ),
                   ),
                 )
                 .toList(growable: false);
@@ -79,7 +86,7 @@ class _AppPreferencesContent extends StatelessWidget {
               .map(
                 (themeMode) => DropdownMenuItem(
                   value: themeMode,
-                  child: Text(_themeModeLabel(themeMode)),
+                  child: Text(_themeModeLabel(l10n, themeMode)),
                 ),
               )
               .toList(growable: false),
@@ -92,20 +99,39 @@ class _AppPreferencesContent extends StatelessWidget {
           },
         ),
         const SizedBox(height: 16),
-        DropdownButtonFormField<String>(
+        DropdownButtonFormField<String?>(
           initialValue: appPreferences.languageCode,
-          decoration: const InputDecoration(labelText: 'Language'),
-          items: const [
-            DropdownMenuItem(value: 'en', child: Text('English')),
-            DropdownMenuItem(value: 'es', child: Text('Español')),
+          decoration: InputDecoration(
+            labelText: l10n.appPreferencesLanguageLabel,
+            helperText: _languageHelperText(l10n, effectiveLanguageLabel),
+          ),
+          items: [
+            DropdownMenuItem<String?>(
+              value: null,
+              child: Text(l10n.appPreferencesLanguageSystem),
+            ),
+            ...AppLanguageOptions.supported.map(
+              (language) => DropdownMenuItem<String?>(
+                value: language.languageCode,
+                child: Text(language.nativeLabel),
+              ),
+            ),
           ],
           onChanged: (languageCode) {
-            if (languageCode == null) {
-              return;
-            }
-
-            context.read<AppPreferencesCubit>().updateLanguageCode(languageCode);
+            context.read<AppPreferencesCubit>().updateLanguageCode(
+              languageCode,
+            );
           },
+        ),
+        const SizedBox(height: 16),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.appPreferencesDirectionLabel),
+          subtitle: Text(
+            l10n.appPreferencesDirectionDescription(
+              _directionLabel(l10n, direction),
+            ),
+          ),
         ),
       ],
     );
@@ -125,38 +151,75 @@ class _AppPreferencesContent extends StatelessWidget {
   }
 
   String _themeModeLabel(
+    AppLocalizations l10n,
     app_preferences_entity.AppPreferencesThemeMode themeMode,
   ) {
     switch (themeMode) {
       case app_preferences_entity.AppPreferencesThemeMode.system:
-        return 'System';
+        return l10n.appPreferencesThemeSystem;
       case app_preferences_entity.AppPreferencesThemeMode.light:
-        return 'Light';
+        return l10n.appPreferencesThemeLight;
       case app_preferences_entity.AppPreferencesThemeMode.dark:
-        return 'Dark';
+        return l10n.appPreferencesThemeDark;
     }
   }
 
   String _selectedThemeModeLabel(
+    AppLocalizations l10n,
     app_preferences_entity.AppPreferencesThemeMode themeMode,
     app_preferences_entity.AppPreferencesThemeMode effectiveThemeMode,
   ) {
     if (themeMode != app_preferences_entity.AppPreferencesThemeMode.system) {
-      return _themeModeLabel(themeMode);
+      return _themeModeLabel(l10n, themeMode);
     }
 
-    return 'System (${_themeModeLabel(effectiveThemeMode)})';
+    return l10n.appPreferencesThemeSystemSelected(
+      _themeModeLabel(l10n, effectiveThemeMode),
+    );
   }
 
   String _themeModeHelperText(
+    AppLocalizations l10n,
     app_preferences_entity.AppPreferencesThemeMode effectiveThemeMode,
   ) {
     if (appPreferences.themeMode !=
         app_preferences_entity.AppPreferencesThemeMode.system) {
-      return 'Currently applied: ${_themeModeLabel(effectiveThemeMode)}';
+      return l10n.appPreferencesThemeApplied(
+        _themeModeLabel(l10n, effectiveThemeMode),
+      );
     }
 
-    return 'Following device setting: ${_themeModeLabel(effectiveThemeMode)}';
+    return l10n.appPreferencesThemeFollowingSystem(
+      _themeModeLabel(l10n, effectiveThemeMode),
+    );
+  }
+
+  String _languageHelperText(
+    AppLocalizations l10n,
+    String effectiveLanguageLabel,
+  ) {
+    if (appPreferences.languageCode != null) {
+      return l10n.appPreferencesLanguageApplied(effectiveLanguageLabel);
+    }
+
+    return l10n.appPreferencesLanguageFollowingSystem(effectiveLanguageLabel);
+  }
+
+  String _effectiveLanguageLabel(BuildContext context) {
+    final effectiveLocale = Localizations.localeOf(context);
+
+    return AppLanguageOptions.labelForLanguageCode(
+      effectiveLocale.languageCode,
+    );
+  }
+
+  String _directionLabel(AppLocalizations l10n, TextDirection direction) {
+    switch (direction) {
+      case TextDirection.ltr:
+        return l10n.appPreferencesDirectionLtr;
+      case TextDirection.rtl:
+        return l10n.appPreferencesDirectionRtl;
+    }
   }
 }
 
@@ -167,6 +230,8 @@ class _AppPreferencesError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -179,7 +244,7 @@ class _AppPreferencesError extends StatelessWidget {
               onPressed: () {
                 context.read<AppPreferencesCubit>().loadAppPreferences();
               },
-              child: const Text('Retry'),
+              child: Text(l10n.appPreferencesRetry),
             ),
           ],
         ),

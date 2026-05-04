@@ -10,10 +10,7 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return PageScaffold(
-      title: l10n.settingsTab,
-      body: const _SettingsView(),
-    );
+    return PageScaffold(title: l10n.settingsTab, body: const _SettingsView());
   }
 }
 
@@ -22,13 +19,15 @@ class _SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
         ListTile(
           contentPadding: EdgeInsets.zero,
-          title: const Text('App preferences'),
-          subtitle: const Text('Theme and language'),
+          title: Text(l10n.settingsAppPreferencesTitle),
+          subtitle: Text(l10n.settingsAppPreferencesSubtitle),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             Navigator.of(context).push(
