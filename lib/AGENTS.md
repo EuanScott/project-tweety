@@ -4,6 +4,15 @@
 - This file defines the default pattern for new feature work under `lib/`.
 - This document is the source of truth for feature structure, naming, and layer boundaries under `lib/`.
 
+## Skill Hints
+- Users can scaffold and wire features manually. Skills are optional shortcuts for repeated patterns under `lib/`.
+- If the task is a new feature that spans domain, data, and presentation, prefer `$feature-scaffold`.
+- If the task is only domain work, prefer `$domain-scaffold`.
+- If the task is only data work, prefer `$data-scaffold`.
+- If the task is only page and BLoC work, prefer `$page-scaffold`.
+- If the task is a reusable widget under `lib/presentation/widgets/`, prefer the widget-specific guidance in that folder.
+- If the user wants examples or expected inputs, use `<skill> --help` instead of guessing.
+
 ## Feature Structure
 - New features should follow the layered structure already used in this repo:
   - `lib/presentation/pages/<feature>/`
