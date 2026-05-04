@@ -18,5 +18,99 @@
   "settingsTab": "Settings",
   "@settingsTab": {
     "description": "Label for settings tab"
+  },
+  "settingsAppPreferencesTitle": "App preferences",
+  "@settingsAppPreferencesTitle": {
+    "description": "Title for the app preferences settings entry"
+  },
+  "settingsAppPreferencesSubtitle": "Theme and language",
+  "@settingsAppPreferencesSubtitle": {
+    "description": "Subtitle for the app preferences settings entry"
+  },
+  "appPreferencesTitle": "App preferences",
+  "@appPreferencesTitle": {
+    "description": "Title for the app preferences page"
+  },
+  "appPreferencesThemeLabel": "Theme",
+  "@appPreferencesThemeLabel": {
+    "description": "Label for the theme selector"
+  },
+  "appPreferencesThemeSystem": "System",
+  "@appPreferencesThemeSystem": {
+    "description": "Label for the system theme option"
+  },
+  "appPreferencesThemeLight": "Light",
+  "@appPreferencesThemeLight": {
+    "description": "Label for the light theme option"
+  },
+  "appPreferencesThemeDark": "Dark",
+  "@appPreferencesThemeDark": {
+    "description": "Label for the dark theme option"
+  },
+  "appPreferencesThemeSystemSelected": "System ({theme})",
+  "@appPreferencesThemeSystemSelected": {
+    "description": "Selected label for the system theme option",
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "appPreferencesThemeApplied": "Currently applied: {theme}",
+  "@appPreferencesThemeApplied": {
+    "description": "Helper text for an explicitly selected theme",
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "appPreferencesThemeFollowingSystem": "Following device setting: {theme}",
+  "@appPreferencesThemeFollowingSystem": {
+    "description": "Helper text when theme follows the system setting",
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "appPreferencesLanguageLabel": "Language",
+  "@appPreferencesLanguageLabel": {
+    "description": "Label for the language selector"
+  },
+  "appPreferencesLanguageSystem": "System default",
+  "@appPreferencesLanguageSystem": {
+    "description": "Label for the system language option"
+  },
+  "appPreferencesLanguageApplied": "Currently applied: {language}",
+  "@appPreferencesLanguageApplied": {
+    "description": "Helper text for an explicitly selected language",
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "appPreferencesLanguageFollowingSystem": "Following device setting: {language}",
+  "@appPreferencesLanguageFollowingSystem": {
+    "description": "Helper text when language follows the system setting",
+    "placeholders": {
+      "language": {}
+    }
+  },
+  "appPreferencesDirectionLabel": "Layout direction",
+  "@appPreferencesDirectionLabel": {
+    "description": "Label for the current layout direction"
+  },
+  "appPreferencesDirectionLtr": "LTR",
+  "@appPreferencesDirectionLtr": {
+    "description": "Short label for left-to-right layout"
+  },
+  "appPreferencesDirectionRtl": "RTL",
+  "@appPreferencesDirectionRtl": {
+    "description": "Short label for right-to-left layout"
+  },
+  "appPreferencesDirectionDescription": "Following active app language: {direction}",
+  "@appPreferencesDirectionDescription": {
+    "description": "Helper text for the current layout direction",
+    "placeholders": {
+      "direction": {}
+    }
+  },
+  "appPreferencesRetry": "Retry",
+  "@appPreferencesRetry": {
+    "description": "Retry button label for app preferences loading"
   }
 }

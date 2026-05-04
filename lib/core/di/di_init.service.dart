@@ -19,6 +19,6 @@ class DiInitService {
   /// Notes on ordering:
   ///   - If one service depends on another, be sure to initialize that first, to prevent weird errors.
   Future<void> initializeAllServices() async {
-    await _appPreferencesStorage.ensureDefaultsExist();
+    await _appPreferencesStorage.readPreferences();
   }
 }

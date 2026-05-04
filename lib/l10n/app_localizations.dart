@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_he.dart';
 
 // ignore_for_file: type=lint
 
@@ -96,6 +97,7 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('es'),
+    Locale('he'),
   ];
 
   /// The title of the application
@@ -127,6 +129,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsTab;
+
+  /// Title for the app preferences settings entry
+  ///
+  /// In en, this message translates to:
+  /// **'App preferences'**
+  String get settingsAppPreferencesTitle;
+
+  /// Subtitle for the app preferences settings entry
+  ///
+  /// In en, this message translates to:
+  /// **'Theme and language'**
+  String get settingsAppPreferencesSubtitle;
+
+  /// Title for the app preferences page
+  ///
+  /// In en, this message translates to:
+  /// **'App preferences'**
+  String get appPreferencesTitle;
+
+  /// Label for the theme selector
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get appPreferencesThemeLabel;
+
+  /// Label for the system theme option
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get appPreferencesThemeSystem;
+
+  /// Label for the light theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get appPreferencesThemeLight;
+
+  /// Label for the dark theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get appPreferencesThemeDark;
+
+  /// Selected label for the system theme option
+  ///
+  /// In en, this message translates to:
+  /// **'System ({theme})'**
+  String appPreferencesThemeSystemSelected(Object theme);
+
+  /// Helper text for an explicitly selected theme
+  ///
+  /// In en, this message translates to:
+  /// **'Currently applied: {theme}'**
+  String appPreferencesThemeApplied(Object theme);
+
+  /// Helper text when theme follows the system setting
+  ///
+  /// In en, this message translates to:
+  /// **'Following device setting: {theme}'**
+  String appPreferencesThemeFollowingSystem(Object theme);
+
+  /// Label for the language selector
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get appPreferencesLanguageLabel;
+
+  /// Label for the system language option
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get appPreferencesLanguageSystem;
+
+  /// Helper text for an explicitly selected language
+  ///
+  /// In en, this message translates to:
+  /// **'Currently applied: {language}'**
+  String appPreferencesLanguageApplied(Object language);
+
+  /// Helper text when language follows the system setting
+  ///
+  /// In en, this message translates to:
+  /// **'Following device setting: {language}'**
+  String appPreferencesLanguageFollowingSystem(Object language);
+
+  /// Label for the current layout direction
+  ///
+  /// In en, this message translates to:
+  /// **'Layout direction'**
+  String get appPreferencesDirectionLabel;
+
+  /// Short label for left-to-right layout
+  ///
+  /// In en, this message translates to:
+  /// **'LTR'**
+  String get appPreferencesDirectionLtr;
+
+  /// Short label for right-to-left layout
+  ///
+  /// In en, this message translates to:
+  /// **'RTL'**
+  String get appPreferencesDirectionRtl;
+
+  /// Helper text for the current layout direction
+  ///
+  /// In en, this message translates to:
+  /// **'Following active app language: {direction}'**
+  String appPreferencesDirectionDescription(Object direction);
+
+  /// Retry button label for app preferences loading
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get appPreferencesRetry;
 }
 
 class _AppLocalizationsDelegate
@@ -140,7 +256,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'es'].contains(locale.languageCode);
+      <String>['en', 'es', 'he'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -153,6 +269,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'es':
       return AppLocalizationsEs();
+    case 'he':
+      return AppLocalizationsHe();
   }
 
   throw FlutterError(
