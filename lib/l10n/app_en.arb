@@ -19,17 +19,17 @@
   "@settingsTab": {
     "description": "Label for settings tab"
   },
-  "settingsAppPreferencesTitle": "App preferences",
+  "settingsAppPreferencesTitle": "Display and language",
   "@settingsAppPreferencesTitle": {
-    "description": "Title for the app preferences settings entry"
+    "description": "Title for the display and language settings entry"
   },
-  "settingsAppPreferencesSubtitle": "Theme and language",
+  "settingsAppPreferencesSubtitle": "Theme, language, and text settings",
   "@settingsAppPreferencesSubtitle": {
-    "description": "Subtitle for the app preferences settings entry"
+    "description": "Subtitle for the display and language settings entry"
   },
-  "appPreferencesTitle": "App preferences",
+  "appPreferencesTitle": "Display and language",
   "@appPreferencesTitle": {
-    "description": "Title for the app preferences page"
+    "description": "Title for the display and language page"
   },
   "appPreferencesThemeLabel": "Theme",
   "@appPreferencesThemeLabel": {
@@ -108,6 +108,22 @@
     "placeholders": {
       "direction": {}
     }
+  },
+  "appPreferencesSystemTextTitle": "Display and text settings",
+  "@appPreferencesSystemTextTitle": {
+    "description": "Title for the display and text settings section"
+  },
+  "appPreferencesSystemTextDescription": "Use your device settings for options like font size and bold text.",
+  "@appPreferencesSystemTextDescription": {
+    "description": "Description for the display and text settings section"
+  },
+  "appPreferencesSystemTextButton": "Open settings",
+  "@appPreferencesSystemTextButton": {
+    "description": "Button label to open device settings"
+  },
+  "appPreferencesSystemTextOpenFailed": "Unable to open settings on this device.",
+  "@appPreferencesSystemTextOpenFailed": {
+    "description": "Error message shown when device settings cannot be opened"
   },
   "appPreferencesRetry": "Retry",
   "@appPreferencesRetry": {

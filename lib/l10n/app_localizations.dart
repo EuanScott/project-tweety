@@ -130,22 +130,22 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settingsTab;
 
-  /// Title for the app preferences settings entry
+  /// Title for the display and language settings entry
   ///
   /// In en, this message translates to:
-  /// **'App preferences'**
+  /// **'Display and language'**
   String get settingsAppPreferencesTitle;
 
-  /// Subtitle for the app preferences settings entry
+  /// Subtitle for the display and language settings entry
   ///
   /// In en, this message translates to:
-  /// **'Theme and language'**
+  /// **'Theme, language, and text settings'**
   String get settingsAppPreferencesSubtitle;
 
-  /// Title for the app preferences page
+  /// Title for the display and language page
   ///
   /// In en, this message translates to:
-  /// **'App preferences'**
+  /// **'Display and language'**
   String get appPreferencesTitle;
 
   /// Label for the theme selector
@@ -237,6 +237,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Following active app language: {direction}'**
   String appPreferencesDirectionDescription(Object direction);
+
+  /// Title for the display and text settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Display and text settings'**
+  String get appPreferencesSystemTextTitle;
+
+  /// Description for the display and text settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Use your device settings for options like font size and bold text.'**
+  String get appPreferencesSystemTextDescription;
+
+  /// Button label to open device settings
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get appPreferencesSystemTextButton;
+
+  /// Error message shown when device settings cannot be opened
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open settings on this device.'**
+  String get appPreferencesSystemTextOpenFailed;
 
   /// Retry button label for app preferences loading
   ///

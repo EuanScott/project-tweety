@@ -54,9 +54,17 @@ extension SafeTextThemeExtension on TextTheme {
 
   TextStyle get safeTitleSmall => safeStyle(titleSmall);
 
+  TextStyle get safeHeadlineSmall => safeStyle(headlineSmall);
+
   TextStyle get safeBodyLarge => safeStyle(bodyLarge);
 
+  TextStyle get safeBodyMedium => safeStyle(bodyMedium);
+
   TextStyle get safeBodySmall => safeStyle(bodySmall);
+
+  TextStyle get safeLabelLarge => safeStyle(labelLarge);
+
+  TextStyle get safeLabelMedium => safeStyle(labelMedium);
 }
 
 /// Convenience accessors for commonly used text styles from [BuildContext].
@@ -71,7 +79,15 @@ extension BuildContextThemeExtension on BuildContext {
 
   TextStyle get titleSmall => textTheme.safeTitleSmall;
 
+  TextStyle get headlineSmall => textTheme.safeHeadlineSmall;
+
   TextStyle get bodyLarge => textTheme.safeBodyLarge;
 
+  TextStyle get bodyMedium => textTheme.safeBodyMedium;
+
   TextStyle get bodySmall => textTheme.safeBodySmall;
+
+  TextStyle get labelLarge => textTheme.safeLabelLarge;
+
+  TextStyle get labelMedium => textTheme.safeLabelMedium;
 }

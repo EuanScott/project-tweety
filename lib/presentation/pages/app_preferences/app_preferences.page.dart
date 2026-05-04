@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_tweety/core/platform/system_text_settings.service.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
     as app_preferences_entity;
 import 'package:project_tweety/l10n/app_localizations.dart';
@@ -65,6 +66,7 @@ class _AppPreferencesContent extends StatelessWidget {
       children: [
         DropdownButtonFormField<app_preferences_entity.AppPreferencesThemeMode>(
           initialValue: appPreferences.themeMode,
+          isExpanded: true,
           decoration: InputDecoration(
             labelText: l10n.appPreferencesThemeLabel,
             helperText: _themeModeHelperText(l10n, effectiveThemeMode),
@@ -101,6 +103,7 @@ class _AppPreferencesContent extends StatelessWidget {
         const SizedBox(height: 16),
         DropdownButtonFormField<String?>(
           initialValue: appPreferences.languageCode,
+          isExpanded: true,
           decoration: InputDecoration(
             labelText: l10n.appPreferencesLanguageLabel,
             helperText: _languageHelperText(l10n, effectiveLanguageLabel),
@@ -133,7 +136,31 @@ class _AppPreferencesContent extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 16),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.appPreferencesSystemTextTitle),
+          subtitle: Text(l10n.appPreferencesSystemTextDescription),
+        ),
+        const SizedBox(height: 8),
+        ElevatedButton(
+          onPressed: () => _openSystemTextSettings(context),
+          child: Text(l10n.appPreferencesSystemTextButton),
+        ),
       ],
+    );
+  }
+
+  Future<void> _openSystemTextSettings(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final opened = await SystemTextSettingsService.open();
+
+    if (!context.mounted || opened) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.appPreferencesSystemTextOpenFailed)),
     );
   }
 
@@ -240,7 +267,7 @@ class _AppPreferencesError extends StatelessWidget {
           children: [
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 12),
-            FilledButton(
+            ElevatedButton(
               onPressed: () {
                 context.read<AppPreferencesCubit>().loadAppPreferences();
               },

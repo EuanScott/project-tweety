@@ -24,13 +24,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsTab => 'הגדרות';
 
   @override
-  String get settingsAppPreferencesTitle => 'העדפות האפליקציה';
+  String get settingsAppPreferencesTitle => 'תצוגה ושפה';
 
   @override
-  String get settingsAppPreferencesSubtitle => 'ערכת נושא ושפה';
+  String get settingsAppPreferencesSubtitle => 'ערכת נושא, שפה והגדרות טקסט';
 
   @override
-  String get appPreferencesTitle => 'העדפות האפליקציה';
+  String get appPreferencesTitle => 'תצוגה ושפה';
 
   @override
   String get appPreferencesThemeLabel => 'ערכת נושא';
@@ -88,6 +88,20 @@ class AppLocalizationsHe extends AppLocalizations {
   String appPreferencesDirectionDescription(Object direction) {
     return 'בהתאם לשפת האפליקציה הפעילה: $direction';
   }
+
+  @override
+  String get appPreferencesSystemTextTitle => 'הגדרות תצוגה וטקסט';
+
+  @override
+  String get appPreferencesSystemTextDescription =>
+      'השתמש בהגדרות המכשיר עבור אפשרויות כמו גודל טקסט וטקסט מודגש.';
+
+  @override
+  String get appPreferencesSystemTextButton => 'פתח הגדרות';
+
+  @override
+  String get appPreferencesSystemTextOpenFailed =>
+      'לא ניתן לפתוח את ההגדרות במכשיר הזה.';
 
   @override
   String get appPreferencesRetry => 'נסה שוב';
