@@ -41,34 +41,14 @@ class _HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final theme = Theme.of(context);
+
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  context.read<HomeBloc>().add(
-                    const HomeActionPressed(HomeAction.cancel),
-                  );
-                },
-                child: const Text('Cancel'),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  context.read<HomeBloc>().add(
-                    const HomeActionPressed(HomeAction.next),
-                  );
-                },
-                child: const Text('Next'),
-              ),
-            ),
-          ],
-        ),
+        // TODO: Better usecase widgets for things like buttons so that the robots doesn't invent anything
+        // TODO: Maybe make list of implemented widgets to view, rather than everything on this page (UI library vibes)
+        const _PrimaryActions(),
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {
@@ -97,24 +77,23 @@ class _HomeView extends StatelessWidget {
           child: const Text('Back'),
         ),
         const SizedBox(height: 32),
-        const Text('Modals'),
+        Text('Modals', style: theme.textTheme.headlineSmall),
         TextButton(
-          child: const Text('Context Modal'),
           onPressed: () {
             context.showAppModal(const Center(child: Text('Modal content')));
           },
+          child: const Text('Context Modal'),
         ),
         TextButton(
-          child: const Text('Page Modal'),
           onPressed: () {
             AppModal.page<bool>(
               context: context,
               child: const Center(child: Text('Modal content')),
             );
           },
+          child: const Text('Page Modal'),
         ),
         TextButton(
-          child: const Text('Blocking Modal'),
           onPressed: () {
             AppModal.blocking<bool>(
               context: context,
@@ -128,9 +107,9 @@ class _HomeView extends StatelessWidget {
               ),
             );
           },
+          child: const Text('Blocking Modal'),
         ),
         TextButton(
-          child: const Text('Compact Modal'),
           onPressed: () async {
             await AppModal.compact<bool>(
               context: context,
@@ -138,9 +117,9 @@ class _HomeView extends StatelessWidget {
               child: const Center(child: Text('Modal content')),
             );
           },
+          child: const Text('Compact Modal'),
         ),
         TextButton(
-          child: const Text('Blocking Modal'),
           onPressed: () async {
             final result = await WebviewModal.show(
               context,
@@ -151,7 +130,48 @@ class _HomeView extends StatelessWidget {
               log('User result: $result');
             }
           },
+          child: const Text('Blocking Modal'),
         ),
+      ],
+    );
+  }
+}
+
+class _PrimaryActions extends StatelessWidget {
+  const _PrimaryActions();
+
+  @override
+  Widget build(BuildContext context) {
+    final textScaleFactor = MediaQuery.textScalerOf(context).scale(1);
+    final useVerticalLayout = textScaleFactor >= 1.4;
+
+    final cancelButton = OutlinedButton(
+      onPressed: () {
+        context.read<HomeBloc>().add(
+          const HomeActionPressed(HomeAction.cancel),
+        );
+      },
+      child: const Text('Cancel', textAlign: TextAlign.center),
+    );
+    final nextButton = ElevatedButton(
+      onPressed: () {
+        context.read<HomeBloc>().add(const HomeActionPressed(HomeAction.next));
+      },
+      child: const Text('Next', textAlign: TextAlign.center),
+    );
+
+    if (useVerticalLayout) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [cancelButton, const SizedBox(height: 12), nextButton],
+      );
+    }
+
+    return Row(
+      children: [
+        Expanded(child: cancelButton),
+        const SizedBox(width: 16),
+        Expanded(child: nextButton),
       ],
     );
   }

@@ -4,9 +4,9 @@
   "dynamicFormTab": "טופס",
   "cardsTab": "כרטיסים",
   "settingsTab": "הגדרות",
-  "settingsAppPreferencesTitle": "העדפות האפליקציה",
-  "settingsAppPreferencesSubtitle": "ערכת נושא ושפה",
-  "appPreferencesTitle": "העדפות האפליקציה",
+  "settingsAppPreferencesTitle": "תצוגה ושפה",
+  "settingsAppPreferencesSubtitle": "ערכת נושא, שפה והגדרות טקסט",
+  "appPreferencesTitle": "תצוגה ושפה",
   "appPreferencesThemeLabel": "ערכת נושא",
   "appPreferencesThemeSystem": "מערכת",
   "appPreferencesThemeLight": "בהיר",
@@ -22,5 +22,9 @@
   "appPreferencesDirectionLtr": "LTR",
   "appPreferencesDirectionRtl": "RTL",
   "appPreferencesDirectionDescription": "בהתאם לשפת האפליקציה הפעילה: {direction}",
+  "appPreferencesSystemTextTitle": "הגדרות תצוגה וטקסט",
+  "appPreferencesSystemTextDescription": "השתמש בהגדרות המכשיר עבור אפשרויות כמו גודל טקסט וטקסט מודגש.",
+  "appPreferencesSystemTextButton": "פתח הגדרות",
+  "appPreferencesSystemTextOpenFailed": "לא ניתן לפתוח את ההגדרות במכשיר הזה.",
   "appPreferencesRetry": "נסה שוב"
 }

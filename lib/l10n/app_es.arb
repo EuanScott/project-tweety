@@ -4,9 +4,9 @@
   "dynamicFormTab": "Formulario",
   "cardsTab": "Tarjetas",
   "settingsTab": "Configuración",
-  "settingsAppPreferencesTitle": "Preferencias de la aplicación",
-  "settingsAppPreferencesSubtitle": "Tema e idioma",
-  "appPreferencesTitle": "Preferencias de la aplicación",
+  "settingsAppPreferencesTitle": "Pantalla e idioma",
+  "settingsAppPreferencesSubtitle": "Tema, idioma y ajustes de texto",
+  "appPreferencesTitle": "Pantalla e idioma",
   "appPreferencesThemeLabel": "Tema",
   "appPreferencesThemeSystem": "Sistema",
   "appPreferencesThemeLight": "Claro",
@@ -22,5 +22,9 @@
   "appPreferencesDirectionLtr": "LTR",
   "appPreferencesDirectionRtl": "RTL",
   "appPreferencesDirectionDescription": "Siguiendo el idioma activo de la aplicación: {direction}",
+  "appPreferencesSystemTextTitle": "Ajustes de pantalla y texto",
+  "appPreferencesSystemTextDescription": "Usa la configuración del dispositivo para opciones como el tamaño del texto y el texto en negrita.",
+  "appPreferencesSystemTextButton": "Abrir configuración",
+  "appPreferencesSystemTextOpenFailed": "No se pudo abrir la configuración en este dispositivo.",
   "appPreferencesRetry": "Reintentar"
 }

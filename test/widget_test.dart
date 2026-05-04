@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/core/di/dependency_injection.dart';
@@ -11,14 +12,28 @@ import 'package:project_tweety/main.dart';
 import 'support/in_memory_shared_preferences_async_platform.dart';
 
 void main() {
+  const systemTextSettingsChannel = MethodChannel(
+    'project_tweety/system_text_settings',
+  );
+
   setUp(() async {
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsyncPlatform();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(systemTextSettingsChannel, (call) async {
+          if (call.method == 'openTextSettings') {
+            return true;
+          }
+
+          return null;
+        });
     await GetIt.I.reset();
     await configureCoreDependencies();
   });
 
   tearDown(() async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(systemTextSettingsChannel, null);
     await GetIt.I.reset();
   });
 
@@ -82,7 +97,7 @@ void main() {
 
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('App preferences'));
+    await tester.tap(find.text('Display and language'));
     await tester.pumpAndSettle();
 
     await tester.tap(_languageDropdownFinder());
@@ -95,7 +110,7 @@ void main() {
       const Locale('he'),
     );
     expect(
-      Directionality.of(tester.element(find.text('העדפות האפליקציה'))),
+      Directionality.of(tester.element(find.text('תצוגה ושפה'))),
       TextDirection.rtl,
     );
     expect(repository.savedPreferences.last.languageCode, 'he');
@@ -116,7 +131,7 @@ void main() {
 
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('App preferences'));
+    await tester.tap(find.text('Display and language'));
     await tester.pumpAndSettle();
 
     await tester.tap(_languageDropdownFinder());
@@ -143,7 +158,7 @@ void main() {
 
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('App preferences'));
+    await tester.tap(find.text('Display and language'));
     await tester.pumpAndSettle();
 
     await tester.tap(_languageDropdownFinder());
@@ -152,8 +167,55 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Tema'), findsOneWidget);
-    expect(find.text('Preferencias de la aplicación'), findsOneWidget);
+    expect(find.text('Pantalla e idioma'), findsOneWidget);
   });
+
+  testWidgets('supports large text scaling without overflow on key screens', (
+    WidgetTester tester,
+  ) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 2.0;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+    await _pumpApp(tester);
+
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Display and language'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Display and language'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('opens system text settings from app preferences', (
+    WidgetTester tester,
+  ) async {
+    var methodCallCount = 0;
+
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(systemTextSettingsChannel, (call) async {
+          if (call.method == 'openTextSettings') {
+            methodCallCount += 1;
+            return true;
+          }
+
+          return null;
+        });
+
+    await _pumpApp(tester);
+
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Display and language'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Open settings'));
+    await tester.pumpAndSettle();
+
+    expect(methodCallCount, 1);
+  });
+
 }
 
 Future<void> _pumpApp(WidgetTester tester) async {

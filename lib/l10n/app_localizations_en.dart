@@ -24,13 +24,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTab => 'Settings';
 
   @override
-  String get settingsAppPreferencesTitle => 'App preferences';
+  String get settingsAppPreferencesTitle => 'Display and language';
 
   @override
-  String get settingsAppPreferencesSubtitle => 'Theme and language';
+  String get settingsAppPreferencesSubtitle =>
+      'Theme, language, and text settings';
 
   @override
-  String get appPreferencesTitle => 'App preferences';
+  String get appPreferencesTitle => 'Display and language';
 
   @override
   String get appPreferencesThemeLabel => 'Theme';
@@ -88,6 +89,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String appPreferencesDirectionDescription(Object direction) {
     return 'Following active app language: $direction';
   }
+
+  @override
+  String get appPreferencesSystemTextTitle => 'Display and text settings';
+
+  @override
+  String get appPreferencesSystemTextDescription =>
+      'Use your device settings for options like font size and bold text.';
+
+  @override
+  String get appPreferencesSystemTextButton => 'Open settings';
+
+  @override
+  String get appPreferencesSystemTextOpenFailed =>
+      'Unable to open settings on this device.';
 
   @override
   String get appPreferencesRetry => 'Retry';

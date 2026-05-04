@@ -5,6 +5,7 @@ import 'components/design_system_bottom_sheet_theme.dart';
 import 'components/design_system_button_theme.dart';
 import 'components/design_system_card_theme.dart';
 import 'components/design_system_navigation_bar_theme.dart';
+import 'components/design_system_radio_theme.dart';
 import 'components/design_system_text_theme.dart';
 import 'design_brand.dart';
 import 'design_brands.dart';
@@ -19,9 +20,7 @@ class DesignSystemTheme {
   DesignSystemTheme._();
 
   /// Builds the light theme for a given [brand].
-  static ThemeData light({
-    DesignBrand brand = DesignBrands.tweetyB2c,
-  }) {
+  static ThemeData light({DesignBrand brand = DesignBrands.tweetyB2c}) {
     final colorScheme = DesignColorSchemes.light(brand);
 
     return ThemeData(
@@ -36,14 +35,13 @@ class DesignSystemTheme {
       outlinedButtonTheme: DesignSystemButtonTheme.outlined(colorScheme),
       textButtonTheme: DesignSystemButtonTheme.text(colorScheme),
       navigationBarTheme: DesignSystemNavigationBarTheme.build(colorScheme),
+      radioTheme: DesignSystemRadioTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );
   }
 
   /// Builds the dark theme for a given [brand].
-  static ThemeData dark({
-    DesignBrand brand = DesignBrands.tweetyB2c,
-  }) {
+  static ThemeData dark({DesignBrand brand = DesignBrands.tweetyB2c}) {
     final colorScheme = DesignColorSchemes.dark(brand);
 
     return ThemeData(
@@ -58,6 +56,7 @@ class DesignSystemTheme {
       outlinedButtonTheme: DesignSystemButtonTheme.outlined(colorScheme),
       textButtonTheme: DesignSystemButtonTheme.text(colorScheme),
       navigationBarTheme: DesignSystemNavigationBarTheme.build(colorScheme),
+      radioTheme: DesignSystemRadioTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );
   }

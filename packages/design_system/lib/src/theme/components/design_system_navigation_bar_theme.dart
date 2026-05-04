@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'design_system_text_theme.dart';
+
 class DesignSystemNavigationBarTheme {
   DesignSystemNavigationBarTheme._();
 
   static NavigationBarThemeData build(ColorScheme colorScheme) {
+    final labelStyle = DesignSystemTextTheme.build(colorScheme).labelMedium;
+
     return NavigationBarThemeData(
       backgroundColor: colorScheme.surface,
       elevation: 3,
@@ -20,7 +24,7 @@ class DesignSystemNavigationBarTheme {
             ? colorScheme.primary
             : colorScheme.primary;
 
-        return TextStyle(color: color);
+        return (labelStyle ?? const TextStyle()).copyWith(color: color);
       }),
     );
   }
