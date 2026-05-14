@@ -15,7 +15,14 @@ import 'package:http/http.dart' as http;
 /// Note: Created entirely using DuckDuckGo AI Chat (GPT-3.5 Turbo model) && Github Co-pilot
 class Services {
   // TODO: When I get around to using this, make this configurable. Either from a build config, or if running tests, by using whatever I have set in code
-  final String _baseUrl = "https://jsonplaceholder.typicode.com";
+  Services({
+    http.Client? client,
+    String baseUrl = 'https://jsonplaceholder.typicode.com',
+  }) : _client = client ?? http.Client(),
+       _baseUrl = baseUrl;
+
+  final http.Client _client;
+  final String _baseUrl;
 
   /// Creates data by sending a POST request to the specified URL.
   ///
@@ -46,10 +53,7 @@ class Services {
   /// [url]: The URL to fetch data from.
   ///
   /// Returns either a Map<String, dynamic> representation of the JSON data or a List<Map<String, dynamic>> if the response is an array.
-  Future<dynamic> getData(
-    String path, {
-    Map<String, String>? headers,
-  }) async {
+  Future<dynamic> getData(String path, {Map<String, String>? headers}) async {
     var response = await sendHttpRequest('GET', path, headers: headers);
 
     if (response.statusCode != 200) {
@@ -68,8 +72,13 @@ class Services {
     required Map<String, dynamic> body,
     Encoding? encoding,
   }) async {
-    var response = await sendHttpRequest('PUT', path,
-        headers: headers, body: body, encoding: encoding);
+    var response = await sendHttpRequest(
+      'PUT',
+      path,
+      headers: headers,
+      body: body,
+      encoding: encoding,
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to PUT data. Error: ${response.statusCode}');
@@ -86,8 +95,13 @@ class Services {
     Map<String, String>? body,
     Encoding? encoding,
   }) async {
-    var response = await sendHttpRequest('DELETE', path,
-        headers: headers, body: body, encoding: encoding);
+    var response = await sendHttpRequest(
+      'DELETE',
+      path,
+      headers: headers,
+      body: body,
+      encoding: encoding,
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to DELETE data. Error: ${response.statusCode}');
@@ -128,16 +142,28 @@ class Services {
 
     switch (method) {
       case 'POST':
-        return await http.post(url,
-            headers: headers, body: encodedBody, encoding: encoding);
+        return await _client.post(
+          url,
+          headers: headers,
+          body: encodedBody,
+          encoding: encoding,
+        );
       case 'GET':
-        return await http.get(url, headers: headers);
+        return await _client.get(url, headers: headers);
       case 'PUT':
-        return await http.put(url,
-            headers: headers, body: encodedBody, encoding: encoding);
+        return await _client.put(
+          url,
+          headers: headers,
+          body: encodedBody,
+          encoding: encoding,
+        );
       case 'DELETE':
-        return await http.delete(url,
-            headers: headers, body: encodedBody, encoding: encoding);
+        return await _client.delete(
+          url,
+          headers: headers,
+          body: encodedBody,
+          encoding: encoding,
+        );
       default:
         throw Exception('Invalid HTTP method');
     }
@@ -165,5 +191,5 @@ class Services {
   /// Returns a JSON string representation of [data].
   _encodeJsonData(Map<String, dynamic> data) => convert.jsonEncode(data);
 
-//endregion
+  //endregion
 }

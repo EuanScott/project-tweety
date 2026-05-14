@@ -23,3 +23,21 @@ giving that a try. After all, this project isn't being worked on in a big corpor
 
 Nothing fancy here, I'm just following the "Get started" guide on
 the [Official Flutter Docs](https://docs.flutter.dev/get-started/install)
+
+## API Documentation
+
+This project uses Dart doc comments for generated API documentation.
+
+To generate the docs locally:
+
+```sh
+dart doc --output doc/api
+```
+
+Then open the generated docs:
+
+```sh
+open doc/api/index.html
+```
+
+The generated `doc/api/` output is ignored by git.

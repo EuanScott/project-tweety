@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:project_tweety/core/di/dependency_injection.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
 import 'package:project_tweety/domain/repositories/app_preferences/app_preferences.repository.dart';
+import 'package:project_tweety/presentation/navigation/routes.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 import 'package:project_tweety/main.dart';
@@ -39,6 +40,14 @@ void main() {
 
   testWidgets('renders app navigation tabs', (WidgetTester tester) async {
     await _pumpApp(tester);
+
+    expect(find.text('Home'), findsWidgets);
+    expect(find.text('Cards'), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
+  });
+
+  testWidgets('redirects the root route to home', (WidgetTester tester) async {
+    await _pumpApp(tester, initialLocation: AppRoutes.rootPath);
 
     expect(find.text('Home'), findsWidgets);
     expect(find.text('Cards'), findsOneWidget);
@@ -216,13 +225,114 @@ void main() {
     expect(methodCallCount, 1);
   });
 
+  testWidgets('keeps bottom navigation visible on app preferences', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester);
+
+    await _openAppPreferences(tester);
+
+    expect(find.text('Theme'), findsOneWidget);
+    expect(find.text('Home'), findsWidgets);
+    expect(find.text('Cards'), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
+  });
+
+  testWidgets('opens app preferences from a direct route', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      initialLocation: AppRoutes.settingsAppPreferencesFullPath,
+    );
+
+    final navigationBar = tester.widget<NavigationBar>(
+      find.byType(NavigationBar),
+    );
+
+    expect(navigationBar.selectedIndex, 2);
+    expect(find.text('Theme'), findsOneWidget);
+    expect(find.text('Settings'), findsOneWidget);
+  });
+
+  testWidgets('shows a navigation error page for unknown routes', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester, initialLocation: '/missing');
+
+    expect(find.text('Page not found'), findsWidgets);
+    expect(
+      find.text('The page you were looking for is not available.'),
+      findsOneWidget,
+    );
+    expect(find.text('Go home'), findsOneWidget);
+  });
+
+  testWidgets('navigates home from the navigation error page', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester, initialLocation: '/missing');
+
+    await tester.tap(find.text('Go home'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Page not found'), findsNothing);
+    expect(find.text('Home'), findsWidgets);
+  });
+
+  testWidgets('tapping active settings tab returns nested route to root', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester);
+
+    await _openAppPreferences(tester);
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Theme'), findsNothing);
+    expect(find.text('Display and language'), findsOneWidget);
+  });
+
+  testWidgets('tapping active cards tab scrolls cards list to the top', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester, surfaceSize: const Size(400, 600));
+
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+
+    final cardsList = find.byWidgetPredicate(
+      (widget) => widget is ListView && widget.controller != null,
+    );
+
+    await tester.drag(cardsList, const Offset(0, -900));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card Title 1'), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.grid_view_rounded));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card Title 1'), findsOneWidget);
+  });
 }
 
-Future<void> _pumpApp(WidgetTester tester) async {
-  await tester.binding.setSurfaceSize(const Size(1200, 1600));
+Future<void> _pumpApp(
+  WidgetTester tester, {
+  Size surfaceSize = const Size(1200, 1600),
+  String? initialLocation,
+}) async {
+  await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
 
-  await tester.pumpWidget(const MyApp());
+  await tester.pumpWidget(MyApp(initialLocation: initialLocation));
+  await tester.pumpAndSettle();
+}
+
+Future<void> _openAppPreferences(WidgetTester tester) async {
+  await tester.tap(find.text('Settings'));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Display and language'));
   await tester.pumpAndSettle();
 }
 

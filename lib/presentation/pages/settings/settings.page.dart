@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/pages/app_preferences/app_preferences.page.dart';
+import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 class Settings extends StatelessWidget {
@@ -30,11 +30,7 @@ class _SettingsView extends StatelessWidget {
           subtitle: Text(l10n.settingsAppPreferencesSubtitle),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const AppPreferencesPage(),
-              ),
-            );
+            context.openAppPreferences();
           },
         ),
       ],

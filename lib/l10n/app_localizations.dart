@@ -130,6 +130,24 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settingsTab;
 
+  /// Title shown when navigation cannot resolve a route
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get navigationErrorTitle;
+
+  /// Description shown when navigation cannot resolve a route
+  ///
+  /// In en, this message translates to:
+  /// **'The page you were looking for is not available.'**
+  String get navigationErrorDescription;
+
+  /// Button label to return to the home page after a navigation error
+  ///
+  /// In en, this message translates to:
+  /// **'Go home'**
+  String get navigationErrorGoHome;
+
   /// Title for the display and language settings entry
   ///
   /// In en, this message translates to:

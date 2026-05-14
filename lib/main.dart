@@ -3,27 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:project_tweety/core/analytics/analytics_facade.dart';
 import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
     show AppPreferencesThemeMode;
+import 'package:project_tweety/presentation/navigation/routes.dart';
+import 'package:project_tweety/presentation/navigation/router.dart';
 import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_preferences.cubit.dart';
-import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
-import 'package:project_tweety/presentation/pages/home/home.page.dart';
-import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 
 import 'l10n/app_localizations.dart';
-
-class NavigationItem {
-  final Widget widget;
-  final String label;
-  final IconData icon;
-
-  const NavigationItem({
-    required this.widget,
-    required this.label,
-    required this.icon,
-  });
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +21,27 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({this.initialLocation, this.analyticsFacade, super.key});
+
+  final String? initialLocation;
+  final AnalyticsFacade? analyticsFacade;
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final _router = createRouter(
+    initialLocation: widget.initialLocation ?? AppRoutes.rootPath,
+    analyticsFacade: widget.analyticsFacade ?? GetIt.I<AnalyticsFacade>(),
+  );
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +55,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           final appPreferences = state.effectiveAppPreferences;
 
-          return MaterialApp(
+          return MaterialApp.router(
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.appTitle,
             theme: DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
@@ -62,7 +69,8 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const MyAppImpl(),
+            restorationScopeId: 'project_tweety_app',
+            routerConfig: _router,
             // TODO: Setup navigatorObservers
           );
         },
@@ -87,59 +95,5 @@ class MyApp extends StatelessWidget {
     }
 
     return Locale(languageCode);
-  }
-}
-
-class MyAppImpl extends StatefulWidget {
-  const MyAppImpl({super.key});
-
-  @override
-  State<MyAppImpl> createState() => _MyAppImplState();
-}
-
-class _MyAppImplState extends State<MyAppImpl> {
-  int _selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    final items = [
-      NavigationItem(
-        widget: const Home(),
-        label: l10n.homeTab,
-        icon: Icons.home,
-      ),
-      NavigationItem(
-        widget: const Cards(),
-        label: l10n.cardsTab,
-        icon: Icons.grid_view_rounded,
-      ),
-      NavigationItem(
-        widget: const Settings(),
-        label: l10n.settingsTab,
-        icon: Icons.settings,
-      ),
-    ];
-
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: items.map((item) => item.widget).toList(),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) =>
-            setState(() => _selectedIndex = index),
-        destinations: items
-            .map(
-              (item) => NavigationDestination(
-                icon: Icon(item.icon),
-                label: item.label,
-              ),
-            )
-            .toList(),
-      ),
-    );
   }
 }

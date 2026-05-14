@@ -19,6 +19,18 @@
   "@settingsTab": {
     "description": "Label for settings tab"
   },
+  "navigationErrorTitle": "Page not found",
+  "@navigationErrorTitle": {
+    "description": "Title shown when navigation cannot resolve a route"
+  },
+  "navigationErrorDescription": "The page you were looking for is not available.",
+  "@navigationErrorDescription": {
+    "description": "Description shown when navigation cannot resolve a route"
+  },
+  "navigationErrorGoHome": "Go home",
+  "@navigationErrorGoHome": {
+    "description": "Button label to return to the home page after a navigation error"
+  },
   "settingsAppPreferencesTitle": "Display and language",
   "@settingsAppPreferencesTitle": {
     "description": "Title for the display and language settings entry"

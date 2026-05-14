@@ -24,6 +24,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTab => 'Settings';
 
   @override
+  String get navigationErrorTitle => 'Page not found';
+
+  @override
+  String get navigationErrorDescription =>
+      'The page you were looking for is not available.';
+
+  @override
+  String get navigationErrorGoHome => 'Go home';
+
+  @override
   String get settingsAppPreferencesTitle => 'Display and language';
 
   @override

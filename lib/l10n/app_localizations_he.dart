@@ -24,6 +24,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsTab => 'הגדרות';
 
   @override
+  String get navigationErrorTitle => 'העמוד לא נמצא';
+
+  @override
+  String get navigationErrorDescription => 'העמוד שחיפשת אינו זמין.';
+
+  @override
+  String get navigationErrorGoHome => 'עבור לבית';
+
+  @override
   String get settingsAppPreferencesTitle => 'תצוגה ושפה';
 
   @override
