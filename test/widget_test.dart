@@ -117,6 +117,26 @@ void main() {
     expect(find.text('card-1'), findsOneWidget);
   });
 
+  testWidgets('scrolls selected card into view on wide direct card route', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      surfaceSize: const Size(900, 800),
+      initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-10',
+    );
+
+    final cardsList = tester.widget<ListView>(
+      find.byWidgetPredicate(
+        (widget) => widget is ListView && widget.controller != null,
+      ),
+    );
+
+    expect(cardsList.controller!.offset, greaterThan(0));
+    expect(find.text('Card Title 10'), findsNWidgets(2));
+    expect(find.text('card-10'), findsOneWidget);
+  });
+
   testWidgets('updates card details in place on wide card selection', (
     WidgetTester tester,
   ) async {

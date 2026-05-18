@@ -14,6 +14,7 @@ import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 import 'bloc/cards.bloc.dart';
 import 'card_details/card_details.page.dart';
 
+// TODO: What about portrait tablet view mode?
 class Cards extends StatefulWidget {
   const Cards({this.selectedCardId, super.key});
 
@@ -25,8 +26,6 @@ class Cards extends StatefulWidget {
 
 class _CardsState extends State<Cards> {
   static const double _secondaryBreakpoint = 600;
-  static const double _compactListWidth = 260;
-  static const double _defaultListWidth = 320;
 
   final ScrollController _scrollController = ScrollController();
   late String? _selectedCardId;
@@ -65,8 +64,11 @@ class _CardsState extends State<Cards> {
             onReselect: _scrollToTop,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final showSecondary =
-                    constraints.maxWidth >= _secondaryBreakpoint;
+                final showSecondary = PageScaffold.usesSplitPaneLayout(
+                  context,
+                  constraints,
+                  secondaryBreakpoint: _secondaryBreakpoint,
+                );
                 final selectedCardId = _selectedCardId;
 
                 if (!showSecondary && widget.selectedCardId != null) {
@@ -82,7 +84,6 @@ class _CardsState extends State<Cards> {
                       context.read<CardsBloc>().add(const CardsStarted());
                     },
                   ),
-                  primaryBodyWidth: _listWidthFor(constraints),
                   secondaryBreakpoint: _secondaryBreakpoint,
                   secondaryBody: selectedCardId == null
                       ? const CardDetailsEmptyState()
@@ -105,20 +106,13 @@ class _CardsState extends State<Cards> {
     );
   }
 
-  double _listWidthFor(BoxConstraints constraints) {
-    if (constraints.maxWidth < 620) {
-      return _compactListWidth;
-    }
-
-    return _defaultListWidth;
-  }
-
   void _selectCard(
     BuildContext context,
     String cardId, {
     required bool showSecondary,
   }) {
     if (showSecondary) {
+      // TODO: Remove this setState in favour of bloc state
       setState(() {
         _selectedCardId = cardId;
       });
@@ -178,7 +172,7 @@ class _CardsView extends StatelessWidget {
   }
 }
 
-class _CardsList extends StatelessWidget {
+class _CardsList extends StatefulWidget {
   static const EdgeInsets _listPadding = EdgeInsets.symmetric(vertical: 8);
 
   const _CardsList({
@@ -194,18 +188,44 @@ class _CardsList extends StatelessWidget {
   final ValueChanged<String> onCardSelected;
 
   @override
+  State<_CardsList> createState() => _CardsListState();
+}
+
+class _CardsListState extends State<_CardsList> {
+  static const Duration _scrollDuration = Duration(milliseconds: 250);
+
+  final Map<String, GlobalKey> _itemKeys = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleSelectedCardScroll();
+  }
+
+  @override
+  void didUpdateWidget(_CardsList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.selectedCardId != widget.selectedCardId ||
+        oldWidget.items != widget.items) {
+      _scheduleSelectedCardScroll();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ListView.builder(
-      controller: scrollController,
-      padding: _listPadding,
-      itemCount: items.length,
+      controller: widget.scrollController,
+      padding: _CardsList._listPadding,
+      itemCount: widget.items.length,
       itemBuilder: (context, index) {
-        final item = items[index];
-        final isSelected = item.id == selectedCardId;
+        final item = widget.items[index];
+        final isSelected = item.id == widget.selectedCardId;
 
         return Card(
+          key: _itemKeyFor(item.id),
           margin: const EdgeInsets.symmetric(vertical: 8),
           color: theme.cardTheme.color,
           shape: RoundedRectangleBorder(
@@ -220,7 +240,7 @@ class _CardsList extends StatelessWidget {
           elevation: 3,
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () => onCardSelected(item.id),
+            onTap: () => widget.onCardSelected(item.id),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -236,6 +256,55 @@ class _CardsList extends StatelessWidget {
         );
       },
     );
+  }
+
+  GlobalKey _itemKeyFor(String cardId) {
+    return _itemKeys.putIfAbsent(cardId, () => GlobalKey());
+  }
+
+  void _scheduleSelectedCardScroll() {
+    final selectedCardId = widget.selectedCardId;
+    if (selectedCardId == null) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || widget.selectedCardId != selectedCardId) {
+        return;
+      }
+
+      _scrollSelectedCardIntoView(selectedCardId);
+    });
+  }
+
+  void _scrollSelectedCardIntoView(String selectedCardId) {
+    final selectedContext = _itemKeys[selectedCardId]?.currentContext;
+    if (selectedContext != null) {
+      Scrollable.ensureVisible(
+        selectedContext,
+        duration: _scrollDuration,
+        curve: Curves.easeOutCubic,
+        alignment: 0.08,
+      );
+      return;
+    }
+
+    final selectedIndex = widget.items.indexWhere(
+      (item) => item.id == selectedCardId,
+    );
+    if (selectedIndex == -1 || !widget.scrollController.hasClients) {
+      return;
+    }
+
+    final position = widget.scrollController.position;
+    final targetOffset = widget.items.length <= 1
+        ? position.minScrollExtent
+        : position.maxScrollExtent * selectedIndex / (widget.items.length - 1);
+
+    position.jumpTo(
+      targetOffset.clamp(position.minScrollExtent, position.maxScrollExtent),
+    );
+    _scheduleSelectedCardScroll();
   }
 }
 
