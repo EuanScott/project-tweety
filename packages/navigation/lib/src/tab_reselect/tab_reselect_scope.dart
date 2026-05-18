@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:project_tweety/presentation/navigation/tab_reselect/tab_reselect_controller.dart';
+import 'package:navigation/src/tab_reselect/tab_reselect_controller.dart';
 
 /// Provides the tab reselect controller to root pages inside the shell.
-class TabReselectScope extends InheritedWidget {
+class TabReselectScope<TTab extends Object> extends InheritedWidget {
   /// Creates a scope for active-tab callback registration.
   const TabReselectScope({
     required this.controller,
@@ -11,17 +11,19 @@ class TabReselectScope extends InheritedWidget {
   });
 
   /// The controller owned by the app navigation shell.
-  final TabReselectController controller;
+  final TabReselectController<TTab> controller;
 
   /// Returns the nearest controller, or `null` outside the tab shell.
-  static TabReselectController? maybeOf(BuildContext context) {
+  static TabReselectController<TTab>? maybeOf<TTab extends Object>(
+    BuildContext context,
+  ) {
     return context
-        .dependOnInheritedWidgetOfExactType<TabReselectScope>()
+        .dependOnInheritedWidgetOfExactType<TabReselectScope<TTab>>()
         ?.controller;
   }
 
   @override
-  bool updateShouldNotify(TabReselectScope oldWidget) {
+  bool updateShouldNotify(TabReselectScope<TTab> oldWidget) {
     return controller != oldWidget.controller;
   }
 }

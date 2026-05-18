@@ -52,6 +52,10 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: BlocBuilder<AppPreferencesCubit, AppPreferencesState>(
+        buildWhen: (previous, current) {
+          return previous.effectiveAppPreferences !=
+              current.effectiveAppPreferences;
+        },
         builder: (context, state) {
           final appPreferences = state.effectiveAppPreferences;
 

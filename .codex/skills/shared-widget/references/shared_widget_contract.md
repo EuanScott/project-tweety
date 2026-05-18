@@ -92,6 +92,56 @@ Preferred patterns for controlled widgets:
 - checkbox widgets should usually take the current value and `ValueChanged<bool>`
 - the widget should render from caller-owned state and emit changes back up, not retain long-lived selection state internally
 
+## Constructor Safety
+
+Public widget constructors should fail early in debug mode when callers build an invalid widget contract.
+
+Use assertions for constraints the type system cannot express, such as:
+- required display strings that must not be empty
+- option lists that must contain at least one item
+- selected values that must exist in the available options
+- numeric values that must stay within a meaningful range
+- mutually exclusive parameters that cannot be provided together
+
+Keep assertions targeted and actionable:
+- include a clear assertion message
+- do not assert what the Dart type system already guarantees
+- do not replace runtime error handling for user or network data with constructor assertions
+
+Preferred shape:
+
+```dart
+const ExampleWidget({
+  super.key,
+  required this.title,
+  required this.options,
+  required this.selectedOption,
+  required this.onChanged,
+}) : assert(title.length > 0, 'title must not be empty'),
+     assert(options.length > 0, 'options must not be empty'),
+     assert(
+       options.contains(selectedOption),
+       'selectedOption must be included in options',
+     );
+```
+
+## Key Strategy
+
+Public widgets should expose normal Flutter identity by accepting `super.key`.
+
+When the widget generates repeated children, provide stable keys when identity matters across rebuilds.
+Prefer keys derived from durable values already present in the contract, such as option ids, route names, or stable labels.
+
+Prefer:
+- `super.key` on the public widget constructor
+- `ValueKey(option.id)` or `ValueKey(option.value)` for repeated generated children
+- caller-provided keys when the caller owns the identity
+
+Avoid:
+- creating `UniqueKey()` in `build`, because it changes identity on every rebuild
+- adding keys to every private child when there is no list, reorder, animation, state retention, or test identity need
+- deriving keys from indexes when the list can reorder
+
 ## ThemeData Contract
 
 Shared widgets should consume a defined app `ThemeData`.
@@ -159,6 +209,22 @@ Documentation should:
 Final scaffold output should include:
 - a short usage snippet showing the widget constructed from a calling page
 - the callback handling pattern expected by the scaffold
+
+## Widget Test Contract
+
+New shared widgets should include focused widget tests by default.
+
+Place tests under:
+- `test/presentation/widgets/<widget_name>_widget_tests.dart`
+
+Tests should cover the public contract instead of private implementation detail:
+- visible text, icons, or layout markers that define the widget's output
+- callback behaviour and caller-owned state updates
+- important variants, static entrypoints, or helper objects
+- constructor assertions for invalid inputs when assertions were added
+- stable keys for repeated generated children when those keys are part of the implementation contract
+
+If there is no practical widget test for the generated widget, state the reason in the final response and run the closest targeted validation.
 
 ## Open-Closed Heuristics
 

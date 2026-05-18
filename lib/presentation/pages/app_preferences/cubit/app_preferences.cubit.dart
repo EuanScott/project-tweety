@@ -51,6 +51,10 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
 
   Future<void> updateThemeMode(AppPreferencesThemeMode themeMode) async {
     final currentAppPreferences = state.effectiveAppPreferences;
+    if (currentAppPreferences.themeMode == themeMode) {
+      return;
+    }
+
     final updatedAppPreferences = currentAppPreferences.copyWith(
       themeMode: themeMode,
     );
@@ -60,6 +64,10 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
 
   Future<void> updateLanguageCode(String? languageCode) async {
     final currentAppPreferences = state.effectiveAppPreferences;
+    if (currentAppPreferences.languageCode == languageCode) {
+      return;
+    }
+
     final updatedAppPreferences = currentAppPreferences.copyWith(
       languageCode: languageCode,
     );

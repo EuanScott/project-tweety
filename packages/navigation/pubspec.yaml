@@ -1,0 +1,21 @@
+name: navigation
+description: Shared navigation shell and go_router helpers for Tweety applications.
+publish_to: 'none'
+
+version: 0.1.0
+
+environment:
+  sdk: ">=3.8.1 <4.0.0"
+  flutter: ">=3.38.5"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  go_router: ^17.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

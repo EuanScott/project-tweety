@@ -75,6 +75,8 @@ Collect or infer these inputs before updating:
 - whether the change is visual only, behavioural, or both
 - whether the widget is controlled by the caller
 - whether the change requires a theme hook or can use the existing `ThemeData`
+- whether constructor assertions are missing for invalid public contracts
+- whether the widget or its repeated generated children need stable keys for identity across rebuilds
 
 If the user does not provide a change brief:
 - do not update the widget
@@ -168,8 +170,12 @@ When updating the widget, improve it using the same standards as `$shared-widget
 - open-for-extension structure
 - theme-backed styling
 - small, focused responsibility
+- `super.key` on public widget constructors when missing
+- targeted constructor assertions for invalid contracts that the type system cannot express
+- stable keys for repeated generated children when identity matters
 
 Do not "clean up" the widget by removing behaviour that callers currently depend on.
+Do not introduce `UniqueKey()` values in `build`; prefer caller-provided keys or stable `ValueKey` values derived from durable data.
 
 ### 6. Route visual changes through ThemeData
 
@@ -200,7 +206,8 @@ Typical controlled patterns:
 
 After updating source files:
 - run formatting if needed
-- run targeted tests when tests are part of the task
+- add or update focused widget tests when public API, behaviour, constructor assertions, keys, theme usage, variants, or static entrypoints changed
+- run the new or updated targeted widget tests when present
 - if a new widget name was provided, summarize whether the original widget was left untouched
 - summarize what was intentionally preserved
 - summarize what changed
@@ -214,6 +221,8 @@ The manual review checklist should usually cover:
 - state ownership is still correct
 - light and dark theme appearance still look right
 - any static entrypoints still behave the same
+- constructor assertions catch invalid widget usage in debug builds
+- repeated generated children keep stable identity when keys were added
 
 ## File Contract
 

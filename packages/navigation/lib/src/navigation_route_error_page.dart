@@ -1,25 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
 
 /// Fallback page shown when `go_router` cannot resolve a route.
 ///
-/// The page gives users a localized explanation and a direct action back to the
-/// home tab.
-class AppRouteErrorPage extends StatelessWidget {
-  /// Creates a route error page for [error].
-  const AppRouteErrorPage({this.error, super.key});
+/// The consuming app provides localized text and decides where the primary
+/// action should navigate.
+class NavigationRouteErrorPage extends StatelessWidget {
+  /// Creates a route error page.
+  const NavigationRouteErrorPage({
+    required this.title,
+    required this.description,
+    required this.actionLabel,
+    required this.onActionPressed,
+    this.error,
+    super.key,
+  });
 
   /// The router error that caused this page to render.
   final Exception? error;
 
+  /// The title shown in the app bar and page body.
+  final String title;
+
+  /// The body text explaining the navigation error.
+  final String description;
+
+  /// The primary action label.
+  final String actionLabel;
+
+  /// Callback invoked by the primary action.
+  final VoidCallback onActionPressed;
+
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navigationErrorTitle)),
+      appBar: AppBar(title: Text(title)),
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -34,19 +50,16 @@ class AppRouteErrorPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  l10n.navigationErrorTitle,
+                  title,
                   style: theme.textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  l10n.navigationErrorDescription,
-                  textAlign: TextAlign.center,
-                ),
+                Text(description, textAlign: TextAlign.center),
                 const SizedBox(height: 24),
                 FilledButton(
-                  onPressed: context.goHome,
-                  child: Text(l10n.navigationErrorGoHome),
+                  onPressed: onActionPressed,
+                  child: Text(actionLabel),
                 ),
               ],
             ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:navigation/navigation.dart';
 import 'package:project_tweety/domain/entities/card/card.entity.dart'
     as card_model
     show Card;
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/navigation/tab_reselect/tab_reselect_handler.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
 import 'package:project_tweety/presentation/widgets/app_bar.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';

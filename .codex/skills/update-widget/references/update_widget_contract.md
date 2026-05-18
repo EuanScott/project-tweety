@@ -56,11 +56,18 @@ Prefer:
 - additive parameters
 - doc improvements
 - theme integration with the smallest surface-area change
+- adding `super.key` to public widget constructors when missing
+- adding targeted constructor assertions when current callers already satisfy the intended contract
+- adding stable keys for repeated generated children when identity matters across rebuilds
 
 If a rename target is provided:
 - copy forward the current behaviour into the new widget by default
 - rename the file and class to match the requested target
 - leave the original widget untouched unless explicitly asked to replace it
+
+If adding assertions would fail against an existing caller:
+- stop and explain the mismatch between the intended contract and current usage
+- do not silently change the caller or weaken the assertion without user confirmation
 
 ## Usage Inspection
 
@@ -104,6 +111,64 @@ Examples:
 - radio widgets: `options`, current selected value, typed callback
 - checkbox widgets: current value, typed callback
 
+## Constructor Assertions
+
+Updated shared widgets should fail early in debug mode when callers build an invalid public contract.
+
+Use assertions for constraints the type system cannot express, such as:
+- non-empty labels or display strings
+- non-empty option lists
+- selected values that must be present in the available options
+- ranges for numeric inputs
+- mutually exclusive parameter combinations
+
+Do not assert conditions already guaranteed by non-nullable types.
+Do not use constructor assertions as a substitute for handling runtime data failures.
+Keep assertion messages short and actionable.
+
+Preferred shape:
+
+```dart
+const ExistingWidget({
+  super.key,
+  required this.title,
+  required this.options,
+  required this.selectedOption,
+}) : assert(title.length > 0, 'title must not be empty'),
+     assert(options.length > 0, 'options must not be empty'),
+     assert(
+       options.contains(selectedOption),
+       'selectedOption must be included in options',
+     );
+```
+
+## Key Strategy
+
+Public widgets should accept `super.key` unless the existing constructor shape prevents that without a breaking change.
+
+When an updated widget generates repeated children, use stable keys when identity matters across rebuilds.
+Prefer keys derived from durable contract values, such as option ids, enum values, route names, or stable labels.
+
+Avoid:
+- creating `UniqueKey()` in `build`
+- adding keys to every private child when identity does not matter
+- using list indexes as keys when items can be reordered
+
+## Widget Tests
+
+Updates should add or refresh widget tests when the change touches:
+- public API or constructor assertions
+- callback behaviour or caller-owned state
+- visual variants or static entrypoints
+- theme-backed rendering that can be asserted without brittle pixel tests
+- repeated generated children where stable keys are part of the contract
+
+Place tests under:
+- `test/presentation/widgets/<widget_name>_widget_tests.dart`
+
+If the existing widget has no tests and the update materially changes behaviour or contract, add a focused test file.
+If no practical test can be added, state why in the final response and run the closest targeted validation.
+
 ## Required Final Output
 
 The final output should include:
@@ -119,3 +184,5 @@ Suggested manual review items:
 - verify callback semantics still match the old behaviour
 - verify visual behaviour in light and dark theme
 - verify any entrypoints or variants still behave correctly
+- verify constructor assertions catch invalid usage in debug builds
+- verify generated repeated children keep stable identity when keys were added

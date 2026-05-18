@@ -33,6 +33,7 @@
         <entry key="async">
           <value>
             <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.13.1/lib" />
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.13.0/lib" />
             </list>
           </value>
@@ -831,6 +832,7 @@
         <entry key="source_span">
           <value>
             <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/source_span-1.10.2/lib" />
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/source_span-1.10.1/lib" />
             </list>
           </value>
@@ -929,6 +931,7 @@
         <entry key="vm_service">
           <value>
             <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/vm_service-15.2.0/lib" />
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/vm_service-15.0.2/lib" />
             </list>
           </value>
@@ -997,6 +1000,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/archive-4.0.9/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/args-2.7.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.13.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.13.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bloc-9.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bloc_lint-0.3.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bloc_test-10.0.0/lib" />
@@ -1106,6 +1110,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/source_map_stack_trace-2.1.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/source_maps-0.10.13/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/source_span-1.10.1/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/source_span-1.10.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/stack_trace-1.12.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/stream_channel-2.1.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/stream_transform-2.1.1/lib" />
@@ -1120,6 +1125,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vector_math-2.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vm_service-15.0.2/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vm_service-15.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/watcher-1.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-1.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web_socket-1.0.1/lib" />

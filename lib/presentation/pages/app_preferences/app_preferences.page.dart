@@ -29,6 +29,7 @@ class _AppPreferencesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppPreferencesCubit, AppPreferencesState>(
+      buildWhen: _shouldRebuild,
       builder: (context, state) {
         if ((state.isInitial || state.isLoading) && !state.hasAppPreferences) {
           return const Center(child: CircularProgressIndicator());
@@ -45,6 +46,30 @@ class _AppPreferencesView extends StatelessWidget {
         );
       },
     );
+  }
+
+  bool _shouldRebuild(
+    AppPreferencesState previous,
+    AppPreferencesState current,
+  ) {
+    final previousBlockingState = _hasBlockingState(previous);
+    final currentBlockingState = _hasBlockingState(current);
+
+    if (previousBlockingState || currentBlockingState) {
+      return previous.status != current.status ||
+          previous.hasAppPreferences != current.hasAppPreferences ||
+          previous.errorMessage != current.errorMessage;
+    }
+
+    return previous.effectiveAppPreferences != current.effectiveAppPreferences;
+  }
+
+  bool _hasBlockingState(AppPreferencesState state) {
+    final isInitialLoad =
+        (state.isInitial || state.isLoading) && !state.hasAppPreferences;
+    final isBlockingFailure = state.isFailure && !state.hasAppPreferences;
+
+    return isInitialLoad || isBlockingFailure;
   }
 }
 

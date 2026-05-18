@@ -1,15 +1,14 @@
 import 'package:flutter/widgets.dart';
-import 'package:project_tweety/presentation/navigation/tab_reselect/tab_reselect_controller.dart';
-import 'package:project_tweety/presentation/navigation/tab_reselect/tab_reselect_scope.dart';
-import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
+import 'package:navigation/src/tab_reselect/tab_reselect_controller.dart';
+import 'package:navigation/src/tab_reselect/tab_reselect_scope.dart';
 
 /// Registers a page-owned callback for active-tab taps.
 ///
 /// Use this on a tab's root page when tapping the already-selected bottom
 /// navigation item should perform page-specific work, such as scrolling a list
-/// to the top. The app shell only runs these callbacks while the tab is already
-/// on its root route.
-class TabReselectHandler extends StatefulWidget {
+/// to the top. The navigation shell only runs these callbacks while the tab is
+/// already on its root route.
+class TabReselectHandler<TTab extends Object> extends StatefulWidget {
   /// Creates a handler that registers [onReselect] for [tab].
   const TabReselectHandler({
     required this.tab,
@@ -19,7 +18,7 @@ class TabReselectHandler extends StatefulWidget {
   });
 
   /// The root tab this handler belongs to.
-  final AppTab tab;
+  final TTab tab;
 
   /// Callback invoked when the user taps the active tab on its root route.
   final VoidCallback onReselect;
@@ -28,17 +27,19 @@ class TabReselectHandler extends StatefulWidget {
   final Widget child;
 
   @override
-  State<TabReselectHandler> createState() => _TabReselectHandlerState();
+  State<TabReselectHandler<TTab>> createState() =>
+      _TabReselectHandlerState<TTab>();
 }
 
-class _TabReselectHandlerState extends State<TabReselectHandler> {
-  TabReselectController? _controller;
+class _TabReselectHandlerState<TTab extends Object>
+    extends State<TabReselectHandler<TTab>> {
+  TabReselectController<TTab>? _controller;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final controller = TabReselectScope.maybeOf(context);
+    final controller = TabReselectScope.maybeOf<TTab>(context);
 
     if (controller == _controller) {
       return;
@@ -50,7 +51,7 @@ class _TabReselectHandlerState extends State<TabReselectHandler> {
   }
 
   @override
-  void didUpdateWidget(TabReselectHandler oldWidget) {
+  void didUpdateWidget(TabReselectHandler<TTab> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.tab == widget.tab &&

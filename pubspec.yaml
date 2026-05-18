@@ -11,6 +11,8 @@ environment:
 dependencies:
   design_system:
     path: packages/design_system
+  navigation:
+    path: packages/navigation
   flutter:
     sdk: flutter
   flutter_localizations:

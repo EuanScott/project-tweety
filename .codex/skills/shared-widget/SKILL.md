@@ -81,6 +81,8 @@ For controlled widgets, also infer:
 - which value is owned by the calling page
 - which callback communicates the updated value back to the caller
 - whether the widget should remain stateless and render purely from caller-owned inputs
+- which constructor assertions should guard invalid widget contracts, such as empty labels, empty option lists, impossible state combinations, or a selected value missing from its options
+- which stable keys are needed for the public widget and for any repeated generated child widgets
 
 If the user does not provide a descriptive brief:
 - do not scaffold the widget
@@ -200,6 +202,10 @@ Follow these rules:
 - keep business logic out of the shared widget
 - prefer `StatelessWidget` unless local UI state is genuinely required
 - consume the active theme inside the widget instead of defining visual values ad hoc
+- include `super.key` on public widget constructors
+- add targeted constructor assertions for invalid contracts that the type system cannot express
+- use stable keys for repeated generated children when Flutter needs identity across rebuilds
+- do not create `UniqueKey()` values in `build`; prefer caller-provided keys or stable `ValueKey` values derived from durable domain data
 
 ### 6. Prefer open-closed structure over broad parameter surfaces
 
@@ -229,7 +235,22 @@ Follow these rules:
 - include small examples only when they materially clarify usage
 - do not add inline comments unless the behavior is genuinely non-obvious
 
-### 8. Keep the implementation small and opinionated
+### 8. Add focused widget tests
+
+Add a widget test file by default for newly scaffolded shared widgets.
+Use the existing `test/presentation/widgets/` style and prefer a focused file such as:
+- `test/presentation/widgets/<widget_name>_widget_tests.dart`
+
+Cover the generated widget's contract, including:
+- required visible output
+- caller-owned callback behaviour
+- important variants or static entrypoints
+- constructor assertions for invalid inputs when assertions were added
+- stable identity for repeated child widgets when the implementation depends on keys
+
+If a widget test is not practical for the scaffolded widget, explain why in the final response and run the closest targeted validation available.
+
+### 9. Keep the implementation small and opinionated
 
 Do not over-generate.
 Avoid adding:
@@ -242,11 +263,11 @@ Avoid adding:
 - local visual systems that bypass the app theme
 - direct theme assembly inside the widget file
 
-### 9. Finish cleanly
+### 10. Finish cleanly
 
 After creating source files:
 - run formatting if needed
-- run targeted tests when tests are part of the task
+- run the new or updated targeted widget tests
 - if theme files were created or extended, summarize the new theme entrypoint and helper classes
 - summarize any intentionally omitted customization points so the constrained API is explicit
 - always include a small usage snippet in the final response that shows how the calling page should construct the widget and handle the callback

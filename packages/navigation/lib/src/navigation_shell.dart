@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/navigation/tab_reselect/tab_reselect_controller.dart';
-import 'package:project_tweety/presentation/navigation/tab_reselect/tab_reselect_scope.dart';
-import 'package:project_tweety/presentation/navigation/tabs/app_tab_config.dart';
+import 'package:navigation/src/navigation_tab_config.dart';
+import 'package:navigation/src/tab_reselect/tab_reselect_controller.dart';
+import 'package:navigation/src/tab_reselect/tab_reselect_scope.dart';
 
-/// Bottom-navigation shell for the app's top-level routes.
+/// Bottom-navigation shell for top-level tab routes.
 ///
-/// The shell renders the active `StatefulShellRoute` branch and preserves each
-/// tab's nested navigation stack. Tapping a nested active tab returns it to its
-/// root route; tapping an active root tab can run a registered
-/// `TabReselectHandler`.
-class AppNavigationShell extends StatefulWidget {
-  /// Creates the shell around a [StatefulNavigationShell].
-  const AppNavigationShell({
+/// The shell renders the active [StatefulNavigationShell] branch and preserves
+/// each tab's nested navigation stack. Tapping a nested active tab returns it
+/// to its root route; tapping an active root tab can run a registered
+/// [TabReselectController] callback.
+class NavigationShell<TTab extends Object> extends StatefulWidget {
+  /// Creates a shell around [navigationShell].
+  const NavigationShell({
     required this.navigationShell,
+    required this.tabs,
     this.onTabRouteSelected,
     super.key,
   });
@@ -22,32 +22,35 @@ class AppNavigationShell extends StatefulWidget {
   /// The shell route object supplied by `go_router`.
   final StatefulNavigationShell navigationShell;
 
+  /// Ordered top-level tab configurations.
+  final List<NavigationTabConfig<TTab>> tabs;
+
   /// Optional route-name callback used by analytics when tabs are selected.
   final ValueChanged<String>? onTabRouteSelected;
 
   @override
-  State<AppNavigationShell> createState() => _AppNavigationShellState();
+  State<NavigationShell<TTab>> createState() => _NavigationShellState<TTab>();
 }
 
-class _AppNavigationShellState extends State<AppNavigationShell> {
-  final TabReselectController _tabReselectController = TabReselectController();
+class _NavigationShellState<TTab extends Object>
+    extends State<NavigationShell<TTab>> {
+  final TabReselectController<TTab> _tabReselectController =
+      TabReselectController<TTab>();
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return TabReselectScope(
+    return TabReselectScope<TTab>(
       controller: _tabReselectController,
       child: Scaffold(
         body: widget.navigationShell,
         bottomNavigationBar: NavigationBar(
           selectedIndex: widget.navigationShell.currentIndex,
           onDestinationSelected: _onDestinationSelected,
-          destinations: appTabConfigs
+          destinations: widget.tabs
               .map(
-                (item) => NavigationDestination(
-                  icon: Icon(item.icon),
-                  label: item.label(l10n),
+                (tab) => NavigationDestination(
+                  icon: Icon(tab.icon),
+                  label: tab.labelBuilder(context),
                 ),
               )
               .toList(growable: false),
@@ -57,7 +60,7 @@ class _AppNavigationShellState extends State<AppNavigationShell> {
   }
 
   void _onDestinationSelected(int index) {
-    final tabConfig = appTabConfigs[index];
+    final tabConfig = widget.tabs[index];
 
     if (index != widget.navigationShell.currentIndex) {
       widget.onTabRouteSelected?.call(tabConfig.routeName);
