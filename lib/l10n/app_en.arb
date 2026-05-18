@@ -15,6 +15,38 @@
   "@cardsTab": {
     "description": "Label for cards tab"
   },
+  "cardDetailsTitle": "Card details",
+  "@cardDetailsTitle": {
+    "description": "Title for the card details page"
+  },
+  "cardDetailsIdLabel": "ID",
+  "@cardDetailsIdLabel": {
+    "description": "Label for the card id shown on the card details page"
+  },
+  "cardDetailsEmptyTitle": "Select a card",
+  "@cardDetailsEmptyTitle": {
+    "description": "Title shown in the wide cards detail pane before a card is selected"
+  },
+  "cardDetailsEmptyDescription": "Choose a card from the list to see details.",
+  "@cardDetailsEmptyDescription": {
+    "description": "Description shown in the wide cards detail pane before a card is selected"
+  },
+  "cardDetailsMissingTitle": "Card not found",
+  "@cardDetailsMissingTitle": {
+    "description": "Title shown when a card details route references an unknown card id"
+  },
+  "cardDetailsMissingDescription": "This card is not available.",
+  "@cardDetailsMissingDescription": {
+    "description": "Description shown when a card details route references an unknown card id"
+  },
+  "cardDetailsLoadFailedTitle": "Unable to load card",
+  "@cardDetailsLoadFailedTitle": {
+    "description": "Title shown when card details fail to load"
+  },
+  "cardDetailsLoadFailedDescription": "Try opening the card again.",
+  "@cardDetailsLoadFailedDescription": {
+    "description": "Description shown when card details fail to load"
+  },
   "settingsTab": "Settings",
   "@settingsTab": {
     "description": "Label for settings tab"

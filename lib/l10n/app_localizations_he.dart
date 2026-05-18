@@ -21,6 +21,31 @@ class AppLocalizationsHe extends AppLocalizations {
   String get cardsTab => 'כרטיסים';
 
   @override
+  String get cardDetailsTitle => 'פרטי כרטיס';
+
+  @override
+  String get cardDetailsIdLabel => 'מזהה';
+
+  @override
+  String get cardDetailsEmptyTitle => 'בחר כרטיס';
+
+  @override
+  String get cardDetailsEmptyDescription =>
+      'בחר כרטיס מהרשימה כדי לראות פרטים.';
+
+  @override
+  String get cardDetailsMissingTitle => 'הכרטיס לא נמצא';
+
+  @override
+  String get cardDetailsMissingDescription => 'הכרטיס הזה אינו זמין.';
+
+  @override
+  String get cardDetailsLoadFailedTitle => 'לא ניתן לטעון את הכרטיס';
+
+  @override
+  String get cardDetailsLoadFailedDescription => 'נסה לפתוח את הכרטיס שוב.';
+
+  @override
   String get settingsTab => 'הגדרות';
 
   @override

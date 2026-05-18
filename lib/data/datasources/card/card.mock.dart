@@ -9,8 +9,10 @@ class MockCardsDataSource {
     return List<CardDto>.generate(
       10,
       (index) => CardDto(
+        id: 'card-${index + 1}',
         title: 'Card Title ${index + 1}',
-        description: 'This is the body copy for card number ${index + 1}. '
+        description:
+            'This is the body copy for card number ${index + 1}. '
             'You can replace this with whatever description you want.',
       ),
       growable: false,

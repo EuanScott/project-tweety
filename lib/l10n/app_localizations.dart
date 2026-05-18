@@ -124,6 +124,54 @@ abstract class AppLocalizations {
   /// **'Cards'**
   String get cardsTab;
 
+  /// Title for the card details page
+  ///
+  /// In en, this message translates to:
+  /// **'Card details'**
+  String get cardDetailsTitle;
+
+  /// Label for the card id shown on the card details page
+  ///
+  /// In en, this message translates to:
+  /// **'ID'**
+  String get cardDetailsIdLabel;
+
+  /// Title shown in the wide cards detail pane before a card is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Select a card'**
+  String get cardDetailsEmptyTitle;
+
+  /// Description shown in the wide cards detail pane before a card is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a card from the list to see details.'**
+  String get cardDetailsEmptyDescription;
+
+  /// Title shown when a card details route references an unknown card id
+  ///
+  /// In en, this message translates to:
+  /// **'Card not found'**
+  String get cardDetailsMissingTitle;
+
+  /// Description shown when a card details route references an unknown card id
+  ///
+  /// In en, this message translates to:
+  /// **'This card is not available.'**
+  String get cardDetailsMissingDescription;
+
+  /// Title shown when card details fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load card'**
+  String get cardDetailsLoadFailedTitle;
+
+  /// Description shown when card details fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Try opening the card again.'**
+  String get cardDetailsLoadFailedDescription;
+
   /// Label for settings tab
   ///
   /// In en, this message translates to:

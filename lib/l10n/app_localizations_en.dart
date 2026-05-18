@@ -21,6 +21,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardsTab => 'Cards';
 
   @override
+  String get cardDetailsTitle => 'Card details';
+
+  @override
+  String get cardDetailsIdLabel => 'ID';
+
+  @override
+  String get cardDetailsEmptyTitle => 'Select a card';
+
+  @override
+  String get cardDetailsEmptyDescription =>
+      'Choose a card from the list to see details.';
+
+  @override
+  String get cardDetailsMissingTitle => 'Card not found';
+
+  @override
+  String get cardDetailsMissingDescription => 'This card is not available.';
+
+  @override
+  String get cardDetailsLoadFailedTitle => 'Unable to load card';
+
+  @override
+  String get cardDetailsLoadFailedDescription => 'Try opening the card again.';
+
+  @override
   String get settingsTab => 'Settings';
 
   @override

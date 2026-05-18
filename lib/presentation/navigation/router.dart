@@ -54,6 +54,18 @@ GoRouter createRouter({
             path: AppRoutes.cardsPath,
             name: AppRoutes.cardsName,
             builder: (context, state) => const Cards(),
+            routes: [
+              GoRoute(
+                path: AppRoutes.cardsDetailPath,
+                name: AppRoutes.cardsDetailName,
+                builder: (context, state) {
+                  final cardId =
+                      state.pathParameters[AppRoutes.cardsDetailIdParameter]!;
+
+                  return Cards(selectedCardId: cardId);
+                },
+              ),
+            ],
           ),
         ],
       ),

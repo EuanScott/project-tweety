@@ -28,6 +28,14 @@ class DesignBrands {
     surfaceDark: Color(0xFF121212),
     surfaceVariantDark: Color(0xFF2C2C2C),
     onSurfaceDark: Colors.white,
+    navigationSurfaceLight: Color(0xFFE5F5F4),
+    onNavigationSurfaceLight: Color(0xFF0F5D5D),
+    navigationSelectedLight: Color(0xFFFFFFFF),
+    onNavigationSelectedLight: Color(0xFF0F5D5D),
+    navigationSurfaceDark: Color(0xFF163434),
+    onNavigationSurfaceDark: Color(0xFFE7F5F5),
+    navigationSelectedDark: Color(0xFF244A4A),
+    onNavigationSelectedDark: Colors.white,
     outline: Color(0xFFBDBDBD),
   );
 
@@ -49,6 +57,14 @@ class DesignBrands {
     surfaceDark: Color(0xFF0F172A),
     surfaceVariantDark: Color(0xFF1E293B),
     onSurfaceDark: Colors.white,
+    navigationSurfaceLight: Color(0xFFEAF1FF),
+    onNavigationSurfaceLight: Color(0xFF1F3C88),
+    navigationSelectedLight: Color(0xFFFFFFFF),
+    onNavigationSelectedLight: Color(0xFF1F3C88),
+    navigationSurfaceDark: Color(0xFF17213B),
+    onNavigationSurfaceDark: Color(0xFFE7EDFF),
+    navigationSelectedDark: Color(0xFF243154),
+    onNavigationSelectedDark: Colors.white,
     outline: Color(0xFF94A3B8),
   );
 }

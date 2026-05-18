@@ -34,6 +34,9 @@ class NavigationShell<TTab extends Object> extends StatefulWidget {
 
 class _NavigationShellState<TTab extends Object>
     extends State<NavigationShell<TTab>> {
+  static const double _mediumWidthBreakpoint = 600;
+  static const double _drawerWidthBreakpoint = 1200;
+
   final TabReselectController<TTab> _tabReselectController =
       TabReselectController<TTab>();
 
@@ -41,20 +44,68 @@ class _NavigationShellState<TTab extends Object>
   Widget build(BuildContext context) {
     return TabReselectScope<TTab>(
       controller: _tabReselectController,
-      child: Scaffold(
-        body: widget.navigationShell,
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: widget.navigationShell.currentIndex,
-          onDestinationSelected: _onDestinationSelected,
-          destinations: widget.tabs
-              .map(
-                (tab) => NavigationDestination(
-                  icon: Icon(tab.icon),
-                  label: tab.labelBuilder(context),
-                ),
-              )
-              .toList(growable: false),
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final useRail = constraints.maxWidth >= _mediumWidthBreakpoint;
+          final useDrawer = constraints.maxWidth >= _drawerWidthBreakpoint;
+          final content = _NavigationContentTheme(
+            useSideNavigation: useRail,
+            useDrawer: useDrawer,
+            child: widget.navigationShell,
+          );
+
+          return Scaffold(
+            body: Row(
+              children: [
+                if (useDrawer)
+                  SizedBox(
+                    width: 304,
+                    child: NavigationDrawer(
+                      selectedIndex: widget.navigationShell.currentIndex,
+                      onDestinationSelected: _onDestinationSelected,
+                      children: widget.tabs
+                          .map(
+                            (tab) => NavigationDrawerDestination(
+                              icon: Icon(tab.icon),
+                              label: Text(tab.labelBuilder(context)),
+                            ),
+                          )
+                          .toList(growable: false),
+                    ),
+                  )
+                else if (useRail)
+                  NavigationRail(
+                    labelType: NavigationRailLabelType.all,
+                    selectedIndex: widget.navigationShell.currentIndex,
+                    onDestinationSelected: _onDestinationSelected,
+                    destinations: widget.tabs
+                        .map(
+                          (tab) => NavigationRailDestination(
+                            icon: Icon(tab.icon),
+                            label: Text(tab.labelBuilder(context)),
+                          ),
+                        )
+                        .toList(growable: false),
+                  ),
+                Expanded(child: content),
+              ],
+            ),
+            bottomNavigationBar: useRail
+                ? null
+                : NavigationBar(
+                    selectedIndex: widget.navigationShell.currentIndex,
+                    onDestinationSelected: _onDestinationSelected,
+                    destinations: widget.tabs
+                        .map(
+                          (tab) => NavigationDestination(
+                            icon: Icon(tab.icon),
+                            label: tab.labelBuilder(context),
+                          ),
+                        )
+                        .toList(growable: false),
+                  ),
+          );
+        },
       ),
     );
   }
@@ -77,5 +128,85 @@ class _NavigationShellState<TTab extends Object>
     }
 
     _tabReselectController.handle(tabConfig.tab);
+  }
+}
+
+class _NavigationContentTheme extends StatelessWidget {
+  const _NavigationContentTheme({
+    required this.useSideNavigation,
+    required this.useDrawer,
+    required this.child,
+  });
+
+  final bool useSideNavigation;
+  final bool useDrawer;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!useSideNavigation) {
+      return child;
+    }
+
+    final theme = Theme.of(context);
+    final appBarTheme = theme.appBarTheme;
+    final foregroundColor =
+        _sideNavigationForegroundColor(context, useDrawer: useDrawer) ??
+        appBarTheme.foregroundColor ??
+        theme.colorScheme.onSurface;
+    final backgroundColor =
+        _sideNavigationBackgroundColor(context, useDrawer: useDrawer) ??
+        appBarTheme.backgroundColor ??
+        theme.colorScheme.surface;
+
+    return Theme(
+      data: theme.copyWith(
+        appBarTheme: appBarTheme.copyWith(
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
+          iconTheme:
+              appBarTheme.iconTheme?.copyWith(color: foregroundColor) ??
+              IconThemeData(color: foregroundColor),
+          actionsIconTheme:
+              appBarTheme.actionsIconTheme?.copyWith(color: foregroundColor) ??
+              IconThemeData(color: foregroundColor),
+          titleTextStyle: appBarTheme.titleTextStyle?.copyWith(
+            color: foregroundColor,
+          ),
+          toolbarTextStyle: appBarTheme.toolbarTextStyle?.copyWith(
+            color: foregroundColor,
+          ),
+        ),
+      ),
+      child: child,
+    );
+  }
+
+  Color? _sideNavigationBackgroundColor(
+    BuildContext context, {
+    required bool useDrawer,
+  }) {
+    if (useDrawer) {
+      return NavigationDrawerTheme.of(context).backgroundColor;
+    }
+
+    return NavigationRailTheme.of(context).backgroundColor;
+  }
+
+  Color? _sideNavigationForegroundColor(
+    BuildContext context, {
+    required bool useDrawer,
+  }) {
+    if (useDrawer) {
+      final drawerTheme = NavigationDrawerTheme.of(context);
+
+      return drawerTheme.iconTheme?.resolve(const <WidgetState>{})?.color ??
+          drawerTheme.labelTextStyle?.resolve(const <WidgetState>{})?.color;
+    }
+
+    final railTheme = NavigationRailTheme.of(context);
+
+    return railTheme.unselectedIconTheme?.color ??
+        railTheme.unselectedLabelTextStyle?.color;
   }
 }

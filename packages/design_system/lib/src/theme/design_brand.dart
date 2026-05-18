@@ -23,6 +23,14 @@ class DesignBrand {
     required this.surfaceDark,
     required this.surfaceVariantDark,
     required this.onSurfaceDark,
+    required this.navigationSurfaceLight,
+    required this.onNavigationSurfaceLight,
+    required this.navigationSelectedLight,
+    required this.onNavigationSelectedLight,
+    required this.navigationSurfaceDark,
+    required this.onNavigationSurfaceDark,
+    required this.navigationSelectedDark,
+    required this.onNavigationSelectedDark,
     required this.outline,
   });
 
@@ -42,5 +50,13 @@ class DesignBrand {
   final Color surfaceDark;
   final Color surfaceVariantDark;
   final Color onSurfaceDark;
+  final Color navigationSurfaceLight;
+  final Color onNavigationSurfaceLight;
+  final Color navigationSelectedLight;
+  final Color onNavigationSelectedLight;
+  final Color navigationSurfaceDark;
+  final Color onNavigationSurfaceDark;
+  final Color navigationSelectedDark;
+  final Color onNavigationSelectedDark;
   final Color outline;
 }

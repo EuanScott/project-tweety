@@ -68,6 +68,109 @@ void main() {
     await tester.tap(find.text('Cards'));
     await tester.pumpAndSettle();
 
+    expect(find.text('Card Title 1'), findsWidgets);
+  });
+
+  testWidgets('opens card details from the cards list on compact width', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester, surfaceSize: const Size(400, 800));
+
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Card Title 1'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card details'), findsOneWidget);
+    expect(find.text('Card Title 1'), findsWidgets);
+    expect(find.text('card-1'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsOneWidget);
+  });
+
+  testWidgets('opens card details from a direct compact route', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      surfaceSize: const Size(400, 800),
+      initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+    );
+
+    expect(find.text('Card details'), findsOneWidget);
+    expect(find.text('Card Title 1'), findsOneWidget);
+    expect(find.text('card-1'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsOneWidget);
+  });
+
+  testWidgets('shows cards list and details together on wide card route', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      surfaceSize: const Size(900, 800),
+      initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+    );
+
+    expect(find.byType(NavigationRail), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
+    expect(find.text('Card Title 1'), findsWidgets);
+    expect(find.text('card-1'), findsOneWidget);
+  });
+
+  testWidgets('updates card details in place on wide card selection', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester, surfaceSize: const Size(900, 800));
+
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Select a card'), findsOneWidget);
+
+    await tester.tap(find.text('Card Title 1'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card details'), findsNothing);
+    expect(find.text('card-1'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.grid_view_rounded));
+    await tester.pumpAndSettle();
+
+    expect(find.text('card-1'), findsOneWidget);
+  });
+
+  testWidgets('active cards tab returns wide direct details route to root', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      surfaceSize: const Size(900, 800),
+      initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+    );
+
+    expect(find.text('card-1'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.grid_view_rounded));
+    await tester.pumpAndSettle();
+
+    expect(find.text('card-1'), findsNothing);
+    expect(find.text('Select a card'), findsOneWidget);
+  });
+
+  testWidgets('tapping active cards tab returns card details to cards root', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      surfaceSize: const Size(400, 800),
+      initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+    );
+
+    await tester.tap(find.byIcon(Icons.grid_view_rounded));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card details'), findsNothing);
+    expect(find.text('card-1'), findsNothing);
     expect(find.text('Card Title 1'), findsOneWidget);
   });
 
@@ -315,11 +418,63 @@ void main() {
 
     expect(find.text('Card Title 1'), findsOneWidget);
   });
+
+  testWidgets('tapping active cards rail item scrolls cards list to the top', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester, surfaceSize: const Size(900, 800));
+
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+
+    final cardsList = find.byWidgetPredicate(
+      (widget) => widget is ListView && widget.controller != null,
+    );
+
+    await tester.drag(cardsList, const Offset(0, -900));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card Title 1'), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.grid_view_rounded));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card Title 1'), findsOneWidget);
+  });
+
+  testWidgets('tapping active cards rail item scrolls selected cards list', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(tester, surfaceSize: const Size(900, 800));
+
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Card Title 1'));
+    await tester.pumpAndSettle();
+
+    final cardsList = find.byWidgetPredicate(
+      (widget) => widget is ListView && widget.controller != null,
+    );
+
+    await tester.drag(cardsList, const Offset(0, -900));
+    await tester.pumpAndSettle();
+
+    final scrolledList = tester.widget<ListView>(cardsList);
+    expect(scrolledList.controller!.offset, greaterThan(0));
+    expect(find.text('card-1'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.grid_view_rounded));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Card Title 1'), findsWidgets);
+    expect(scrolledList.controller!.offset, 0);
+    expect(find.text('card-1'), findsOneWidget);
+  });
 }
 
 Future<void> _pumpApp(
   WidgetTester tester, {
-  Size surfaceSize = const Size(1200, 1600),
+  Size surfaceSize = const Size(400, 800),
   String? initialLocation,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);

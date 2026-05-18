@@ -5,7 +5,7 @@
 ## What This Package Owns
 
 - `createNavigationRouter<TTab>()` for assembling a tab-shell `GoRouter`
-- `NavigationShell<TTab>` for `StatefulNavigationShell` + `NavigationBar`
+- `NavigationShell<TTab>` for `StatefulNavigationShell` + adaptive `NavigationBar`/`NavigationRail`/`NavigationDrawer`
 - `NavigationTabConfig<TTab>` for tab metadata
 - `NavigationBranch<TTab>` for app-provided branch route trees
 - `NavigationNavigatorKeys<TTab>` for root and branch navigator keys
@@ -66,6 +66,16 @@ createNavigationRouter<AppTab>(
   onTabRouteSelected: analyticsTracker?.trackScreenName,
 );
 ```
+
+## Adaptive Shell
+
+`NavigationShell<TTab>` uses the width available to the shell:
+
+- below `600dp`: bottom `NavigationBar`
+- `600dp` to `1199dp`: compact `NavigationRail` with labels under icons
+- `1200dp` and wider: permanent `NavigationDrawer`
+
+The package only adapts the shared navigation chrome. Consuming apps keep route definitions and destination-specific layouts, including list-detail behavior, in their own presentation layer.
 
 ## Tab Configuration
 

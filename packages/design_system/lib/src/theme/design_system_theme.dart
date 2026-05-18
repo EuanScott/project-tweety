@@ -5,6 +5,8 @@ import 'components/design_system_bottom_sheet_theme.dart';
 import 'components/design_system_button_theme.dart';
 import 'components/design_system_card_theme.dart';
 import 'components/design_system_navigation_bar_theme.dart';
+import 'components/design_system_navigation_drawer_theme.dart';
+import 'components/design_system_navigation_rail_theme.dart';
 import 'components/design_system_radio_theme.dart';
 import 'components/design_system_text_theme.dart';
 import 'design_brand.dart';
@@ -35,6 +37,20 @@ class DesignSystemTheme {
       outlinedButtonTheme: DesignSystemButtonTheme.outlined(colorScheme),
       textButtonTheme: DesignSystemButtonTheme.text(colorScheme),
       navigationBarTheme: DesignSystemNavigationBarTheme.build(colorScheme),
+      navigationDrawerTheme: DesignSystemNavigationDrawerTheme.build(
+        colorScheme,
+        backgroundColor: brand.navigationSurfaceLight,
+        onBackgroundColor: brand.onNavigationSurfaceLight,
+        indicatorColor: brand.navigationSelectedLight,
+        onIndicatorColor: brand.onNavigationSelectedLight,
+      ),
+      navigationRailTheme: DesignSystemNavigationRailTheme.build(
+        colorScheme,
+        backgroundColor: brand.navigationSurfaceLight,
+        onBackgroundColor: brand.onNavigationSurfaceLight,
+        indicatorColor: brand.navigationSelectedLight,
+        onIndicatorColor: brand.onNavigationSelectedLight,
+      ),
       radioTheme: DesignSystemRadioTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );
@@ -56,6 +72,20 @@ class DesignSystemTheme {
       outlinedButtonTheme: DesignSystemButtonTheme.outlined(colorScheme),
       textButtonTheme: DesignSystemButtonTheme.text(colorScheme),
       navigationBarTheme: DesignSystemNavigationBarTheme.build(colorScheme),
+      navigationDrawerTheme: DesignSystemNavigationDrawerTheme.build(
+        colorScheme,
+        backgroundColor: brand.navigationSurfaceDark,
+        onBackgroundColor: brand.onNavigationSurfaceDark,
+        indicatorColor: brand.navigationSelectedDark,
+        onIndicatorColor: brand.onNavigationSelectedDark,
+      ),
+      navigationRailTheme: DesignSystemNavigationRailTheme.build(
+        colorScheme,
+        backgroundColor: brand.navigationSurfaceDark,
+        onBackgroundColor: brand.onNavigationSurfaceDark,
+        indicatorColor: brand.navigationSelectedDark,
+        onIndicatorColor: brand.onNavigationSelectedDark,
+      ),
       radioTheme: DesignSystemRadioTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );

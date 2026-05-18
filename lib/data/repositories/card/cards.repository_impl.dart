@@ -28,9 +28,16 @@ class CardsRepositoryImpl implements CardsRepository {
   }
 
   @override
-  Future<Card?> getCardById(String cardId) {
-    // TODO: implement getCardById
-    throw UnimplementedError();
+  Future<Card?> getCardById(String cardId) async {
+    final items = await getCards();
+
+    for (final item in items) {
+      if (item.id == cardId) {
+        return item;
+      }
+    }
+
+    return null;
   }
 
   @override

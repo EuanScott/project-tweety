@@ -35,15 +35,18 @@ import 'package:your_app/domain/entities/card.entity.dart';
 
 class CardDto {
   const CardDto({
+    required this.id,
     required this.title,
     required this.description,
   });
 
+  final String id;
   final String title;
   final String description;
 
   Card toEntity() {
     return Card(
+      id: id,
       title: title,
       description: description,
     );
@@ -66,6 +69,7 @@ class MockCardsDataSource {
   Future<List<CardDto>> getCards() async {
     return const [
       CardDto(
+        id: 'card-1',
         title: 'Card Title 1',
         description: 'Example card description.',
       ),

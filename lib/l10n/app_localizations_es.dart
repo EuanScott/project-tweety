@@ -21,6 +21,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardsTab => 'Tarjetas';
 
   @override
+  String get cardDetailsTitle => 'Detalles de la tarjeta';
+
+  @override
+  String get cardDetailsIdLabel => 'ID';
+
+  @override
+  String get cardDetailsEmptyTitle => 'Selecciona una tarjeta';
+
+  @override
+  String get cardDetailsEmptyDescription =>
+      'Elige una tarjeta de la lista para ver los detalles.';
+
+  @override
+  String get cardDetailsMissingTitle => 'Tarjeta no encontrada';
+
+  @override
+  String get cardDetailsMissingDescription =>
+      'Esta tarjeta no está disponible.';
+
+  @override
+  String get cardDetailsLoadFailedTitle => 'No se pudo cargar la tarjeta';
+
+  @override
+  String get cardDetailsLoadFailedDescription =>
+      'Intenta abrir la tarjeta de nuevo.';
+
+  @override
   String get settingsTab => 'Configuración';
 
   @override

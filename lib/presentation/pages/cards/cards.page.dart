@@ -6,21 +6,45 @@ import 'package:project_tweety/domain/entities/card/card.entity.dart'
     as card_model
     show Card;
 import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
 import 'package:project_tweety/presentation/widgets/app_bar.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 import 'bloc/cards.bloc.dart';
+import 'card_details/card_details.page.dart';
 
 class Cards extends StatefulWidget {
-  const Cards({super.key});
+  const Cards({this.selectedCardId, super.key});
+
+  final String? selectedCardId;
 
   @override
   State<Cards> createState() => _CardsState();
 }
 
 class _CardsState extends State<Cards> {
+  static const double _secondaryBreakpoint = 600;
+  static const double _compactListWidth = 260;
+  static const double _defaultListWidth = 320;
+
   final ScrollController _scrollController = ScrollController();
+  late String? _selectedCardId;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCardId = widget.selectedCardId;
+  }
+
+  @override
+  void didUpdateWidget(Cards oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.selectedCardId != widget.selectedCardId) {
+      _selectedCardId = widget.selectedCardId;
+    }
+  }
 
   @override
   void dispose() {
@@ -39,21 +63,69 @@ class _CardsState extends State<Cards> {
           return TabReselectHandler(
             tab: AppTab.cards,
             onReselect: _scrollToTop,
-            child: PageScaffold(
-              title: l10n.cardsTab,
-              trailingAction: CustomAppBarAction(
-                icon: Icons.refresh,
-                tooltip: 'Refresh cards',
-                onPressed: () {
-                  context.read<CardsBloc>().add(const CardsStarted());
-                },
-              ),
-              body: _CardsView(scrollController: _scrollController),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final showSecondary =
+                    constraints.maxWidth >= _secondaryBreakpoint;
+                final selectedCardId = _selectedCardId;
+
+                if (!showSecondary && widget.selectedCardId != null) {
+                  return CardDetailsPage(cardId: widget.selectedCardId!);
+                }
+
+                return PageScaffold(
+                  title: l10n.cardsTab,
+                  trailingAction: CustomAppBarAction(
+                    icon: Icons.refresh,
+                    tooltip: 'Refresh cards',
+                    onPressed: () {
+                      context.read<CardsBloc>().add(const CardsStarted());
+                    },
+                  ),
+                  primaryBodyWidth: _listWidthFor(constraints),
+                  secondaryBreakpoint: _secondaryBreakpoint,
+                  secondaryBody: selectedCardId == null
+                      ? const CardDetailsEmptyState()
+                      : CardDetailsContent(cardId: selectedCardId),
+                  body: _CardsView(
+                    scrollController: _scrollController,
+                    selectedCardId: selectedCardId,
+                    onCardSelected: (cardId) => _selectCard(
+                      context,
+                      cardId,
+                      showSecondary: showSecondary,
+                    ),
+                  ),
+                );
+              },
             ),
           );
         },
       ),
     );
+  }
+
+  double _listWidthFor(BoxConstraints constraints) {
+    if (constraints.maxWidth < 620) {
+      return _compactListWidth;
+    }
+
+    return _defaultListWidth;
+  }
+
+  void _selectCard(
+    BuildContext context,
+    String cardId, {
+    required bool showSecondary,
+  }) {
+    if (showSecondary) {
+      setState(() {
+        _selectedCardId = cardId;
+      });
+      return;
+    }
+
+    context.openCardDetails(cardId);
   }
 
   void _scrollToTop() {
@@ -70,9 +142,15 @@ class _CardsState extends State<Cards> {
 }
 
 class _CardsView extends StatelessWidget {
-  const _CardsView({required this.scrollController});
+  const _CardsView({
+    required this.scrollController,
+    required this.selectedCardId,
+    required this.onCardSelected,
+  });
 
   final ScrollController scrollController;
+  final String? selectedCardId;
+  final ValueChanged<String> onCardSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +170,8 @@ class _CardsView extends StatelessWidget {
         return _CardsList(
           items: state.items,
           scrollController: scrollController,
+          selectedCardId: selectedCardId,
+          onCardSelected: onCardSelected,
         );
       },
     );
@@ -99,10 +179,19 @@ class _CardsView extends StatelessWidget {
 }
 
 class _CardsList extends StatelessWidget {
-  const _CardsList({required this.items, required this.scrollController});
+  static const EdgeInsets _listPadding = EdgeInsets.symmetric(vertical: 8);
+
+  const _CardsList({
+    required this.items,
+    required this.scrollController,
+    required this.selectedCardId,
+    required this.onCardSelected,
+  });
 
   final List<card_model.Card> items;
   final ScrollController scrollController;
+  final String? selectedCardId;
+  final ValueChanged<String> onCardSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -110,23 +199,38 @@ class _CardsList extends StatelessWidget {
 
     return ListView.builder(
       controller: scrollController,
-      padding: EdgeInsets.zero,
+      padding: _listPadding,
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
+        final isSelected = item.id == selectedCardId;
 
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8),
+          color: theme.cardTheme.color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : Colors.transparent,
+              width: 2,
+            ),
+          ),
           elevation: 3,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(item.title, style: theme.textTheme.titleMedium),
-                const SizedBox(height: 8),
-                Text(item.description, style: theme.textTheme.bodyMedium),
-              ],
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => onCardSelected(item.id),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(item.title, style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  Text(item.description, style: theme.textTheme.bodyMedium),
+                ],
+              ),
             ),
           ),
         );

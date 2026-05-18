@@ -16,7 +16,7 @@ App-owned in `lib/presentation/navigation`:
 Package-owned in `packages/navigation`:
 
 - tab shell rendering
-- bottom navigation behavior
+- adaptive bottom navigation and navigation rail behavior
 - branch navigator key creation
 - route error page widget
 - generic tab reselect lifecycle
@@ -31,9 +31,19 @@ The package must not import app pages, app localization, app route constants, or
 1. The app creates analytics wiring.
 2. The app defines `NavigationBranch<AppTab>` values with `GoRoute` trees and page builders.
 3. The app passes `appTabConfigs`, branches, root redirect data, observers, and the localized error builder into `createNavigationRouter<AppTab>()`.
-4. The package builds the `GoRouter`, `StatefulShellRoute.indexedStack`, branch navigators, and bottom navigation shell.
+4. The package builds the `GoRouter`, `StatefulShellRoute.indexedStack`, branch navigators, and adaptive navigation shell.
 
 This keeps the route graph easy to scan while moving repeated shell logic out of the app.
+
+## Adaptive Shell
+
+The shared shell switches navigation chrome from the available width:
+
+- compact width below `600dp`: bottom `NavigationBar`
+- medium width from `600dp`: compact `NavigationRail` with labels under icons
+- tablet width from `1200dp`: permanent `NavigationDrawer`
+
+Feature pages should still decide their own content layout. For example, the Cards branch uses `/cards/:cardId` as a nested route: compact widths show details as a page, while wider widths can keep the list and selected details visible together.
 
 ## Adding a Nested Route
 
