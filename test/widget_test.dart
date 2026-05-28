@@ -378,6 +378,20 @@ void main() {
     expect(find.text('Settings'), findsOneWidget);
   });
 
+  testWidgets('explains denied settings deep links', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      initialLocation: AppRoutes.settingsAppPreferencesFullPath,
+      canAccessSettings: false,
+    );
+
+    expect(find.text('Theme'), findsNothing);
+    expect(find.text('Access denied'), findsWidgets);
+    expect(find.text('You do not have access to this page.'), findsOneWidget);
+  });
+
   testWidgets('shows a navigation error page for unknown routes', (
     WidgetTester tester,
   ) async {
@@ -496,11 +510,17 @@ Future<void> _pumpApp(
   WidgetTester tester, {
   Size surfaceSize = const Size(400, 800),
   String? initialLocation,
+  bool canAccessSettings = true,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
 
-  await tester.pumpWidget(MyApp(initialLocation: initialLocation));
+  await tester.pumpWidget(
+    MyApp(
+      initialLocation: initialLocation,
+      canAccessSettings: canAccessSettings,
+    ),
+  );
   await tester.pumpAndSettle();
 }
 

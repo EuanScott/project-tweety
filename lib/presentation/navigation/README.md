@@ -35,6 +35,43 @@ The package must not import app pages, app localization, app route constants, or
 
 This keeps the route graph easy to scan while moving repeated shell logic out of the app.
 
+## Deep Links
+
+`go_router` treats the incoming location as the source of truth, so routes such
+as `/settings/app-preferences` and `/cards/:cardId` can be opened directly.
+
+Widget tests exercise this with `MyApp(initialLocation: ...)`. Platform-level
+Android and iOS link registration is not configured yet.
+
+## Route Guards
+
+Route guards live in `router.dart` on the `GoRoute` definitions. Pages should
+not decide whether they are allowed to render. The router decides whether a
+location can be displayed before the guarded page is built.
+
+The temporary manual guard for Settings is controlled by:
+
+```sh
+flutter run --dart-define=CAN_ACCESS_SETTINGS=false
+```
+
+When `CAN_ACCESS_SETTINGS` is `false`, these routes redirect to
+`/access-denied`:
+
+- `/settings`
+- `/settings/app-preferences`
+
+`/access-denied` is a fallback explanation route for authorization failures.
+It is not the right destination for every guard failure. When a user can resolve
+the blocked condition, redirect them to the journey that resolves it instead:
+
+- signed out user: redirect to login and preserve the intended route
+- incomplete profile: redirect to profile completion and preserve the intended route
+- missing role or entitlement: show access denied, request access, or upgrade flow
+- unknown auth state: show a loading/splash gate, then re-evaluate
+
+Testing notes live in [`docs/testing/navigation.md`](../../../docs/testing/navigation.md).
+
 ## Adaptive Shell
 
 The shared shell switches navigation chrome from the available width:

@@ -22,10 +22,19 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({this.initialLocation, this.analyticsFacade, super.key});
+  const MyApp({
+    this.initialLocation,
+    this.analyticsFacade,
+    this.canAccessSettings = const bool.fromEnvironment(
+      'CAN_ACCESS_SETTINGS',
+      defaultValue: true,
+    ),
+    super.key,
+  });
 
   final String? initialLocation;
   final AnalyticsFacade? analyticsFacade;
+  final bool canAccessSettings;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -35,6 +44,7 @@ class _MyAppState extends State<MyApp> {
   late final _router = createRouter(
     initialLocation: widget.initialLocation ?? AppRoutes.rootPath,
     analyticsFacade: widget.analyticsFacade ?? GetIt.I<AnalyticsFacade>(),
+    canAccessSettings: widget.canAccessSettings,
   );
 
   @override

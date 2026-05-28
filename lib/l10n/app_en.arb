@@ -63,6 +63,18 @@
   "@navigationErrorGoHome": {
     "description": "Button label to return to the home page after a navigation error"
   },
+  "accessDeniedTitle": "Access denied",
+  "@accessDeniedTitle": {
+    "description": "Title shown when a guarded route denies access"
+  },
+  "accessDeniedDescription": "You do not have access to this page.",
+  "@accessDeniedDescription": {
+    "description": "Description shown when a guarded route denies access"
+  },
+  "accessDeniedGoHome": "Go home",
+  "@accessDeniedGoHome": {
+    "description": "Button label to return home from the access denied page"
+  },
   "settingsAppPreferencesTitle": "Display and language",
   "@settingsAppPreferencesTitle": {
     "description": "Title for the display and language settings entry"

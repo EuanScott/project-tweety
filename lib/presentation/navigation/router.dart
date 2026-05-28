@@ -9,6 +9,7 @@ import 'package:project_tweety/presentation/navigation/navigation_extensions.dar
 import 'package:project_tweety/presentation/navigation/routes.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab_config.dart';
+import 'package:project_tweety/presentation/pages/access_denied/access_denied.page.dart';
 import 'package:project_tweety/presentation/pages/app_preferences/app_preferences.page.dart';
 import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
@@ -22,6 +23,7 @@ import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 GoRouter createRouter({
   String initialLocation = AppRoutes.rootPath,
   AnalyticsFacade? analyticsFacade,
+  bool canAccessSettings = true,
 }) {
   final analyticsTracker = analyticsFacade == null
       ? null
@@ -42,6 +44,11 @@ GoRouter createRouter({
             path: AppRoutes.homePath,
             name: AppRoutes.homeName,
             builder: (context, state) => const Home(),
+          ),
+          GoRoute(
+            path: AppRoutes.accessDeniedPath,
+            name: AppRoutes.accessDeniedName,
+            builder: (context, state) => const AccessDeniedPage(),
           ),
         ],
       ),
@@ -77,11 +84,16 @@ GoRouter createRouter({
           GoRoute(
             path: AppRoutes.settingsPath,
             name: AppRoutes.settingsName,
+            redirect: (context, state) =>
+                _settingsAccessRedirect(canAccessSettings: canAccessSettings),
             builder: (context, state) => const Settings(),
             routes: [
               GoRoute(
                 path: AppRoutes.settingsAppPreferencesPath,
                 name: AppRoutes.settingsAppPreferencesName,
+                redirect: (context, state) => _settingsAccessRedirect(
+                  canAccessSettings: canAccessSettings,
+                ),
                 builder: (context, state) => const AppPreferencesPage(),
               ),
             ],
@@ -95,6 +107,14 @@ GoRouter createRouter({
     errorBuilder: _navigationErrorBuilder,
     onTabRouteSelected: analyticsTracker?.trackScreenName,
   );
+}
+
+String? _settingsAccessRedirect({required bool canAccessSettings}) {
+  if (canAccessSettings) {
+    return null;
+  }
+
+  return AppRoutes.accessDeniedPath;
 }
 
 Widget _navigationErrorBuilder(BuildContext context, Exception? error) {

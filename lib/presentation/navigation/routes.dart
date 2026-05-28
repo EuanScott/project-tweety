@@ -11,6 +11,9 @@ class AppRoutes {
   /// Named route for the home tab root.
   static const homeName = 'home';
 
+  /// Named route shown when a guarded route denies access.
+  static const accessDeniedName = 'accessDenied';
+
   /// Named route for the cards tab root.
   static const cardsName = 'cards';
 
@@ -25,6 +28,9 @@ class AppRoutes {
 
   /// Absolute path for the home tab root.
   static const homePath = '/home';
+
+  /// Absolute path for guarded-route access denial.
+  static const accessDeniedPath = '/access-denied';
 
   /// Absolute path for the cards tab root.
   static const cardsPath = '/cards';

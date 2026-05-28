@@ -59,6 +59,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navigationErrorGoHome => 'Go home';
 
   @override
+  String get accessDeniedTitle => 'Access denied';
+
+  @override
+  String get accessDeniedDescription => 'You do not have access to this page.';
+
+  @override
+  String get accessDeniedGoHome => 'Go home';
+
+  @override
   String get settingsAppPreferencesTitle => 'Display and language';
 
   @override

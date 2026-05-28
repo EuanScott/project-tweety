@@ -58,6 +58,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get navigationErrorGoHome => 'עבור לבית';
 
   @override
+  String get accessDeniedTitle => 'הגישה נדחתה';
+
+  @override
+  String get accessDeniedDescription => 'אין לך גישה לעמוד הזה.';
+
+  @override
+  String get accessDeniedGoHome => 'עבור לבית';
+
+  @override
   String get settingsAppPreferencesTitle => 'תצוגה ושפה';
 
   @override

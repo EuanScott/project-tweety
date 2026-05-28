@@ -196,6 +196,24 @@ abstract class AppLocalizations {
   /// **'Go home'**
   String get navigationErrorGoHome;
 
+  /// Title shown when a guarded route denies access
+  ///
+  /// In en, this message translates to:
+  /// **'Access denied'**
+  String get accessDeniedTitle;
+
+  /// Description shown when a guarded route denies access
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have access to this page.'**
+  String get accessDeniedDescription;
+
+  /// Button label to return home from the access denied page
+  ///
+  /// In en, this message translates to:
+  /// **'Go home'**
+  String get accessDeniedGoHome;
+
   /// Title for the display and language settings entry
   ///
   /// In en, this message translates to:
