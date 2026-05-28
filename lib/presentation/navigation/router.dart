@@ -6,6 +6,7 @@ import 'package:project_tweety/presentation/navigation/analytics/navigation_anal
 import 'package:project_tweety/presentation/navigation/analytics/navigation_analytics_tracker.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
+import 'package:project_tweety/presentation/navigation/route_access_policy.dart';
 import 'package:project_tweety/presentation/navigation/routes.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab_config.dart';
@@ -28,6 +29,9 @@ GoRouter createRouter({
   final analyticsTracker = analyticsFacade == null
       ? null
       : NavigationAnalyticsTracker(analyticsFacade);
+  final routeAccessPolicy = RouteAccessPolicy(
+    canAccessSettings: canAccessSettings,
+  );
 
   return createNavigationRouter<AppTab>(
     initialLocation: initialLocation,
@@ -85,15 +89,14 @@ GoRouter createRouter({
             path: AppRoutes.settingsPath,
             name: AppRoutes.settingsName,
             redirect: (context, state) =>
-                _settingsAccessRedirect(canAccessSettings: canAccessSettings),
+                _settingsAccessRedirect(policy: routeAccessPolicy),
             builder: (context, state) => const Settings(),
             routes: [
               GoRoute(
                 path: AppRoutes.settingsAppPreferencesPath,
                 name: AppRoutes.settingsAppPreferencesName,
-                redirect: (context, state) => _settingsAccessRedirect(
-                  canAccessSettings: canAccessSettings,
-                ),
+                redirect: (context, state) =>
+                    _settingsAccessRedirect(policy: routeAccessPolicy),
                 builder: (context, state) => const AppPreferencesPage(),
               ),
             ],
@@ -109,12 +112,8 @@ GoRouter createRouter({
   );
 }
 
-String? _settingsAccessRedirect({required bool canAccessSettings}) {
-  if (canAccessSettings) {
-    return null;
-  }
-
-  return AppRoutes.accessDeniedPath;
+String? _settingsAccessRedirect({required RouteAccessPolicy policy}) {
+  return policy.settingsAccessDecision().redirectPath;
 }
 
 Widget _navigationErrorBuilder(BuildContext context, Exception? error) {
