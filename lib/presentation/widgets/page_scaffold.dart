@@ -4,14 +4,14 @@ import 'dart:ui' show DisplayFeature, DisplayFeatureState, DisplayFeatureType;
 import 'package:design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:project_tweety/presentation/widgets/app_bar.dart';
+import 'package:project_tweety/presentation/widgets/tool_bar.dart';
 
 /// A shared page shell that standardises the app scaffold structure.
 ///
 /// This widget owns the common presentation layout for top-level and nested
 /// pages:
 /// - [Scaffold]
-/// - [CustomAppBar]
+/// - [ToolBar]
 /// - [SafeArea]
 /// - consistent body padding
 ///
@@ -63,7 +63,7 @@ class PageScaffold extends StatelessWidget {
   final Widget? secondaryBody;
 
   /// The optional typed trailing action rendered in the shared app bar.
-  final CustomAppBarAction? trailingAction;
+  final ToolBarAction? trailingAction;
 
   /// The optional floating action button for the page.
   final Widget? floatingActionButton;
@@ -133,7 +133,7 @@ class PageScaffold extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: CustomAppBar(title: title, trailingAction: trailingAction),
+      appBar: ToolBar(title: title, trailingAction: trailingAction),
       body: SafeArea(child: _PageScaffoldBody(scaffold: this)),
       floatingActionButton: floatingActionButton,
     );

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// Example:
 /// ```dart
 /// Scaffold(
-///   appBar: const CustomAppBar(
+///   appBar: const ToolBar(
 ///     title: 'Home',
 ///   ),
 ///   body: const SizedBox.shrink(),
@@ -22,9 +22,9 @@ import 'package:flutter/material.dart';
 /// Example:
 /// ```dart
 /// Scaffold(
-///   appBar: CustomAppBar(
+///   appBar: ToolBar(
 ///     title: 'Cards',
-///     trailingAction: CustomAppBarAction(
+///     trailingAction: ToolBarAction(
 ///       icon: Icons.add,
 ///       onPressed: _handleAddPressed,
 ///     ),
@@ -32,12 +32,12 @@ import 'package:flutter/material.dart';
 ///   body: const SizedBox.shrink(),
 /// )
 /// ```
-class CustomAppBarAction {
+class ToolBarAction {
   /// Creates a typed trailing app-bar action.
   ///
   /// The [icon] and [onPressed] callback are required. [tooltip] is optional
   /// and defaults to an empty string when omitted.
-  const CustomAppBarAction({
+  const ToolBarAction({
     required this.icon,
     required this.onPressed,
     this.tooltip = '',
@@ -53,18 +53,18 @@ class CustomAppBarAction {
   final String tooltip;
 }
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class ToolBar extends StatelessWidget implements PreferredSizeWidget {
   /// Creates a standard app bar with an optional trailing action.
   ///
   /// The leading area is not manually overridden, so Flutter can infer the
   /// appropriate platform navigation affordance automatically.
-  const CustomAppBar({required this.title, this.trailingAction, super.key});
+  const ToolBar({required this.title, this.trailingAction, super.key});
 
   /// The text shown in the centre of the app bar.
   final String title;
 
   /// The optional typed trailing action rendered in the app bar.
-  final CustomAppBarAction? trailingAction;
+  final ToolBarAction? trailingAction;
 
   /// Returns the standard Material app bar height.
   @override
