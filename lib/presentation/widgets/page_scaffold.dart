@@ -1,10 +1,11 @@
-import 'dart:math' as math;
-import 'dart:ui' show DisplayFeature, DisplayFeatureState, DisplayFeatureType;
-
 import 'package:design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:project_tweety/presentation/widgets/page_title_behavior.dart';
+import 'package:project_tweety/presentation/widgets/split_pane_layout.dart';
 import 'package:project_tweety/presentation/widgets/tool_bar.dart';
+
+export 'package:project_tweety/presentation/widgets/page_title_behavior.dart';
 
 /// A shared page shell that standardises the app scaffold structure.
 ///
@@ -25,8 +26,7 @@ class PageScaffold extends StatelessWidget {
     this.secondaryBody,
     this.trailingAction,
     this.floatingActionButton,
-    this.prefersLargeCupertinoTitle = false,
-    this.allowsLargeCupertinoTitleCollapse = true,
+    this.titleBehavior = PageTitleBehavior.standard,
     this.secondaryBreakpoint = 600,
     this.primaryBodyWidth,
     this.paneGap = 16,
@@ -35,9 +35,6 @@ class PageScaffold extends StatelessWidget {
   });
 
   static const EdgeInsets _bodyPadding = EdgeInsets.symmetric(horizontal: 16);
-  static const BorderRadius _secondaryBodyBorderRadius = BorderRadius.only(
-    topLeft: Radius.circular(16),
-  );
 
   /// Whether the current surface should render primary and secondary panes.
   ///
@@ -49,8 +46,11 @@ class PageScaffold extends StatelessWidget {
     BoxConstraints constraints, {
     double secondaryBreakpoint = 600,
   }) {
-    return _verticalDisplayFeatureFor(MediaQuery.of(context)) != null ||
-        constraints.maxWidth >= secondaryBreakpoint;
+    return SplitPaneLayout.shouldUse(
+      context,
+      constraints,
+      breakpoint: secondaryBreakpoint,
+    );
   }
 
   /// The title rendered in the shared app bar.
@@ -68,16 +68,12 @@ class PageScaffold extends StatelessWidget {
   /// The optional floating action button for the page.
   final Widget? floatingActionButton;
 
-  /// Whether iOS should render a native collapsing large title.
+  /// How the page title should be presented.
   ///
-  /// Material platforms ignore this flag and keep the standard [AppBar].
-  final bool prefersLargeCupertinoTitle;
-
-  /// Whether an iOS large title can collapse through scroll gestures.
-  ///
-  /// Short pages can keep the large-title presentation while disabling the
-  /// header-only scroll range that otherwise exists even when content fits.
-  final bool allowsLargeCupertinoTitleCollapse;
+  /// Material platforms currently render all variants with the standard
+  /// [ToolBar]. Cupertino platforms render large-title variants with
+  /// [CupertinoSliverNavigationBar].
+  final PageTitleBehavior titleBehavior;
 
   /// Width at which [secondaryBody] is shown beside [body].
   final double secondaryBreakpoint;
@@ -99,10 +95,10 @@ class PageScaffold extends StatelessWidget {
         : null;
 
     if (AppDesignPlatform.of(context).isCupertino) {
-      if (prefersLargeCupertinoTitle) {
+      if (titleBehavior.usesLargeCupertinoTitle) {
         return CupertinoPageScaffold(
           child: NestedScrollView(
-            physics: allowsLargeCupertinoTitleCollapse
+            physics: titleBehavior.allowsCupertinoCollapse
                 ? null
                 : const NeverScrollableScrollPhysics(),
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -175,7 +171,9 @@ class _PageScaffoldBodyState extends State<_PageScaffoldBody> {
       builder: (context, constraints) {
         final secondaryBody = scaffold.secondaryBody;
         final mediaQuery = MediaQuery.of(context);
-        final displayFeature = _verticalDisplayFeatureFor(mediaQuery);
+        final displayFeature = SplitPaneLayout.verticalDisplayFeatureFor(
+          mediaQuery,
+        );
         final showSecondary =
             secondaryBody != null &&
             PageScaffold.usesSplitPaneLayout(
@@ -190,13 +188,15 @@ class _PageScaffoldBodyState extends State<_PageScaffoldBody> {
         return Padding(
           padding: scaffold.bodyPadding,
           child: showSecondary
-              ? _SplitPaneBody(
-                  scaffold: scaffold,
+              ? SplitPaneLayout(
+                  primary: scaffold.body,
+                  secondary: secondaryBody,
                   displayFeature: displayFeature,
                   constraints: constraints,
                   resolvedPadding: resolvedPadding,
                   globalOffset: _globalOffset,
-                  secondaryBody: secondaryBody,
+                  primaryWidth: scaffold.primaryBodyWidth,
+                  paneGap: scaffold.paneGap,
                 )
               : scaffold.body,
         );
@@ -225,149 +225,4 @@ class _PageScaffoldBodyState extends State<_PageScaffoldBody> {
       });
     });
   }
-}
-
-class _SplitPaneBody extends StatelessWidget {
-  const _SplitPaneBody({
-    required this.scaffold,
-    required this.displayFeature,
-    required this.constraints,
-    required this.resolvedPadding,
-    required this.globalOffset,
-    required this.secondaryBody,
-  });
-
-  final PageScaffold scaffold;
-  final DisplayFeature? displayFeature;
-  final BoxConstraints constraints;
-  final EdgeInsets resolvedPadding;
-  final Offset globalOffset;
-  final Widget secondaryBody;
-
-  @override
-  Widget build(BuildContext context) {
-    final displayFeatureBounds = _localDisplayFeatureBounds;
-
-    if (displayFeatureBounds != null) {
-      final primaryWidth = _primaryWidthForDisplayFeature(displayFeatureBounds);
-
-      return Row(
-        children: [
-          _PrimaryPane(width: primaryWidth, child: scaffold.body),
-          SizedBox(
-            width: _gapWidthForDisplayFeature(
-              displayFeatureBounds,
-              primaryWidth,
-            ),
-          ),
-          Expanded(child: _SecondaryPane(child: secondaryBody)),
-        ],
-      );
-    }
-
-    return Row(
-      children: [
-        _PrimaryPane(width: scaffold.primaryBodyWidth, child: scaffold.body),
-        SizedBox(width: scaffold.paneGap),
-        const VerticalDivider(width: 1),
-        SizedBox(width: scaffold.paneGap),
-        Expanded(child: _SecondaryPane(child: secondaryBody)),
-      ],
-    );
-  }
-
-  double _primaryWidthForDisplayFeature(Rect displayFeatureBounds) {
-    final availableWidth = _availableWidth;
-    return (displayFeatureBounds.left - resolvedPadding.left)
-        .clamp(0.0, availableWidth)
-        .toDouble();
-  }
-
-  double _gapWidthForDisplayFeature(
-    Rect displayFeatureBounds,
-    double primaryWidth,
-  ) {
-    return displayFeatureBounds.width
-        .clamp(0.0, math.max(0, _availableWidth - primaryWidth))
-        .toDouble();
-  }
-
-  double get _availableWidth {
-    return (constraints.maxWidth - resolvedPadding.horizontal)
-        .clamp(0.0, double.infinity)
-        .toDouble();
-  }
-
-  Rect? get _localDisplayFeatureBounds {
-    final displayFeature = this.displayFeature;
-    if (displayFeature == null) {
-      return null;
-    }
-
-    final bounds = displayFeature.bounds.shift(-globalOffset);
-    final crossesLocalHeight =
-        bounds.top <= 0 && bounds.bottom >= constraints.maxHeight;
-    final splitsLocalWidth =
-        bounds.left > 0 && bounds.right < constraints.maxWidth;
-
-    return crossesLocalHeight && splitsLocalWidth ? bounds : null;
-  }
-}
-
-class _PrimaryPane extends StatelessWidget {
-  const _PrimaryPane({required this.width, required this.child});
-
-  final double? width;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final width = this.width;
-    final child = PrimaryScrollController.none(child: this.child);
-
-    if (width == null) {
-      return Expanded(child: child);
-    }
-
-    return SizedBox(width: width, child: child);
-  }
-}
-
-class _SecondaryPane extends StatelessWidget {
-  const _SecondaryPane({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return PrimaryScrollController.none(
-      child: ClipRRect(
-        borderRadius: PageScaffold._secondaryBodyBorderRadius,
-        child: child,
-      ),
-    );
-  }
-}
-
-DisplayFeature? _verticalDisplayFeatureFor(MediaQueryData mediaQuery) {
-  for (final displayFeature in mediaQuery.displayFeatures) {
-    final bounds = displayFeature.bounds;
-    final isFoldableFeature =
-        displayFeature.type == DisplayFeatureType.hinge ||
-        displayFeature.type == DisplayFeatureType.fold;
-    final splitsVertically =
-        bounds.left > 0 &&
-        bounds.right < mediaQuery.size.width &&
-        bounds.height >= mediaQuery.size.height;
-    final isObstructing =
-        bounds.shortestSide > 0 ||
-        displayFeature.state == DisplayFeatureState.postureHalfOpened ||
-        displayFeature.type == DisplayFeatureType.fold;
-
-    if (isFoldableFeature && splitsVertically && isObstructing) {
-      return displayFeature;
-    }
-  }
-
-  return null;
 }

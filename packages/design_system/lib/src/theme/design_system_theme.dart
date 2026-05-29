@@ -7,7 +7,6 @@ import 'components/design_system_card_theme.dart';
 import 'components/design_system_navigation_bar_theme.dart';
 import 'components/design_system_navigation_drawer_theme.dart';
 import 'components/design_system_navigation_rail_theme.dart';
-import 'components/design_system_radio_theme.dart';
 import 'components/design_system_text_theme.dart';
 import 'design_brand.dart';
 import 'design_brands.dart';
@@ -51,7 +50,6 @@ class DesignSystemTheme {
         indicatorColor: brand.navigationSelectedLight,
         onIndicatorColor: brand.onNavigationSelectedLight,
       ),
-      radioTheme: DesignSystemRadioTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );
   }
@@ -86,7 +84,6 @@ class DesignSystemTheme {
         indicatorColor: brand.navigationSelectedDark,
         onIndicatorColor: brand.onNavigationSelectedDark,
       ),
-      radioTheme: DesignSystemRadioTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );
   }

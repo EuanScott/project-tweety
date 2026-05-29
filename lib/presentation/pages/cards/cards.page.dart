@@ -71,8 +71,9 @@ class _CardsState extends State<Cards> {
 
                 return PageScaffold(
                   title: l10n.cardsTab,
-                  prefersLargeCupertinoTitle: true,
-                  allowsLargeCupertinoTitleCollapse: !showSecondary,
+                  titleBehavior: showSecondary
+                      ? PageTitleBehavior.largeStatic
+                      : PageTitleBehavior.large,
                   secondaryBreakpoint: _secondaryBreakpoint,
                   secondaryBody: selectedCardId == null
                       ? const CardDetailsEmptyState()

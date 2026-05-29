@@ -59,7 +59,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          prefersLargeCupertinoTitle: true,
+          titleBehavior: PageTitleBehavior.large,
           body: Text('Primary'),
         ),
       );
@@ -79,8 +79,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          prefersLargeCupertinoTitle: true,
-          allowsLargeCupertinoTitleCollapse: false,
+          titleBehavior: PageTitleBehavior.largeStatic,
           body: Text('Primary'),
         ),
       );
@@ -105,7 +104,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          prefersLargeCupertinoTitle: true,
+          titleBehavior: PageTitleBehavior.large,
           body: Text('Primary'),
         ),
       );
@@ -129,7 +128,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          prefersLargeCupertinoTitle: true,
+          titleBehavior: PageTitleBehavior.large,
           body: Text('Primary'),
         ),
       );
@@ -154,7 +153,7 @@ void main() {
           surfaceSize: const Size(400, 800),
           scaffold: const PageScaffold(
             title: 'Large Title',
-            prefersLargeCupertinoTitle: true,
+            titleBehavior: PageTitleBehavior.large,
             body: Text('Primary'),
           ),
         );
@@ -175,7 +174,7 @@ void main() {
           surfaceSize: const Size(400, 800),
           scaffold: const PageScaffold(
             title: 'Large Title',
-            prefersLargeCupertinoTitle: true,
+            titleBehavior: PageTitleBehavior.large,
             body: Text('Primary'),
           ),
         );
@@ -256,7 +255,7 @@ void main() {
         surfaceSize: const Size(900, 800),
         scaffold: PageScaffold(
           title: 'Test',
-          prefersLargeCupertinoTitle: true,
+          titleBehavior: PageTitleBehavior.large,
           body: Builder(
             builder: (context) {
               primaryController = PrimaryScrollController.maybeOf(context);

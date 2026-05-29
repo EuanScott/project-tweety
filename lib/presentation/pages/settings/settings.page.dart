@@ -13,8 +13,7 @@ class Settings extends StatelessWidget {
 
     return PageScaffold(
       title: l10n.settingsTab,
-      prefersLargeCupertinoTitle: true,
-      allowsLargeCupertinoTitleCollapse: false,
+      titleBehavior: PageTitleBehavior.largeStatic,
       body: const _SettingsView(),
     );
   }

@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
         },
         child: PageScaffold(
           title: l10n.homeTab,
-          prefersLargeCupertinoTitle: true,
+          titleBehavior: PageTitleBehavior.large,
           body: const _HomeView(),
         ),
       ),
