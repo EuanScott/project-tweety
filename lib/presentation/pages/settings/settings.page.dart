@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
@@ -10,7 +11,12 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return PageScaffold(title: l10n.settingsTab, body: const _SettingsView());
+    return PageScaffold(
+      title: l10n.settingsTab,
+      prefersLargeCupertinoTitle: true,
+      allowsLargeCupertinoTitleCollapse: false,
+      body: const _SettingsView(),
+    );
   }
 }
 
@@ -22,10 +28,10 @@ class _SettingsView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return ListView(
+      physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
       children: [
-        ListTile(
-          contentPadding: EdgeInsets.zero,
+        AppListTile(
           title: Text(l10n.settingsAppPreferencesTitle),
           subtitle: Text(l10n.settingsAppPreferencesSubtitle),
           trailing: const Icon(Icons.chevron_right),

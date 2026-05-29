@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui' show DisplayFeature, DisplayFeatureState, DisplayFeatureType;
 
+import 'package:design_system/design_system.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project_tweety/presentation/widgets/app_bar.dart';
 
@@ -23,6 +25,8 @@ class PageScaffold extends StatelessWidget {
     this.secondaryBody,
     this.trailingAction,
     this.floatingActionButton,
+    this.prefersLargeCupertinoTitle = false,
+    this.allowsLargeCupertinoTitleCollapse = true,
     this.secondaryBreakpoint = 600,
     this.primaryBodyWidth,
     this.paneGap = 16,
@@ -64,6 +68,17 @@ class PageScaffold extends StatelessWidget {
   /// The optional floating action button for the page.
   final Widget? floatingActionButton;
 
+  /// Whether iOS should render a native collapsing large title.
+  ///
+  /// Material platforms ignore this flag and keep the standard [AppBar].
+  final bool prefersLargeCupertinoTitle;
+
+  /// Whether an iOS large title can collapse through scroll gestures.
+  ///
+  /// Short pages can keep the large-title presentation while disabling the
+  /// header-only scroll range that otherwise exists even when content fits.
+  final bool allowsLargeCupertinoTitleCollapse;
+
   /// Width at which [secondaryBody] is shown beside [body].
   final double secondaryBreakpoint;
 
@@ -78,10 +93,62 @@ class PageScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cupertinoBackgroundColor = theme.brightness == Brightness.dark
+        ? theme.appBarTheme.backgroundColor
+        : null;
+
+    if (AppDesignPlatform.of(context).isCupertino) {
+      if (prefersLargeCupertinoTitle) {
+        return CupertinoPageScaffold(
+          child: NestedScrollView(
+            physics: allowsLargeCupertinoTitleCollapse
+                ? null
+                : const NeverScrollableScrollPhysics(),
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                CupertinoSliverNavigationBar(
+                  backgroundColor: cupertinoBackgroundColor,
+                  largeTitle: Text(title),
+                  trailing: _cupertinoTrailingAction,
+                ),
+              ];
+            },
+            body: SafeArea(
+              top: false,
+              child: _PageScaffoldBody(scaffold: this),
+            ),
+          ),
+        );
+      }
+
+      return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          backgroundColor: cupertinoBackgroundColor,
+          middle: Text(title),
+          trailing: _cupertinoTrailingAction,
+        ),
+        child: SafeArea(child: _PageScaffoldBody(scaffold: this)),
+      );
+    }
+
     return Scaffold(
       appBar: CustomAppBar(title: title, trailingAction: trailingAction),
       body: SafeArea(child: _PageScaffoldBody(scaffold: this)),
       floatingActionButton: floatingActionButton,
+    );
+  }
+
+  Widget? get _cupertinoTrailingAction {
+    final action = trailingAction;
+    if (action == null) {
+      return null;
+    }
+
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: action.onPressed,
+      child: Icon(action.icon),
     );
   }
 }
@@ -256,6 +323,8 @@ class _PrimaryPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = this.width;
+    final child = PrimaryScrollController.none(child: this.child);
+
     if (width == null) {
       return Expanded(child: child);
     }
@@ -271,9 +340,11 @@ class _SecondaryPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: PageScaffold._secondaryBodyBorderRadius,
-      child: child,
+    return PrimaryScrollController.none(
+      child: ClipRRect(
+        borderRadius: PageScaffold._secondaryBodyBorderRadius,
+        child: child,
+      ),
     );
   }
 }

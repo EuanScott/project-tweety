@@ -40,6 +40,8 @@
 - Follow the existing lint rules in `analysis_options.yaml`, especially `avoid_print: true` and `prefer_single_quotes: true`.
 - Match the current import style: package imports for app entrypoints and shared modules, relative imports where already generated or established.
 - Treat this document as the source of truth for naming and structure rules.
+- Visible UI in pages and app-level shared widgets must go through app/design-system primitives instead of raw platform widgets when a primitive exists. For example, use `AppButton`, `AppListTile`, `AppLoadingIndicator`, and `AppPickerField` rather than directly using `ElevatedButton`, `ListTile`, `CircularProgressIndicator`, or `DropdownButtonFormField`.
+- Add missing native/adaptive UI primitives to `packages/design_system` before using raw Material or Cupertino controls repeatedly in pages or shared widgets. The design-system primitive owns the Material/Cupertino branching; callers express app intent.
 - Standardize filenames on `feature_or_entity.role.dart`.
 - Use `_` inside the business name and `.` before the technical role.
 - Preferred role suffixes are:

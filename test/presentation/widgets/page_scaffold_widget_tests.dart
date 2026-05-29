@@ -1,7 +1,9 @@
 import 'dart:ui' show DisplayFeature, DisplayFeatureState, DisplayFeatureType;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:design_system/design_system.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 void main() {
@@ -17,6 +19,192 @@ void main() {
 
       expect(find.text('Primary'), findsOneWidget);
       expect(find.byType(VerticalDivider), findsNothing);
+    });
+
+    testWidgets('renders Cupertino page chrome on iOS', (tester) async {
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(title: 'Test', body: Text('Primary')),
+      );
+
+      expect(find.byType(CupertinoPageScaffold), findsOneWidget);
+      expect(find.byType(CupertinoNavigationBar), findsOneWidget);
+      expect(find.byType(Scaffold), findsNothing);
+      expect(find.text('Primary'), findsOneWidget);
+    });
+
+    testWidgets('renders Material page chrome on Android', (tester) async {
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.android,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(title: 'Test', body: Text('Primary')),
+      );
+
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(AppBar), findsOneWidget);
+      expect(find.byType(CupertinoPageScaffold), findsNothing);
+      expect(find.byType(CupertinoNavigationBar), findsNothing);
+      expect(find.text('Primary'), findsOneWidget);
+    });
+
+    testWidgets('renders a large Cupertino title when requested on iOS', (
+      tester,
+    ) async {
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(
+          title: 'Large Title',
+          prefersLargeCupertinoTitle: true,
+          body: Text('Primary'),
+        ),
+      );
+
+      expect(find.byType(CupertinoSliverNavigationBar), findsOneWidget);
+      expect(find.byType(CupertinoNavigationBar), findsNothing);
+      expect(find.text('Large Title'), findsWidgets);
+      expect(find.text('Primary'), findsOneWidget);
+    });
+
+    testWidgets('can disable large Cupertino title collapse for short pages', (
+      tester,
+    ) async {
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(
+          title: 'Large Title',
+          prefersLargeCupertinoTitle: true,
+          allowsLargeCupertinoTitleCollapse: false,
+          body: Text('Primary'),
+        ),
+      );
+
+      final nestedScrollView = tester.widget<NestedScrollView>(
+        find.byType(NestedScrollView),
+      );
+
+      expect(nestedScrollView.physics, isA<NeverScrollableScrollPhysics>());
+    });
+
+    testWidgets('keeps large-title capable Android pages on Material chrome', (
+      tester,
+    ) async {
+      final theme = DesignSystemTheme.dark().copyWith(
+        platform: TargetPlatform.android,
+      );
+
+      await _pumpScaffold(
+        tester,
+        theme: theme,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(
+          title: 'Large Title',
+          prefersLargeCupertinoTitle: true,
+          body: Text('Primary'),
+        ),
+      );
+
+      expect(find.byType(Scaffold), findsOneWidget);
+      expect(find.byType(AppBar), findsOneWidget);
+      expect(find.byType(CupertinoPageScaffold), findsNothing);
+      expect(find.byType(CupertinoSliverNavigationBar), findsNothing);
+    });
+
+    testWidgets('uses dark chrome for the large Cupertino title in dark mode', (
+      tester,
+    ) async {
+      final theme = DesignSystemTheme.dark().copyWith(
+        platform: TargetPlatform.iOS,
+      );
+
+      await _pumpScaffold(
+        tester,
+        theme: theme,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(
+          title: 'Large Title',
+          prefersLargeCupertinoTitle: true,
+          body: Text('Primary'),
+        ),
+      );
+
+      final navigationBar = tester.widget<CupertinoSliverNavigationBar>(
+        find.byType(CupertinoSliverNavigationBar),
+      );
+
+      expect(navigationBar.backgroundColor, theme.appBarTheme.backgroundColor);
+    });
+
+    testWidgets(
+      'keeps default Cupertino chrome for the large title in light mode',
+      (tester) async {
+        final theme = DesignSystemTheme.light().copyWith(
+          platform: TargetPlatform.iOS,
+        );
+
+        await _pumpScaffold(
+          tester,
+          theme: theme,
+          surfaceSize: const Size(400, 800),
+          scaffold: const PageScaffold(
+            title: 'Large Title',
+            prefersLargeCupertinoTitle: true,
+            body: Text('Primary'),
+          ),
+        );
+
+        final navigationBar = tester.widget<CupertinoSliverNavigationBar>(
+          find.byType(CupertinoSliverNavigationBar),
+        );
+
+        expect(navigationBar.backgroundColor, isNull);
+      },
+    );
+
+    testWidgets(
+      'keeps Material app bar when large Cupertino title is requested on Android',
+      (tester) async {
+        await _pumpScaffold(
+          tester,
+          surfaceSize: const Size(400, 800),
+          scaffold: const PageScaffold(
+            title: 'Large Title',
+            prefersLargeCupertinoTitle: true,
+            body: Text('Primary'),
+          ),
+        );
+
+        expect(find.byType(AppBar), findsOneWidget);
+        expect(find.byType(CupertinoSliverNavigationBar), findsNothing);
+      },
+    );
+
+    testWidgets('renders the native Cupertino back button on iOS', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          home: Navigator(
+            pages: const [
+              MaterialPage(child: Text('Root')),
+              MaterialPage(
+                child: PageScaffold(title: 'Details', body: Text('Nested')),
+              ),
+            ],
+            onDidRemovePage: (_) {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoNavigationBarBackButton), findsOneWidget);
     });
 
     testWidgets('hides secondary body below the adaptive breakpoint', (
@@ -54,6 +242,38 @@ void main() {
       expect(find.text('Primary'), findsOneWidget);
       expect(find.text('Secondary'), findsOneWidget);
       expect(find.byType(VerticalDivider), findsOneWidget);
+    });
+
+    testWidgets('isolates primary scroll controllers between split panes', (
+      tester,
+    ) async {
+      ScrollController? primaryController;
+      ScrollController? secondaryController;
+
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(900, 800),
+        scaffold: PageScaffold(
+          title: 'Test',
+          prefersLargeCupertinoTitle: true,
+          body: Builder(
+            builder: (context) {
+              primaryController = PrimaryScrollController.maybeOf(context);
+              return const Text('Primary');
+            },
+          ),
+          secondaryBody: Builder(
+            builder: (context) {
+              secondaryController = PrimaryScrollController.maybeOf(context);
+              return const Text('Secondary');
+            },
+          ),
+        ),
+      );
+
+      expect(primaryController, isNull);
+      expect(secondaryController, isNull);
     });
 
     testWidgets('uses an even primary and secondary split by default', (
@@ -143,6 +363,8 @@ Future<void> _pumpScaffold(
   WidgetTester tester, {
   required Size surfaceSize,
   required PageScaffold scaffold,
+  TargetPlatform platform = TargetPlatform.android,
+  ThemeData? theme,
   Size? mediaSize,
   Offset scaffoldOffset = Offset.zero,
   List<DisplayFeature> displayFeatures = const [],
@@ -151,6 +373,7 @@ Future<void> _pumpScaffold(
 
   await tester.pumpWidget(
     MaterialApp(
+      theme: theme ?? ThemeData(platform: platform),
       home: MediaQuery(
         data: MediaQueryData(
           size: resolvedMediaSize,

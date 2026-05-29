@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -30,7 +31,11 @@ class Home extends StatelessWidget {
             log('Home action pressed: $action');
           }
         },
-        child: PageScaffold(title: l10n.homeTab, body: const _HomeView()),
+        child: PageScaffold(
+          title: l10n.homeTab,
+          prefersLargeCupertinoTitle: true,
+          body: const _HomeView(),
+        ),
       ),
     );
   }
@@ -50,7 +55,7 @@ class _HomeView extends StatelessWidget {
         // TODO: Maybe make list of implemented widgets to view, rather than everything on this page (UI library vibes)
         const _PrimaryActions(),
         const SizedBox(height: 16),
-        ElevatedButton(
+        AppButton.primary(
           onPressed: () {
             context.read<HomeBloc>().add(
               const HomeActionPressed(HomeAction.primary),
@@ -59,7 +64,7 @@ class _HomeView extends StatelessWidget {
           child: const Text('Button'),
         ),
         const SizedBox(height: 16),
-        OutlinedButton(
+        AppButton.secondary(
           onPressed: () {
             context.read<HomeBloc>().add(
               const HomeActionPressed(HomeAction.secondary),
@@ -68,7 +73,7 @@ class _HomeView extends StatelessWidget {
           child: const Text('Button'),
         ),
         const SizedBox(height: 16),
-        TextButton(
+        AppButton.text(
           onPressed: () {
             context.read<HomeBloc>().add(
               const HomeActionPressed(HomeAction.back),
@@ -78,13 +83,13 @@ class _HomeView extends StatelessWidget {
         ),
         const SizedBox(height: 32),
         Text('Modals', style: theme.textTheme.headlineSmall),
-        TextButton(
+        AppButton.text(
           onPressed: () {
             context.showAppModal(const Center(child: Text('Modal content')));
           },
           child: const Text('Context Modal'),
         ),
-        TextButton(
+        AppButton.text(
           onPressed: () {
             AppModal.page<bool>(
               context: context,
@@ -93,12 +98,12 @@ class _HomeView extends StatelessWidget {
           },
           child: const Text('Page Modal'),
         ),
-        TextButton(
+        AppButton.text(
           onPressed: () {
             AppModal.blocking<bool>(
               context: context,
               child: Center(
-                child: TextButton(
+                child: AppButton.text(
                   onPressed: () {
                     Navigator.of(context).pop(true);
                   },
@@ -109,7 +114,7 @@ class _HomeView extends StatelessWidget {
           },
           child: const Text('Blocking Modal'),
         ),
-        TextButton(
+        AppButton.text(
           onPressed: () async {
             await AppModal.compact<bool>(
               context: context,
@@ -119,7 +124,7 @@ class _HomeView extends StatelessWidget {
           },
           child: const Text('Compact Modal'),
         ),
-        TextButton(
+        AppButton.text(
           onPressed: () async {
             final result = await WebviewModal.show(
               context,
@@ -145,7 +150,7 @@ class _PrimaryActions extends StatelessWidget {
     final textScaleFactor = MediaQuery.textScalerOf(context).scale(1);
     final useVerticalLayout = textScaleFactor >= 1.4;
 
-    final cancelButton = OutlinedButton(
+    final cancelButton = AppButton.secondary(
       onPressed: () {
         context.read<HomeBloc>().add(
           const HomeActionPressed(HomeAction.cancel),
@@ -153,7 +158,7 @@ class _PrimaryActions extends StatelessWidget {
       },
       child: const Text('Cancel', textAlign: TextAlign.center),
     );
-    final nextButton = ElevatedButton(
+    final nextButton = AppButton.primary(
       onPressed: () {
         context.read<HomeBloc>().add(const HomeActionPressed(HomeAction.next));
       },

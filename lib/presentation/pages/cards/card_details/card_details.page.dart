@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -50,7 +51,7 @@ class _CardDetailsView extends StatelessWidget {
     return BlocBuilder<CardDetailsBloc, CardDetailsState>(
       builder: (context, state) {
         if (state.isInitial || state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: AppLoadingIndicator());
         }
 
         if (state.isFailure) {

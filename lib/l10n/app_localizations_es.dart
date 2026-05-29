@@ -102,6 +102,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String appPreferencesThemeDeviceSetting(Object theme) {
+    return 'Configuración del dispositivo: $theme';
+  }
+
+  @override
   String appPreferencesThemeFollowingSystem(Object theme) {
     return 'Siguiendo la configuración del dispositivo: $theme';
   }

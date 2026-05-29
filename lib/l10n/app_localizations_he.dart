@@ -98,6 +98,11 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String appPreferencesThemeDeviceSetting(Object theme) {
+    return 'הגדרת המכשיר: $theme';
+  }
+
+  @override
   String appPreferencesThemeFollowingSystem(Object theme) {
     return 'בהתאם להגדרת המכשיר: $theme';
   }

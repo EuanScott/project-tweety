@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -58,7 +59,7 @@ class _WebviewModalState extends State<WebviewModal> {
             const Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [CircularProgressIndicator()],
+                children: [AppLoadingIndicator()],
               ),
             ),
         ],
@@ -69,14 +70,14 @@ class _WebviewModalState extends State<WebviewModal> {
           child: Row(
             children: [
               Expanded(
-                child: OutlinedButton(
+                child: AppButton.secondary(
                   onPressed: () => Navigator.pop(context, false),
                   child: const Text('Cancel'),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: ElevatedButton(
+                child: AppButton.primary(
                   onPressed: () => Navigator.pop(context, true),
                   child: const Text('Confirm'),
                 ),

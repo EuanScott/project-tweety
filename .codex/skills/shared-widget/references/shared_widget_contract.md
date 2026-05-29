@@ -146,16 +146,22 @@ Avoid:
 
 Shared widgets should consume a defined app `ThemeData`.
 
+Shared widgets should also consume app-level adaptive primitives for visible UI controls and feedback. Pages and shared widgets should not repeatedly instantiate raw Material or Cupertino controls when a design-system primitive exists.
+
 Prefer:
 - reading presentation values from `Theme.of(context)`
+- using `AppButton`, `AppListTile`, `AppLoadingIndicator`, `AppPickerField`, and future `App*` primitives from `package:design_system/design_system.dart`
 - using the existing app theme entrypoint instead of local visual definitions
 - extending theme helper classes when a new shared visual treatment is needed
 - wiring standard Material controls through their matching `ThemeData` slots when the widget introduces that control pattern
 
 Avoid by default:
+- raw `ElevatedButton`, `OutlinedButton`, `TextButton`, `ListTile`, `CircularProgressIndicator`, `DropdownButtonFormField`, or direct Cupertino equivalents in shared widgets when an app primitive exists
 - hardcoded colors when a themed color is appropriate
 - bespoke text styles inside widget files when `textTheme` should own them
 - creating styling parameters to sidestep missing shared theme structure
+
+If a reusable visible control is missing, add the narrow adaptive primitive to `packages/design_system` first. The primitive owns Material/Cupertino branching; callers express app intent.
 
 If a theme structure does not already exist:
 - create a minimal theme entrypoint for the app's `MaterialApp`

@@ -1,6 +1,6 @@
 ---
 name: update-widget
-description: Update an existing shared widget for Project Tweety while preserving its current behaviour by default. Use when modifying a widget that already exists under lib/presentation/widgets and you want to improve structure, docs, theme usage, or API shape without breaking current callers unless explicitly requested. Optionally accept a new widget name to create a renamed successor instead of editing the original in place.
+description: Update an existing shared widget for Project Tweety while preserving its current behaviour by default and aligning visible UI with adaptive design-system primitives. Use when modifying a widget under lib/presentation/widgets to improve structure, docs, theme usage, native Material/Cupertino presentation through package:design_system, or API shape without breaking current callers unless explicitly requested. Optionally accept a new widget name to create a renamed successor.
 ---
 
 # Update Widget
@@ -63,6 +63,14 @@ Use `DesignSystemTheme` and the existing component theme builders as the default
 - separating `ThemeData` assembly from component theme implementation
 - avoiding hardcoded presentation values when the app theme should own them
 
+Use existing adaptive primitives exported by `package:design_system/design_system.dart` for visible UI controls and feedback:
+- `AppButton` instead of raw Material or Cupertino buttons
+- `AppListTile` instead of raw `ListTile`/`CupertinoListTile`
+- `AppLoadingIndicator` instead of raw progress/activity indicators
+- `AppPickerField` instead of raw dropdowns or picker rows
+
+If the update needs a reusable visible control that does not have an app primitive yet, add the narrow adaptive primitive under `packages/design_system` first. The primitive owns the Material/Cupertino branching; the shared widget should express app intent and consume the primitive.
+
 If the written guidance and the current source tree disagree, follow the current source tree.
 
 ## Inputs
@@ -77,6 +85,7 @@ Collect or infer these inputs before updating:
 - whether the change requires a theme hook or can use the existing `ThemeData`
 - whether constructor assertions are missing for invalid public contracts
 - whether the widget or its repeated generated children need stable keys for identity across rebuilds
+- whether the widget currently uses raw Material/Cupertino controls that should be replaced with existing design-system primitives
 
 If the user does not provide a change brief:
 - do not update the widget
@@ -181,6 +190,9 @@ Do not introduce `UniqueKey()` values in `build`; prefer caller-provided keys or
 
 When the update changes a standard Material control or shared visual pattern:
 - use the existing `ThemeData` where possible
+- prefer app/design-system primitives such as `AppButton`, `AppListTile`, `AppLoadingIndicator`, and `AppPickerField` for visible controls
+- replace raw Material/Cupertino controls with existing primitives when that preserves the widget's public contract
+- add a missing adaptive primitive to `packages/design_system` before repeating raw platform controls in pages or shared widgets
 - extend the matching theme slot when needed
 - keep the `ThemeData` entrypoint mostly declarative
 - add concrete implementation in a separate helper class

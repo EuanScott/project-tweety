@@ -18,6 +18,12 @@
 - Add new brands through token objects like `DesignBrand` and shared presets like `DesignBrands`.
 - Keep B2C and B2B variants using the same structural theme logic wherever possible.
 
+## Adaptive Primitive Conventions
+- `packages/design_system` owns app-level visible UI primitives that choose the native presentation per platform, such as buttons, list rows, loading indicators, and pickers.
+- Design-system primitives may use raw Material and Cupertino widgets internally, but consuming pages and shared widgets should depend on the primitive API instead of branching on platform themselves.
+- Keep primitive APIs semantic and app-facing, for example `AppButton.primary`, `AppLoadingIndicator`, or `AppPickerField`, rather than mirroring every underlying Flutter platform widget option.
+- When a page or shared widget needs visible UI that is not covered by an existing primitive, add the narrow primitive here first and cover both Material and Cupertino behavior with focused tests.
+
 ## Dependency Conventions
 - Keep dependencies lightweight and UI-focused.
 - Only add package dependencies that are truly required by the shared design system.

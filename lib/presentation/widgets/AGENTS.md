@@ -17,5 +17,7 @@
 ## Widget Conventions
 - Prefer narrow public APIs over large configurable surfaces.
 - Prefer `Theme.of(context)` and shared component themes over local ad hoc styling.
+- Prefer `packages/design_system` app primitives for visible controls and feedback. Do not use raw Material/Cupertino controls such as `ElevatedButton`, `ListTile`, `CircularProgressIndicator`, `DropdownButtonFormField`, or their Cupertino equivalents in shared widgets when an app primitive exists.
+- If a shared widget needs a reusable visible control that lacks an app primitive, add a narrow adaptive primitive to `packages/design_system` first, then consume it from the shared widget.
 - Preserve open-for-extension, closed-for-modification structure where it fits the widget, for example additive entrypoints or variants over breaking edits to an existing contract.
 - Keep caller-owned state outside the widget unless local transient UI state is the point of the abstraction.

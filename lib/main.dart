@@ -25,6 +25,7 @@ class MyApp extends StatefulWidget {
   const MyApp({
     this.initialLocation,
     this.analyticsFacade,
+    this.platform,
     this.canAccessSettings = const bool.fromEnvironment(
       'CAN_ACCESS_SETTINGS',
       defaultValue: true,
@@ -34,6 +35,7 @@ class MyApp extends StatefulWidget {
 
   final String? initialLocation;
   final AnalyticsFacade? analyticsFacade;
+  final TargetPlatform? platform;
   final bool canAccessSettings;
 
   @override
@@ -72,8 +74,12 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp.router(
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.appTitle,
-            theme: DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
-            darkTheme: DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
+            theme: _themeData(
+              DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
+            ),
+            darkTheme: _themeData(
+              DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
+            ),
             themeMode: _themeMode(appPreferences.themeMode),
             locale: _locale(appPreferences.languageCode),
             localizationsDelegates: const [
@@ -101,6 +107,15 @@ class _MyAppState extends State<MyApp> {
       case AppPreferencesThemeMode.dark:
         return ThemeMode.dark;
     }
+  }
+
+  ThemeData _themeData(ThemeData themeData) {
+    final platform = widget.platform;
+    if (platform == null) {
+      return themeData;
+    }
+
+    return themeData.copyWith(platform: platform);
   }
 
   Locale? _locale(String? languageCode) {

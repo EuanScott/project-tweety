@@ -27,6 +27,7 @@
   "appPreferencesThemeDark": "כהה",
   "appPreferencesThemeSystemSelected": "מערכת ({theme})",
   "appPreferencesThemeApplied": "מוחל כעת: {theme}",
+  "appPreferencesThemeDeviceSetting": "הגדרת המכשיר: {theme}",
   "appPreferencesThemeFollowingSystem": "בהתאם להגדרת המכשיר: {theme}",
   "appPreferencesLanguageLabel": "שפה",
   "appPreferencesLanguageSystem": "ברירת המחדל של המערכת",

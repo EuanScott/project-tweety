@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -69,6 +71,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Card Title 1'), findsWidgets);
+    expect(find.byIcon(Icons.refresh), findsNothing);
   });
 
   testWidgets('opens card details from the cards list on compact width', (
@@ -135,6 +138,59 @@ void main() {
     expect(cardsList.controller!.offset, greaterThan(0));
     expect(find.text('Card Title 10'), findsNWidgets(2));
     expect(find.text('card-10'), findsOneWidget);
+  });
+
+  testWidgets(
+    'scrolling card details does not scroll cards list on wide iOS layout',
+    (WidgetTester tester) async {
+      await _pumpApp(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(1000, 800),
+        initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-10',
+      );
+
+      final cardsList = tester.widget<ListView>(
+        find.byWidgetPredicate(
+          (widget) => widget is ListView && widget.controller != null,
+        ),
+      );
+      final initialOffset = cardsList.controller!.offset;
+
+      expect(initialOffset, greaterThan(0));
+
+      await tester.drag(find.text('card-10'), const Offset(0, 300));
+      await tester.pumpAndSettle();
+
+      expect(cardsList.controller!.offset, initialOffset);
+
+      await tester.sendEventToBinding(
+        PointerScrollEvent(
+          position: tester.getCenter(find.text('card-10')),
+          scrollDelta: const Offset(0, 300),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(cardsList.controller!.offset, initialOffset);
+    },
+  );
+
+  testWidgets('wide iOS cards disable page-level sliver scrolling', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      platform: TargetPlatform.iOS,
+      surfaceSize: const Size(1000, 800),
+      initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-10',
+    );
+
+    final nestedScrollView = tester.widget<NestedScrollView>(
+      find.byType(NestedScrollView),
+    );
+
+    expect(nestedScrollView.physics, isA<NeverScrollableScrollPhysics>());
   });
 
   testWidgets('updates card details in place on wide card selection', (
@@ -361,6 +417,27 @@ void main() {
     expect(find.text('Settings'), findsOneWidget);
   });
 
+  testWidgets('shows the device theme setting when theme is overridden', (
+    WidgetTester tester,
+  ) async {
+    GetIt.I
+      ..unregister<AppPreferencesRepository>()
+      ..registerLazySingleton<AppPreferencesRepository>(
+        () => _FakeAppPreferencesRepository(
+          const AppPreferences(themeMode: AppPreferencesThemeMode.light),
+        ),
+      );
+
+    await _pumpApp(
+      tester,
+      platformBrightness: Brightness.dark,
+      initialLocation: AppRoutes.settingsAppPreferencesFullPath,
+    );
+
+    expect(find.text('Light'), findsOneWidget);
+    expect(find.text('Device setting: Dark'), findsOneWidget);
+  });
+
   testWidgets('opens app preferences from a direct route', (
     WidgetTester tester,
   ) async {
@@ -453,6 +530,23 @@ void main() {
     expect(find.text('Card Title 1'), findsOneWidget);
   });
 
+  testWidgets(
+    'iOS cards use large title scroll coordination without refresh action',
+    (WidgetTester tester) async {
+      await _pumpApp(tester, platform: TargetPlatform.iOS);
+
+      await tester.tap(find.text('Cards'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoSliverNavigationBar), findsOneWidget);
+      expect(find.byIcon(Icons.refresh), findsNothing);
+
+      final cardsList = find.byType(ListView).first;
+      final listView = tester.widget<ListView>(cardsList);
+      expect(listView.controller, isNotNull);
+    },
+  );
+
   testWidgets('tapping active cards rail item scrolls cards list to the top', (
     WidgetTester tester,
   ) async {
@@ -511,14 +605,20 @@ Future<void> _pumpApp(
   Size surfaceSize = const Size(400, 800),
   String? initialLocation,
   bool canAccessSettings = true,
+  Brightness platformBrightness = Brightness.light,
+  TargetPlatform? platform,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
 
   await tester.pumpWidget(
-    MyApp(
-      initialLocation: initialLocation,
-      canAccessSettings: canAccessSettings,
+    MediaQuery(
+      data: MediaQueryData(platformBrightness: platformBrightness),
+      child: MyApp(
+        initialLocation: initialLocation,
+        platform: platform,
+        canAccessSettings: canAccessSettings,
+      ),
     ),
   );
   await tester.pumpAndSettle();

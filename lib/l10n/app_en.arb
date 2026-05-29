@@ -117,6 +117,13 @@
       "theme": {}
     }
   },
+  "appPreferencesThemeDeviceSetting": "Device setting: {theme}",
+  "@appPreferencesThemeDeviceSetting": {
+    "description": "Helper text showing the current device/system theme setting",
+    "placeholders": {
+      "theme": {}
+    }
+  },
   "appPreferencesThemeFollowingSystem": "Following device setting: {theme}",
   "@appPreferencesThemeFollowingSystem": {
     "description": "Helper text when theme follows the system setting",

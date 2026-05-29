@@ -27,6 +27,7 @@
   "appPreferencesThemeDark": "Oscuro",
   "appPreferencesThemeSystemSelected": "Sistema ({theme})",
   "appPreferencesThemeApplied": "Aplicado actualmente: {theme}",
+  "appPreferencesThemeDeviceSetting": "Configuración del dispositivo: {theme}",
   "appPreferencesThemeFollowingSystem": "Siguiendo la configuración del dispositivo: {theme}",
   "appPreferencesLanguageLabel": "Idioma",
   "appPreferencesLanguageSystem": "Predeterminado del sistema",

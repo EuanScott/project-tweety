@@ -268,6 +268,12 @@ abstract class AppLocalizations {
   /// **'Currently applied: {theme}'**
   String appPreferencesThemeApplied(Object theme);
 
+  /// Helper text showing the current device/system theme setting
+  ///
+  /// In en, this message translates to:
+  /// **'Device setting: {theme}'**
+  String appPreferencesThemeDeviceSetting(Object theme);
+
   /// Helper text when theme follows the system setting
   ///
   /// In en, this message translates to:

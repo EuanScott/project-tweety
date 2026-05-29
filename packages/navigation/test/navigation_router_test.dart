@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,7 @@ const _railForeground = Color(0xFF0F5D5D);
 const _drawerSurface = Color(0xFFEAF1FF);
 const _drawerForeground = Color(0xFF1F3C88);
 const _homeThemeProbeKey = ValueKey('home-theme-probe');
+const _sideNavigationToggleTooltip = 'Toggle side navigation';
 
 void main() {
   group('createNavigationRouter', () {
@@ -72,6 +74,21 @@ void main() {
       expect(find.byType(NavigationDrawer), findsNothing);
     });
 
+    testWidgets('renders a Cupertino tab bar at compact iOS width', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(500, 800),
+      );
+
+      expect(find.byType(CupertinoTabBar), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+      expect(find.byType(NavigationRail), findsNothing);
+      expect(find.byType(NavigationDrawer), findsNothing);
+    });
+
     testWidgets('renders an unextended navigation rail at medium width', (
       tester,
     ) async {
@@ -82,6 +99,47 @@ void main() {
       expect(find.byType(NavigationBar), findsNothing);
       expect(find.byType(NavigationDrawer), findsNothing);
       expect(rail.extended, isFalse);
+    });
+
+    testWidgets('renders Cupertino side navigation at medium iOS width', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(700, 800),
+      );
+
+      expect(find.byType(CupertinoListSection), findsNothing);
+      expect(find.byType(CupertinoListTile), findsNWidgets(2));
+      expect(find.byType(NavigationRail), findsNothing);
+      expect(find.byType(NavigationDrawer), findsNothing);
+      expect(find.byType(CupertinoTabBar), findsNothing);
+    });
+
+    testWidgets('can collapse and expand Cupertino side navigation', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(700, 800),
+      );
+
+      expect(_sideNavigationWidth(tester), 304);
+      expect(find.text('home'), findsOneWidget);
+
+      await tester.tap(find.byTooltip(_sideNavigationToggleTooltip));
+      await tester.pumpAndSettle();
+
+      expect(_sideNavigationWidth(tester), 72);
+      expect(find.text('home'), findsNothing);
+
+      await tester.tap(find.byTooltip(_sideNavigationToggleTooltip));
+      await tester.pumpAndSettle();
+
+      expect(_sideNavigationWidth(tester), 304);
+      expect(find.text('home'), findsOneWidget);
     });
 
     testWidgets('keeps the navigation rail compact at expanded width', (
@@ -103,6 +161,46 @@ void main() {
       expect(find.byType(NavigationBar), findsNothing);
       expect(find.byType(NavigationRail), findsNothing);
       expect(find.byType(NavigationDrawer), findsOneWidget);
+    });
+
+    testWidgets('can collapse and expand Material side navigation', (
+      tester,
+    ) async {
+      await _pumpRouter(tester, surfaceSize: const Size(1200, 800));
+
+      expect(_sideNavigationWidth(tester), 304);
+      expect(find.byType(NavigationDrawer), findsOneWidget);
+
+      await tester.tap(find.byTooltip(_sideNavigationToggleTooltip));
+      await tester.pumpAndSettle();
+
+      final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+
+      expect(_sideNavigationWidth(tester), 72);
+      expect(rail.labelType, NavigationRailLabelType.none);
+      expect(find.byType(NavigationDrawer), findsNothing);
+
+      await tester.tap(find.byTooltip(_sideNavigationToggleTooltip));
+      await tester.pumpAndSettle();
+
+      expect(_sideNavigationWidth(tester), 304);
+      expect(find.byType(NavigationDrawer), findsOneWidget);
+    });
+
+    testWidgets('renders Cupertino side navigation at tablet iOS width', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(1200, 800),
+      );
+
+      expect(find.byType(CupertinoListSection), findsNothing);
+      expect(find.byType(CupertinoListTile), findsNWidgets(2));
+      expect(find.byType(NavigationDrawer), findsNothing);
+      expect(find.byType(NavigationRail), findsNothing);
+      expect(find.byType(CupertinoTabBar), findsNothing);
     });
 
     testWidgets('keeps the app bar theme unchanged at compact width', (
@@ -151,6 +249,7 @@ void main() {
 Future<void> _pumpRouter(
   WidgetTester tester, {
   required Size surfaceSize,
+  TargetPlatform platform = TargetPlatform.android,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -175,13 +274,14 @@ Future<void> _pumpRouter(
   addTearDown(router.dispose);
 
   await tester.pumpWidget(
-    MaterialApp.router(theme: _themeData(), routerConfig: router),
+    MaterialApp.router(theme: _themeData(platform), routerConfig: router),
   );
   await tester.pumpAndSettle();
 }
 
-ThemeData _themeData() {
+ThemeData _themeData(TargetPlatform platform) {
   return ThemeData(
+    platform: platform,
     appBarTheme: const AppBarTheme(
       backgroundColor: _compactAppBarBackground,
       foregroundColor: _compactAppBarForeground,
@@ -230,4 +330,17 @@ GoRoute _route(String path) {
 
 Widget _errorBuilder(BuildContext context, Exception? error) {
   return const SizedBox.shrink();
+}
+
+double _sideNavigationWidth(WidgetTester tester) {
+  return tester
+      .getSize(
+        find
+            .ancestor(
+              of: find.byTooltip(_sideNavigationToggleTooltip),
+              matching: find.byType(SizedBox),
+            )
+            .first,
+      )
+      .width;
 }

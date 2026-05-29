@@ -1,6 +1,6 @@
 ---
 name: shared-widget
-description: Scaffold a shared widget for Project Tweety under lib/presentation/widgets using the repo's focused wrapper style. Use when adding reusable app widgets such as modals, page shells, app bars, or small UI building blocks that should have rich dart doc comments, narrow public APIs, and opinionated defaults. A human-readable widget description is required. Prefer extension-friendly structure without turning the widget into a highly customizable surface.
+description: Scaffold a shared widget for Project Tweety under lib/presentation/widgets using the repo's focused wrapper style and adaptive design-system primitives. Use when adding reusable app widgets such as modals, page shells, app bars, or small UI building blocks that should have rich dart doc comments, narrow public APIs, native Material/Cupertino presentation through package:design_system, and opinionated defaults. A human-readable widget description is required.
 ---
 
 # Shared Widget Scaffold
@@ -50,6 +50,14 @@ Use `DesignSystemTheme` and the existing component theme builders as the default
 - separating `ThemeData` assembly from component theme implementation
 - avoiding hardcoded presentation values when the app theme should own them
 
+Use existing adaptive primitives exported by `package:design_system/design_system.dart` for visible UI controls and feedback:
+- `AppButton` instead of raw Material or Cupertino buttons
+- `AppListTile` instead of raw `ListTile`/`CupertinoListTile`
+- `AppLoadingIndicator` instead of raw progress/activity indicators
+- `AppPickerField` instead of raw dropdowns or picker rows
+
+If the widget needs a reusable visible control that does not have an app primitive yet, add the narrow adaptive primitive under `packages/design_system` first. The primitive owns the Material/Cupertino branching; the shared widget should express app intent and consume the primitive.
+
 If the written guidance and the current source tree disagree, follow the current source tree.
 
 ## Inputs
@@ -63,6 +71,7 @@ Collect or infer these inputs before scaffolding:
 - whether a small typed helper object is needed, such as an action or config value object
 - whether the widget belongs in `lib/presentation/widgets/` or should live in `packages/design_system/`
 - whether the widget can be fully styled from the existing `ThemeData` or needs a new theme hook
+- whether all visible controls can be built from existing design-system primitives, or whether a missing adaptive primitive must be added first
 
 When the user gives a descriptive brief, infer these implementation details before scaffolding:
 - the most likely widget name and filename
@@ -159,8 +168,12 @@ Do not invent extra parameters unless the brief clearly requires them now.
 Shared widgets should make use of a defined `ThemeData` for the app.
 Do not treat widget files as the place to define the visual system.
 
+Shared widgets should also route visible controls through app/design-system primitives. Do not introduce raw Material/Cupertino controls in shared widgets when a primitive exists.
+
 Follow these rules:
 - prefer `Theme.of(context)` for colors, text styles, icon themes, card styling, and other presentation values
+- prefer app primitives such as `AppButton`, `AppListTile`, `AppLoadingIndicator`, and `AppPickerField` for visible controls
+- add a missing adaptive primitive to `packages/design_system` before repeating raw platform controls in pages or shared widgets
 - use existing theme-backed component widgets and styles before introducing new inline values
 - avoid hardcoded colors, text styles, and visual constants when the current theme can own them
 - allow small layout constants such as local spacing only when they are structural and not part of the visual token system

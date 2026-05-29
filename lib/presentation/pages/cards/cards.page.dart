@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -8,7 +9,6 @@ import 'package:project_tweety/domain/entities/card/card.entity.dart'
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
-import 'package:project_tweety/presentation/widgets/app_bar.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 import 'bloc/cards.bloc.dart';
@@ -27,7 +27,7 @@ class Cards extends StatefulWidget {
 class _CardsState extends State<Cards> {
   static const double _secondaryBreakpoint = 600;
 
-  final ScrollController _scrollController = ScrollController();
+  final GlobalKey<_CardsListState> _cardsListKey = GlobalKey<_CardsListState>();
   late String? _selectedCardId;
 
   @override
@@ -43,12 +43,6 @@ class _CardsState extends State<Cards> {
     if (oldWidget.selectedCardId != widget.selectedCardId) {
       _selectedCardId = widget.selectedCardId;
     }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 
   @override
@@ -77,19 +71,14 @@ class _CardsState extends State<Cards> {
 
                 return PageScaffold(
                   title: l10n.cardsTab,
-                  trailingAction: CustomAppBarAction(
-                    icon: Icons.refresh,
-                    tooltip: 'Refresh cards',
-                    onPressed: () {
-                      context.read<CardsBloc>().add(const CardsStarted());
-                    },
-                  ),
+                  prefersLargeCupertinoTitle: true,
+                  allowsLargeCupertinoTitleCollapse: !showSecondary,
                   secondaryBreakpoint: _secondaryBreakpoint,
                   secondaryBody: selectedCardId == null
                       ? const CardDetailsEmptyState()
                       : CardDetailsContent(cardId: selectedCardId),
                   body: _CardsView(
-                    scrollController: _scrollController,
+                    listKey: _cardsListKey,
                     selectedCardId: selectedCardId,
                     onCardSelected: (cardId) => _selectCard(
                       context,
@@ -123,26 +112,18 @@ class _CardsState extends State<Cards> {
   }
 
   void _scrollToTop() {
-    if (!_scrollController.hasClients) {
-      return;
-    }
-
-    _scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOutCubic,
-    );
+    _cardsListKey.currentState?.scrollToTop();
   }
 }
 
 class _CardsView extends StatelessWidget {
   const _CardsView({
-    required this.scrollController,
+    required this.listKey,
     required this.selectedCardId,
     required this.onCardSelected,
   });
 
-  final ScrollController scrollController;
+  final GlobalKey<_CardsListState> listKey;
   final String? selectedCardId;
   final ValueChanged<String> onCardSelected;
 
@@ -152,7 +133,7 @@ class _CardsView extends StatelessWidget {
     return BlocBuilder<CardsBloc, CardsState>(
       builder: (context, state) {
         if (state.isInitial || state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: AppLoadingIndicator());
         }
 
         if (state.isFailure) {
@@ -162,13 +143,20 @@ class _CardsView extends StatelessWidget {
         }
 
         return _CardsList(
+          key: listKey,
           items: state.items,
-          scrollController: scrollController,
           selectedCardId: selectedCardId,
           onCardSelected: onCardSelected,
+          onRefresh: () => _refreshCards(context),
         );
       },
     );
+  }
+
+  Future<void> _refreshCards(BuildContext context) async {
+    final bloc = context.read<CardsBloc>()..add(const CardsStarted());
+
+    await bloc.stream.firstWhere((state) => !state.isLoading);
   }
 }
 
@@ -177,15 +165,16 @@ class _CardsList extends StatefulWidget {
 
   const _CardsList({
     required this.items,
-    required this.scrollController,
     required this.selectedCardId,
     required this.onCardSelected,
+    required this.onRefresh,
+    super.key,
   });
 
   final List<card_model.Card> items;
-  final ScrollController scrollController;
   final String? selectedCardId;
   final ValueChanged<String> onCardSelected;
+  final Future<void> Function() onRefresh;
 
   @override
   State<_CardsList> createState() => _CardsListState();
@@ -194,6 +183,7 @@ class _CardsList extends StatefulWidget {
 class _CardsListState extends State<_CardsList> {
   static const Duration _scrollDuration = Duration(milliseconds: 250);
 
+  final ScrollController _materialScrollController = ScrollController();
   final Map<String, GlobalKey> _itemKeys = {};
 
   @override
@@ -213,48 +203,74 @@ class _CardsListState extends State<_CardsList> {
   }
 
   @override
+  void dispose() {
+    _materialScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scrollController = _scrollControllerFor(context);
 
-    return ListView.builder(
-      controller: widget.scrollController,
-      padding: _CardsList._listPadding,
-      itemCount: widget.items.length,
-      itemBuilder: (context, index) {
-        final item = widget.items[index];
-        final isSelected = item.id == widget.selectedCardId;
+    return AppRefreshIndicator(
+      onRefresh: widget.onRefresh,
+      child: ListView.builder(
+        controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(),
+        ),
+        padding: _CardsList._listPadding,
+        itemCount: widget.items.length,
+        itemBuilder: (context, index) {
+          final item = widget.items[index];
+          final isSelected = item.id == widget.selectedCardId;
 
-        return Card(
-          key: _itemKeyFor(item.id),
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          color: theme.cardTheme.color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: BorderSide(
-              color: isSelected
-                  ? theme.colorScheme.primary
-                  : Colors.transparent,
-              width: 2,
-            ),
-          ),
-          elevation: 3,
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: () => widget.onCardSelected(item.id),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.title, style: theme.textTheme.titleMedium),
-                  const SizedBox(height: 8),
-                  Text(item.description, style: theme.textTheme.bodyMedium),
-                ],
+          return Card(
+            key: _itemKeyFor(item.id),
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            color: theme.cardTheme.color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : Colors.transparent,
+                width: 2,
               ),
             ),
-          ),
-        );
-      },
+            elevation: 3,
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => widget.onCardSelected(item.id),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.title, style: theme.textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    Text(item.description, style: theme.textTheme.bodyMedium),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void scrollToTop() {
+    final position = _primaryScrollPosition;
+    if (position == null) {
+      return;
+    }
+
+    position.animateTo(
+      position.minScrollExtent,
+      duration: _scrollDuration,
+      curve: Curves.easeOutCubic,
     );
   }
 
@@ -292,11 +308,11 @@ class _CardsListState extends State<_CardsList> {
     final selectedIndex = widget.items.indexWhere(
       (item) => item.id == selectedCardId,
     );
-    if (selectedIndex == -1 || !widget.scrollController.hasClients) {
+    final position = _primaryScrollPosition;
+    if (selectedIndex == -1 || position == null) {
       return;
     }
 
-    final position = widget.scrollController.position;
     final targetOffset = widget.items.length <= 1
         ? position.minScrollExtent
         : position.maxScrollExtent * selectedIndex / (widget.items.length - 1);
@@ -305,6 +321,24 @@ class _CardsListState extends State<_CardsList> {
       targetOffset.clamp(position.minScrollExtent, position.maxScrollExtent),
     );
     _scheduleSelectedCardScroll();
+  }
+
+  ScrollPosition? get _primaryScrollPosition {
+    final controller = _scrollControllerFor(context);
+    if (controller == null || !controller.hasClients) {
+      return null;
+    }
+
+    return controller.position;
+  }
+
+  ScrollController? _scrollControllerFor(BuildContext context) {
+    if (AppDesignPlatform.of(context).isCupertino) {
+      return PrimaryScrollController.maybeOf(context) ??
+          _materialScrollController;
+    }
+
+    return _materialScrollController;
   }
 }
 
@@ -323,7 +357,7 @@ class _CardsError extends StatelessWidget {
           children: [
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 12),
-            ElevatedButton(
+            AppButton.primary(
               onPressed: () {
                 context.read<CardsBloc>().add(const CardsStarted());
               },

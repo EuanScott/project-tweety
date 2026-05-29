@@ -87,8 +87,13 @@ If a screenshot or mockup is attached:
 
 When visual behaviour is updated:
 - prefer `Theme.of(context)`
+- prefer app/design-system primitives such as `AppButton`, `AppListTile`, `AppLoadingIndicator`, and `AppPickerField` for visible controls
+- replace raw Material/Cupertino controls with existing primitives when that preserves current callers and behaviour
+- add a missing adaptive primitive to `packages/design_system` before repeating raw platform controls in pages or shared widgets
 - prefer existing themed Material controls
 - extend the matching `ThemeData` slot when the widget introduces or updates a standard control pattern
+
+Pages and shared widgets should express app intent through primitives. The design-system primitive owns the Material/Cupertino branching.
 
 For Project Tweety, prefer:
 - `packages/design_system/lib/src/theme/design_system_theme.dart`

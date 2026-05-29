@@ -46,6 +46,8 @@
 - Keep retry logic in the error widget simple and event-driven.
 - Avoid putting business logic in the page; keep it in the BLoC or lower layers.
 - The page should render domain entities, not DTOs.
+- Use app/design-system primitives for visible UI controls and feedback when they exist. For example, render loading with `AppLoadingIndicator`, actions with `AppButton`, rows with `AppListTile`, and selection fields with `AppPickerField`.
+- Do not add raw Material or Cupertino controls directly to pages for reusable UI patterns. Add or extend a narrow primitive in `packages/design_system` first so native platform branching stays centralized.
 
 ## Feature Naming
 - Use domain-meaningful feature names throughout the page and BLoC.
