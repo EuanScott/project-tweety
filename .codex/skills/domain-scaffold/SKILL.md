@@ -43,9 +43,9 @@ Read the closest existing domain area before generating files.
 Prefer current source examples over older written guidance.
 
 Use the current repo as the reference for nested paths such as:
-- `lib/domain/repositories/card/card.repository.dart`
-- `lib/domain/usecases/card/get_card.usecase.dart`
-- `lib/domain/entities/card/card.entity.dart`
+- `lib/domain/repositories/<feature>/<feature>.repository.dart`
+- `lib/domain/usecases/<feature>/<action>_<feature>.usecase.dart`
+- `lib/domain/entities/<entity>/<entity>.entity.dart`
 
 ### 2. Create the repository contract
 

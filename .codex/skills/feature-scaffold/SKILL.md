@@ -1,11 +1,14 @@
 ---
 name: feature-scaffold
-description: Scaffold a new Project Tweety feature using the repo's layered-first Flutter structure across lib/domain, lib/data, and lib/presentation only. Use when adding a new page-backed feature that needs a minimal repository, use case, page, and BLoC scaffold that follows the repo's dotted filename conventions, nested per-feature data/domain folders, Freezed state pattern, Injectable wiring, and low-opinionated bootstrap flow. Do not use for work under lib/features or for design-system-only changes.
+description: Scaffold a new Project Tweety feature using the repo's default BFF-backed layered architecture with optional domain across lib/data and lib/presentation, adding lib/domain only when mobile-owned behavior justifies it. Use when adding a new page-backed feature that needs a minimal repository, page, and BLoC or Cubit scaffold that follows the repo's dotted filename conventions, nested per-feature folders, Freezed state pattern, Injectable wiring, and low-opinionated bootstrap flow. Do not use for work under lib/features or for design-system-only changes.
 ---
 
 # Feature Scaffold
 
-Create a new layered feature in one pass instead of treating domain, data, and presentation as separate generation steps.
+Create a new feature in one pass instead of treating data and presentation as separate generation steps.
+The default architecture is BFF-backed layered architecture with optional domain.
+Assume the BFF handles mobile-specific shaping and common business logic.
+Do not add `lib/domain` unless the feature has mobile-owned policy, orchestration, stateful app concepts, or custom behavior that would otherwise leak into presentation or data.
 
 ## Help mode
 
@@ -25,17 +28,18 @@ Start by reading the repo guidance that defines the contract:
 - `lib/presentation/pages/AGENTS.md`
 
 If the written guidance and the current source tree disagree, follow the current source tree.
-For `lib/domain/` and `lib/data/`, the repo currently nests files by feature or entity name, and the scaffold should match that structure.
+For `lib/data/` and optional `lib/domain/`, the repo currently nests files by feature or entity name, and the scaffold should match that structure.
 
-Use this skill only for the layered app structure under `lib/domain/`, `lib/data/`, and `lib/presentation/pages/`.
+Use this skill only for the app structure under `lib/data/`, `lib/presentation/pages/`, and justified optional `lib/domain/`.
 Treat `lib/features/` as explicitly out of scope.
 
 ## Inputs
 
 Collect or infer these inputs before scaffolding:
-- feature name in snake_case, usually plural for list-style features, such as `cards`
+- feature name in snake_case, usually plural for list-style features
 - primary page intent, such as list, detail, preferences, or editor
 - initial repository operations that are actually needed now
+- whether the feature needs a domain layer, and the specific mobile-owned behavior that justifies it
 - optional `curl` request that defines a real API call for the feature
 - optional sample response body when the user has one available
 
@@ -45,23 +49,27 @@ Ask a short clarifying question only if the feature name or required operations 
 
 ### 1. Inspect existing patterns
 
-Read the closest existing feature before generating files.
+Read `_template` before generating files.
 Prefer current source examples over historical scripts.
 
-For this repo, use the `cards` flow as the main reference for:
+For this repo, use `_template` as the source of truth for:
 - page and BLoC structure
 - Freezed state shape
-- use case wiring
+- data repository contract and implementation wiring
 
-### 2. Scaffold the domain layer first
+### 2. Decide whether domain is required
 
-Create the minimum domain files needed for the requested feature:
+Skip domain by default.
+Create domain files only when the feature has mobile-owned behavior that should not live in the BFF, data layer, or BLoC.
+Valid examples include settings-style local app policy, non-trivial client-side orchestration, durable app-owned entities, or feature rules that must be tested independently from transport and UI.
+
+When domain is justified, create only the minimum domain files needed:
 - repository contract in `lib/domain/repositories/<feature-or-entity>/`
 - one or more use cases in `lib/domain/usecases/<feature-or-entity>/`
 
 Follow these rules:
-- Use the nested folders already established in the repo, for example `lib/domain/repositories/card/card.repository.dart` and `lib/domain/usecases/card/get_card.usecase.dart`
-- Use dotted filenames such as `card.repository.dart` and `get_card.usecase.dart`
+- Use the nested folders already established in the repo, for example `lib/domain/repositories/<feature>/<feature>.repository.dart` and `lib/domain/usecases/<feature>/<action>_<feature>.usecase.dart`
+- Use dotted filenames such as `<feature>.repository.dart` and `<action>_<feature>.usecase.dart`
 - The folder key may be singular even when the file name is plural; mirror the nearest existing pattern for that domain area
 - Keep repository contracts intent-based
 - Add only the operations needed for the requested feature
@@ -74,19 +82,20 @@ If a `curl` request is supplied:
 - create a concrete domain entity when the request/response shape justifies one
 - let the use case reflect the real operation rather than a placeholder fetch
 
-### 3. Scaffold the data layer second
+### 3. Scaffold the data layer
 
 Create only the matching data files that are justified by the current scope.
-For the default first pass, create only the repository implementation in `lib/data/repositories/<feature-or-entity>/`.
+For the default first pass, create the repository contract and repository implementation in `lib/data/repositories/<feature-or-entity>/`.
 
 Follow these rules:
 - Do not create mock datasources or DTOs by default
 - Add datasources or DTOs only when the feature has a real source shape or transport model to represent
-- Use the nested folders already established in the repo, for example `lib/data/repositories/card/cards.repository_impl.dart`, `lib/data/dtos/card/card.dto.dart`, and `lib/data/datasources/card/card.mock.dart`
+- Use the nested folders already established in the repo, for example `lib/data/repositories/<feature>/<feature>.repository.dart`, `lib/data/repositories/<feature>/<feature>.repository_impl.dart`, `lib/data/dtos/<entity>/<entity>.dto.dart`, and `lib/data/datasources/<feature>/<source>_<feature>.datasource.dart`
 - The folder key may be singular even when the file name is plural; mirror the nearest existing pattern for that domain area
 - Use `.repository_impl.dart` filenames
 - Keep the initial repository implementation minimal, for example a `Future<void>` method that completes successfully
 - Annotate datasource and repository implementation for Injectable using the repo's preferred lifecycles
+- If optional domain exists, the data implementation may implement the domain repository contract instead of a data-layer contract.
 
 If a `curl` request is supplied:
 - route the data-layer scaffolding through the same rules as `$data-scaffold`
@@ -105,28 +114,31 @@ Create the page and BLoC files under `lib/presentation/pages/<feature>/`:
 
 Follow these rules:
 - Use one feature-scoped BLoC per page unless the task says otherwise
+- Cubit is allowed instead of BLoC when state changes are simple commands and events add no useful vocabulary
 - Prefer a small event set; start with a bootstrap event such as `<Feature>Started`
-- Name the page widget `<Feature>Page`, for example `CardsPage`
+- Name the page widget `<Feature>Page`
 - Use a single Freezed state with a feature-scoped status enum and no payload fields by default
 - Keep the initial state unopinionated: status plus optional error message is usually enough
-- Let the initial BLoC flow emit `loading` and then `success` without attaching domain data
+- Let the initial BLoC flow emit `loading` and then `success` without attaching placeholder data
+- In the default path, inject the data-layer repository contract directly into the BLoC. If optional domain exists, inject the use case instead.
 - Add derived getters only when they improve rendering clarity
 - Resolve the BLoC with `GetIt.I<YourBloc>()`
 - Trigger initial loading during provider creation when the page owns the BLoC lifecycle
 - Keep the app bar minimal; do not add trailing actions, refresh icons, or custom app bar controls in the default scaffold
 - Render the initial success UI as `Center(child: Text('<feature>'))` using the feature name
-- Do not scaffold list rendering, item cards, or placeholder domain data until the user asks for real content
+- Do not scaffold list rendering, item rows, or placeholder data until the user asks for real content
 
 ### 5. Keep the scaffold intentionally minimal
 
 Do not over-generate.
 Avoid adding:
 - entities, DTOs, or datasources when there is no concrete data shape yet
+- domain files when there is no mobile-owned behavior to justify them
 - extra CRUD use cases that are not required yet
 - navigation wiring in `main.dart` unless the user asked for end-to-end integration
 - localization keys unless labels or tabs are part of the requested scope
 - widget extraction that is not needed for clarity
-- placeholder collections or card-style UI copied from `cards`
+- placeholder collections or copied rich UI from another feature
 - tests if the task is explicitly scaffold-only and the user does not want them yet
 
 ### 6. Finish the scaffold cleanly

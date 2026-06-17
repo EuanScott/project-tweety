@@ -1,35 +1,38 @@
 # Layered Scaffold Contract
 
-Use this reference when creating a new Project Tweety feature scaffold.
+Use this reference when creating a new Project Tweety feature scaffold for BFF-backed layered architecture with optional domain.
 
-For `lib/domain/` and `lib/data/`, the repo currently groups files into nested folders by feature or entity name.
+For `lib/data/` and optional `lib/domain/`, the repo currently groups files into nested folders by feature or entity name.
 Match the current source tree even if older written docs still show flatter directories.
 
 ## Naming
 
-- Feature names are usually plural for page-level flows: `cards`, `orders`, `profiles`
+- Feature names are usually plural for page-level flows
 - Filenames use `feature_or_entity.role.dart`
 - Use `_` inside the business name and `.` before the technical role
-- Folder names under `lib/domain/` and `lib/data/` should mirror the nearest existing domain area, which may be singular even when some filenames are plural
+- Folder names under `lib/data/` and optional `lib/domain/` should mirror the nearest existing feature or entity area
 
 Examples:
-- `lib/domain/repositories/card/card.repository.dart`
-- `lib/domain/usecases/card/get_card.usecase.dart`
-- `lib/data/repositories/card/cards.repository_impl.dart`
-- `lib/data/dtos/card/card.dto.dart`
-- `lib/data/datasources/card/card.mock.dart`
-- `cards.page.dart`
-- `cards.bloc.dart`
-- `cards.event.dart`
-- `cards.state.dart`
+- `lib/data/repositories/<feature>/<feature>.repository.dart`
+- `lib/data/repositories/<feature>/<feature>.repository_impl.dart`
+- `lib/data/dtos/<entity>/<entity>.dto.dart`
+- `lib/data/datasources/<feature>/<source>_<feature>.datasource.dart`
+- `<feature>.page.dart`
+- `<feature>.bloc.dart`
+- `<feature>.event.dart`
+- `<feature>.state.dart`
 
 Class naming:
-- Page widgets should be named `<Feature>Page`, for example `CardsPage`
-- BLoC, event, state, and status names should remain feature-scoped, for example `CardsBloc` and `CardsStatus`
+- Page widgets should be named `<Feature>Page`
+- BLoC, event, state, and status names should remain feature-scoped
 
-## Domain Files
+## Optional Domain Files
 
-Create these files for the default minimal bootstrap scaffold:
+Do not create domain files for the default minimal bootstrap scaffold.
+Assume the BFF handles mobile-specific shaping and common business logic.
+Create domain only when mobile-owned behavior justifies it.
+
+When domain is justified, create:
 - `lib/domain/repositories/<feature-or-entity>/<feature>.repository.dart`
 - `lib/domain/usecases/<feature-or-entity>/fetch_<feature>.usecase.dart`
 
@@ -52,12 +55,14 @@ Add entity files or extra use cases only when the requested behavior needs them 
 ## Data Files
 
 Default first-pass data files:
+- `lib/data/repositories/<feature-or-entity>/<feature>.repository.dart`
 - `lib/data/repositories/<feature-or-entity>/<feature>.repository_impl.dart`
 
 Defaults:
 - do not create mock datasources or DTOs by default
 - repository implementation can satisfy the bootstrap fetch with a simple successful `Future<void>`
 - repository implementation is annotated as `@LazySingleton(as: ContractType)`
+- the BLoC may depend directly on the data-layer repository contract when no domain layer exists
 
 If a `curl` request is supplied:
 - create a datasource by default

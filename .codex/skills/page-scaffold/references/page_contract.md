@@ -5,7 +5,8 @@ Use this reference when creating only the presentation layer for a Project Tweet
 ## Prerequisites
 
 Verify an existing dependency target before scaffolding the page:
-- preferably a use case under `lib/domain/usecases/`
+- preferably a data-layer repository contract under `lib/data/repositories/`
+- or a use case under `lib/domain/usecases/` when optional domain exists
 - or another already-existing dependency that the BLoC should consume
 
 Do not silently invent lower-layer behavior if the dependency is missing.

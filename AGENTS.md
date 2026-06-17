@@ -14,7 +14,7 @@
 - `packages/design_system`: shared Flutter design system package for reusable theming and UI-level primitives
 - `lib/core`: cross-cutting concerns such as analytics, DI, error reporting, and feature flags
 - `lib/data`: constants, DTOs, datasources, repositories, and services
-- `lib/domain`: domain entities, repository contracts, and use cases
+- `lib/domain`: optional mobile-owned domain concepts, repository contracts, and use cases for features that need app-specific policy beyond BFF-shaped data
 - `lib/features`: feature-scoped experiments; currently includes `dynamic_form`
 - `lib/presentation`: pages, widgets, extensions, and UI helpers
 - `lib/l10n`: ARB files and generated localization output
@@ -22,18 +22,18 @@
 
 ## Skill Routing
 - Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
-- For future layered feature work, treat `_template` as the source of truth for the raw clean architecture scaffold:
-  - `lib/domain/repositories/_template/_template.repository.dart`
-  - `lib/domain/usecases/_template/fetch_template.usecase.dart`
+- For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain:
+  - `lib/data/repositories/_template/_template.repository.dart`
   - `lib/data/repositories/_template/_template.repository_impl.dart`
   - `lib/presentation/pages/_template/_template.page.dart`
   - `lib/presentation/pages/_template/bloc/`
+- Do not add a domain layer by default. Assume the BFF owns mobile-specific shaping and most business logic; add `lib/domain` only case-by-case for mobile-owned policy or custom app behavior, such as settings.
 - If an AI assistant notices a task that matches an existing skill, it may suggest or use that skill when it improves consistency. This is guidance, not a hard rule.
 - If the user wants help discovering a skill, prefer a short pointer over a long explanation.
 - If the user runs a skill with `--help`, do not edit files. Return a short explanation of what the skill does, its inputs, and example usage.
 - Prefer these skill matches when they fit the task:
-  - New feature scaffold across layers: `$feature-scaffold`
-  - Domain-only contracts or use cases: `$domain-scaffold`
+  - New feature scaffold across default layers: `$feature-scaffold`
+  - Domain-only contracts or use cases, only when justified: `$domain-scaffold`
   - Data-layer work such as repositories, datasources, DTOs, or a `curl`-driven API implementation: `$data-scaffold`
   - Page and BLoC scaffold work on top of existing lower layers: `$page-scaffold`
   - New shared widget from a brief or screenshot/mockup: `$shared-widget`

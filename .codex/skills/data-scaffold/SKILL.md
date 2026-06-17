@@ -1,6 +1,6 @@
 ---
 name: data-scaffold
-description: Scaffold only the data layer for a Project Tweety feature using the repo's nested lib/data folders and existing domain contracts. Use when implementing repository implementations, datasources, or DTOs for an existing feature. If the matching domain layer is missing, route through $domain-scaffold first in the same flow unless the user explicitly restricts the task to data-only.
+description: Scaffold only the data layer for a Project Tweety feature using the repo's nested lib/data folders. Use when implementing repository contracts, repository implementations, datasources, or DTOs for an existing feature. Add or depend on domain only when mobile-owned behavior justifies it.
 ---
 
 # Data Scaffold
@@ -25,15 +25,16 @@ Start by reading:
 - `lib/data/AGENTS.md`
 
 If the written guidance and the current source tree disagree, follow the current source tree.
-For `lib/data/` and `lib/domain/`, the repo currently nests files by feature or entity name, and the scaffold should match that structure.
+For `lib/data/` and optional `lib/domain/`, the repo currently nests files by feature or entity name, and the scaffold should match that structure.
 
 ## Inputs
 
 Collect or infer these inputs before scaffolding:
 - feature name in snake_case
-- folder key, usually the nearest existing singular business name
-- whether the data layer needs only a repository implementation or also datasources and DTOs
+- folder key, usually the nearest existing feature or entity name
+- whether the data layer needs a repository contract, repository implementation, datasources, and DTOs
 - whether the work is bootstrap-only or already has a concrete data shape
+- whether optional domain already exists or is justified by mobile-owned behavior
 - optional `curl` request that defines the API call to implement
 - optional sample response body when the user has one available
 
@@ -43,14 +44,14 @@ Ask a short clarifying question only if the feature name, folder key, or require
 
 ### 1. Inspect existing patterns
 
-Read the closest existing domain and data areas before generating files.
+Read `_template` and the closest existing data area before generating files.
 Prefer current source examples over older written guidance.
 
 Use the current repo as the reference for nested paths such as:
-- `lib/domain/repositories/card/card.repository.dart`
-- `lib/data/repositories/card/cards.repository_impl.dart`
-- `lib/data/dtos/card/card.dto.dart`
-- `lib/data/datasources/card/card.mock.dart`
+- `lib/data/repositories/<feature>/<feature>.repository.dart`
+- `lib/data/repositories/<feature>/<feature>.repository_impl.dart`
+- `lib/data/dtos/<entity>/<entity>.dto.dart`
+- `lib/data/datasources/<feature>/<source>_<feature>.datasource.dart`
 
 ### 1a. Parse a supplied curl request when present
 
@@ -63,40 +64,35 @@ If the user provides a `curl` request:
 If a `curl` request is present, the work is no longer bootstrap-only by default.
 Treat it as concrete transport work.
 
-### 2. Verify domain prerequisites first
+### 2. Decide whether domain prerequisites apply
 
-Before creating data files, verify that the matching domain contract already exists.
-At minimum, look for the repository contract under:
+Do not require domain for normal data scaffolding.
+By default, create or use a data-layer repository contract under:
+- `lib/data/repositories/<folder-key>/<feature>.repository.dart`
+
+If optional domain is justified or already exists, verify the matching domain contract under:
 - `lib/domain/repositories/<folder-key>/`
 
-If the planned data work depends on entities, verify those too under:
+If optional domain depends on entities, verify those too under:
 - `lib/domain/entities/<entity>/`
 
-If the domain prerequisites are missing:
-- explain the dependency in plain language
-- tell the user what is missing
-- invoke `$domain-scaffold` to create the minimal domain prerequisites first in the same flow unless the user explicitly restricted scope to data-only
-- after the domain files exist, continue with the data scaffold
-
-Use clear messages such as:
-- `The data layer depends on a domain repository contract first. I’ll use $domain-scaffold to create that minimal domain layer, then continue with the data layer.`
-- `The requested data scaffold needs a domain entity that does not exist yet. I’ll route through $domain-scaffold for that prerequisite, then return to data.`
-
-If the user explicitly restricted the task to data-only, stop and report the missing prerequisite instead of silently expanding scope.
+If optional domain prerequisites are missing, route through `$domain-scaffold` only after stating why mobile-owned domain behavior is required.
 
 ### 3. Create the repository implementation
 
-Create the repository implementation in:
+Create the repository contract and implementation in:
+- `lib/data/repositories/<folder-key>/<feature>.repository.dart`
 - `lib/data/repositories/<folder-key>/<feature>.repository_impl.dart`
 
 Follow these rules:
-- implement the matching domain repository contract
+- implement the data-layer repository contract by default
+- implement a domain repository contract only when optional domain exists
 - keep bootstrap implementations minimal when there is no real payload yet
 - annotate the repository implementation with `@LazySingleton(as: ContractType)` unless a different lifecycle is justified
 
 If a `curl` request is present:
 - implement the repository around the concrete datasource call instead of a payload-free stub
-- preserve the API intent in the repository contract while mapping the raw transport details in the data layer
+- preserve the API intent in the repository contract while mapping raw transport details in the data layer
 
 ### 4. Add datasources and DTOs only when justified
 
@@ -122,7 +118,7 @@ If a `curl` request is present:
 Do not over-generate.
 Avoid adding:
 - presentation-layer files
-- domain-layer files beyond the minimal prerequisites needed to unblock data
+- domain-layer files unless mobile-owned behavior justifies them
 - datasources or DTOs when the repository implementation can stay payload-free
 - extra storage or network abstractions that have no current consumer
 
@@ -131,9 +127,9 @@ Avoid adding:
 After creating source files:
 - regenerate code only if Injectable annotations changed
 - run targeted tests first when tests are part of the task
-- summarize whether `$domain-scaffold` was used as part of the same flow
+- summarize whether optional domain was intentionally skipped or added
 - if a `curl` request was used, summarize which request details were implemented from it and whether a sample response body was available
 
 ## File Contract
 
-Use [data_contract.md](references/data_contract.md) for the expected nested paths, prerequisite checks, and same-flow routing behavior when domain files are missing.
+Use [data_contract.md](references/data_contract.md) for the expected nested paths and optional-domain rules.

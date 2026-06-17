@@ -6,17 +6,18 @@
 
 ## Purpose
 - The data layer is responsible for retrieving, shaping, and returning data for the rest of the app.
-- This layer implements repository contracts defined in the domain layer.
-- Data-layer code may depend on data sources, DTOs, services, and domain contracts, but domain logic should not live here.
+- In the default BFF-backed layered architecture with optional domain, this layer may define repository contracts and implementations consumed directly by BLoCs or Cubits.
+- Data-layer code may depend on data sources, DTOs, services, and optional domain contracts, but mobile-owned business policy should move to `lib/domain` when it exists.
 
 ## Skill Hints
 - Users can implement data-layer code directly. `$data-scaffold` is an optional helper when the work matches the repo's existing pattern.
 - For raw data scaffolds with no transport or payload shape, mirror `_template`:
+  - `lib/data/repositories/_template/_template.repository.dart`
   - `lib/data/repositories/_template/_template.repository_impl.dart`
 - Do not add a datasource or DTO until there is a real source shape, API contract, persistence model, or mapping boundary to represent.
 - Prefer `$data-scaffold` for repository implementations, datasources, DTOs, or API-backed data work.
 - If the user provides a `curl` request, prefer `$data-scaffold` and treat that `curl` as the transport source of truth.
-- If the required domain contract is missing, use `$domain-scaffold` first or route through `$feature-scaffold` if the work is broader than data only.
+- Do not create a domain contract just to unblock data work. Add domain first only when the feature has mobile-owned policy or custom app behavior.
 - If the user wants to understand the expected inputs, run `$data-scaffold --help`.
 
 ## Directory Responsibilities
@@ -30,9 +31,9 @@
   - DTOs may provide mapping helpers such as `toEntity()`.
   - Prefer filenames such as `order_item.dto.dart`.
 - `repositories/`
-  - Use for concrete repository implementations that fulfill domain repository contracts.
-  - Repositories coordinate data sources and map DTOs into domain entities.
-  - Prefer filenames such as `orders.repository_impl.dart`.
+  - Use for repository contracts and concrete implementations that expose app-facing data operations.
+  - Repositories coordinate data sources and map DTOs into app-facing values.
+  - Prefer filenames such as `<feature>.repository.dart` and `<feature>.repository_impl.dart`.
 - `services/`
   - Use for shared infrastructure helpers that speak to external systems, such as HTTP services.
 - `constants/`
@@ -60,10 +61,11 @@
 
 ## Repository Implementation Conventions
 - Repository implementations should live in `repositories/` and end with `.repository_impl.dart`.
-- Repositories should implement contracts from `lib/domain/repositories/`.
-- Repositories should map DTOs into domain entities before returning values to the domain layer.
+- Repositories should implement the narrowest contract needed by their caller. By default, define that contract in `lib/data/repositories/<feature>/`.
+- Repositories should map DTOs into app-facing values before returning values to callers.
 - Repositories should hide datasource and transport details from callers.
 - Repositories may combine multiple data sources when required, but should stay focused on data orchestration rather than business policy.
+- If repository behavior starts encoding mobile-owned policy, introduce a domain layer for that feature instead of growing data-layer business rules.
 
 ## Dependency Injection
 - Prefer `@LazySingleton(as: ContractType)` for repository implementations unless the feature needs a different lifecycle.
@@ -73,8 +75,8 @@
 
 ## Boundaries
 - Do not import presentation-layer files into `lib/data/`.
-- Do not return DTOs outside the data layer when the domain layer should consume entities instead.
-- Do not place app-specific business rules here if they belong in the domain layer.
+- Do not return DTOs outside the data layer when callers need an app-facing type instead.
+- Do not place app-specific business rules here if they justify an optional domain layer.
 
 ## Testing Guidance
 - Test DTO mapping behavior where it adds value.
@@ -85,7 +87,8 @@
 - Prefer fakes or mocks for data sources when testing repositories.
 
 ## Reference Implementation
-- Use `_template` as the raw clean architecture scaffold reference:
+- Use `_template` as the BFF-backed layered architecture scaffold reference with optional domain:
+  - `TemplateRepository`
   - `TemplateRepositoryImpl`
 - Use these preferred filenames for new data-layer files:
   - `<entity>.dto.dart`

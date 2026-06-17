@@ -1,12 +1,12 @@
 ---
 name: page-scaffold
-description: Scaffold only the presentation layer for a Project Tweety feature using lib/presentation/pages and an existing domain-facing dependency such as a use case. Use when adding a new page and BLoC flow that should consume existing data or domain work without generating the lower layers again.
+description: Scaffold only the presentation layer for a Project Tweety feature using lib/presentation/pages and an existing data or optional domain dependency. Use when adding a new page and BLoC or Cubit flow that should consume existing data or domain work without generating the lower layers again.
 ---
 
 # Page Scaffold
 
 Scaffold the presentation layer only.
-Use this when the work should stay inside `lib/presentation/pages/` and the page should consume existing use cases or other already-available dependencies.
+Use this when the work should stay inside `lib/presentation/pages/` and the page should consume existing repositories, use cases, or other already-available dependencies.
 
 ## Help mode
 
@@ -29,7 +29,7 @@ If the written guidance and the current source tree disagree, follow the current
 Collect or infer these inputs before scaffolding:
 - feature name in snake_case
 - page intent, such as list, detail, settings, or preferences
-- the existing use case or dependency the BLoC should consume
+- the existing data repository, use case, or dependency the BLoC/Cubit should consume
 - whether the initial page should remain payload-free
 
 Ask a short clarifying question only if the feature name, page intent, or dependency target is ambiguous.
@@ -49,8 +49,9 @@ Use the repo's current page structure as the default:
 
 ### 2. Verify the dependency target
 
-Before creating the page and BLoC, verify the dependency the BLoC should consume already exists.
-Prefer an existing use case from `lib/domain/usecases/`.
+Before creating the page and BLoC/Cubit, verify the dependency it should consume already exists.
+Prefer a data-layer repository contract by default.
+Use an existing use case from `lib/domain/usecases/` only when optional domain exists for the feature.
 
 If the dependency is missing:
 - explain the missing prerequisite plainly
@@ -68,16 +69,20 @@ Follow these rules:
 - use `BlocProvider(create: ...)` when the page owns the BLoC
 - resolve DI-backed BLoCs with `GetIt.I<YourBloc>()`
 
-### 4. Create the BLoC files
+### 4. Create the BLoC or Cubit files
 
-Create the BLoC files in:
+Create BLoC files in:
 - `lib/presentation/pages/<feature>/bloc/`
+
+Create Cubit files in:
+- `lib/presentation/pages/<feature>/cubit/`
 
 Follow these rules:
 - prefer a small event set starting with `<Feature>Started`
+- use Cubit instead when events would only duplicate method names
 - use a single Freezed state with a feature-scoped status enum
 - keep the default scaffold payload-free unless the page is explicitly consuming real data
-- let the initial flow emit `loading` and then `success` without attaching placeholder domain data
+- let the initial flow emit `loading` and then `success` without attaching placeholder data
 - add derived getters only when they improve rendering clarity
 
 ### 5. Keep the scaffold intentionally minimal
