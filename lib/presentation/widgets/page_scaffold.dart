@@ -35,6 +35,7 @@ class PageScaffold extends StatelessWidget {
   });
 
   static const EdgeInsets _bodyPadding = EdgeInsets.symmetric(horizontal: 16);
+  static const double _cupertinoLargeTitleBodyTopInset = 16;
 
   /// Whether the current surface should render primary and secondary panes.
   ///
@@ -112,7 +113,12 @@ class PageScaffold extends StatelessWidget {
             },
             body: SafeArea(
               top: false,
-              child: _PageScaffoldBody(scaffold: this),
+              child: _PageScaffoldBody(
+                scaffold: this,
+                additionalPadding: const EdgeInsets.only(
+                  top: _cupertinoLargeTitleBodyTopInset,
+                ),
+              ),
             ),
           ),
         );
@@ -150,9 +156,13 @@ class PageScaffold extends StatelessWidget {
 }
 
 class _PageScaffoldBody extends StatefulWidget {
-  const _PageScaffoldBody({required this.scaffold});
+  const _PageScaffoldBody({
+    required this.scaffold,
+    this.additionalPadding = EdgeInsets.zero,
+  });
 
   final PageScaffold scaffold;
+  final EdgeInsetsGeometry additionalPadding;
 
   @override
   State<_PageScaffoldBody> createState() => _PageScaffoldBodyState();
@@ -181,12 +191,11 @@ class _PageScaffoldBodyState extends State<_PageScaffoldBody> {
               constraints,
               secondaryBreakpoint: scaffold.secondaryBreakpoint,
             );
-        final resolvedPadding = scaffold.bodyPadding.resolve(
-          Directionality.of(context),
-        );
+        final bodyPadding = scaffold.bodyPadding.add(widget.additionalPadding);
+        final resolvedPadding = bodyPadding.resolve(Directionality.of(context));
 
         return Padding(
-          padding: scaffold.bodyPadding,
+          padding: bodyPadding,
           child: showSecondary
               ? SplitPaneLayout(
                   primary: scaffold.body,

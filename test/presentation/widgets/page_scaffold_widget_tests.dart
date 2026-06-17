@@ -243,6 +243,42 @@ void main() {
       expect(find.byType(VerticalDivider), findsOneWidget);
     });
 
+    testWidgets('keeps split panes below large Cupertino chrome', (
+      tester,
+    ) async {
+      const primaryKey = ValueKey('Primary');
+      const secondaryKey = ValueKey('Secondary');
+
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(900, 800),
+        scaffold: const PageScaffold(
+          title: 'Test',
+          titleBehavior: PageTitleBehavior.largeStatic,
+          body: SizedBox.expand(key: primaryKey),
+          secondaryBody: SizedBox.expand(key: secondaryKey),
+        ),
+      );
+
+      expect(
+        tester.getTopLeft(find.byKey(primaryKey)).dy,
+        greaterThanOrEqualTo(56),
+      );
+      expect(
+        tester.getTopLeft(find.byKey(primaryKey)).dy,
+        lessThanOrEqualTo(72),
+      );
+      expect(
+        tester.getTopLeft(find.byKey(secondaryKey)).dy,
+        greaterThanOrEqualTo(56),
+      );
+      expect(
+        tester.getTopLeft(find.byKey(secondaryKey)).dy,
+        lessThanOrEqualTo(72),
+      );
+    });
+
     testWidgets('isolates primary scroll controllers between split panes', (
       tester,
     ) async {

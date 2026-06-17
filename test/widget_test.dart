@@ -90,6 +90,50 @@ void main() {
     expect(find.byType(NavigationBar), findsOneWidget);
   });
 
+  testWidgets('keeps compact iOS card details below the app bar', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      platform: TargetPlatform.iOS,
+      surfaceSize: const Size(400, 800),
+    );
+
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Card Title 1'));
+    await tester.pumpAndSettle();
+
+    final navigationBarBottom = tester
+        .getRect(find.byType(CupertinoNavigationBar))
+        .bottom;
+    final detailsTitleTop = tester.getRect(find.text('Card Title 1').last).top;
+
+    expect(detailsTitleTop, greaterThanOrEqualTo(navigationBarBottom));
+  });
+
+  testWidgets('keeps wide iOS selected card details below the app bar', (
+    WidgetTester tester,
+  ) async {
+    await _pumpApp(
+      tester,
+      platform: TargetPlatform.iOS,
+      surfaceSize: const Size(1000, 800),
+    );
+
+    await tester.tap(find.text('Cards'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Card Title 1'));
+    await tester.pumpAndSettle();
+
+    final detailsTitleTop = tester.getRect(find.text('Card Title 1').last).top;
+
+    expect(
+      detailsTitleTop,
+      greaterThanOrEqualTo(kMinInteractiveDimensionCupertino),
+    );
+  });
+
   testWidgets('opens card details from a direct compact route', (
     WidgetTester tester,
   ) async {
