@@ -14,23 +14,27 @@
 
 ## Skill Hints
 - Users can add domain files directly. `$domain-scaffold` is an optional helper when the work matches the repo's standard domain pattern.
+- For raw domain scaffolds, mirror `_template` before using richer feature examples:
+  - repository contract: `lib/domain/repositories/_template/_template.repository.dart`
+  - use case: `lib/domain/usecases/_template/fetch_template.usecase.dart`
+- Skip entities until the feature has a concrete domain payload.
 - Prefer `$domain-scaffold` for new or updated entities, repository contracts, and use cases.
 - If the task spans more than domain, prefer `$feature-scaffold` for a full feature or `$data-scaffold` when domain work is only needed to unblock data-layer scaffolding.
 - If the user wants usage examples or expected inputs, run `$domain-scaffold --help`.
 
 ## Directory Responsibilities
 - `entities/`
-  - Use for business objects such as `Card`.
+  - Use for concrete business objects when a feature has a domain payload.
   - Entities should model app concepts, not transport formats.
-  - Prefer filenames such as `card.entity.dart`.
+  - Prefer filenames such as `<entity>.entity.dart`.
 - `repositories/`
   - Use for abstract contracts that the data layer implements.
   - Repository contracts define what the app needs, not how it is fetched.
-  - Prefer filenames such as `cards.repository.dart`.
+  - Prefer filenames such as `<feature>.repository.dart`.
 - `usecases/`
   - Use for focused operations that the presentation layer can invoke.
   - Use cases should depend on repository contracts, not repository implementations.
-  - Prefer filenames such as `get_cards.usecase.dart`, `create_card.usecase.dart`, `update_card.usecase.dart`, and `delete_card.usecase.dart`.
+  - Prefer filenames such as `<action>_<feature>.usecase.dart`.
 
 ## Entity Conventions
 - Keep entities lightweight and framework-light.
@@ -58,12 +62,9 @@
 - Use plural feature names for feature-level files such as repositories and list-oriented use cases.
 - Use singular or domain-specific entity names for business objects and DTO partners.
 - Prefer names such as:
-  - `card.entity.dart`
-  - `cards.repository.dart`
-  - `get_cards.usecase.dart`
-  - `create_card.usecase.dart`
-  - `update_card.usecase.dart`
-  - `delete_card.usecase.dart`
+  - `<entity>.entity.dart`
+  - `<feature>.repository.dart`
+  - `<action>_<feature>.usecase.dart`
 
 ## Boundaries
 - Do not import data-layer DTOs, data sources, or repository implementations into `lib/domain/`.
@@ -82,9 +83,8 @@
 - Test domain logic in isolation from UI and data transport concerns.
 
 ## Example
-- Example names for these conventions:
-  - `Card`
-  - `CardsRepository`
-  - `GetCardsUseCase`
+- Raw scaffold reference:
+  - `TemplateRepository`
+  - `FetchTemplateUseCase`
 - Use the naming convention above for new domain files even where older files still use legacy names.
 - If an existing domain feature differs from this document, follow the documented convention unless the deviation is intentional and documented.

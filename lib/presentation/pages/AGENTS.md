@@ -6,6 +6,12 @@
 
 ## Skill Hints
 - Users can build pages and BLoCs directly. `$page-scaffold` is an optional helper for the common repo pattern.
+- For raw page and BLoC scaffolds, mirror `_template`:
+  - `lib/presentation/pages/_template/_template.page.dart`
+  - `lib/presentation/pages/_template/bloc/_template.bloc.dart`
+  - `lib/presentation/pages/_template/bloc/_template.event.dart`
+  - `lib/presentation/pages/_template/bloc/_template.state.dart`
+- Keep the initial page payload-free: loading, failure, and success states only.
 - Prefer `$page-scaffold` when adding a new page and BLoC flow on top of existing lower-layer work.
 - If the lower layers do not exist yet, prefer `$feature-scaffold` for a full feature or route through `$domain-scaffold` and `$data-scaffold` first.
 - If the user wants to see the supported inputs and examples, run `$page-scaffold --help`.
@@ -37,7 +43,7 @@
 - Prefer `BlocProvider(create: ...)` at the page root when the page owns the BLoC.
 - Resolve injected BLoCs with `GetIt.I<YourBloc>()`.
 - Trigger the initial load inline with creation, for example:
-  - `GetIt.I<CardsBloc>()..add(const CardsStarted())`
+  - `GetIt.I<FeatureBloc>()..add(const FeatureStarted())`
 - Prefer `BlocBuilder` for rendering-only pages.
 - Use `BlocConsumer` only if the page must both rebuild and trigger side effects.
 
@@ -52,18 +58,18 @@
 ## Feature Naming
 - Use domain-meaningful feature names throughout the page and BLoC.
 - Keep names aligned end-to-end, for example:
-  - `Cards`
-  - `CardsBloc`
-  - `CardsState`
-  - `CardsEvent`
-  - `CardsStarted`
-  - `CardsStatus`
+  - `<Feature>`
+  - `<Feature>Bloc`
+  - `<Feature>State`
+  - `<Feature>Event`
+  - `<Feature>Started`
+  - `<Feature>Status`
 - Preferred filenames are:
-  - `cards.page.dart`
-  - `cards.bloc.dart`
-  - `cards.event.dart`
-  - `cards.state.dart`
+  - `<feature>.page.dart`
+  - `<feature>.bloc.dart`
+  - `<feature>.event.dart`
+  - `<feature>.state.dart`
 
 ## Example
-- Example names for these conventions include `CardsPage`, `CardsBloc`, and `cards.page.dart`.
+- Raw scaffold examples include `TemplatePage`, `TemplateBloc`, and `_template.page.dart`.
 - If an existing page differs from this document, follow the documented convention unless the deviation is intentional and documented.

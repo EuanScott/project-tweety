@@ -11,6 +11,9 @@
 
 ## Skill Hints
 - Users can implement data-layer code directly. `$data-scaffold` is an optional helper when the work matches the repo's existing pattern.
+- For raw data scaffolds with no transport or payload shape, mirror `_template`:
+  - `lib/data/repositories/_template/_template.repository_impl.dart`
+- Do not add a datasource or DTO until there is a real source shape, API contract, persistence model, or mapping boundary to represent.
 - Prefer `$data-scaffold` for repository implementations, datasources, DTOs, or API-backed data work.
 - If the user provides a `curl` request, prefer `$data-scaffold` and treat that `curl` as the transport source of truth.
 - If the required domain contract is missing, use `$domain-scaffold` first or route through `$feature-scaffold` if the work is broader than data only.
@@ -82,11 +85,9 @@
 - Prefer fakes or mocks for data sources when testing repositories.
 
 ## Reference Implementation
-- Use the `cards` feature as the current reference:
-  - `CardDto`
-  - `MockCardsDataSource`
-  - `CardsRepositoryImpl`
+- Use `_template` as the raw clean architecture scaffold reference:
+  - `TemplateRepositoryImpl`
 - Use these preferred filenames for new data-layer files:
-  - `card.dto.dart`
-  - `mock_cards.datasource.dart`
-  - `cards.repository_impl.dart`
+  - `<entity>.dto.dart`
+  - `<source>_<feature>.datasource.dart`
+  - `<feature>.repository_impl.dart`

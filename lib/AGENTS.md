@@ -6,6 +6,12 @@
 
 ## Skill Hints
 - Users can scaffold and wire features manually. Skills are optional shortcuts for repeated patterns under `lib/`.
+- For new raw clean architecture feature scaffolds, mirror `_template` first:
+  - domain repository contract in `lib/domain/repositories/_template/`
+  - domain use case in `lib/domain/usecases/_template/`
+  - data repository implementation in `lib/data/repositories/_template/`
+  - page and BLoC files in `lib/presentation/pages/_template/`
+- Do not add entities, DTOs, datasources, navigation, localization, or rich UI until the feature has real behavior or data shape that justifies them.
 - If the task is a new feature that spans domain, data, and presentation, prefer `$feature-scaffold`.
 - If the task is only domain work, prefer `$domain-scaffold`.
 - If the task is only data work, prefer `$data-scaffold`.
@@ -24,6 +30,7 @@
   - `lib/data/dtos/`
   - `lib/data/repositories/`
 - Prefer feature names that describe the business or UI intent, not placeholders like `other`, `misc`, or `stuff`.
+- `_template` is the only intentional placeholder feature name. It exists as a copyable implementation reference for agents and should not be wired into app navigation.
 
 ## BLoC Pattern
 - Prefer one Freezed state class per page or feature BLoC instead of many small state subclasses.
@@ -31,7 +38,7 @@
 - Use Freezed-generated `copyWith`; do not manually implement `copyWith`.
 - If you need computed getters on a Freezed state, add `const MyState._();` and place only real derived getters there.
 - Never leave manual getters that throw `UnimplementedError()` inside a Freezed state.
-- Keep events small and explicit. For simple load flows, a single event such as `CardsStarted` is preferred.
+- Keep events small and explicit. For simple load flows, use a single `<Feature>Started` event.
 - Keep BLoC logic focused on orchestration: emit loading, call the use case, emit success or failure.
 
 ## UI Integration
@@ -40,42 +47,39 @@
 - Prefer `BlocBuilder` for pure rendering.
 - Use `BlocConsumer` only when the page needs both rendering and side effects such as snackbars, dialogs, navigation, or analytics hooks.
 - For DI-backed page BLoCs, resolve them with `GetIt.I<YourBloc>()`, not the `getIt` helper.
-- Trigger initial loading in the provider creation flow, for example: `GetIt.I<CardsBloc>()..add(const CardsStarted())`.
+- Trigger initial loading in the provider creation flow with the injected feature BLoC and its start event.
 
 ## Naming Conventions
 - Standardize filenames on `feature_or_entity.role.dart`.
 - Use `_` inside the business name and `.` before the technical role.
 - Keep class names and filenames aligned across presentation, domain, and data layers.
 - Use plural feature names for feature-scoped pages, repositories, and list-style use cases:
-  - `Cards`
-  - `CardsBloc`
-  - `CardsEvent`
-  - `CardsState`
-  - `CardsStatus`
-  - `CardsRepository`
-  - `GetCardsUseCase`
+  - `<Feature>`
+  - `<Feature>Bloc`
+  - `<Feature>Event`
+  - `<Feature>State`
+  - `<Feature>Status`
+  - `<Feature>Repository`
+  - `<Action><Feature>UseCase`
 - Use singular or domain-specific entity names for the actual business object:
-  - `Card`
-  - `CardDto`
+  - `<Entity>`
+  - `<Entity>Dto`
 - Preferred filename examples:
-  - `cards.page.dart`
-  - `cards.bloc.dart`
-  - `cards.event.dart`
-  - `cards.state.dart`
-  - `card.entity.dart`
-  - `cards.repository.dart`
-  - `get_cards.usecase.dart`
-  - `create_card.usecase.dart`
-  - `update_card.usecase.dart`
-  - `delete_card.usecase.dart`
-  - `card.dto.dart`
-  - `mock_cards.datasource.dart`
-  - `cards.repository_impl.dart`
+  - `<feature>.page.dart`
+  - `<feature>.bloc.dart`
+  - `<feature>.event.dart`
+  - `<feature>.state.dart`
+  - `<entity>.entity.dart`
+  - `<feature>.repository.dart`
+  - `<action>_<feature>.usecase.dart`
+  - `<entity>.dto.dart`
+  - `<source>_<feature>.datasource.dart`
+  - `<feature>.repository_impl.dart`
 
 ## Domain Layer
-- Domain entities should be framework-light and represent app concepts, for example `Card`.
+- Domain entities should be framework-light and represent app concepts.
 - Entity filenames should use the entity name plus `.entity.dart`.
-- Repository contracts live in the domain layer and expose intent-based methods, for example `getCards()`.
+- Repository contracts live in the domain layer and expose intent-based methods.
 - Repository filenames should use the feature name plus `.repository.dart`.
 - Use cases wrap repository operations and provide the entry point the BLoC depends on.
 - Use case filenames should describe the action plus `.usecase.dart`.
@@ -84,7 +88,7 @@
 ## Data Layer
 - Data layer objects that represent transferred or raw data should be named `Dto`, not `Model`.
 - DTO filenames should use the entity name plus `.dto.dart`.
-- Data sources should describe where the data comes from, for example `MockCardsDataSource`.
+- Data sources should describe where the data comes from.
 - Data source filenames should use the source description plus `.datasource.dart`.
 - Repository implementations should map DTOs into domain entities before returning data to the domain layer.
 - Repository implementation filenames should use the feature name plus `.repository_impl.dart`.

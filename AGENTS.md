@@ -22,6 +22,12 @@
 
 ## Skill Routing
 - Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
+- For future layered feature work, treat `_template` as the source of truth for the raw clean architecture scaffold:
+  - `lib/domain/repositories/_template/_template.repository.dart`
+  - `lib/domain/usecases/_template/fetch_template.usecase.dart`
+  - `lib/data/repositories/_template/_template.repository_impl.dart`
+  - `lib/presentation/pages/_template/_template.page.dart`
+  - `lib/presentation/pages/_template/bloc/`
 - If an AI assistant notices a task that matches an existing skill, it may suggest or use that skill when it improves consistency. This is guidance, not a hard rule.
 - If the user wants help discovering a skill, prefer a short pointer over a long explanation.
 - If the user runs a skill with `--help`, do not edit files. Return a short explanation of what the skill does, its inputs, and example usage.
