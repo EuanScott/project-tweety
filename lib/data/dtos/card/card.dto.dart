@@ -1,4 +1,4 @@
-import 'package:project_tweety/domain/entities/card/card.entity.dart';
+import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 
 class CardDto {
   const CardDto({
@@ -11,7 +11,7 @@ class CardDto {
   final String title;
   final String description;
 
-  Card toEntity() {
+  Card toValue() {
     return Card(id: id, title: title, description: description);
   }
 }

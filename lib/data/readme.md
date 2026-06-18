@@ -4,8 +4,29 @@ The data layer is responsible for retrieving, shaping, and returning data for th
 
 ## Purpose
 
-This layer implements repository contracts defined in the domain layer and provides the concrete
-data operations those contracts need.
+This layer owns data access and can expose repository contracts directly for features that do not
+need a domain layer.
+
+## Data Shape Vocabulary
+
+- **DTO**: a raw source, transport, or persistence shape. DTOs stay inside the data layer.
+- **Repository value**: an app-facing immutable value returned by a data repository when a feature
+  does not have a domain layer.
+- **Domain entity**: a mobile-owned business concept used only when a feature has a justified
+  domain layer.
+
+For simple no-domain features, the normal flow is:
+
+```text
+DataSource -> Dto -> Repository -> Repository value -> BLoC/Cubit
+```
+
+When domain is justified, the repository implementation maps data-layer shapes into domain
+entities instead:
+
+```text
+DataSource -> Dto -> RepositoryImpl -> Domain entity -> Use case -> BLoC/Cubit
+```
 
 ## Naming Convention
 
@@ -31,7 +52,7 @@ Contains data transfer objects that represent raw or transported data.
 
 ```dart
 // card.dto.dart
-import 'package:your_app/domain/entities/card.entity.dart';
+import 'package:your_app/data/repositories/card/cards.repository.dart';
 
 class CardDto {
   const CardDto({
@@ -44,7 +65,7 @@ class CardDto {
   final String title;
   final String description;
 
-  Card toEntity() {
+  Card toValue() {
     return Card(
       id: id,
       title: title,
@@ -80,15 +101,18 @@ class MockCardsDataSource {
 
 ### `/repositories`
 
-Contains implementations of repository contracts defined in the domain layer.
+Contains repository contracts and implementations. Use data-layer contracts directly for simple
+BFF-backed or CRUD-style features; use domain contracts only when the feature has mobile-owned
+policy. Repository contracts may define small app-facing repository values next to the contract for
+simple features. If a feature needs several repository values, move them into focused
+`<entity>.value.dart` files under the same feature folder.
 
 **Example filename:** `cards.repository_impl.dart`
 
 ```dart
 // cards.repository_impl.dart
 import 'package:your_app/data/datasources/mock_cards.datasource.dart';
-import 'package:your_app/domain/entities/card.entity.dart';
-import 'package:your_app/domain/repositories/cards.repository.dart';
+import 'package:your_app/data/repositories/card/cards.repository.dart';
 
 class CardsRepositoryImpl implements CardsRepository {
   const CardsRepositoryImpl(this._mockCardsDataSource);
@@ -98,7 +122,7 @@ class CardsRepositoryImpl implements CardsRepository {
   @override
   Future<List<Card>> getCards() async {
     final items = await _mockCardsDataSource.getCards();
-    return items.map((item) => item.toEntity()).toList();
+    return items.map((item) => item.toValue()).toList();
   }
 }
 ```
@@ -139,6 +163,7 @@ class ApiService {
 
 - Prefer `Dto` over `Model` in this repo.
 - Keep DTOs and datasources inside the data layer.
-- Return domain entities from repositories, not DTOs.
+- Return repository values from no-domain repositories, not DTOs.
+- Return domain entities only from repositories that implement a justified domain contract.
 - Treat this document as the source of truth for data-layer naming.
 - Older features may still use legacy names.

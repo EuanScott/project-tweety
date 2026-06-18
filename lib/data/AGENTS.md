@@ -28,11 +28,12 @@
 - `dtos/`
   - Use for transferred or raw data objects.
   - Prefer the `Dto` suffix over `Model`.
-  - DTOs may provide mapping helpers such as `toEntity()`.
+  - DTOs may provide mapping helpers such as `toValue()` for no-domain repository values or
+    `toEntity()` when mapping into a justified domain entity.
   - Prefer filenames such as `order_item.dto.dart`.
 - `repositories/`
   - Use for repository contracts and concrete implementations that expose app-facing data operations.
-  - Repositories coordinate data sources and map DTOs into app-facing values.
+  - Repositories coordinate data sources and map DTOs into app-facing repository values.
   - Prefer filenames such as `<feature>.repository.dart` and `<feature>.repository_impl.dart`.
 - `services/`
   - Use for shared infrastructure helpers that speak to external systems, such as HTTP services.
@@ -45,9 +46,22 @@
 - DTO filenames should use the entity name plus `.dto.dart`.
 - DTOs may include:
   - serialization and deserialization helpers
-  - mapping helpers like `toEntity()`
+  - mapping helpers like `toValue()` for no-domain features
+  - mapping helpers like `toEntity()` only when the target type is a domain entity
 - DTOs should not contain UI logic or presentation concerns.
 - Prefer keeping DTOs immutable.
+
+## Repository Value Conventions
+- A repository value is the app-facing immutable object returned by a data-layer repository when no
+  domain layer exists.
+- Prefer the business noun for the class name, for example `Order` or `Card`, so presentation code
+  reads naturally.
+- For a small feature with one or two values, colocate repository values with the contract in
+  `<feature>.repository.dart`.
+- If the repository contract starts collecting several values, move them to focused
+  `<entity>.value.dart` files under the same feature repository folder.
+- Do not call these types `Model`; that term is too overloaded in this codebase.
+- Do not use `.entity.dart` outside `lib/domain/`; entity naming implies a domain concept.
 
 ## Data Source Conventions
 - Data sources should expose raw fetch and save operations and stay close to the underlying source shape.
@@ -62,7 +76,10 @@
 ## Repository Implementation Conventions
 - Repository implementations should live in `repositories/` and end with `.repository_impl.dart`.
 - Repositories should implement the narrowest contract needed by their caller. By default, define that contract in `lib/data/repositories/<feature>/`.
-- Repositories should map DTOs into app-facing values before returning values to callers.
+- Repositories should map DTOs into app-facing repository values before returning values to callers
+  when no domain layer exists.
+- Repository implementations should map DTOs into domain entities only when implementing a justified
+  domain contract.
 - Repositories should hide datasource and transport details from callers.
 - Repositories may combine multiple data sources when required, but should stay focused on data orchestration rather than business policy.
 - If repository behavior starts encoding mobile-owned policy, introduce a domain layer for that feature instead of growing data-layer business rules.
@@ -81,7 +98,8 @@
 ## Testing Guidance
 - Test DTO mapping behavior where it adds value.
 - Test repository implementations for:
-  - DTO-to-entity mapping
+  - DTO-to-repository-value mapping for no-domain features
+  - DTO-to-domain-entity mapping when domain exists
   - data-source coordination
   - expected behavior for mock and future remote sources
 - Prefer fakes or mocks for data sources when testing repositories.
@@ -92,5 +110,6 @@
   - `TemplateRepositoryImpl`
 - Use these preferred filenames for new data-layer files:
   - `<entity>.dto.dart`
+  - `<entity>.value.dart` when a no-domain feature has several repository values
   - `<source>_<feature>.datasource.dart`
   - `<feature>.repository_impl.dart`

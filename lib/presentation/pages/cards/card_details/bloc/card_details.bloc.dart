@@ -2,8 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/domain/entities/card/card.entity.dart';
-import 'package:project_tweety/domain/usecases/card/get_card.usecase.dart';
+import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 
 part 'card_details.event.dart';
 part 'card_details.state.dart';
@@ -11,11 +10,11 @@ part 'card_details.bloc.freezed.dart';
 
 @injectable
 class CardDetailsBloc extends Bloc<CardDetailsEvent, CardDetailsState> {
-  CardDetailsBloc(this._getCardByIdUseCase) : super(const CardDetailsState()) {
+  CardDetailsBloc(this._cardsRepository) : super(const CardDetailsState()) {
     on<CardDetailsStarted>(_onStarted);
   }
 
-  final GetCardByIdUseCase _getCardByIdUseCase;
+  final CardsRepository _cardsRepository;
 
   Future<void> _onStarted(
     CardDetailsStarted event,
@@ -31,7 +30,7 @@ class CardDetailsBloc extends Bloc<CardDetailsEvent, CardDetailsState> {
     );
 
     try {
-      final card = await _getCardByIdUseCase(event.cardId);
+      final card = await _cardsRepository.getCardById(event.cardId);
 
       if (card == null) {
         emit(

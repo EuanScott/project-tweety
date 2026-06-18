@@ -72,6 +72,7 @@
   - `<feature>.event.dart`
   - `<feature>.state.dart`
   - `<entity>.entity.dart`
+  - `<entity>.value.dart`
   - `<feature>.repository.dart`
   - `<action>_<feature>.usecase.dart`
   - `<entity>.dto.dart`
@@ -93,7 +94,12 @@
 - DTO filenames should use the entity name plus `.dto.dart`.
 - Data sources should describe where the data comes from.
 - Data source filenames should use the source description plus `.datasource.dart`.
-- Repository implementations should map DTOs into app-facing values before returning data to callers.
+- Repository implementations should map DTOs into app-facing repository values before returning data
+  to callers when no domain layer exists.
+- Repository values should use natural business class names such as `Card`; use
+  `<entity>.value.dart` only when a feature needs separate files for several repository values.
+- Use `toValue()` for DTO-to-repository-value mapping and reserve `toEntity()` for mapping into a
+  domain entity.
 - Repository implementation filenames should use the feature name plus `.repository_impl.dart`.
 - Keep mock data sources in place until a real API implementation exists; they should still follow the same contract shape as a real data source.
 

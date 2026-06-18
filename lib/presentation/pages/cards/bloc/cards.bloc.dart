@@ -2,8 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:project_tweety/domain/entities/card/card.entity.dart';
-import 'package:project_tweety/domain/usecases/card/get_card.usecase.dart';
+import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 
 part 'cards.event.dart';
 part 'cards.state.dart';
@@ -11,16 +10,13 @@ part 'cards.bloc.freezed.dart';
 
 @injectable
 class CardsBloc extends Bloc<CardsEvent, CardsState> {
-  CardsBloc(this._getCardsUseCase) : super(const CardsState()) {
+  CardsBloc(this._cardsRepository) : super(const CardsState()) {
     on<CardsStarted>(_onStarted);
   }
 
-  final GetCardsUseCase _getCardsUseCase;
+  final CardsRepository _cardsRepository;
 
-  Future<void> _onStarted(
-    CardsStarted event,
-    Emitter<CardsState> emit,
-  ) async {
+  Future<void> _onStarted(CardsStarted event, Emitter<CardsState> emit) async {
     emit(
       state.copyWith(
         status: CardsStatus.loading,
@@ -30,7 +26,7 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
     );
 
     try {
-      final items = await _getCardsUseCase();
+      final items = await _cardsRepository.getCards();
 
       emit(
         state.copyWith(

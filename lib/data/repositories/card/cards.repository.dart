@@ -14,3 +14,9 @@ class Card extends Equatable {
   @override
   List<Object> get props => [id, title, description];
 }
+
+abstract class CardsRepository {
+  Future<List<Card>> getCards();
+
+  Future<Card?> getCardById(String cardId);
+}

@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/data/datasources/card/card.mock.dart';
-import 'package:project_tweety/domain/entities/card/card.entity.dart';
-import 'package:project_tweety/domain/repositories/card/card.repository.dart';
+
+import 'cards.repository.dart';
 
 @LazySingleton(as: CardsRepository)
 class CardsRepositoryImpl implements CardsRepository {
@@ -12,19 +12,7 @@ class CardsRepositoryImpl implements CardsRepository {
   @override
   Future<List<Card>> getCards() async {
     final items = await _mockCardsDataSource.getCards();
-    return items.map((item) => item.toEntity()).toList(growable: false);
-  }
-
-  @override
-  Future<Card> createCard(Card card) {
-    // TODO: implement createCard
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteCard(String cardId) {
-    // TODO: implement deleteCard
-    throw UnimplementedError();
+    return items.map((item) => item.toValue()).toList(growable: false);
   }
 
   @override
@@ -38,11 +26,5 @@ class CardsRepositoryImpl implements CardsRepository {
     }
 
     return null;
-  }
-
-  @override
-  Future<Card> updateCard(Card card) {
-    // TODO: implement updateCard
-    throw UnimplementedError();
   }
 }

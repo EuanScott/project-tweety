@@ -1,8 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:project_tweety/domain/entities/card/card.entity.dart';
-import 'package:project_tweety/domain/repositories/card/card.repository.dart';
-import 'package:project_tweety/domain/usecases/card/get_card.usecase.dart';
+import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 import 'package:project_tweety/presentation/pages/cards/card_details/bloc/card_details.bloc.dart';
 
 void main() {
@@ -13,7 +11,7 @@ void main() {
   );
 
   CardDetailsBloc buildBloc(CardsRepository repository) {
-    return CardDetailsBloc(GetCardByIdUseCase(repository));
+    return CardDetailsBloc(repository);
   }
 
   group('CardDetailsBloc', () {
@@ -90,20 +88,5 @@ class _FakeCardsRepository implements CardsRepository {
     }
 
     return card?.id == cardId ? card : null;
-  }
-
-  @override
-  Future<Card> createCard(Card card) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteCard(String cardId) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Card> updateCard(Card card) {
-    throw UnimplementedError();
   }
 }

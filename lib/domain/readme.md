@@ -18,12 +18,10 @@ This document defines the naming convention for the domain layer. Standardize fi
 
 Examples:
 
-- `card.entity.dart`
-- `cards.repository.dart`
-- `get_cards.usecase.dart`
-- `create_card.usecase.dart`
-- `update_card.usecase.dart`
-- `delete_card.usecase.dart`
+- `app_preferences.entity.dart`
+- `app_preferences.repository.dart`
+- `get_app_preferences.usecase.dart`
+- `save_app_preferences.usecase.dart`
 
 ## Subdirectories
 
@@ -31,20 +29,20 @@ Examples:
 
 Contains business objects that represent core concepts in the app.
 
-**Example filename:** `card.entity.dart`
+**Example filename:** `app_preferences.entity.dart`
 
 ```dart
-// card.entity.dart
-class Card {
-  const Card({
-    required this.id,
-    required this.title,
-    required this.description,
+// app_preferences.entity.dart
+enum AppPreferencesThemeMode { system, light, dark }
+
+class AppPreferences {
+  const AppPreferences({
+    this.themeMode = AppPreferencesThemeMode.system,
+    this.languageCode,
   });
 
-  final String id;
-  final String title;
-  final String description;
+  final AppPreferencesThemeMode themeMode;
+  final String? languageCode;
 }
 ```
 
@@ -53,18 +51,15 @@ class Card {
 Contains contracts for data operations. The domain layer defines what it needs while the data layer
 provides the implementation.
 
-**Example filename:** `cards.repository.dart`
+**Example filename:** `app_preferences.repository.dart`
 
 ```dart
-// cards.repository.dart
-import 'package:your_app/domain/entities/card.entity.dart';
+// app_preferences.repository.dart
+import 'package:your_app/domain/entities/app_preferences.entity.dart';
 
-abstract class CardsRepository {
-  Future<List<Card>> getCards();
-  Future<Card?> getCardById(String cardId);
-  Future<Card> createCard(Card card);
-  Future<Card> updateCard(Card card);
-  Future<void> deleteCard(String cardId);
+abstract class AppPreferencesRepository {
+  Future<AppPreferences> getAppPreferences();
+  Future<void> saveAppPreferences(AppPreferences appPreferences);
 }
 ```
 
@@ -72,34 +67,34 @@ abstract class CardsRepository {
 
 Contains focused business operations that the presentation layer can call.
 
-**Example filenames:** `get_cards.usecase.dart` and `create_card.usecase.dart`
+**Example filenames:** `get_app_preferences.usecase.dart` and `save_app_preferences.usecase.dart`
 
 ```dart
-// get_cards.usecase.dart
-import 'package:your_app/domain/entities/card.entity.dart';
-import 'package:your_app/domain/repositories/cards.repository.dart';
+// get_app_preferences.usecase.dart
+import 'package:your_app/domain/entities/app_preferences.entity.dart';
+import 'package:your_app/domain/repositories/app_preferences.repository.dart';
 
-class GetCardsUseCase {
-  const GetCardsUseCase(this._repository);
+class GetAppPreferencesUseCase {
+  const GetAppPreferencesUseCase(this._repository);
 
-  final CardsRepository _repository;
+  final AppPreferencesRepository _repository;
 
-  Future<List<Card>> call() {
-    return _repository.getCards();
+  Future<AppPreferences> call() {
+    return _repository.getAppPreferences();
   }
 }
 
-// create_card.usecase.dart
-import 'package:your_app/domain/entities/card.entity.dart';
-import 'package:your_app/domain/repositories/cards.repository.dart';
+// save_app_preferences.usecase.dart
+import 'package:your_app/domain/entities/app_preferences.entity.dart';
+import 'package:your_app/domain/repositories/app_preferences.repository.dart';
 
-class CreateCardUseCase {
-  const CreateCardUseCase(this._repository);
+class SaveAppPreferencesUseCase {
+  const SaveAppPreferencesUseCase(this._repository);
 
-  final CardsRepository _repository;
+  final AppPreferencesRepository _repository;
 
-  Future<Card> call(Card card) {
-    return _repository.createCard(card);
+  Future<void> call(AppPreferences appPreferences) {
+    return _repository.saveAppPreferences(appPreferences);
   }
 }
 ```
