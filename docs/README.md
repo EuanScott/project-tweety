@@ -6,3 +6,7 @@ source folder.
 ## Testing Guides
 
 - [Navigation, deep links, and route guards](testing/navigation.md)
+
+## Architecture
+
+- [Cards SQLite read foundation](architecture/cards_sqlite_foundation.md)

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/core/di/dependency_injection.dart';
+import 'package:project_tweety/data/repositories/card/cards.repository.dart'
+    as cards_repository;
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
 import 'package:project_tweety/domain/repositories/app_preferences/app_preferences.repository.dart';
 import 'package:project_tweety/presentation/navigation/routes.dart';
@@ -32,6 +34,10 @@ void main() {
         });
     await GetIt.I.reset();
     await configureCoreDependencies();
+    await GetIt.I.unregister<cards_repository.CardsRepository>();
+    GetIt.I.registerLazySingleton<cards_repository.CardsRepository>(
+      () => const _FakeCardsRepository(),
+    );
   });
 
   tearDown(() async {
@@ -697,4 +703,34 @@ class _FakeAppPreferencesRepository implements AppPreferencesRepository {
     _currentPreferences = appPreferences;
     savedPreferences.add(appPreferences);
   }
+}
+
+class _FakeCardsRepository implements cards_repository.CardsRepository {
+  const _FakeCardsRepository();
+
+  @override
+  Future<List<cards_repository.Card>> getCards() async => _cards;
+
+  @override
+  Future<cards_repository.Card?> getCardById(String cardId) async {
+    for (final card in _cards) {
+      if (card.id == cardId) {
+        return card;
+      }
+    }
+
+    return null;
+  }
+
+  static final _cards = List<cards_repository.Card>.generate(
+    10,
+    (index) => cards_repository.Card(
+      id: 'card-${index + 1}',
+      title: 'Card Title ${index + 1}',
+      description:
+          'This is the body copy for card number ${index + 1}. '
+          'You can replace this with whatever description you want.',
+    ),
+    growable: false,
+  );
 }

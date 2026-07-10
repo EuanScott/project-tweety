@@ -1,8 +1,8 @@
-import 'package:injectable/injectable.dart';
+import 'package:project_tweety/data/datasources/card/cards.datasource.dart';
 import 'package:project_tweety/data/dtos/card/card.dto.dart';
 
-@lazySingleton
-class MockCardsDataSource {
+class MockCardsDataSource implements CardsDataSource {
+  @override
   Future<List<CardDto>> getCards() async {
     await Future<void>.delayed(const Duration(milliseconds: 350));
 
@@ -17,5 +17,18 @@ class MockCardsDataSource {
       ),
       growable: false,
     );
+  }
+
+  @override
+  Future<CardDto?> getCardById(String cardId) async {
+    final cards = await getCards();
+
+    for (final card in cards) {
+      if (card.id == cardId) {
+        return card;
+      }
+    }
+
+    return null;
   }
 }

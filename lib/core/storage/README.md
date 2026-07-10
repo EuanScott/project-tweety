@@ -1,57 +1,56 @@
-# Preferences Storage
+# App-owned Storage
 
-This folder contains the app-owned preferences storage for small, non-secure persisted app data.
+This folder contains the persistence mechanisms owned by the app. Storage is split by data shape
+and lifecycle rather than hidden behind a provider-neutral API.
 
-## Purpose
+## SQLite database
 
-Use this storage for lightweight values that should remain on the user’s device across app
-launches, such as:
+`AppDatabase` owns the native SQLite connection used for relational app data. It is intentionally
+Sqflite-shaped: the boundary centralizes connection lifecycle and transaction behavior, but does
+not promise that another database engine can be substituted without changes.
 
-- theme mode
-- language choice
+The initial database supports Android and iOS. It opens `project_tweety.db` in the platform database
+directory on first use.
 
-## Non-Goals
+### Access contract
 
-Do not use this storage for:
+- `read` exposes query-only operations.
+- `write` runs the callback in one transaction and rolls it back if the callback fails.
+- concurrent first operations share one pending open.
+- an open failure is propagated and a later operation retries with a new open.
+- `close` drains operations that already started; later operations wait for close and then reopen.
+- Injectable calls `close` when the registered database is disposed.
 
-- auth tokens
-- secrets or sensitive data
-- API response storage
-- offline-first or syncable data
-- large payloads
+Database callbacks must use the executor passed to them. They must not recursively call `read`,
+`write`, or `close` on `AppDatabase`.
 
-## Supported Values
+### Schema version 1
 
-The storage is intentionally limited to app settings and lightweight UI state:
+Version 1 creates `cards` with the following columns:
 
-- theme mode
-- selected language code
+- `id TEXT PRIMARY KEY`
+- `title TEXT NOT NULL`
+- `description TEXT NOT NULL`
 
-Consumers should read and write a single preferences object through the storage service instead of
-persisting arbitrary keys and values.
+The v1 migration inserts the ten sample cards once. Opening or reading an existing v1 database never
+seeds it again, including when every card has been removed.
 
-## Contract
+This schema replaces an uncommitted development schema that reached version 3. A simulator or device
+that ran that work must clear the app data or reinstall once. Downgrades remain explicitly rejected;
+the app never destroys an existing database to recover from a version mismatch.
 
-The public API is intentionally small and now lives in a single file.
+## Preferences storage
 
-The storage behavior is intentionally fixed:
-
-- one permanent shared preferences entry
-- one app-owned preferences object
-- startup initialization ensures defaults exist
-- no expiry support
-- no custom storage names
-
-The stored preferences object currently contains default-backed values for:
+`AppPreferencesStorage` persists small, non-sensitive settings through one shared-preferences entry.
+It currently stores:
 
 - theme mode, defaulting to `ThemeMode.system`
 - language code, defaulting to `en`
 
-If storage is empty or contains invalid JSON, the service rewrites the default preferences object.
+Startup initialization ensures defaults exist. Invalid or missing JSON is replaced with the default
+preferences object.
 
-## Injection
-
-Use constructor injection with the concrete storage service:
+Use constructor injection with the concrete preferences service:
 
 ```dart
 class ExampleService {
@@ -60,3 +59,8 @@ class ExampleService {
   final AppPreferencesStorage _appPreferencesStorage;
 }
 ```
+
+## Non-goals
+
+Neither storage mechanism is intended for auth tokens or other secrets. Preferences storage is also
+not suitable for relational, offline-first, syncable, or large data.
