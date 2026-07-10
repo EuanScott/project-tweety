@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/core/storage/app_database.storage.dart';
+import 'package:project_tweety/core/storage/app_database_migrations.storage.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
@@ -25,7 +26,7 @@ void main() {
     await temporaryDirectory.delete(recursive: true);
   });
 
-  test('creates the v1 cards schema and samples on first open', () async {
+  test('creates the latest cards schema and samples on first open', () async {
     final snapshot = await database.read((db) async {
       final versionRows = await db.rawQuery('PRAGMA user_version');
       final columnRows = await db.rawQuery('PRAGMA table_info(cards)');
@@ -38,8 +39,16 @@ void main() {
       );
     });
 
-    expect(snapshot.version, 1);
-    expect(snapshot.columns, <Object?>['id', 'title', 'description']);
+    expect(snapshot.version, AppDatabaseMigrations.latestVersion);
+    expect(snapshot.columns, <Object?>[
+      'id',
+      'title',
+      'description',
+      'sync_status',
+      'updated_at',
+      'last_synced_at',
+      'deleted_at',
+    ]);
     expect(snapshot.cards, hasLength(10));
     expect(snapshot.cards.map((card) => card['id']), <String>[
       'card-1',
@@ -53,20 +62,25 @@ void main() {
       'card-9',
       'card-10',
     ]);
-    expect(snapshot.cards.first, <String, Object?>{
-      'id': 'card-1',
-      'title': 'Card Title 1',
-      'description':
-          'This is the body copy for card number 1. '
-          'You can replace this with whatever description you want.',
-    });
-    expect(snapshot.cards.last, <String, Object?>{
-      'id': 'card-10',
-      'title': 'Card Title 10',
-      'description':
-          'This is the body copy for card number 10. '
-          'You can replace this with whatever description you want.',
-    });
+    expect(snapshot.cards.first, containsPair('id', 'card-1'));
+    expect(snapshot.cards.last, containsPair('id', 'card-10'));
+    expect(snapshot.cards, everyElement(containsPair('sync_status', 'synced')));
+    final seedTimestamp = snapshot.cards.first['updated_at'];
+    expect(
+      seedTimestamp,
+      isA<String>().having((value) => value, 'value', isNotEmpty),
+    );
+    expect(DateTime.parse(seedTimestamp! as String).isUtc, isTrue);
+    expect(
+      snapshot.cards,
+      everyElement(
+        allOf(
+          containsPair('updated_at', seedTimestamp),
+          containsPair('last_synced_at', seedTimestamp),
+          containsPair('deleted_at', null),
+        ),
+      ),
+    );
   });
 
   test('does not seed an existing v1 database again', () async {
