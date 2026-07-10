@@ -9,4 +9,8 @@ source folder.
 
 ## Architecture
 
-- [Cards SQLite read foundation](architecture/cards_sqlite_foundation.md)
+- [Cards SQLite persistence](architecture/cards_sqlite_foundation.md)
+
+## Plans
+
+- [SQLite cards app persistence](plans/cards_sqlite_data_layer.md)

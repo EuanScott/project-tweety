@@ -1,25 +1,26 @@
-# Cards SQLite read foundation
+# Cards SQLite persistence
 
 ## Decision
 
-Cards list and detail reads use native SQLite on Android and iOS. The data path is:
+Cards reads and local mutations use native SQLite on Android and iOS. The data path is:
 
 `CardsRepository -> CardsDataSource -> CardsLocalDataSource -> AppDatabase -> Sqflite`
 
 `CardsDataSource` is the test and source-selection seam. `AppDatabase` is a Sqflite-shaped lifecycle
 and transaction boundary, not a database-provider abstraction.
 
-## Initial scope
+## Current scope
 
-- schema version 1 contains only card identity, title, and description
-- the v1 migration inserts the existing ten sample cards once
+- schema version 1 creates card identity, title, and description
+- schema version 2 adds sync status and mutation timestamps
+- schema version 3 seeds the existing ten sample cards when the table is empty
 - production dependency injection binds the local datasource
-- the mock datasource follows the same read contract but is not production-registered
-- the cards repository exposes list and direct ID reads only
-- database writes are available transactionally as infrastructure, but card CRUD is deferred
+- the mock datasource follows the same CRUD contract but is not production-registered
+- the cards repository exposes list, direct ID reads, create, update, and delete
+- local changes are tracked as created, updated, or deleted for a later bulk upload
+- tombstones are hidden from normal reads and removed after a successful upload
 
-CRUD behavior, conflict handling, tombstones, dirty tracking, and synchronization policy require a
-separate design and schema migration after this foundation is verified.
+The bulk upload API, sync UI, and conflict policy remain deferred.
 
 ## Lifecycle guarantees
 
@@ -29,10 +30,11 @@ separate design and schema migration after this foundation is verified.
 - close drains active callbacks, and later callers reopen cleanly
 - downgrade attempts fail without modifying the database
 
-## Development reset
+## Upgrade behavior
 
-The discarded CRUD/sync experiment used an unshipped version 3 database. Clear app data or reinstall
-before running this v1 foundation on any simulator or device that opened the experimental database.
+Version-1 foundation databases migrate in place. Existing rows are preserved, receive `synced`
+status, and are not reseeded. Version-2 databases preserve existing metadata, while an empty version-2
+database receives the sample cards once during the version-3 migration. Downgrades remain rejected.
 
 ## Supported targets
 

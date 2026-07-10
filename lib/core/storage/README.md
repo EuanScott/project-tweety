@@ -24,7 +24,7 @@ directory on first use.
 Database callbacks must use the executor passed to them. They must not recursively call `read`,
 `write`, or `close` on `AppDatabase`.
 
-### Schema version 1
+### Cards schema
 
 Version 1 creates `cards` with the following columns:
 
@@ -32,12 +32,18 @@ Version 1 creates `cards` with the following columns:
 - `title TEXT NOT NULL`
 - `description TEXT NOT NULL`
 
-The v1 migration inserts the ten sample cards once. Opening or reading an existing v1 database never
-seeds it again, including when every card has been removed.
+Version 2 adds sync metadata:
 
-This schema replaces an uncommitted development schema that reached version 3. A simulator or device
-that ran that work must clear the app data or reinstall once. Downgrades remain explicitly rejected;
-the app never destroys an existing database to recover from a version mismatch.
+- `sync_status TEXT NOT NULL DEFAULT 'synced'`
+- `updated_at TEXT NOT NULL DEFAULT ''`
+- `last_synced_at TEXT`
+- `deleted_at TEXT`
+
+Version 3 inserts the ten sample cards only when the table is empty. Opening or reading an existing
+latest-version database never seeds it again, including when every card has been removed.
+
+Version-1 and version-2 files migrate in place without replacing existing rows. Downgrades remain
+explicitly rejected; the app never destroys an existing database to recover from a version mismatch.
 
 ## Preferences storage
 
