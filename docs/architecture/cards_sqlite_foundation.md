@@ -49,3 +49,27 @@ flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>
 The test reads the ten seed cards through production DI, commits a sentinel row, renders list and
 detail views, tears down the app composition and database, then reboots it and verifies the same file
 contains eleven cards before exercising list and detail again.
+
+For a process-level iOS relaunch check, keep the first verifier installed, then replace only its app
+bundle with the second-phase verifier so the simulator data container is preserved:
+
+```sh
+xcrun simctl uninstall <device-id> com.example.projectTweety
+flutter drive \
+  --driver=test_driver/integration_test.dart \
+  --target=integration_test/cards_sqlite_smoke_test.dart \
+  -d <device-id> \
+  --keep-app-running
+xcrun simctl terminate <device-id> com.example.projectTweety
+flutter build ios \
+  --simulator \
+  --debug \
+  --no-codesign \
+  --target=integration_test/cards_sqlite_smoke_test.dart \
+  --dart-define=EXPECT_EXISTING_SQLITE_SMOKE_CARD=true
+xcrun simctl install <device-id> build/ios/iphonesimulator/Runner.app
+xcrun simctl launch <device-id> com.example.projectTweety
+```
+
+The relaunched verifier fails unless the sentinel already exists and shows `SQLite relaunch verified`
+after list and detail reads pass again.

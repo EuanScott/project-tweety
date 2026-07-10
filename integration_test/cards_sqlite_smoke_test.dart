@@ -8,6 +8,9 @@ import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 import 'package:project_tweety/main.dart';
 
 const _smokeCardId = 'native-smoke-card';
+const _expectExistingSmokeCard = bool.fromEnvironment(
+  'EXPECT_EXISTING_SQLITE_SMOKE_CARD',
+);
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -27,15 +30,20 @@ void main() {
     final initialCards = await repository.getCards();
     final existingSmokeCard = await repository.getCardById(_smokeCardId);
 
-    expect(initialCards, hasLength(10));
-    expect(existingSmokeCard, isNull);
-    await database.write((db) {
-      return db.insert('cards', const <String, Object?>{
-        'id': _smokeCardId,
-        'title': 'Native persistence smoke',
-        'description': 'Persists across native app launches.',
+    if (_expectExistingSmokeCard) {
+      expect(initialCards, hasLength(11));
+      expect(existingSmokeCard?.title, 'Native persistence smoke');
+    } else {
+      expect(initialCards, hasLength(10));
+      expect(existingSmokeCard, isNull);
+      await database.write((db) {
+        return db.insert('cards', const <String, Object?>{
+          'id': _smokeCardId,
+          'title': 'Native persistence smoke',
+          'description': 'Persists across native app launches.',
+        });
       });
-    });
+    }
 
     await _verifyCardsUi(tester);
     await tester.pumpWidget(const SizedBox.shrink());
@@ -50,7 +58,19 @@ void main() {
     expect(cardAfterReopen?.title, 'Native persistence smoke');
 
     await _verifyCardsUi(tester);
-    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpWidget(
+      const Directionality(
+        textDirection: TextDirection.ltr,
+        child: Center(
+          child: Text(
+            _expectExistingSmokeCard
+                ? 'SQLite relaunch verified'
+                : 'SQLite first launch verified',
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
   });
 }
 
