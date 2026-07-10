@@ -89,4 +89,13 @@ class _FakeCardsRepository implements CardsRepository {
 
     return card?.id == cardId ? card : null;
   }
+
+  @override
+  Future<void> createCard(Card card) async {}
+
+  @override
+  Future<void> updateCard(Card card) async {}
+
+  @override
+  Future<void> deleteCard(String cardId) async {}
 }

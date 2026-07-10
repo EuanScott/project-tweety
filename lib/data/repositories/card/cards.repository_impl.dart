@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/data/datasources/card/cards.datasource.dart';
+import 'package:project_tweety/data/dtos/card/card.dto.dart';
 
 import 'cards.repository.dart';
 
@@ -19,5 +20,28 @@ class CardsRepositoryImpl implements CardsRepository {
   Future<Card?> getCardById(String cardId) async {
     final item = await _dataSource.getCardById(cardId);
     return item?.toValue();
+  }
+
+  @override
+  Future<void> createCard(Card card) {
+    return _dataSource.createCard(_toDto(card));
+  }
+
+  @override
+  Future<void> updateCard(Card card) {
+    return _dataSource.updateCard(_toDto(card));
+  }
+
+  @override
+  Future<void> deleteCard(String cardId) {
+    return _dataSource.deleteCard(cardId);
+  }
+
+  CardDto _toDto(Card card) {
+    return CardDto(
+      id: card.id,
+      title: card.title,
+      description: card.description,
+    );
   }
 }

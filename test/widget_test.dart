@@ -722,6 +722,15 @@ class _FakeCardsRepository implements cards_repository.CardsRepository {
     return null;
   }
 
+  @override
+  Future<void> createCard(cards_repository.Card card) async {}
+
+  @override
+  Future<void> updateCard(cards_repository.Card card) async {}
+
+  @override
+  Future<void> deleteCard(String cardId) async {}
+
   static final _cards = List<cards_repository.Card>.generate(
     10,
     (index) => cards_repository.Card(
