@@ -1,7 +1,7 @@
 interface:
   display_name: "App Performance Review"
-  short_description: "Review app screens for performance risks."
-  default_prompt: "Use $app-performance-review to review this page or feature for performance risks and recommend focused improvements."
+  short_description: "Audit one Flutter view for performance risks"
+  default_prompt: "Use $app-performance-review to audit <page or feature> for <performance risk> without changing code."
 
 policy:
   allow_implicit_invocation: true

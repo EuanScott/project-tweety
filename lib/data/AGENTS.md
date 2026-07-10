@@ -24,7 +24,7 @@
 - `datasources/`
   - Use for raw data access such as mock providers, API clients, local storage adapters, or cache readers.
   - Data sources should describe where the data comes from, for example `MockOrdersDataSource`.
-  - Prefer filenames such as `mock_orders.datasource.dart`, `orders_remote.datasource.dart`, or `orders_local.datasource.dart`.
+  - Prefer `<feature>_<source>.datasource.dart`, such as `orders_mock.datasource.dart`, `orders_remote.datasource.dart`, or `orders_local.datasource.dart`.
 - `dtos/`
   - Use for transferred or raw data objects.
   - Prefer the `Dto` suffix over `Model`.
@@ -111,5 +111,5 @@
 - Use these preferred filenames for new data-layer files:
   - `<entity>.dto.dart`
   - `<entity>.value.dart` when a no-domain feature has several repository values
-  - `<source>_<feature>.datasource.dart`
+  - `<feature>_<source>.datasource.dart`
   - `<feature>.repository_impl.dart`

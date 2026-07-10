@@ -1,135 +1,81 @@
 ---
 name: data-scaffold
-description: Scaffold only the data layer for a Project Tweety feature using the repo's nested lib/data folders. Use when implementing repository contracts, repository implementations, datasources, or DTOs for an existing feature. Add or depend on domain only when mobile-owned behavior justifies it.
+description: "Scaffold Project Tweety data artifacts for an existing feature: repository contracts and implementations, datasources, DTOs, or transport wiring. Use only for data-layer work."
 ---
 
 # Data Scaffold
 
-Scaffold the data layer only.
-Use this when the work should stay inside `lib/data/`, or when the user is implementing storage, transport, or repository orchestration for an existing feature.
+## Required inputs
 
-## Help mode
+Collect:
 
-If the user invokes this skill with `--help`:
-- do not scaffold or edit files
-- return a short, human-readable help response
-- explain what the skill does
-- list the required and optional inputs
-- mention that a `curl` request can be supplied to define the API call shape
-- show one or two example invocations
+- `feature_name` and `folder_key` in snake_case;
+- `repository_operations` needed now;
+- `required_artifacts`: repository, implementation, datasource, and/or DTO;
+- `source` and concrete data shape when a datasource or DTO is requested;
+- the existing domain contract when the implementation belongs to a justified domain path;
+- optional `curl` text and request/response samples.
 
-Start by reading:
-- Root `AGENTS.md`
-- `lib/AGENTS.md`
-- `lib/domain/AGENTS.md`
-- `lib/data/AGENTS.md`
-
-If the written guidance and the current source tree disagree, follow the current source tree.
-For `lib/data/` and optional `lib/domain/`, the repo currently nests files by feature or entity name, and the scaffold should match that structure.
-
-## Inputs
-
-Collect or infer these inputs before scaffolding:
-- feature name in snake_case
-- folder key, usually the nearest existing feature or entity name
-- whether the data layer needs a repository contract, repository implementation, datasources, and DTOs
-- whether the work is bootstrap-only or already has a concrete data shape
-- whether optional domain already exists or is justified by mobile-owned behavior
-- optional `curl` request that defines the API call to implement
-- optional sample response body when the user has one available
-
-Ask a short clarifying question only if the feature name, folder key, or required data pieces are ambiguous.
+Ask only for required information that repository inspection cannot resolve.
 
 ## Workflow
 
-### 1. Inspect existing patterns
+### 1. Establish authority and preflight targets
 
-Read `_template` and the closest existing data area before generating files.
-Prefer current source examples over older written guidance.
+Apply sources in this order: user request, applicable `AGENTS.md`, `lib/data/repositories/_template/`, then the nearest data implementation only for uncovered details. Read root, `lib`, and data guidance; read domain guidance only when consuming an existing domain contract.
 
-Use the current repo as the reference for nested paths such as:
-- `lib/data/repositories/<feature>/<feature>.repository.dart`
-- `lib/data/repositories/<feature>/<feature>.repository_impl.dart`
-- `lib/data/dtos/<entity>/<entity>.dto.dart`
-- `lib/data/datasources/<feature>/<source>_<feature>.datasource.dart`
+Before the first red test, inspect only that guidance, the exact existing or
+canonical pair, the requested source seam, and one nearest focused test. Do not
+inventory the repository. Expand only to resolve a concrete symbol, contract,
+or generated-input question.
 
-### 1a. Parse a supplied curl request when present
+List every proposed target. Stop if any target already exists unless the user explicitly requests an update. Keep all new artifacts under `lib/data/`.
 
-If the user provides a `curl` request:
-- treat it as the source of truth for the transport shape
-- extract the HTTP method, URL, headers, query params, and request body
-- preserve the request semantics unless the user explicitly asks to adapt them
-- use any supplied sample response body to shape DTOs and response mapping
+**Gate:** Confirm complete inputs, a resolved contract owner, an in-scope target list, and zero unapproved overwrites.
 
-If a `curl` request is present, the work is no longer bootstrap-only by default.
-Treat it as concrete transport work.
+### 2. Select the exact manifest
 
-### 2. Decide whether domain prerequisites apply
+For a feature without domain, require the complete baseline pair:
 
-Do not require domain for normal data scaffolding.
-By default, create or use a data-layer repository contract under:
-- `lib/data/repositories/<folder-key>/<feature>.repository.dart`
+- `lib/data/repositories/<folder_key>/<feature_name>.repository.dart`
+- `lib/data/repositories/<folder_key>/<feature_name>.repository_impl.dart`
 
-If optional domain is justified or already exists, verify the matching domain contract under:
-- `lib/domain/repositories/<folder-key>/`
+Create both when repository scaffolding is requested and neither exists. When both already exist, verify them as prerequisites and add only the requested datasource, DTO, or transport change. Stop on a half-created pair instead of inventing the missing contract or implementation outside the stated scope.
 
-If optional domain depends on entities, verify those too under:
-- `lib/domain/entities/<entity>/`
+For a justified domain feature, verify these upstream artifacts already exist:
 
-If optional domain prerequisites are missing, route through `$domain-scaffold` only after stating why mobile-owned domain behavior is required.
+- `lib/domain/repositories/<folder_key>/<feature_name>.repository.dart`
+- at least one policy-bearing `lib/domain/usecases/<folder_key>/<action>_<feature_name>.usecase.dart`
+- a domain entity only when a real domain payload exists
 
-### 3. Create the repository implementation
+Then create only `lib/data/repositories/<folder_key>/<feature_name>.repository_impl.dart`; never duplicate the contract under `lib/data`. Stop and direct missing domain work to `$domain-scaffold` instead of silently expanding this skill's scope.
 
-Create the repository contract and implementation in:
-- `lib/data/repositories/<folder-key>/<feature>.repository.dart`
-- `lib/data/repositories/<folder-key>/<feature>.repository_impl.dart`
+Add `lib/data/datasources/<folder_key>/<feature_name>_<source>.datasource.dart` only for a real source. Add `lib/data/dtos/<entity>/<entity>.dto.dart` only for a concrete transport or persistence shape.
 
-Follow these rules:
-- implement the data-layer repository contract by default
-- implement a domain repository contract only when optional domain exists
-- keep bootstrap implementations minimal when there is no real payload yet
-- annotate the repository implementation with `@LazySingleton(as: ContractType)` unless a different lifecycle is justified
+**Gate:** Confirm the baseline pair or domain implementation path, and justify each conditional datasource and DTO against a real boundary.
 
-If a `curl` request is present:
-- implement the repository around the concrete datasource call instead of a payload-free stub
-- preserve the API intent in the repository contract while mapping raw transport details in the data layer
+### 3. Resolve optional transport work
 
-### 4. Add datasources and DTOs only when justified
+When `curl` text is supplied, read [the curl transport branch](../references/curl_transport.md). Parse it as text; never execute it. Require response evidence before assuming response DTO fields or mapping. Route concrete request, mapping, error, or retry behavior through `/implement` and its TDD flow.
 
-Create these only when the feature has a real source shape or transport model:
-- `lib/data/datasources/<folder-key>/`
-- `lib/data/dtos/<entity>/`
+**Gate:** Trace method, path, query, headers, body, and response mapping to evidence; reuse existing networking/auth seams; retain no credential value.
 
-Follow these rules:
-- do not create mock datasources or DTOs by default
-- keep datasources close to source shape
-- keep DTOs responsible for mapping and serialization concerns
-- keep repository implementations responsible for orchestration
+### 4. Specify and create the data artifacts
 
-If a `curl` request is present:
-- create a datasource by default
-- use the extracted URL, HTTP method, headers, and request body shape in that datasource
-- create DTOs when the request body or sample response has a concrete structure worth modelling
-- if a sample response body is available, use it to shape the DTO and repository mapping
-- if no sample response is available, keep the response handling conservative and document any assumptions in the final summary
+For repository orchestration, mapping, or transport behaviour, add the nearest
+focused failing test and confirm the expected red state before production
+changes. Pure interface/file skeletons need no behavioural assertion.
 
-### 5. Keep the scaffold intentionally minimal
+Keep contracts app-facing and intent-based. Keep datasources close to raw source shape. Keep DTOs responsible for serialization and mapping. Keep repository implementations responsible for orchestration and for hiding transport details.
 
-Do not over-generate.
-Avoid adding:
-- presentation-layer files
-- domain-layer files unless mobile-owned behavior justifies them
-- datasources or DTOs when the repository implementation can stay payload-free
-- extra storage or network abstractions that have no current consumer
+Map DTOs with `toValue()` when no domain exists and with `toEntity()` only for a justified domain entity. Annotate the repository implementation with `@LazySingleton(as: ContractType)` and the datasource with the nearest justified lifecycle unless current scoped guidance requires otherwise.
 
-### 6. Finish cleanly
+Do not invent placeholder operations, DTO fields, network clients, domain policy, or presentation behavior.
 
-After creating source files:
-- regenerate code only if Injectable annotations changed
-- run targeted tests first when tests are part of the task
-- summarize whether optional domain was intentionally skipped or added
-- if a `curl` request was used, summarize which request details were implemented from it and whether a sample response body was available
+**Gate:** Confirm the implementation satisfies exactly one contract, raw DTOs do not escape data, transport details remain hidden, and imports do not point to presentation.
 
-## File Contract
+### 5. Verify completion
 
-Use [data_contract.md](references/data_contract.md) for the expected nested paths and optional-domain rules.
+Format all changed inputs before one required code-generation pass. Run the targeted test and scoped analysis. Broaden tests only when a shared seam's behaviour changed; a feature-local addition does not require the full widget suite.
+
+**Gate:** Apply [the shared scaffold completion gate](../references/scaffold_completion.md) to the selected data manifest.

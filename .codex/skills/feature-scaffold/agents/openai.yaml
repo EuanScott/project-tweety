@@ -1,4 +1,6 @@
 interface:
   display_name: "Feature Scaffold"
   short_description: "Scaffold layered features"
-  default_prompt: "Use $feature-scaffold to scaffold a new layered feature for Project Tweety."
+  default_prompt: "Use $feature-scaffold to create <feature_name> for <page_intent> with read-only <initial_load_operation>; use BLoC unless I explicitly request Cubit, and include domain_reason only for mobile-owned policy."
+policy:
+  allow_implicit_invocation: true

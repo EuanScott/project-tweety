@@ -1,4 +1,6 @@
 interface:
   display_name: "Page Scaffold"
   short_description: "Scaffold presentation pages"
-  default_prompt: "Use $page-scaffold to scaffold a presentation page and BLoC for Project Tweety."
+  default_prompt: "Use $page-scaffold to create <feature_name> for <page_intent>, consuming the existing <dependency> via <initial_operation>; use BLoC unless I explicitly request Cubit."
+policy:
+  allow_implicit_invocation: false

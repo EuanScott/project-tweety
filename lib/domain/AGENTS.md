@@ -52,7 +52,8 @@
 
 ## Use Case Conventions
 - Prefer one use case per focused operation.
-- Use cases should wrap repository calls and represent a clear action the app can perform.
+- Use cases should own the mobile policy or orchestration that justified this layer and represent a clear action the app can perform.
+- Keep a pure repository pass-through out of `lib/domain`; consume the data contract directly until mobile-owned behaviour exists.
 - Presentation-layer BLoCs should depend on use cases rather than repository implementations.
 - Annotate use cases with `@injectable` when they should be resolved through DI.
 - Use cases may expose `call()` for simple ergonomics when appropriate.

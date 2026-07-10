@@ -6,7 +6,7 @@
 - Preserve the existing layered structure instead of introducing new architectural styles unless the task explicitly requires it.
 
 ## Tech Stack
-- Flutter with Dart `>=3.8.1 <4.0.0`
+- Flutter with Dart `>=3.11.5 <4.0.0`
 - State management and DI packages include `bloc`, `flutter_bloc`, `get_it`, and `injectable`
 - Code generation is used for DI and Flutter-generated assets/localization
 
@@ -22,31 +22,21 @@
 
 ## Skill Routing
 - Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
+- Invocation policy lives in each skill's `agents/openai.yaml`; authoring and validation rules live in `.codex/skills/AGENTS.md`.
 - For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain:
   - `lib/data/repositories/_template/_template.repository.dart`
   - `lib/data/repositories/_template/_template.repository_impl.dart`
   - `lib/presentation/pages/_template/_template.page.dart`
   - `lib/presentation/pages/_template/bloc/`
 - Do not add a domain layer by default. Assume the BFF owns mobile-specific shaping and most business logic; add `lib/domain` only case-by-case for mobile-owned policy or custom app behavior, such as settings.
-- If an AI assistant notices a task that matches an existing skill, it may suggest or use that skill when it improves consistency. This is guidance, not a hard rule.
-- If the user wants help discovering a skill, prefer a short pointer over a long explanation.
-- If the user runs a skill with `--help`, do not edit files. Return a short explanation of what the skill does, its inputs, and example usage.
-- Prefer these skill matches when they fit the task:
-  - New feature scaffold across default layers: `$feature-scaffold`
-  - Domain-only contracts or use cases, only when justified: `$domain-scaffold`
-  - Data-layer work such as repositories, datasources, DTOs, or a `curl`-driven API implementation: `$data-scaffold`
-  - Page and BLoC scaffold work on top of existing lower layers: `$page-scaffold`
-  - New shared widget from a brief or screenshot/mockup: `$shared-widget`
-  - Existing shared widget update that should preserve current behavior by default: `$update-widget`
-- Prefer task-based guidance in conversation:
-  - "If you are scaffolding a new shared widget, `$shared-widget --help` will show the inputs."
-  - "If you are updating an existing shared widget without changing its behavior, `$update-widget --help` is the better starting point."
+- Full feature scaffolds, new shared widgets, existing shared-widget updates, and proactive single-view performance audits may select their matching local skill implicitly.
+- Layer-only `$data-scaffold`, `$domain-scaffold`, and `$page-scaffold` flows require explicit invocation. Ordinary behaviour changes stay in the normal implementation/TDD flow.
 
 ## Working Conventions
 - Follow the existing lint rules in `analysis_options.yaml`, especially `avoid_print: true` and `prefer_single_quotes: true`.
 - Match the current import style: package imports for app entrypoints and shared modules, relative imports where already generated or established.
 - Treat this document as the source of truth for naming and structure rules.
-- Visible UI in pages and app-level shared widgets must go through app/design-system primitives instead of raw platform widgets when a primitive exists. For example, use `AppButton`, `AppListTile`, `AppLoadingIndicator`, and `AppPickerField` rather than directly using `ElevatedButton`, `ListTile`, `CircularProgressIndicator`, or `DropdownButtonFormField`.
+- Visible UI in pages and app-level shared widgets must use the adaptive primitives exported by `package:design_system` when a matching primitive exists.
 - Add missing native/adaptive UI primitives to `packages/design_system` before using raw Material or Cupertino controls repeatedly in pages or shared widgets. The design-system primitive owns the Material/Cupertino branching; callers express app intent.
 - Standardize filenames on `feature_or_entity.role.dart`.
 - Use `_` inside the business name and `.` before the technical role.
@@ -66,7 +56,7 @@
 ## Generated Files
 - Treat generated files as derived artifacts unless the task explicitly targets generation output.
 - Do not hand-edit these files unless absolutely necessary:
-  - `lib/core/di/di.config.dart`
+  - `lib/core/di/dependency_injection.config.dart`
   - `lib/l10n/app_localizations.dart`
   - `lib/l10n/app_localizations_en.dart`
   - `lib/l10n/app_localizations_es.dart`

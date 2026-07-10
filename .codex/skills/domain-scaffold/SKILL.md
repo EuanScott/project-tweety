@@ -1,98 +1,62 @@
 ---
 name: domain-scaffold
-description: Scaffold only the domain layer for a Project Tweety feature using the repo's nested lib/domain folders. Use when adding or updating repository contracts, use cases, or domain entities without touching data or presentation, or when another layer depends on domain files that do not exist yet.
+description: "Scaffold Project Tweety domain contracts, policy-bearing use cases, and entities for an existing feature with stated mobile-owned behaviour. Use only for domain-layer work."
 ---
 
 # Domain Scaffold
 
-Scaffold the domain layer only.
-Use this when the work should stay inside `lib/domain/` and the data or presentation layers either already exist or are intentionally out of scope.
+## Required inputs
 
-## Help mode
+Collect:
 
-If the user invokes this skill with `--help`:
-- do not scaffold or edit files
-- return a short, human-readable help response
-- explain what the skill does
-- list the required and optional inputs
-- show one or two example invocations
+- `feature_name` and `folder_key` in snake_case;
+- `domain_reason`: the concrete policy, decision, or orchestration owned by the mobile app;
+- `repository_operations` required by that policy;
+- the rule each use case enforces;
+- an entity name and shape only when a real domain payload exists.
 
-Start by reading:
-- Root `AGENTS.md`
-- `lib/AGENTS.md`
-- `lib/domain/AGENTS.md`
-
-If the written guidance and the current source tree disagree, follow the current source tree.
-For `lib/domain/`, the repo currently nests files by feature or entity name, and the scaffold should match that structure.
-
-## Inputs
-
-Collect or infer these inputs before scaffolding:
-- feature name in snake_case
-- domain folder key, usually the nearest existing singular business name
-- required repository operations
-- whether a concrete entity is needed now
-
-Ask a short clarifying question only if the feature name, folder key, or required operations are ambiguous.
+Reject an empty or infrastructure-only `domain_reason`. Ask only for required information that repository inspection cannot resolve.
 
 ## Workflow
 
-### 1. Inspect existing patterns
+### 1. Establish authority and preflight targets
 
-Read the closest existing domain area before generating files.
-Prefer current source examples over older written guidance.
+Apply sources in this order: user request, applicable `AGENTS.md`, the canonical `_template`, then the nearest domain implementation only for uncovered details. Use `_template` to confirm that domain is absent by default; do not invent a domain template. Read root, `lib`, and domain guidance.
 
-Use the current repo as the reference for nested paths such as:
-- `lib/domain/repositories/<feature>/<feature>.repository.dart`
-- `lib/domain/usecases/<feature>/<action>_<feature>.usecase.dart`
-- `lib/domain/entities/<entity>/<entity>.entity.dart`
+List every proposed target. Stop if any target already exists unless the user explicitly requests an update. Keep all new artifacts under `lib/domain/`.
 
-### 2. Create the repository contract
+**Gate:** Confirm complete inputs, resolved authority, an in-scope target list, and zero unapproved overwrites.
 
-Create the repository contract in:
-- `lib/domain/repositories/<folder-key>/<feature>.repository.dart`
+### 2. Prove the domain seam
 
-Follow these rules:
-- use dotted filenames
-- keep the interface intent-based and cohesive
-- add only the methods the requested scope needs now
-- keep the contract independent from data-layer types
+Require the use case to own observable mobile policy such as validation, a decision, ordering, coordination across operations, or app-owned state transition. Reject a use case that only forwards arguments and returns one repository call unchanged. Route pure transport or BFF-shaped orchestration to `$data-scaffold` instead.
 
-### 3. Create the use cases
+State the policy independently of UI, HTTP, persistence, DTOs, and repository implementation details.
 
-Create one or more use cases in:
-- `lib/domain/usecases/<folder-key>/`
+**Gate:** Express `domain_reason` as a testable rule and identify why neither presentation nor data is the correct owner.
 
-Follow these rules:
-- prefer one use case per focused operation
-- annotate use cases with `@injectable` when they will be resolved through DI
-- keep them thin wrappers around the repository contract
-- use `call()` when that matches nearby patterns
+### 3. Select the exact manifest
 
-### 4. Create entities only when justified
+Create:
 
-Create entities in:
-- `lib/domain/entities/<entity>/<entity>.entity.dart`
+- `lib/domain/repositories/<folder_key>/<feature_name>.repository.dart`;
+- one or more `lib/domain/usecases/<folder_key>/<action>_<feature_name>.usecase.dart` files that enforce the stated policy;
+- `lib/domain/entities/<entity>/<entity>.entity.dart` only when the policy operates on a real domain payload.
 
-Do not create an entity by default if the feature is still in a payload-free bootstrap stage.
-Add the entity only when there is a real domain shape to model.
+Add only operations required by the policy. Do not create data implementations, DTOs, datasources, pages, BLoCs, navigation, or localization.
 
-### 5. Keep the scaffold intentionally minimal
+**Gate:** Confirm one cohesive repository contract, at least one policy-bearing use case, and no entity without a concrete payload and consumer.
 
-Do not over-generate.
-Avoid adding:
-- data-layer files
-- presentation-layer files
-- CRUD use cases that are not required yet
-- extra entities that have no current consumer
+### 4. Specify and create domain behavior
 
-### 6. Finish cleanly
+Write a failing unit test for each policy rule before implementing it. Keep contracts intent-based and independent from data types. Keep entities immutable and framework-light. Let use cases depend only on domain contracts, expose `call()` when nearby code does, and use `@injectable` only when DI constructs them.
 
-After creating source files:
-- regenerate code only if Injectable annotations changed
-- run targeted tests first when tests are part of the task
-- summarize any intentionally deferred entity or use case work
+Do not embed presentation formatting, transport fields, persistence details, or pass-through-only behavior.
 
-## File Contract
+**Gate:** Confirm tests observe the stated policy, domain imports remain independent, and every public operation has a current consumer or requested purpose.
 
-Use [domain_contract.md](references/domain_contract.md) for the expected nested paths, naming rules, and default scope for a domain-only scaffold.
+### 5. Verify completion
+
+Run the targeted unit tests red then green. Format changed Dart files. Regenerate only when Injectable or other generated inputs changed. Run analysis and proportionate broader tests.
+
+**Gate:** Apply [the shared scaffold completion gate](../references/scaffold_completion.md) to the selected domain manifest.

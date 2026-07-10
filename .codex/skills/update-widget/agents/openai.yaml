@@ -1,4 +1,7 @@
 interface:
   display_name: "Update Widget"
-  short_description: "Safely update adaptive widgets"
-  default_prompt: "Use $update-widget to update an existing shared widget for Project Tweety while preserving current behaviour and routing visible controls through adaptive design-system primitives. Optionally provide a new widget name to create a renamed successor."
+  short_description: "Safely evolve existing shared widgets"
+  default_prompt: "Use $update-widget on <widget name or path> to <change>; optional successor: <name>."
+
+policy:
+  allow_implicit_invocation: true

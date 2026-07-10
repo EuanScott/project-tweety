@@ -1,4 +1,6 @@
 interface:
   display_name: "Domain Scaffold"
   short_description: "Scaffold domain layer files"
-  default_prompt: "Use $domain-scaffold to scaffold the domain layer for a Project Tweety feature."
+  default_prompt: "Use $domain-scaffold for <feature_name> in <folder_key> because <domain_reason>, with <repository_operations>, policy rules <rules>, and entity payload <entity_or_none>."
+policy:
+  allow_implicit_invocation: false

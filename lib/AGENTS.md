@@ -76,7 +76,7 @@
   - `<feature>.repository.dart`
   - `<action>_<feature>.usecase.dart`
   - `<entity>.dto.dart`
-  - `<source>_<feature>.datasource.dart`
+  - `<feature>_<source>.datasource.dart`
   - `<feature>.repository_impl.dart`
 
 ## Domain Layer
@@ -85,7 +85,7 @@
 - Entity filenames should use the entity name plus `.entity.dart`.
 - Repository contracts live in the domain layer only when domain is justified; otherwise data-layer repository contracts are acceptable.
 - Repository filenames should use the feature name plus `.repository.dart`.
-- Use cases wrap repository operations and provide the entry point the BLoC depends on.
+- Use cases own justified mobile policy or orchestration and provide the entry point the BLoC depends on; a pure repository pass-through does not justify a domain layer.
 - Use case filenames should describe the action plus `.usecase.dart`.
 - BLoCs and Cubits should depend on the narrowest useful contract. In the default BFF-backed path, that can be a data-layer repository contract; when domain exists, prefer use cases.
 
