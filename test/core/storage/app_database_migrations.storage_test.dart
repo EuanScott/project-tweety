@@ -76,7 +76,7 @@ void main() {
       everyElement(
         allOf(
           containsPair('updated_at', seedTimestamp),
-          containsPair('last_synced_at', seedTimestamp),
+          containsPair('last_synced_at', null),
           containsPair('deleted_at', null),
         ),
       ),

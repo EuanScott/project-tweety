@@ -143,6 +143,12 @@ class _FakeCardsDataSource implements CardsDataSource {
   Future<void> deleteCard(String cardId) async {}
 
   @override
+  Future<List<CardDto>> getDirtyCards() async => const [];
+
+  @override
+  Future<void> markCardsSynced(List<String> cardIds) async {}
+
+  @override
   Future<List<CardDto>> getCards() async => cards;
 
   @override

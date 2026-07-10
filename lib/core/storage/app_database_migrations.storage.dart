@@ -62,7 +62,7 @@ abstract final class AppDatabaseMigrations {
             'You can replace this with whatever description you want.',
         'sync_status': _syncedCardStatus,
         'updated_at': seedTimestamp,
-        'last_synced_at': seedTimestamp,
+        'last_synced_at': null,
         'deleted_at': null,
       });
     }

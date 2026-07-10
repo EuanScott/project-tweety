@@ -17,6 +17,7 @@ and transaction boundary, not a database-provider abstraction.
 - production dependency injection binds the local datasource
 - the mock datasource follows the same CRUD contract but is not production-registered
 - the cards repository exposes list, direct ID reads, create, update, and delete
+- the datasource contract exposes dirty reads and successful-upload acknowledgement for future sync
 - local changes are tracked as created, updated, or deleted for a later bulk upload
 - tombstones are hidden from normal reads and removed after a successful upload
 

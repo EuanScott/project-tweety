@@ -40,7 +40,7 @@ Cards contain `id`, `title`, and `description`, plus local persistence metadata:
 - `last_synced_at`: the latest successful upload time
 - `deleted_at`: the local tombstone time
 
-`CardsRepository` exposes list, lookup, create, update, and delete. `CardsLocalDataSource` additionally
+`CardsRepository` exposes list, lookup, create, update, and delete. `CardsDataSource` additionally
 exposes dirty reads and marking uploaded IDs as synced for the future sync service.
 
 ## Behavior

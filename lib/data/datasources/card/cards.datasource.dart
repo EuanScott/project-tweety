@@ -10,4 +10,8 @@ abstract class CardsDataSource {
   Future<void> updateCard(CardDto card);
 
   Future<void> deleteCard(String cardId);
+
+  Future<List<CardDto>> getDirtyCards();
+
+  Future<void> markCardsSynced(List<String> cardIds);
 }

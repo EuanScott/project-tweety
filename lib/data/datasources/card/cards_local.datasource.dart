@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 import 'package:project_tweety/core/storage/app_database.storage.dart';
 import 'package:project_tweety/data/datasources/card/cards.datasource.dart';
 import 'package:project_tweety/data/dtos/card/card.dto.dart';
-import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 
 @LazySingleton(as: CardsDataSource)
 class CardsLocalDataSource implements CardsDataSource {
@@ -64,7 +63,8 @@ class CardsLocalDataSource implements CardsDataSource {
   Future<void> updateCard(CardDto card) {
     return _database.write((db) async {
       final existingCard = await _getCardByIdIncludingDeleted(db, card.id);
-      if (existingCard == null) {
+      if (existingCard == null ||
+          existingCard.syncStatus == CardSyncStatus.deleted) {
         return;
       }
 
@@ -117,6 +117,7 @@ class CardsLocalDataSource implements CardsDataSource {
     });
   }
 
+  @override
   Future<List<CardDto>> getDirtyCards() {
     return _database.read((db) async {
       final rows = await db.query(
@@ -130,6 +131,7 @@ class CardsLocalDataSource implements CardsDataSource {
     });
   }
 
+  @override
   Future<void> markCardsSynced(List<String> cardIds) {
     if (cardIds.isEmpty) {
       return Future<void>.value();

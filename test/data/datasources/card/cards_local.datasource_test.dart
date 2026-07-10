@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/core/storage/app_database.storage.dart';
 import 'package:project_tweety/data/datasources/card/cards_local.datasource.dart';
 import 'package:project_tweety/data/dtos/card/card.dto.dart';
-import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
@@ -170,6 +169,25 @@ void main() {
     expect(dirtyCards.single.id, 'card-1');
     expect(dirtyCards.single.syncStatus, CardSyncStatus.deleted);
     expect(dirtyCards.single.deletedAt?.isUtc, isTrue);
+  });
+
+  test('does not resurrect a tombstone when a stale update arrives', () async {
+    await dataSource.deleteCard('card-1');
+
+    await dataSource.updateCard(
+      const CardDto(
+        id: 'card-1',
+        title: 'Stale update',
+        description: 'Must not cancel the pending delete',
+      ),
+    );
+
+    final dirtyCards = await dataSource.getDirtyCards();
+
+    expect(await dataSource.getCardById('card-1'), isNull);
+    expect(dirtyCards.single.id, 'card-1');
+    expect(dirtyCards.single.syncStatus, CardSyncStatus.deleted);
+    expect(dirtyCards.single.title, 'Card Title 1');
   });
 
   test('physically removes a deleted unsynced card', () async {

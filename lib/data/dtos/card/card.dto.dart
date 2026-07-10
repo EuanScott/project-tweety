@@ -1,5 +1,24 @@
 import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 
+enum CardSyncStatus {
+  synced,
+  created,
+  updated,
+  deleted;
+
+  String get storageValue => name;
+
+  static CardSyncStatus fromStorageValue(Object? value) {
+    return switch (value) {
+      'synced' => CardSyncStatus.synced,
+      'created' => CardSyncStatus.created,
+      'updated' => CardSyncStatus.updated,
+      'deleted' => CardSyncStatus.deleted,
+      _ => CardSyncStatus.synced,
+    };
+  }
+}
+
 class CardDto {
   const CardDto({
     required this.id,
