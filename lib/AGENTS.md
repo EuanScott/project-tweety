@@ -2,13 +2,16 @@
 
 ## Purpose
 - This file defines the default pattern for new feature work under `lib/`.
-- This document is the source of truth for feature structure, naming, and layer boundaries under `lib/`.
+- This document is the source of truth for feature policy, naming, and layer
+  boundaries under `lib/`; referenced `_template` files own concrete scaffold
+  structure.
 
 ## Skill Hints
 - Users can scaffold and wire features manually. Skills are optional shortcuts for repeated patterns under `lib/`.
 - For new BFF-backed layered architecture scaffolds with optional domain, mirror `_template` first:
   - data repository contract in `lib/data/repositories/_template/`
   - data repository implementation in `lib/data/repositories/_template/`
+  - justified domain structure in `lib/domain/_template/README.md`
   - page and BLoC files in `lib/presentation/pages/_template/`
 - Do not add entities, DTOs, datasources, navigation, localization, or rich UI until the feature has real behavior or data shape that justifies them.
 - Do not add a domain layer by default. Assume the BFF handles mobile-specific shaping and common business logic.
@@ -33,7 +36,7 @@
 
 ## State Management Pattern
 - Prefer BLoC when the feature has meaningful events, multiple user intents, retry/refresh flows, or enough orchestration that event names improve readability.
-- Cubit is allowed for simple page state when there is no useful event vocabulary and state changes are direct commands, such as loading static preferences or toggling local UI state.
+- Scaffolding defaults to BLoC; select Cubit explicitly for simple page state when there is no useful event vocabulary and state changes are direct commands, such as loading static preferences or toggling local UI state.
 - Prefer one Freezed state class per page BLoC or Cubit instead of many small state subclasses.
 - Use a status enum inside the state for lifecycle flow such as `initial`, `loading`, `success`, and `failure`.
 - Use Freezed-generated `copyWith`; do not manually implement `copyWith`.
@@ -82,25 +85,19 @@
 ## Domain Layer
 - The domain layer is optional, not the default feature layer.
 - Domain entities should be framework-light and represent app-owned concepts.
-- Entity filenames should use the entity name plus `.entity.dart`.
 - Repository contracts live in the domain layer only when domain is justified; otherwise data-layer repository contracts are acceptable.
-- Repository filenames should use the feature name plus `.repository.dart`.
 - Use cases own justified mobile policy or orchestration and provide the entry point the BLoC depends on; a pure repository pass-through does not justify a domain layer.
-- Use case filenames should describe the action plus `.usecase.dart`.
 - BLoCs and Cubits should depend on the narrowest useful contract. In the default BFF-backed path, that can be a data-layer repository contract; when domain exists, prefer use cases.
 
 ## Data Layer
 - Data layer objects that represent transferred or raw data should be named `Dto`, not `Model`.
-- DTO filenames should use the entity name plus `.dto.dart`.
 - Data sources should describe where the data comes from.
-- Data source filenames should use the source description plus `.datasource.dart`.
 - Repository implementations should map DTOs into app-facing repository values before returning data
   to callers when no domain layer exists.
 - Repository values should use natural business class names such as `Card`; use
   `<entity>.value.dart` only when a feature needs separate files for several repository values.
 - Use `toValue()` for DTO-to-repository-value mapping and reserve `toEntity()` for mapping into a
   domain entity.
-- Repository implementation filenames should use the feature name plus `.repository_impl.dart`.
 - Keep mock data sources in place until a real API implementation exists; they should still follow the same contract shape as a real data source.
 
 ## Injectable and DI

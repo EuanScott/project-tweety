@@ -27,8 +27,8 @@ presentation only on request.
 
 ### 1. Establish authority and preflight targets
 
-Apply user request, applicable `AGENTS.md`, `_template`, then one nearest
-implementation for gaps. Read selected-layer guidance. Use the tool for
+Apply user request, applicable `AGENTS.md`, the selected layer's `_template`,
+then one nearest implementation for gaps. Read selected-layer guidance. Use the tool for
 supported no-domain baselines; inspect templates only for unsupported work.
 
 Reject targets under `lib/features/` or `packages/design_system`. List targets;
@@ -51,12 +51,13 @@ Use the domain manifest only when `domain_reason` identifies real mobile-owned p
 
 - `lib/domain/repositories/<folder_key>/<feature_name>.repository.dart`
 - one or more policy-bearing `lib/domain/usecases/<folder_key>/<action>_<feature_name>.usecase.dart`
-- `lib/domain/entities/<entity>/<entity>.entity.dart` only for a real domain payload
+- `lib/domain/entities/<folder_key>/<entity>.entity.dart` only for a real domain payload
 - `lib/data/repositories/<folder_key>/<feature_name>.repository_impl.dart`
 - the same presentation manifest, depending on the use case instead of the repository
 
-On the domain path, keep the contract in domain and reject pass-through use
-cases. Add a datasource or DTO only for a concrete boundary.
+On the domain path, read `lib/domain/_template/README.md`, keep the contract in
+domain, and reject pass-through use cases. Add a datasource or DTO only for a
+concrete boundary.
 
 **Gate:** Record exactly one baseline manifest and justify every conditional entity, DTO, datasource, or extra use case.
 

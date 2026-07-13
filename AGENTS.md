@@ -26,6 +26,7 @@
 - For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain:
   - `lib/data/repositories/_template/_template.repository.dart`
   - `lib/data/repositories/_template/_template.repository_impl.dart`
+  - `lib/domain/_template/README.md` when a domain branch is justified
   - `lib/presentation/pages/_template/_template.page.dart`
   - `lib/presentation/pages/_template/bloc/`
 - Do not add a domain layer by default. Assume the BFF owns mobile-specific shaping and most business logic; add `lib/domain` only case-by-case for mobile-owned policy or custom app behavior, such as settings.
@@ -35,7 +36,9 @@
 ## Working Conventions
 - Follow the existing lint rules in `analysis_options.yaml`, especially `avoid_print: true` and `prefer_single_quotes: true`.
 - Match the current import style: package imports for app entrypoints and shared modules, relative imports where already generated or established.
-- Treat this document as the source of truth for naming and structure rules.
+- Treat this document as the source of truth for repository policy; use the
+  referenced `_template` files as the source of truth for concrete scaffold
+  structure.
 - Visible UI in pages and app-level shared widgets must use the adaptive primitives exported by `package:design_system` when a matching primitive exists.
 - Add missing native/adaptive UI primitives to `packages/design_system` before using raw Material or Cupertino controls repeatedly in pages or shared widgets. The design-system primitive owns the Material/Cupertino branching; callers express app intent.
 - Standardize filenames on `feature_or_entity.role.dart`.

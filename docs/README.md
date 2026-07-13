@@ -14,3 +14,4 @@ source folder.
 ## Plans
 
 - [SQLite cards app persistence](plans/cards_sqlite_data_layer.md)
+- [Complete Cards SQLite integration](plans/cards_sqlite_end_to_end_integration.md)
