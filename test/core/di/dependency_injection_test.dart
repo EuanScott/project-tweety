@@ -13,24 +13,26 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../../support/in_memory_shared_preferences_async_platform.dart';
 
 void main() {
-  setUpAll(() {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  });
+  group('dependency injection', () {
+    setUpAll(() {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    });
 
-  setUp(() async {
-    SharedPreferencesAsyncPlatform.instance =
-        InMemorySharedPreferencesAsyncPlatform();
-    await GetIt.I.reset();
-  });
-  tearDown(() => GetIt.I.reset());
+    setUp(() async {
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsyncPlatform();
+      await GetIt.I.reset();
+    });
+    tearDown(() => GetIt.I.reset());
 
-  test('binds card reads to the local SQLite datasource', () async {
-    await configureCoreDependencies();
+    test('binds card reads to the local SQLite datasource', () async {
+      await configureCoreDependencies();
 
-    expect(GetIt.I<AppDatabase>(), isA<SqfliteAppDatabase>());
-    expect(GetIt.I<CardsDataSource>(), isA<CardsLocalDataSource>());
-    expect(GetIt.I<CardsRepository>(), isA<CardsRepositoryImpl>());
-    expect(GetIt.I.isRegistered<MockCardsDataSource>(), isFalse);
+      expect(GetIt.I<AppDatabase>(), isA<SqfliteAppDatabase>());
+      expect(GetIt.I<CardsDataSource>(), isA<CardsLocalDataSource>());
+      expect(GetIt.I<CardsRepository>(), isA<CardsRepositoryImpl>());
+      expect(GetIt.I.isRegistered<MockCardsDataSource>(), isFalse);
+    });
   });
 }

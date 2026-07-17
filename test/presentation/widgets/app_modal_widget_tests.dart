@@ -4,10 +4,7 @@ import 'package:project_tweety/presentation/widgets/app_modal.dart';
 
 const _modalTransitionDuration = Duration(milliseconds: 250);
 
-Future<void> _tapAndFinishTransition(
-    WidgetTester tester,
-    Finder finder,
-    ) async {
+Future<void> _tapAndFinishTransition(WidgetTester tester, Finder finder) async {
   await tester.tap(finder);
   await tester.pump();
   await tester.pump(_modalTransitionDuration);
@@ -73,7 +70,7 @@ void main() {
 
       testWidgets(
         'applies a max height constraint when maxHeightFactor is provided',
-            (tester) async {
+        (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               mediaQuerySize: Size(400, 800),
@@ -98,8 +95,8 @@ void main() {
       );
 
       testWidgets('shows the drag handle when showDragHandle is true', (
-          tester,
-          ) async {
+        tester,
+      ) async {
         await tester.pumpWidget(
           const _TestApp(
             home: _ModalLauncher(
@@ -118,8 +115,8 @@ void main() {
       });
 
       testWidgets('disables system back dismissal when canPop is false', (
-          tester,
-          ) async {
+        tester,
+      ) async {
         await tester.pumpWidget(
           const _TestApp(
             home: _ResultHarness(variant: _ModalVariant.page, canPop: false),
@@ -147,7 +144,7 @@ void main() {
 
       testWidgets(
         'passes showDragHandle as false when the caller requests it',
-            (tester) async {
+        (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               home: _ModalLauncher(variant: _ModalVariant.compact),
@@ -223,8 +220,8 @@ void main() {
       });
 
       testWidgets('is not dismissed by tapping outside the modal', (
-          tester,
-          ) async {
+        tester,
+      ) async {
         await tester.pumpWidget(
           const _TestApp(home: _ModalLauncher(variant: _ModalVariant.blocking)),
         );
@@ -250,8 +247,8 @@ void main() {
       });
 
       testWidgets('disables system back dismissal when canPop is false', (
-          tester,
-          ) async {
+        tester,
+      ) async {
         await tester.pumpWidget(
           const _TestApp(
             home: _ResultHarness(
@@ -269,8 +266,8 @@ void main() {
       });
 
       testWidgets('uses the root navigator when useRootNavigator is true', (
-          tester,
-          ) async {
+        tester,
+      ) async {
         final rootObserver = _TestNavigatorObserver();
         final nestedObserver = _TestNavigatorObserver();
 
@@ -323,10 +320,7 @@ class _TestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQueryData(
-        size: mediaQuerySize,
-        disableAnimations: true,
-      ),
+      data: MediaQueryData(size: mediaQuerySize, disableAnimations: true),
       child: MaterialApp(home: Scaffold(body: home)),
     );
   }
@@ -336,20 +330,14 @@ class _ModalLauncher extends StatelessWidget {
   const _ModalLauncher({
     required this.variant,
     this.borderRadius,
-    this.canPop = true,
     this.maxHeightFactor,
     this.showDragHandle,
-    this.useSafeArea,
-    this.useRootNavigator = false,
   });
 
   final _ModalVariant variant;
   final BorderRadiusGeometry? borderRadius;
-  final bool canPop;
   final double? maxHeightFactor;
   final bool? showDragHandle;
-  final bool? useSafeArea;
-  final bool useRootNavigator;
 
   @override
   Widget build(BuildContext context) {
@@ -368,30 +356,23 @@ class _ModalLauncher extends StatelessWidget {
           context: context,
           child: const _ModalContent(),
           borderRadius: borderRadius ?? AppModal.defaultBorderRadius,
-          canPop: canPop,
           maxHeightFactor: maxHeightFactor ?? AppModal.standardMaxHeightFactor,
           showDragHandle: showDragHandle ?? true,
-          useSafeArea: useSafeArea ?? true,
         );
       case _ModalVariant.compact:
         return AppModal.compact<void>(
           context: context,
           child: const _ModalContent(),
           borderRadius: borderRadius ?? AppModal.defaultBorderRadius,
-          canPop: canPop,
           maxHeightFactor: maxHeightFactor,
           showDragHandle: showDragHandle ?? false,
-          useSafeArea: useSafeArea ?? false,
         );
       case _ModalVariant.blocking:
         return AppModal.blocking<void>(
           context: context,
           child: const _ModalContent(),
           borderRadius: borderRadius ?? AppModal.defaultBorderRadius,
-          canPop: canPop,
           maxHeightFactor: maxHeightFactor,
-          useSafeArea: useSafeArea ?? true,
-          useRootNavigator: useRootNavigator,
         );
     }
   }
@@ -417,15 +398,10 @@ class _CompactDefaultLauncher extends StatelessWidget {
 }
 
 class _ResultHarness extends StatefulWidget {
-  const _ResultHarness({
-    required this.variant,
-    this.canPop = true,
-    this.useRootNavigator = false,
-  });
+  const _ResultHarness({required this.variant, this.canPop = true});
 
   final _ModalVariant variant;
   final bool canPop;
-  final bool useRootNavigator;
 
   @override
   State<_ResultHarness> createState() => _ResultHarnessState();
@@ -470,7 +446,6 @@ class _ResultHarnessState extends State<_ResultHarness> {
         return AppModal.blocking<bool>(
           context: context,
           canPop: widget.canPop,
-          useRootNavigator: widget.useRootNavigator,
           child: const _ResultModalContent(),
         );
     }

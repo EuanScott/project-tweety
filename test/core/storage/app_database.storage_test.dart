@@ -8,9 +8,9 @@ import 'package:project_tweety/core/storage/app_database_migrations.storage.dart
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
-  setUpAll(sqfliteFfiInit);
-
   group('SqfliteAppDatabase', () {
+    setUpAll(sqfliteFfiInit);
+
     test('shares a pending database open between concurrent reads', () async {
       final factory = _ControlledOpenDatabaseFactory(databaseFactoryFfi);
       final database = SqfliteAppDatabase.test(

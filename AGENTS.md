@@ -20,15 +20,17 @@
 - `lib/l10n`: ARB files and generated localization output
 - `test`: widget and shared/unit tests
 
+For cross-cutting orientation, read the [source map](docs/source_map.md).
+
 ## Skill Routing
 - Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
 - Invocation policy lives in each skill's `agents/openai.yaml`; authoring and validation rules live in `.codex/skills/AGENTS.md`.
 - For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain:
-  - `lib/data/repositories/_template/_template.repository.dart`
-  - `lib/data/repositories/_template/_template.repository_impl.dart`
+  - `tool/templates/feature/data/repositories/_template.repository.dart`
+  - `tool/templates/feature/data/repositories/_template.repository_impl.dart`
   - `lib/domain/_template/README.md` when a domain branch is justified
-  - `lib/presentation/pages/_template/_template.page.dart`
-  - `lib/presentation/pages/_template/bloc/`
+  - `tool/templates/feature/presentation/pages/_template.page.dart`
+  - `tool/templates/feature/presentation/pages/bloc/`
 - Do not add a domain layer by default. Assume the BFF owns mobile-specific shaping and most business logic; add `lib/domain` only case-by-case for mobile-owned policy or custom app behavior, such as settings.
 - Full feature scaffolds, new shared widgets, existing shared-widget updates, and proactive single-view performance audits may select their matching local skill implicitly.
 - Layer-only `$data-scaffold`, `$domain-scaffold`, and `$page-scaffold` flows require explicit invocation. Ordinary behaviour changes stay in the normal implementation/TDD flow.

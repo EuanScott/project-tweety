@@ -24,11 +24,36 @@ giving that a try. After all, this project isn't being worked on in a big corpor
 Nothing fancy here, I'm just following the "Get started" guide on
 the [Official Flutter Docs](https://docs.flutter.dev/get-started/install)
 
+This project requires Flutter `3.44.6` (Dart `3.12.2`). After installing
+dependencies, use the following validation loop:
+
+```sh
+dart format --output=none --set-exit-if-changed .
+flutter analyze --no-fatal-infos
+dart run tool/agent_context/validate.dart
+dart run very_good_cli:very_good test --fail-fast
+```
+
+Run one test file with:
+
+```sh
+dart run very_good_cli:very_good test test/path_test.dart --fail-fast
+```
+
+The optimized runner aggregates tests for faster unit and widget feedback. If
+you need to diagnose a runner-specific failure, append `--no-optimization`.
+Native Android and iOS coverage remains an explicit device/simulator check:
+
+```sh
+flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>
+```
+
 ## Project Docs
 
 Broader project guides live under [`docs/`](docs/). Current guides include:
 
 - [Navigation, deep links, and route guards](docs/testing/navigation.md)
+- [Cards SQLite persistence and native smoke testing](docs/architecture/cards_sqlite_foundation.md)
 
 ## API Documentation
 

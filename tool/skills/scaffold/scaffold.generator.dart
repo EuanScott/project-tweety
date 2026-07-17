@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dart_style/dart_style.dart';
 
+import '../../templates/feature_template_paths.dart';
 import 'scaffold.models.dart';
 
 /// Builds deterministic source manifests from this repository's `_template`.
@@ -26,7 +27,7 @@ final class ScaffoldGenerator {
     final files = <ScaffoldFile>[
       await _renderTemplate(
         const _TemplateArtifact(
-          source: 'lib/data/repositories/_template/_template.repository.dart',
+          source: featureRepositoryContractTemplate,
           target: '',
         ).withTarget(
           'lib/data/repositories/$folderKey/'
@@ -36,9 +37,7 @@ final class ScaffoldGenerator {
       ),
       await _renderTemplate(
         const _TemplateArtifact(
-          source:
-              'lib/data/repositories/_template/'
-              '_template.repository_impl.dart',
+          source: featureRepositoryImplementationTemplate,
           target: '',
         ).withTarget(
           'lib/data/repositories/$folderKey/'
@@ -77,19 +76,19 @@ final class ScaffoldGenerator {
   }) async {
     final artifacts = [
       _TemplateArtifact(
-        source: 'lib/presentation/pages/_template/_template.page.dart',
+        source: featurePageTemplate,
         target: 'lib/presentation/pages/$feature/$feature.page.dart',
       ),
       _TemplateArtifact(
-        source: 'lib/presentation/pages/_template/bloc/_template.bloc.dart',
+        source: featureBlocTemplate,
         target: 'lib/presentation/pages/$feature/bloc/$feature.bloc.dart',
       ),
       _TemplateArtifact(
-        source: 'lib/presentation/pages/_template/bloc/_template.event.dart',
+        source: featureBlocEventTemplate,
         target: 'lib/presentation/pages/$feature/bloc/$feature.event.dart',
       ),
       _TemplateArtifact(
-        source: 'lib/presentation/pages/_template/bloc/_template.state.dart',
+        source: featureBlocStateTemplate,
         target: 'lib/presentation/pages/$feature/bloc/$feature.state.dart',
       ),
     ];
@@ -109,14 +108,14 @@ final class ScaffoldGenerator {
   }) async {
     final page = await _renderTemplate(
       _TemplateArtifact(
-        source: 'lib/presentation/pages/_template/_template.page.dart',
+        source: featurePageTemplate,
         target: 'lib/presentation/pages/$feature/$feature.page.dart',
       ),
       replacements,
     );
     final state = await _renderTemplate(
       _TemplateArtifact(
-        source: 'lib/presentation/pages/_template/bloc/_template.state.dart',
+        source: featureBlocStateTemplate,
         target: 'lib/presentation/pages/$feature/cubit/$feature.state.dart',
       ),
       replacements,

@@ -25,9 +25,9 @@ class FirebaseAnalyticsService implements AnalyticsService {
 
   @override
   Future<void> trackEvent(
-      String eventName,
-      Map<String, Object?>? params,
-      ) async {
+    String eventName,
+    Map<String, Object?>? params,
+  ) async {
     log('[FirebaseAnalytics] event: $eventName $params');
   }
 

@@ -21,7 +21,7 @@ Ask only for required information that repository inspection cannot resolve.
 
 ### 1. Establish authority and preflight targets
 
-Apply sources in this order: user request, applicable `AGENTS.md`, `lib/presentation/pages/_template/`, then the nearest page implementation only for uncovered details. Read root, `lib`, and page guidance. Use `_template` only for the default BLoC path.
+Apply sources in this order: user request, applicable `AGENTS.md`, `tool/templates/feature/presentation/pages/`, then the nearest page implementation only for uncovered details. Read root, `lib`, and page guidance. Use the BLoC template only for the default BLoC path.
 
 List every proposed target. Stop if any target already exists unless the user explicitly requests an update. Keep all new artifacts under `lib/presentation/pages/<feature_name>/`.
 

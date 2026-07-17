@@ -1,0 +1,11 @@
+targets:
+  $default:
+    builders:
+      freezed|freezed:
+        generate_for:
+          exclude:
+            - tool/templates/**
+      injectable_generator|injectable_builder:
+        generate_for:
+          exclude:
+            - tool/templates/**

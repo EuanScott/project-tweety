@@ -1,7 +1,6 @@
 import 'dart:convert' as convert;
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 /// TODO:
@@ -134,10 +133,6 @@ class Services {
     String? encodedBody;
     if (body != null) {
       encodedBody = _encodeJsonData(body);
-    }
-
-    if (kDebugMode) {
-      print('Sending $method request to $url');
     }
 
     switch (method) {

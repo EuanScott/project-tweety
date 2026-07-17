@@ -5,6 +5,7 @@ import 'package:dart_style/dart_style.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 
+import '../../../tool/templates/feature_template_paths.dart';
 import '../../../tool/skills/scaffold/scaffold.dart';
 import '../../../tool/skills/scaffold/scaffold.cli.dart';
 
@@ -305,8 +306,7 @@ void main() {
             isA<ScaffoldException>()
                 .having((error) => error.code, 'code', 'template_missing')
                 .having((error) => error.paths, 'paths', [
-                  'lib/data/repositories/_template/'
-                      '_template.repository.dart',
+                  featureRepositoryContractTemplate,
                 ]),
           ),
         );
@@ -1032,14 +1032,7 @@ class _ScaffoldFixture {
       );
 
   Future<void> _copyCanonicalTemplates() async {
-    const paths = [
-      'lib/data/repositories/_template/_template.repository.dart',
-      'lib/data/repositories/_template/_template.repository_impl.dart',
-      'lib/presentation/pages/_template/_template.page.dart',
-      'lib/presentation/pages/_template/bloc/_template.bloc.dart',
-      'lib/presentation/pages/_template/bloc/_template.event.dart',
-      'lib/presentation/pages/_template/bloc/_template.state.dart',
-    ];
+    const paths = featureProductionTemplatePaths;
 
     for (final path in paths) {
       final target = File(p.join(repositoryRoot.path, path));

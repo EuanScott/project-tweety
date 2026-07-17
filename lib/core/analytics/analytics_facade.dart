@@ -47,6 +47,6 @@ class AnalyticsFacade {
 abstract class AnalyticsModule {
   @lazySingleton
   Iterable<AnalyticsService> analyticsServices(
-      AnalyticsService firebaseAnalytics,
-      ) => <AnalyticsService>[firebaseAnalytics];
+    AnalyticsService firebaseAnalytics,
+  ) => <AnalyticsService>[firebaseAnalytics];
 }

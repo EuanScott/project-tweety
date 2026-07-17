@@ -4,9 +4,6 @@ class DesignSystemCardTheme {
   DesignSystemCardTheme._();
 
   static CardThemeData build(ColorScheme colorScheme) {
-    return CardThemeData(
-      color: colorScheme.surface,
-      elevation: 3,
-    );
+    return CardThemeData(color: colorScheme.surface, elevation: 3);
   }
 }

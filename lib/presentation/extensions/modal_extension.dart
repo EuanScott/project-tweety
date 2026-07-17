@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 /// Convenience modal helpers available directly from a [BuildContext].
 extension ModalExtension on BuildContext {
-
   /// Shows the standard app bottom-sheet modal.
   ///
   /// This is a convenience wrapper for presenting modal content directly from a

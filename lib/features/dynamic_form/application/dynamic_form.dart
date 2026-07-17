@@ -38,19 +38,20 @@ class _DynamicFormState extends State<DynamicForm> {
       errorMessage: "Numeric input is required",
     ),
     FormInputData(
-        name: "Dropdown",
-        type: FormInputType.dropdown,
-        isRequired: true,
-        errorMessage: "Dropdown selection is required",
-        inputOptions: [
-          'Option 1',
-          'Option 2',
-          'Option 3',
-          'Option 4',
-          'Option 5',
-          'Option 6',
-          'Option 7'
-        ]),
+      name: "Dropdown",
+      type: FormInputType.dropdown,
+      isRequired: true,
+      errorMessage: "Dropdown selection is required",
+      inputOptions: [
+        'Option 1',
+        'Option 2',
+        'Option 3',
+        'Option 4',
+        'Option 5',
+        'Option 6',
+        'Option 7',
+      ],
+    ),
     FormInputData(
       name: "Radio",
       type: FormInputType.radio,
@@ -71,7 +72,7 @@ class _DynamicFormState extends State<DynamicForm> {
     FormOutputData(key: 'numericValue', value: 0),
     FormOutputData(key: 'dropdownValue', value: ''),
     FormOutputData(key: 'radioValue', value: ''),
-    FormOutputData(key: 'checkboxValue', value: [])
+    FormOutputData(key: 'checkboxValue', value: []),
   ];
 
   // TODO: Find a better way of handling this (this isn't dynamic)
@@ -87,54 +88,62 @@ class _DynamicFormState extends State<DynamicForm> {
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
-              child: Column(children: [
-                ...formInputData.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  FormInputData formInput = entry.value;
-                  switch (formInput.type) {
-                    case FormInputType.text:
-                      return TextFormField(
-                        decoration: InputDecoration(labelText: formInput.name),
-                        onChanged: (value) =>
-                            formOutputData[index].value = value,
-                      );
-                    // TODO: The UI should not accept non-numbers and should inform the user of as much
-                    case FormInputType.number:
-                      return TextFormField(
-                        decoration: InputDecoration(labelText: formInput.name),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) => formOutputData[index].value =
-                            int.tryParse(value) ?? 0,
-                      );
-                    case FormInputType.dropdown:
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(formInput.name),
-                          DropdownButtonFormField(
-                            value: formInput.inputOptions![0],
-                            onChanged: (newValue) {
-                              setState(() {
-                                formOutputData[index].value = newValue;
-                              });
-                            },
-                            items: formInput.inputOptions!
-                                .map((option) => DropdownMenuItem(
+              child: Column(
+                children: [
+                  ...formInputData.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    FormInputData formInput = entry.value;
+                    switch (formInput.type) {
+                      case FormInputType.text:
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            labelText: formInput.name,
+                          ),
+                          onChanged: (value) =>
+                              formOutputData[index].value = value,
+                        );
+                      // TODO: The UI should not accept non-numbers and should inform the user of as much
+                      case FormInputType.number:
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            labelText: formInput.name,
+                          ),
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) => formOutputData[index].value =
+                              int.tryParse(value) ?? 0,
+                        );
+                      case FormInputType.dropdown:
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(formInput.name),
+                            DropdownButtonFormField(
+                              value: formInput.inputOptions![0],
+                              onChanged: (newValue) {
+                                setState(() {
+                                  formOutputData[index].value = newValue;
+                                });
+                              },
+                              items: formInput.inputOptions!
+                                  .map(
+                                    (option) => DropdownMenuItem(
                                       value: option,
                                       child: Text(option),
-                                    ))
-                                .toList(),
-                          ),
-                        ],
-                      );
-                    case FormInputType.radio:
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(formInput.name),
-                          Column(
-                            children: formInput.inputOptions!
-                                .map((option) => RadioListTile<String>(
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        );
+                      case FormInputType.radio:
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(formInput.name),
+                            Column(
+                              children: formInput.inputOptions!
+                                  .map(
+                                    (option) => RadioListTile<String>(
                                       title: Text(option),
                                       value: option,
                                       groupValue: formOutputData[index].value,
@@ -143,39 +152,42 @@ class _DynamicFormState extends State<DynamicForm> {
                                           formOutputData[index].value = value;
                                         });
                                       },
-                                    ))
-                                .toList(),
-                          ),
-                        ],
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        );
+                      case FormInputType.checkbox:
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(formInput.name),
+                            CheckboxListTile(
+                              title: Text(formInput.name),
+                              value: checkboxValue,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  formOutputData[index].value = checkboxValue =
+                                      value;
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                    }
+                  }),
+                  ElevatedButton(
+                    onPressed: () {
+                      String jsonData = jsonEncode(
+                        formOutputData.map((data) => data.toJson()).toList(),
                       );
-                    case FormInputType.checkbox:
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(formInput.name),
-                          CheckboxListTile(
-                            title: Text(formInput.name),
-                            value: checkboxValue,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                formOutputData[index].value = checkboxValue = value;
-                              });
-                            },
-                          ),
-                        ],
-                      );
-                  }
-                }),
-                ElevatedButton(
-                  onPressed: () {
-                    String jsonData = jsonEncode(
-                      formOutputData.map((data) => data.toJson()).toList(),
-                    );
-                    log(jsonData);
-                  },
-                  child: const Text('Submit'),
-                ),
-              ]),
+                      log(jsonData);
+                    },
+                    child: const Text('Submit'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

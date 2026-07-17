@@ -21,15 +21,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final ErrorReportingFacade errorReporting;
 
-  void _onStarted(
-    HomeStarted event,
-    Emitter<HomeState> emit,
-  ) {
-    emit(
-      state.copyWith(
-        status: HomeStatus.ready,
-      ),
-    );
+  void _onStarted(HomeStarted event, Emitter<HomeState> emit) {
+    emit(state.copyWith(status: HomeStatus.ready));
   }
 
   Future<void> _onActionPressed(
@@ -37,12 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     try {
-      emit(
-        state.copyWith(
-          status: HomeStatus.ready,
-          lastAction: event.action,
-        ),
-      );
+      emit(state.copyWith(status: HomeStatus.ready, lastAction: event.action));
     } catch (error, stacktrace) {
       unawaited(errorReporting.recordError(error, stacktrace));
       rethrow;

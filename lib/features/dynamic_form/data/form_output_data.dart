@@ -4,15 +4,9 @@ class FormOutputData {
   String key;
   dynamic value;
 
-  FormOutputData({
-    required this.key,
-    required this.value,
-  });
+  FormOutputData({required this.key, required this.value});
 
   Map<String, dynamic> toJson() {
-    return {
-      'key': key,
-      'value': value,
-    };
+    return {'key': key, 'value': value};
   }
 }
