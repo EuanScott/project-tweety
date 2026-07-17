@@ -27,6 +27,9 @@ nearest `AGENTS.md`; for feature details, prefer the linked focused guide.
 
 ## Current focused architecture
 
+- [Architecture documentation](architecture/README.md) navigates current-state
+  architecture documents, while [the ADR catalog](decisions/README.md) records
+  durable decisions and their rationale.
 - [Cards SQLite foundation](architecture/cards_sqlite_foundation.md) records the current local persistence design.
 - [Navigation testing](testing/navigation.md) records deep-link, guard, and adaptive-shell coverage.
 - [Project plans](plans/) provide historical implementation context, not active architectural authority.

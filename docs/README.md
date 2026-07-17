@@ -10,7 +10,12 @@ source folder.
 ## Architecture
 
 - [Source map](source_map.md)
+- [Architecture documentation](architecture/README.md)
 - [Cards SQLite persistence](architecture/cards_sqlite_foundation.md)
+
+## Decisions
+
+- [Architecture Decision Records](decisions/README.md)
 
 ## Plans
 

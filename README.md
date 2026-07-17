@@ -54,6 +54,7 @@ Broader project guides live under [`docs/`](docs/). Current guides include:
 
 - [Navigation, deep links, and route guards](docs/testing/navigation.md)
 - [Cards SQLite persistence and native smoke testing](docs/architecture/cards_sqlite_foundation.md)
+- [Architecture Decision Records](docs/decisions/README.md)
 
 ## API Documentation
 
