@@ -34,16 +34,11 @@ void main() {
       final fixture = await _AdrFixture.create();
       addTearDown(fixture.dispose);
       await fixture.write('docs/decisions/0001-broken.md', '''
----
-type: ADR
-id: "0002"
-title: "Broken record"
-status: active
-date: invalid
-superseded_by: "9999"
----
+# ADR-0002: Different title
 
-# ADR-0001: Different title
+Status: active
+Date: invalid
+Superseded by: [ADR-9999](9999-missing.md)
 
 ## Context
 
@@ -52,8 +47,6 @@ superseded_by: "9999"
 ## Decision
 
 Do something.
-
-## Consequences
 
 Unknown.
 ''');
@@ -71,7 +64,6 @@ Unknown.
           'adr.id.filename_mismatch',
           'adr.status.invalid',
           'adr.date.invalid',
-          'adr.heading.title_mismatch',
           'adr.heading.missing',
           'adr.placeholder.present',
           'adr.supersession.status',
@@ -87,14 +79,14 @@ Unknown.
         id: '0001',
         title: 'First decision',
         status: 'superseded',
-        supersededBy: '0002',
+        supersededBy: '[ADR-0002](0002-second-decision.md)',
       );
       await fixture.addAdr(
         id: '0002',
         title: 'Second decision',
         status: 'superseded',
-        supersedes: '0001',
-        supersededBy: '0001',
+        supersedes: '[ADR-0001](0001-first-decision.md)',
+        supersededBy: '[ADR-0001](0001-first-decision.md)',
       );
       await fixture.writeCatalog();
 
@@ -113,13 +105,13 @@ Unknown.
         id: '0001',
         title: 'First decision',
         status: 'superseded',
-        supersededBy: '0002',
+        supersededBy: '[ADR-0002](0002-replacement-decision.md)',
       );
       await fixture.addAdr(
         id: '0002',
         title: 'Replacement decision',
         status: 'proposed',
-        supersedes: '0001',
+        supersedes: '[ADR-0001](0001-first-decision.md)',
       );
       await fixture.writeCatalog();
 
@@ -132,6 +124,102 @@ Unknown.
         contains('adr.supersession.successor_status'),
       );
     });
+
+    test(
+      'requires a supersession successor to be accepted and link back',
+      () async {
+        final fixture = await _AdrFixture.create();
+        addTearDown(fixture.dispose);
+        await fixture.addAdr(
+          id: '0001',
+          title: 'First decision',
+          status: 'superseded',
+          supersededBy: '[ADR-0002](0002-replacement-decision.md)',
+        );
+        await fixture.addAdr(
+          id: '0002',
+          title: 'Replacement decision',
+          status: 'proposed',
+        );
+        await fixture.writeCatalog();
+
+        final result = AdrValidator(
+          repositoryRoot: fixture.repositoryRoot,
+        ).validate();
+
+        expect(
+          result.diagnostics.map((diagnostic) => diagnostic.code),
+          containsAll(<String>{
+            'adr.supersession.successor_status',
+            'adr.supersession.backlink_missing',
+          }),
+        );
+      },
+    );
+
+    test('rejects malformed and duplicate required metadata lines', () async {
+      final fixture = await _AdrFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.write('docs/decisions/0001-broken-metadata.md', '''
+# ADR-0001: Broken metadata
+
+Status: proposed
+Status: accepted
+Date:
+
+## Context
+
+The current situation needs a durable decision.
+
+## Decision
+
+We will use this decision.
+
+## Consequences
+
+The team has a documented direction.
+''');
+      await fixture.writeCatalog();
+
+      final result = AdrValidator(
+        repositoryRoot: fixture.repositoryRoot,
+      ).validate();
+
+      expect(
+        result.diagnostics.map((diagnostic) => diagnostic.code),
+        containsAll(<String>{'adr.metadata.duplicate', 'adr.date.invalid'}),
+      );
+    });
+
+    test(
+      'rejects supersession links whose filename does not match the target',
+      () async {
+        final fixture = await _AdrFixture.create();
+        addTearDown(fixture.dispose);
+        await fixture.addAdr(
+          id: '0001',
+          title: 'First decision',
+          status: 'superseded',
+          supersededBy: '[ADR-0002](0002-wrong-name.md)',
+        );
+        await fixture.addAdr(
+          id: '0002',
+          title: 'Replacement decision',
+          status: 'accepted',
+          supersedes: '[ADR-0001](0001-first-decision.md)',
+        );
+        await fixture.writeCatalog();
+
+        final result = AdrValidator(
+          repositoryRoot: fixture.repositoryRoot,
+        ).validate();
+
+        expect(
+          result.diagnostics.map((diagnostic) => diagnostic.code),
+          contains('adr.supersession.target_mismatch'),
+        );
+      },
+    );
   });
 }
 
@@ -160,73 +248,37 @@ final class _AdrFixture {
     String? supersedes,
     String? supersededBy,
   }) {
-    final fields = <String>[
-      'type: ADR',
-      'id: "$id"',
-      'title: "$title"',
-      'status: $status',
-      'date: 2026-07-17',
-      if (supersedes != null) 'supersedes: "$supersedes"',
-      if (supersededBy != null) 'superseded_by: "$supersededBy"',
-    ];
     final slug = title.toLowerCase().replaceAll(' ', '-');
     return write('docs/decisions/$id-$slug.md', '''
----
-${fields.join('\n')}
----
-
 # ADR-$id: $title
+
+Status: $status
+Date: 2026-07-17
+${supersedes == null ? '' : 'Supersedes: $supersedes'}
+${supersededBy == null ? '' : 'Superseded by: $supersededBy'}
 
 ## Context
 
 The current situation needs a durable decision.
 
-## Decision Drivers
-
-- Maintainability.
-
 ## Decision
 
 We will use this decision.
 
-## Options Considered
-
-- This decision.
-
 ## Consequences
 
 The team has a documented direction.
-
-## Confirmation
-
-Review this record with the change.
 ''');
   }
 
   Future<void> writeCatalog() async {
-    final records =
-        Directory(p.join(repositoryRoot.path, 'docs/decisions'))
-            .listSync()
-            .whereType<File>()
-            .where((file) => p.basename(file.path) != 'adr-template.md')
-            .where((file) => p.basename(file.path) != 'README.md')
-            .toList()
-          ..sort((left, right) => left.path.compareTo(right.path));
-    final rows = records.map((file) {
-      final text = file.readAsStringSync();
-      final id = RegExp(r'id: "(\d{4})"').firstMatch(text)!.group(1)!;
-      final title = RegExp(r'title: "([^"]+)"').firstMatch(text)!.group(1)!;
-      final status = RegExp(r'status: (\w+)').firstMatch(text)!.group(1)!;
-      return '| [$id](${p.basename(file.path)}) | $title | $status |';
-    });
+    final index = AdrValidator(
+      repositoryRoot: repositoryRoot,
+    ).generateCatalog();
     await write('docs/decisions/README.md', '''
 # Architecture Decision Records
 
-<!-- adr-index:start -->
-| ID | Title | Status |
-|----|-------|--------|
-${rows.join('\n')}
-<!-- adr-index:end -->
+$index
 ''');
   }
 

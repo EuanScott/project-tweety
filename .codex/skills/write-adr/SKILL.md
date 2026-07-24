@@ -41,7 +41,7 @@ visible.
 
 Find the highest existing numeric ADR ID and allocate the next ID. Copy the
 template into the decisions directory using the numeric ID and short title; replace every placeholder;
-set `status: proposed`; and use today’s ISO date. Use neutral facts in Context,
+set `Status: proposed`; and use today’s ISO date in `Date`. Use neutral facts in Context,
 state the Decision as “We will…”, include only real options and trade-offs, and
 describe positive, negative, and neutral consequences.
 

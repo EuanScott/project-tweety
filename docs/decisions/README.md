@@ -16,7 +16,19 @@ short-lived experiments, and work already decided by an ADR.
 
 Use [the template](adr-template.md). One ADR describes one decision and uses a
 unique, never-reused `NNNN-short-title.md` filename. The date is the original
-proposal date.
+proposal date. Each ADR starts with its H1 followed by the required Markdown
+metadata lines:
+
+```md
+# ADR-NNNN: Short decision title
+
+Status: proposed
+Date: YYYY-MM-DD
+```
+
+`Decision maker`, `Supersedes`, and `Superseded by` are optional labelled
+lines. Supersession values use links such as
+`[ADR-0001](0001-short-title.md)`.
 
 `proposed` records are editable and ready for review. A human reviewer changes
 a proposal to `accepted` or `rejected`; accepted and rejected decision bodies
@@ -27,7 +39,7 @@ without a specific replacement.
 
 ## Index
 
-The index is generated from ADR frontmatter. Run:
+The index is generated from each ADR's H1 and `Status` line. Run:
 
 ```sh
 dart run tool/decisions/adr.dart generate-index

@@ -1,21 +1,13 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as p;
-import 'package:yaml/yaml.dart';
 
 const _decisionsPath = 'docs/decisions';
 const _catalogPath = 'docs/decisions/README.md';
 const _templateName = 'adr-template.md';
 const _indexStart = '<!-- adr-index:start -->';
 const _indexEnd = '<!-- adr-index:end -->';
-const _requiredHeadings = <String>[
-  'Context',
-  'Decision Drivers',
-  'Decision',
-  'Options Considered',
-  'Consequences',
-  'Confirmation',
-];
+const _requiredHeadings = <String>['Context', 'Decision', 'Consequences'];
 const _allowedStatuses = <String>{
   'proposed',
   'accepted',
@@ -130,133 +122,170 @@ final class AdrValidator {
     List<AdrDiagnostic> diagnostics,
   ) {
     final text = file.readAsStringSync();
-    final match = RegExp(
-      r'^---\n([\s\S]*?)\n---\n?',
+    final heading = RegExp(
+      r'^# ADR-(\d{4}): (.+)$',
       multiLine: true,
     ).firstMatch(text);
+    if (heading == null || text.substring(0, heading.start).trim().isNotEmpty) {
+      diagnostics.add(
+        AdrDiagnostic(
+          code: 'adr.heading.invalid',
+          message: 'ADR must start with an H1 in the form # ADR-NNNN: Title.',
+          path: path,
+        ),
+      );
+      return null;
+    }
+    final id = heading.group(1)!;
+    final title = heading.group(2)!.trim();
+    final metadata = _readMetadata(
+      text.substring(heading.end),
+      path,
+      diagnostics,
+    );
+    final status = metadata['Status'];
+    final date = metadata['Date'];
+    final supersedes = _parseReference(
+      metadata['Supersedes'],
+      'Supersedes',
+      path,
+      diagnostics,
+    );
+    final supersededBy = _parseReference(
+      metadata['Superseded by'],
+      'Superseded by',
+      path,
+      diagnostics,
+    );
+
+    if (id != filenameId) {
+      diagnostics.add(
+        AdrDiagnostic(
+          code: 'adr.id.filename_mismatch',
+          message: 'ADR H1 id must match its filename prefix.',
+          path: path,
+        ),
+      );
+    }
+    if (status == null) {
+      diagnostics.add(
+        AdrDiagnostic(
+          code: 'adr.status.missing',
+          message: 'ADR must declare Status: <value> below its H1.',
+          path: path,
+        ),
+      );
+    } else if (!_allowedStatuses.contains(status)) {
+      diagnostics.add(
+        AdrDiagnostic(
+          code: 'adr.status.invalid',
+          message: 'ADR status must be one of ${_allowedStatuses.join(', ')}.',
+          path: path,
+        ),
+      );
+    }
+    if (date == null) {
+      diagnostics.add(
+        AdrDiagnostic(
+          code: 'adr.date.missing',
+          message: 'ADR must declare Date: YYYY-MM-DD below its H1.',
+          path: path,
+        ),
+      );
+    } else if (!_isIsoDate(date)) {
+      diagnostics.add(
+        AdrDiagnostic(
+          code: 'adr.date.invalid',
+          message: 'ADR date must use YYYY-MM-DD.',
+          path: path,
+        ),
+      );
+    }
+    for (final requiredHeading in _requiredHeadings) {
+      if (!text.contains('## $requiredHeading')) {
+        diagnostics.add(
+          AdrDiagnostic(
+            code: 'adr.heading.missing',
+            message: 'ADR is missing the $requiredHeading section.',
+            path: path,
+          ),
+        );
+      }
+    }
+    if (RegExp(r'\{[^}\n]+\}').hasMatch(text.substring(heading.end))) {
+      diagnostics.add(
+        AdrDiagnostic(
+          code: 'adr.placeholder.present',
+          message: 'ADR must not retain template placeholders.',
+          path: path,
+        ),
+      );
+    }
+    return _AdrRecord(
+      id: id,
+      title: title,
+      status: status ?? '',
+      fileName: p.basename(file.path),
+      path: path,
+      supersedes: supersedes,
+      supersededBy: supersededBy,
+    );
+  }
+
+  Map<String, String> _readMetadata(
+    String source,
+    String path,
+    List<AdrDiagnostic> diagnostics,
+  ) {
+    final bodyStart = RegExp(r'^## ', multiLine: true).firstMatch(source);
+    final header = bodyStart == null
+        ? source
+        : source.substring(0, bodyStart.start);
+    final metadata = <String, String>{};
+    final lineExpression = RegExp(
+      r'^(Status|Date|Decision maker|Supersedes|Superseded by):[ \t]*(.*)$',
+      multiLine: true,
+    );
+    for (final match in lineExpression.allMatches(header)) {
+      final key = match.group(1)!;
+      if (metadata.containsKey(key)) {
+        diagnostics.add(
+          AdrDiagnostic(
+            code: 'adr.metadata.duplicate',
+            message: 'ADR metadata must not declare $key more than once.',
+            path: path,
+          ),
+        );
+        continue;
+      }
+      metadata[key] = match.group(2)!.trim();
+    }
+    return metadata;
+  }
+
+  _AdrReference? _parseReference(
+    String? value,
+    String label,
+    String path,
+    List<AdrDiagnostic> diagnostics,
+  ) {
+    if (value == null) {
+      return null;
+    }
+    final match = RegExp(
+      r'^\[ADR-(\d{4})\]\(([^/()]+\.md)\)$',
+    ).firstMatch(value);
     if (match == null) {
       diagnostics.add(
         AdrDiagnostic(
-          code: 'adr.frontmatter.missing',
-          message: 'ADR must start with YAML frontmatter.',
+          code: 'adr.supersession.link_invalid',
+          message: '$label must use [ADR-NNNN](NNNN-short-title.md).',
           path: path,
         ),
       );
       return null;
     }
-    try {
-      final frontmatter = loadYaml(match.group(1)!) as YamlMap;
-      final id = frontmatter['id']?.toString();
-      final title = frontmatter['title']?.toString();
-      final status = frontmatter['status']?.toString();
-      final date = frontmatter['date']?.toString();
-      final supersedes = frontmatter['supersedes']?.toString();
-      final supersededBy = frontmatter['superseded_by']?.toString();
-      if (frontmatter['type']?.toString() != 'ADR') {
-        diagnostics.add(
-          AdrDiagnostic(
-            code: 'adr.type.invalid',
-            message: 'ADR frontmatter type must be ADR.',
-            path: path,
-          ),
-        );
-      }
-      if (id == null || !RegExp(r'^\d{4}$').hasMatch(id)) {
-        diagnostics.add(
-          AdrDiagnostic(
-            code: 'adr.id.invalid',
-            message: 'ADR id must be a four-digit string.',
-            path: path,
-          ),
-        );
-      } else if (id != filenameId) {
-        diagnostics.add(
-          AdrDiagnostic(
-            code: 'adr.id.filename_mismatch',
-            message: 'ADR id must match its filename prefix.',
-            path: path,
-          ),
-        );
-      }
-      if (title == null || title.trim().isEmpty) {
-        diagnostics.add(
-          AdrDiagnostic(
-            code: 'adr.title.invalid',
-            message: 'ADR title must be a non-empty string.',
-            path: path,
-          ),
-        );
-      }
-      if (status == null || !_allowedStatuses.contains(status)) {
-        diagnostics.add(
-          AdrDiagnostic(
-            code: 'adr.status.invalid',
-            message:
-                'ADR status must be one of ${_allowedStatuses.join(', ')}.',
-            path: path,
-          ),
-        );
-      }
-      if (date == null || !_isIsoDate(date)) {
-        diagnostics.add(
-          AdrDiagnostic(
-            code: 'adr.date.invalid',
-            message: 'ADR date must use YYYY-MM-DD.',
-            path: path,
-          ),
-        );
-      }
-      if (id != null && title != null) {
-        final expectedHeading = '# ADR-$id: $title';
-        if (!text.contains(expectedHeading)) {
-          diagnostics.add(
-            AdrDiagnostic(
-              code: 'adr.heading.title_mismatch',
-              message: 'ADR H1 must match its id and title.',
-              path: path,
-            ),
-          );
-        }
-      }
-      for (final heading in _requiredHeadings) {
-        if (!text.contains('## $heading')) {
-          diagnostics.add(
-            AdrDiagnostic(
-              code: 'adr.heading.missing',
-              message: 'ADR is missing the $heading section.',
-              path: path,
-            ),
-          );
-        }
-      }
-      if (RegExp(r'\{[^}\n]+\}').hasMatch(text.substring(match.end))) {
-        diagnostics.add(
-          AdrDiagnostic(
-            code: 'adr.placeholder.present',
-            message: 'ADR must not retain template placeholders.',
-            path: path,
-          ),
-        );
-      }
-      return _AdrRecord(
-        id: id ?? filenameId,
-        title: title ?? '',
-        status: status ?? '',
-        fileName: p.basename(file.path),
-        path: path,
-        supersedes: supersedes,
-        supersededBy: supersededBy,
-      );
-    } on YamlException {
-      diagnostics.add(
-        AdrDiagnostic(
-          code: 'adr.frontmatter.invalid',
-          message: 'ADR frontmatter is not valid YAML.',
-          path: path,
-        ),
-      );
-      return null;
-    }
+    return _AdrReference(id: match.group(1)!, fileName: match.group(2)!);
   }
 
   void _validateRecords(
@@ -290,20 +319,49 @@ final class AdrValidator {
             ),
           );
         }
-        if (!byId.containsKey(supersededBy)) {
+        final successor = byId[supersededBy.id];
+        if (successor == null) {
           diagnostics.add(
             AdrDiagnostic(
               code: 'adr.supersession.target_missing',
-              message: 'superseded_by must reference an existing ADR.',
+              message: 'Superseded by must reference an existing ADR.',
               path: record.path,
             ),
           );
+        } else if (successor.fileName != supersededBy.fileName) {
+          diagnostics.add(
+            AdrDiagnostic(
+              code: 'adr.supersession.target_mismatch',
+              message:
+                  'Superseded by link must target the referenced ADR file.',
+              path: record.path,
+            ),
+          );
+        } else {
+          if (successor.status != 'accepted') {
+            diagnostics.add(
+              AdrDiagnostic(
+                code: 'adr.supersession.successor_status',
+                message: 'A supersession successor must be accepted.',
+                path: record.path,
+              ),
+            );
+          }
+          if (successor.supersedes?.id != record.id) {
+            diagnostics.add(
+              AdrDiagnostic(
+                code: 'adr.supersession.backlink_missing',
+                message: 'Superseded ADRs require a matching successor link.',
+                path: record.path,
+              ),
+            );
+          }
         }
       } else if (record.status == 'superseded') {
         diagnostics.add(
           AdrDiagnostic(
             code: 'adr.supersession.target_missing',
-            message: 'Superseded ADRs must declare superseded_by.',
+            message: 'Superseded ADRs must declare Superseded by.',
             path: record.path,
           ),
         );
@@ -319,16 +377,24 @@ final class AdrValidator {
             ),
           );
         }
-        final predecessor = byId[supersedes];
+        final predecessor = byId[supersedes.id];
         if (predecessor == null) {
           diagnostics.add(
             AdrDiagnostic(
               code: 'adr.supersession.target_missing',
-              message: 'supersedes must reference an existing ADR.',
+              message: 'Supersedes must reference an existing ADR.',
               path: record.path,
             ),
           );
-        } else if (predecessor.supersededBy != record.id) {
+        } else if (predecessor.fileName != supersedes.fileName) {
+          diagnostics.add(
+            AdrDiagnostic(
+              code: 'adr.supersession.target_mismatch',
+              message: 'Supersedes link must target the referenced ADR file.',
+              path: record.path,
+            ),
+          );
+        } else if (predecessor.supersededBy?.id != record.id) {
           diagnostics.add(
             AdrDiagnostic(
               code: 'adr.supersession.backlink_missing',
@@ -397,9 +463,10 @@ final class AdrValidator {
       var status = record.status;
       final successor = record.supersededBy;
       if (record.status == 'superseded' && successor != null) {
-        final successorRecord = byId[successor];
+        final successorRecord = byId[successor.id];
         if (successorRecord != null) {
-          status = 'superseded → [$successor](${successorRecord.fileName})';
+          status =
+              'superseded → [${successor.id}](${successorRecord.fileName})';
         }
       }
       return '| [${record.id}](${record.fileName}) | ${record.title} | $status |';
@@ -424,7 +491,7 @@ final class AdrValidator {
         visiting.remove(id);
         return false;
       }
-      final successor = records[id]?.supersededBy;
+      final successor = records[id]?.supersededBy?.id;
       final hasCycle = successor != null && records.containsKey(successor)
           ? visit(successor)
           : false;
@@ -459,6 +526,13 @@ final class _AdrRecord {
   final String status;
   final String fileName;
   final String path;
-  final String? supersedes;
-  final String? supersededBy;
+  final _AdrReference? supersedes;
+  final _AdrReference? supersededBy;
+}
+
+final class _AdrReference {
+  const _AdrReference({required this.id, required this.fileName});
+
+  final String id;
+  final String fileName;
 }
