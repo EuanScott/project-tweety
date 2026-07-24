@@ -12,6 +12,7 @@ source folder.
 - [Source map](source_map.md)
 - [Architecture documentation](architecture/README.md)
 - [Cards SQLite persistence](architecture/cards_sqlite_foundation.md)
+- [Cards context](CONTEXT.md)
 
 ## Decisions
 

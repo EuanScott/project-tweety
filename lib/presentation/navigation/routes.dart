@@ -20,6 +20,9 @@ class AppRoutes {
   /// Named route for a card details page inside the cards tab.
   static const cardsDetailName = 'cardsDetail';
 
+  /// Named route for creating a card inside Cards.
+  static const cardsNewName = 'cardsNew';
+
   /// Named route for the settings tab root.
   static const settingsName = 'settings';
 
@@ -38,11 +41,17 @@ class AppRoutes {
   /// Card id path parameter used by [cardsDetailPath].
   static const cardsDetailIdParameter = 'cardId';
 
+  /// Relative child path for creating a card under Cards.
+  static const cardsNewPath = 'new';
+
   /// Relative child path for card details under cards.
   static const cardsDetailPath = ':$cardsDetailIdParameter';
 
   /// Absolute path prefix for directly opening card details.
   static const cardsDetailFullPathPrefix = '$cardsPath/';
+
+  /// Absolute path for directly creating a card.
+  static const cardsNewFullPath = '$cardsPath/$cardsNewPath';
 
   /// Absolute path for the settings tab root.
   static const settingsPath = '/settings';

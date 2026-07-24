@@ -5,9 +5,9 @@ abstract class CardsDataSource {
 
   Future<CardDto?> getCardById(String cardId);
 
-  Future<void> createCard(CardDto card);
+  Future<CardDto> createCard(CardDto card);
 
-  Future<void> updateCard(CardDto card);
+  Future<CardDto?> updateCard(CardDto card);
 
   Future<void> deleteCard(String cardId);
 

@@ -11,5 +11,6 @@ export 'src/navigation_router.dart';
 export 'src/navigation_shell.dart';
 export 'src/navigation_tab_config.dart';
 export 'src/tab_reselect/tab_reselect_controller.dart';
+export 'src/tab_reselect/tab_branch_reset_guard.dart';
 export 'src/tab_reselect/tab_reselect_handler.dart';
 export 'src/tab_reselect/tab_reselect_scope.dart';

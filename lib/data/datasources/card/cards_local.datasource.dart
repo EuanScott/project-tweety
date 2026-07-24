@@ -43,29 +43,28 @@ class CardsLocalDataSource implements CardsDataSource {
   }
 
   @override
-  Future<void> createCard(CardDto card) {
+  Future<CardDto> createCard(CardDto card) {
     return _database.write((db) async {
       final now = DateTime.now().toUtc();
-      await db.insert(
-        _tableName,
-        CardDto(
-          id: card.id,
-          title: card.title,
-          description: card.description,
-          syncStatus: CardSyncStatus.created,
-          updatedAt: now,
-        ).toDatabaseRow(),
+      final createdCard = CardDto(
+        id: card.id,
+        title: card.title,
+        description: card.description,
+        syncStatus: CardSyncStatus.created,
+        updatedAt: now,
       );
+      await db.insert(_tableName, createdCard.toDatabaseRow());
+      return createdCard;
     });
   }
 
   @override
-  Future<void> updateCard(CardDto card) {
+  Future<CardDto?> updateCard(CardDto card) {
     return _database.write((db) async {
       final existingCard = await _getCardByIdIncludingDeleted(db, card.id);
       if (existingCard == null ||
           existingCard.syncStatus == CardSyncStatus.deleted) {
-        return;
+        return null;
       }
 
       final now = DateTime.now().toUtc();
@@ -73,20 +72,22 @@ class CardsLocalDataSource implements CardsDataSource {
           ? CardSyncStatus.created
           : CardSyncStatus.updated;
 
+      final updatedCard = CardDto(
+        id: card.id,
+        title: card.title,
+        description: card.description,
+        syncStatus: syncStatus,
+        updatedAt: now,
+        lastSyncedAt: existingCard.lastSyncedAt,
+        deletedAt: null,
+      );
       await db.update(
         _tableName,
-        CardDto(
-          id: card.id,
-          title: card.title,
-          description: card.description,
-          syncStatus: syncStatus,
-          updatedAt: now,
-          lastSyncedAt: existingCard.lastSyncedAt,
-          deletedAt: null,
-        ).toDatabaseRow(),
+        updatedCard.toDatabaseRow(),
         where: 'id = ?',
         whereArgs: [card.id],
       );
+      return updatedCard;
     });
   }
 

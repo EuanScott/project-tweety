@@ -7,6 +7,7 @@ import 'package:project_tweety/data/datasources/card/cards_local.datasource.dart
 import 'package:project_tweety/data/datasources/card/cards_mock.datasource.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository_impl.dart';
+import 'package:project_tweety/data/services/card/card_id.generator.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -32,6 +33,7 @@ void main() {
       expect(GetIt.I<AppDatabase>(), isA<SqfliteAppDatabase>());
       expect(GetIt.I<CardsDataSource>(), isA<CardsLocalDataSource>());
       expect(GetIt.I<CardsRepository>(), isA<CardsRepositoryImpl>());
+      expect(GetIt.I<CardIdGenerator>(), isA<UuidCardIdGenerator>());
       expect(GetIt.I.isRegistered<MockCardsDataSource>(), isFalse);
     });
   });

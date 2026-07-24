@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navigation/navigation.dart';
 import 'package:project_tweety/core/analytics/analytics_facade.dart';
@@ -13,6 +15,7 @@ import 'package:project_tweety/presentation/navigation/tabs/app_tab_config.dart'
 import 'package:project_tweety/presentation/pages/access_denied/access_denied.page.dart';
 import 'package:project_tweety/presentation/pages/app_preferences/app_preferences.page.dart';
 import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
+import 'package:project_tweety/presentation/pages/cards/bloc/cards.bloc.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 
@@ -61,20 +64,35 @@ GoRouter createRouter({
         restorationScopeId: 'cards_branch',
         observers: _navigationObservers(analyticsTracker),
         routes: [
-          GoRoute(
-            path: AppRoutes.cardsPath,
-            name: AppRoutes.cardsName,
-            builder: (context, state) => const Cards(),
+          ShellRoute(
+            builder: (context, state, child) {
+              return BlocProvider(
+                create: (_) => GetIt.I<CardsBloc>()..add(const CardsStarted()),
+                child: child,
+              );
+            },
             routes: [
               GoRoute(
-                path: AppRoutes.cardsDetailPath,
-                name: AppRoutes.cardsDetailName,
-                builder: (context, state) {
-                  final cardId =
-                      state.pathParameters[AppRoutes.cardsDetailIdParameter]!;
+                path: AppRoutes.cardsPath,
+                name: AppRoutes.cardsName,
+                builder: (context, state) => const Cards(),
+                routes: [
+                  GoRoute(
+                    path: AppRoutes.cardsNewPath,
+                    name: AppRoutes.cardsNewName,
+                    builder: (context, state) => const Cards(isCreating: true),
+                  ),
+                  GoRoute(
+                    path: AppRoutes.cardsDetailPath,
+                    name: AppRoutes.cardsDetailName,
+                    builder: (context, state) {
+                      final cardId = state
+                          .pathParameters[AppRoutes.cardsDetailIdParameter]!;
 
-                  return Cards(selectedCardId: cardId);
-                },
+                      return Cards(selectedCardId: cardId);
+                    },
+                  ),
+                ],
               ),
             ],
           ),

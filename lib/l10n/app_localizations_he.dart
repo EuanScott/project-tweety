@@ -46,6 +46,84 @@ class AppLocalizationsHe extends AppLocalizations {
   String get cardDetailsLoadFailedDescription => 'נסה לפתוח את הכרטיס שוב.';
 
   @override
+  String get cardCreateTitle => 'כרטיס חדש';
+
+  @override
+  String get cardCreateAction => 'צור כרטיס';
+
+  @override
+  String get cardCreateTitleLabel => 'כותרת';
+
+  @override
+  String get cardCreateDescriptionLabel => 'תיאור';
+
+  @override
+  String get cardCreateTitleRequired => 'הזן כותרת.';
+
+  @override
+  String get cardCreateDescriptionRequired => 'הזן תיאור.';
+
+  @override
+  String get cardCreateEmptyTitle => 'אין עדיין כרטיסים';
+
+  @override
+  String get cardCreateEmptyDescription => 'צור את הכרטיס הראשון כדי להתחיל.';
+
+  @override
+  String get cardCreateFailed => 'לא ניתן לשמור את הכרטיס. נסה שוב.';
+
+  @override
+  String get cardEditTitle => 'עריכת כרטיס';
+
+  @override
+  String get cardEditAction => 'עריכת כרטיס';
+
+  @override
+  String get cardEditSaveAction => 'שמירת שינויים';
+
+  @override
+  String get cardEditCancelAction => 'ביטול';
+
+  @override
+  String get cardEditFailed => 'לא ניתן לעדכן את הכרטיס. נסה שוב.';
+
+  @override
+  String get cardEditNotFound => 'הכרטיס כבר לא קיים.';
+
+  @override
+  String get cardEditReturnToCardsAction => 'חזרה לכרטיסים';
+
+  @override
+  String get cardDiscardConfirmationTitle => 'לבטל את השינויים?';
+
+  @override
+  String get cardDiscardConfirmationDescription => 'השינויים שלא נשמרו יאבדו.';
+
+  @override
+  String get cardDiscardCancelAction => 'להמשיך לערוך';
+
+  @override
+  String get cardDiscardAction => 'ביטול שינויים';
+
+  @override
+  String get cardDeleteAction => 'מחק כרטיס';
+
+  @override
+  String get cardDeleteRetryAction => 'נסה למחוק שוב';
+
+  @override
+  String get cardDeleteCancelAction => 'השאר כרטיס';
+
+  @override
+  String get cardDeleteConfirmationTitle => 'למחוק את הכרטיס?';
+
+  @override
+  String get cardDeleteConfirmationDescription => 'הכרטיס יוסר מהרשימה שלך.';
+
+  @override
+  String get cardDeleteFailed => 'לא ניתן למחוק את הכרטיס. נסה שוב.';
+
+  @override
   String get settingsTab => 'הגדרות';
 
   @override

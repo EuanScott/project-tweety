@@ -26,11 +26,21 @@ extension AppNavigation on BuildContext {
     );
   }
 
+  /// Pushes the card creation editor inside Cards.
+  Future<T?> openNewCard<T extends Object?>() {
+    return pushNamed<T>(AppRoutes.cardsNewName);
+  }
+
   /// Replaces the current cards location with a card details route.
   void goCardDetails(String cardId) {
     goNamed(
       AppRoutes.cardsDetailName,
       pathParameters: {AppRoutes.cardsDetailIdParameter: cardId},
     );
+  }
+
+  /// Replaces the current Cards branch location with its collection root.
+  void goCards() {
+    goNamed(AppRoutes.cardsName);
   }
 }

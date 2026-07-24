@@ -6,13 +6,16 @@ import 'package:project_tweety/data/dtos/card/card.dto.dart';
 void main() {
   test('follows the datasource dirty-sync contract', () async {
     final CardsDataSource dataSource = MockCardsDataSource();
-    await dataSource.createCard(
+    final createdCard = await dataSource.createCard(
       const CardDto(
         id: 'card-11',
         title: 'New card',
         description: 'New card description',
       ),
     );
+
+    expect(createdCard.syncStatus, CardSyncStatus.created);
+    expect(createdCard.updatedAt?.isUtc, isTrue);
 
     final dirtyCards = await dataSource.getDirtyCards();
     expect(dirtyCards.single.id, 'card-11');

@@ -1,14 +1,16 @@
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/data/datasources/card/cards.datasource.dart';
 import 'package:project_tweety/data/dtos/card/card.dto.dart';
+import 'package:project_tweety/data/services/card/card_id.generator.dart';
 
 import 'cards.repository.dart';
 
 @LazySingleton(as: CardsRepository)
 class CardsRepositoryImpl implements CardsRepository {
-  const CardsRepositoryImpl(this._dataSource);
+  const CardsRepositoryImpl(this._dataSource, this._cardIdGenerator);
 
   final CardsDataSource _dataSource;
+  final CardIdGenerator _cardIdGenerator;
 
   @override
   Future<List<Card>> getCards() async {
@@ -23,13 +25,35 @@ class CardsRepositoryImpl implements CardsRepository {
   }
 
   @override
-  Future<void> createCard(Card card) {
-    return _dataSource.createCard(_toDto(card));
+  Future<Card> createCard(CardDraft draft) async {
+    final trimmedDraft = _validatedTrimmedDraft(draft);
+    final item = await _dataSource.createCard(
+      CardDto(
+        id: _cardIdGenerator.generate(),
+        title: trimmedDraft.title,
+        description: trimmedDraft.description,
+      ),
+    );
+    return item.toValue();
   }
 
   @override
-  Future<void> updateCard(Card card) {
-    return _dataSource.updateCard(_toDto(card));
+  Future<Card> updateCard({
+    required String cardId,
+    required CardDraft draft,
+  }) async {
+    final trimmedDraft = _validatedTrimmedDraft(draft);
+    final item = await _dataSource.updateCard(
+      CardDto(
+        id: cardId,
+        title: trimmedDraft.title,
+        description: trimmedDraft.description,
+      ),
+    );
+    if (item == null) {
+      throw CardNotFoundException(cardId);
+    }
+    return item.toValue();
   }
 
   @override
@@ -37,11 +61,11 @@ class CardsRepositoryImpl implements CardsRepository {
     return _dataSource.deleteCard(cardId);
   }
 
-  CardDto _toDto(Card card) {
-    return CardDto(
-      id: card.id,
-      title: card.title,
-      description: card.description,
-    );
+  CardDraft _validatedTrimmedDraft(CardDraft draft) {
+    final invalidFields = draft.invalidFields;
+    if (invalidFields.isNotEmpty) {
+      throw InvalidCardDraftException(invalidFields);
+    }
+    return draft.trimmed();
   }
 }

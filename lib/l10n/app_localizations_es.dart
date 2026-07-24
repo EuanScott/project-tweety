@@ -48,6 +48,90 @@ class AppLocalizationsEs extends AppLocalizations {
       'Intenta abrir la tarjeta de nuevo.';
 
   @override
+  String get cardCreateTitle => 'Nueva tarjeta';
+
+  @override
+  String get cardCreateAction => 'Crear tarjeta';
+
+  @override
+  String get cardCreateTitleLabel => 'Título';
+
+  @override
+  String get cardCreateDescriptionLabel => 'Descripción';
+
+  @override
+  String get cardCreateTitleRequired => 'Ingresa un título.';
+
+  @override
+  String get cardCreateDescriptionRequired => 'Ingresa una descripción.';
+
+  @override
+  String get cardCreateEmptyTitle => 'Aún no hay tarjetas';
+
+  @override
+  String get cardCreateEmptyDescription =>
+      'Crea tu primera tarjeta para comenzar.';
+
+  @override
+  String get cardCreateFailed =>
+      'No se pudo guardar la tarjeta. Inténtalo de nuevo.';
+
+  @override
+  String get cardEditTitle => 'Editar tarjeta';
+
+  @override
+  String get cardEditAction => 'Editar tarjeta';
+
+  @override
+  String get cardEditSaveAction => 'Guardar cambios';
+
+  @override
+  String get cardEditCancelAction => 'Cancelar';
+
+  @override
+  String get cardEditFailed =>
+      'No se pudo actualizar la tarjeta. Inténtalo de nuevo.';
+
+  @override
+  String get cardEditNotFound => 'La tarjeta ya no existe.';
+
+  @override
+  String get cardEditReturnToCardsAction => 'Volver a las tarjetas';
+
+  @override
+  String get cardDiscardConfirmationTitle => '¿Descartar cambios?';
+
+  @override
+  String get cardDiscardConfirmationDescription =>
+      'Se perderán los cambios sin guardar.';
+
+  @override
+  String get cardDiscardCancelAction => 'Seguir editando';
+
+  @override
+  String get cardDiscardAction => 'Descartar cambios';
+
+  @override
+  String get cardDeleteAction => 'Eliminar tarjeta';
+
+  @override
+  String get cardDeleteRetryAction => 'Reintentar eliminación';
+
+  @override
+  String get cardDeleteCancelAction => 'Conservar tarjeta';
+
+  @override
+  String get cardDeleteConfirmationTitle => '¿Eliminar tarjeta?';
+
+  @override
+  String get cardDeleteConfirmationDescription =>
+      'Esta tarjeta se eliminará de tu lista.';
+
+  @override
+  String get cardDeleteFailed =>
+      'No se pudo eliminar la tarjeta. Inténtalo de nuevo.';
+
+  @override
   String get settingsTab => 'Configuración';
 
   @override

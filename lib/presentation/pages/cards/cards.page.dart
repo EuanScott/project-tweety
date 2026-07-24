@@ -1,24 +1,28 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:navigation/navigation.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     as card_model
     show Card;
+import 'package:project_tweety/data/repositories/card/cards.repository.dart'
+    show CardDraft, CardDraftField;
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
+import 'package:project_tweety/presentation/widgets/tool_bar.dart';
 
 import 'bloc/cards.bloc.dart';
 import 'card_details/card_details.page.dart';
+import 'draft_discard_guard.dart';
 
 // TODO: What about portrait tablet view mode?
 class Cards extends StatefulWidget {
-  const Cards({this.selectedCardId, super.key});
+  const Cards({this.selectedCardId, this.isCreating = false, super.key});
 
   final String? selectedCardId;
+  final bool isCreating;
 
   @override
   State<Cards> createState() => _CardsState();
@@ -28,88 +32,105 @@ class _CardsState extends State<Cards> {
   static const double _secondaryBreakpoint = 600;
 
   final GlobalKey<_CardsListState> _cardsListKey = GlobalKey<_CardsListState>();
-  late String? _selectedCardId;
 
   @override
   void initState() {
     super.initState();
-    _selectedCardId = widget.selectedCardId;
-  }
-
-  @override
-  void didUpdateWidget(Cards oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.selectedCardId != widget.selectedCardId) {
-      _selectedCardId = widget.selectedCardId;
+    if (widget.isCreating) {
+      context.read<CardsBloc>().add(const CardsCreateStarted());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => GetIt.I<CardsBloc>()..add(const CardsStarted()),
-      child: Builder(
-        builder: (context) {
-          final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
-          return TabReselectHandler(
-            tab: AppTab.cards,
-            onReselect: _scrollToTop,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final showSecondary = PageScaffold.usesSplitPaneLayout(
-                  context,
-                  constraints,
-                  secondaryBreakpoint: _secondaryBreakpoint,
-                );
-                final selectedCardId = _selectedCardId;
-
-                if (!showSecondary && widget.selectedCardId != null) {
-                  return CardDetailsPage(cardId: widget.selectedCardId!);
-                }
-
-                return PageScaffold(
-                  title: l10n.cardsTab,
-                  titleBehavior: showSecondary
-                      ? PageTitleBehavior.largeStatic
-                      : PageTitleBehavior.large,
-                  secondaryBreakpoint: _secondaryBreakpoint,
-                  secondaryBody: selectedCardId == null
-                      ? const CardDetailsEmptyState()
-                      : CardDetailsContent(cardId: selectedCardId),
-                  body: _CardsView(
-                    listKey: _cardsListKey,
-                    selectedCardId: selectedCardId,
-                    onCardSelected: (cardId) => _selectCard(
-                      context,
-                      cardId,
-                      showSecondary: showSecondary,
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
+    return CardsDraftDiscardGuard(
+      child: BlocListener<CardsBloc, CardsState>(
+        listenWhen: (previous, current) =>
+            (previous.createdCardId != current.createdCardId &&
+                current.createdCardId != null) ||
+            (previous.deletedCardId != current.deletedCardId &&
+                current.deletedCardId != null),
+        listener: (context, state) {
+          final createdCardId = state.createdCardId;
+          if (createdCardId != null) {
+            context.goCardDetails(createdCardId);
+            return;
+          }
+          context.goCards();
         },
+        child: TabReselectHandler(
+          tab: AppTab.cards,
+          onReselect: _scrollToTop,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final showSecondary = PageScaffold.usesSplitPaneLayout(
+                context,
+                constraints,
+                secondaryBreakpoint: _secondaryBreakpoint,
+              );
+              final selectedCardId = widget.selectedCardId;
+
+              if (!showSecondary && widget.isCreating) {
+                return PageScaffold(
+                  title: l10n.cardCreateTitle,
+                  body: const _CardEditor(),
+                );
+              }
+
+              if (!showSecondary && selectedCardId != null) {
+                return CardDetailsPage(cardId: selectedCardId);
+              }
+
+              return PageScaffold(
+                title: l10n.cardsTab,
+                titleBehavior: showSecondary
+                    ? PageTitleBehavior.largeStatic
+                    : PageTitleBehavior.large,
+                secondaryBreakpoint: _secondaryBreakpoint,
+                trailingAction: widget.isCreating
+                    ? null
+                    : ToolBarAction(
+                        icon: Icons.add,
+                        tooltip: l10n.cardCreateAction,
+                        onPressed: () => CardsDraftDiscardGuard.discardThen(
+                          context,
+                          () => context.openNewCard(),
+                        ),
+                      ),
+                secondaryBody: widget.isCreating
+                    ? const _CardEditor()
+                    : selectedCardId == null
+                    ? const CardDetailsEmptyState()
+                    : CardDetailsContent(cardId: selectedCardId),
+                body: _CardsView(
+                  listKey: _cardsListKey,
+                  selectedCardId: selectedCardId,
+                  onCardSelected: (cardId) => _selectCard(context, cardId),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 
-  void _selectCard(
-    BuildContext context,
-    String cardId, {
-    required bool showSecondary,
-  }) {
-    if (showSecondary) {
-      // TODO: Remove this setState in favour of bloc state
-      setState(() {
-        _selectedCardId = cardId;
-      });
+  void _selectCard(BuildContext context, String cardId) {
+    CardsDraftDiscardGuard.discardThen(
+      context,
+      () => _navigateToCard(context, cardId),
+    );
+  }
+
+  void _navigateToCard(BuildContext context, String cardId) {
+    if (widget.selectedCardId == null) {
+      context.openCardDetails(cardId);
       return;
     }
 
-    context.openCardDetails(cardId);
+    context.goCardDetails(cardId);
   }
 
   void _scrollToTop() {
@@ -143,6 +164,10 @@ class _CardsView extends StatelessWidget {
           );
         }
 
+        if (!state.hasItems) {
+          return const _CardsEmpty();
+        }
+
         return _CardsList(
           key: listKey,
           items: state.items,
@@ -158,6 +183,149 @@ class _CardsView extends StatelessWidget {
     final bloc = context.read<CardsBloc>()..add(const CardsStarted());
 
     await bloc.stream.firstWhere((state) => !state.isLoading);
+  }
+}
+
+class _CardsEmpty extends StatelessWidget {
+  const _CardsEmpty();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(l10n.cardCreateEmptyTitle, style: theme.textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(l10n.cardCreateEmptyDescription, textAlign: TextAlign.center),
+            const SizedBox(height: 16),
+            AppButton.primary(
+              onPressed: () => CardsDraftDiscardGuard.discardThen(
+                context,
+                () => context.openNewCard(),
+              ),
+              child: Text(l10n.cardCreateAction),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CardEditor extends StatefulWidget {
+  const _CardEditor();
+
+  @override
+  State<_CardEditor> createState() => _CardEditorState();
+}
+
+class _CardEditorState extends State<_CardEditor> {
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          CardsDraftDiscardGuard.discardThen(context, context.goCards);
+        }
+      },
+      child: BlocBuilder<CardsBloc, CardsState>(
+        builder: (context, state) {
+          final invalidDraftFields = state.invalidDraftFields;
+          final isCreating = state.isCreating;
+
+          return ListView(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            children: [
+              Text(
+                l10n.cardCreateTitle,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 24),
+              AppTextField(
+                controller: _titleController,
+                label: l10n.cardCreateTitleLabel,
+                enabled: !isCreating,
+                errorText: invalidDraftFields.contains(CardDraftField.title)
+                    ? l10n.cardCreateTitleRequired
+                    : null,
+                textInputAction: TextInputAction.next,
+                onChanged: (_) => _onDraftChanged(context),
+              ),
+              const SizedBox(height: 16),
+              AppTextField(
+                controller: _descriptionController,
+                label: l10n.cardCreateDescriptionLabel,
+                enabled: !isCreating,
+                minLines: 4,
+                maxLines: 6,
+                errorText:
+                    invalidDraftFields.contains(CardDraftField.description)
+                    ? l10n.cardCreateDescriptionRequired
+                    : null,
+                textInputAction: TextInputAction.done,
+                onChanged: (_) => _onDraftChanged(context),
+              ),
+              if (state.createError) ...[
+                const SizedBox(height: 16),
+                Text(
+                  l10n.cardCreateFailed,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ],
+              const SizedBox(height: 24),
+              AppButton.primary(
+                onPressed: isCreating
+                    ? null
+                    : () => context.read<CardsBloc>().add(
+                        const CardsCreateSubmitted(),
+                      ),
+                child: Text(l10n.cardCreateAction),
+              ),
+              const SizedBox(height: 12),
+              AppButton.secondary(
+                onPressed: isCreating
+                    ? null
+                    : () => CardsDraftDiscardGuard.discardThen(
+                        context,
+                        context.goCards,
+                      ),
+                child: Text(l10n.cardEditCancelAction),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void _onDraftChanged(BuildContext context) {
+    context.read<CardsBloc>().add(
+      CardsDraftChanged(
+        CardDraft(
+          title: _titleController.text,
+          description: _descriptionController.text,
+        ),
+      ),
+    );
   }
 }
 

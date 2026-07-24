@@ -46,6 +46,87 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardDetailsLoadFailedDescription => 'Try opening the card again.';
 
   @override
+  String get cardCreateTitle => 'New card';
+
+  @override
+  String get cardCreateAction => 'Create card';
+
+  @override
+  String get cardCreateTitleLabel => 'Title';
+
+  @override
+  String get cardCreateDescriptionLabel => 'Description';
+
+  @override
+  String get cardCreateTitleRequired => 'Enter a title.';
+
+  @override
+  String get cardCreateDescriptionRequired => 'Enter a description.';
+
+  @override
+  String get cardCreateEmptyTitle => 'No cards yet';
+
+  @override
+  String get cardCreateEmptyDescription =>
+      'Create your first card to get started.';
+
+  @override
+  String get cardCreateFailed => 'Unable to save card. Try again.';
+
+  @override
+  String get cardEditTitle => 'Edit card';
+
+  @override
+  String get cardEditAction => 'Edit card';
+
+  @override
+  String get cardEditSaveAction => 'Save changes';
+
+  @override
+  String get cardEditCancelAction => 'Cancel';
+
+  @override
+  String get cardEditFailed => 'Unable to update card. Try again.';
+
+  @override
+  String get cardEditNotFound => 'Card no longer exists.';
+
+  @override
+  String get cardEditReturnToCardsAction => 'Return to cards';
+
+  @override
+  String get cardDiscardConfirmationTitle => 'Discard changes?';
+
+  @override
+  String get cardDiscardConfirmationDescription =>
+      'Your unsaved changes will be lost.';
+
+  @override
+  String get cardDiscardCancelAction => 'Keep editing';
+
+  @override
+  String get cardDiscardAction => 'Discard changes';
+
+  @override
+  String get cardDeleteAction => 'Delete card';
+
+  @override
+  String get cardDeleteRetryAction => 'Retry deletion';
+
+  @override
+  String get cardDeleteCancelAction => 'Keep card';
+
+  @override
+  String get cardDeleteConfirmationTitle => 'Delete card?';
+
+  @override
+  String get cardDeleteConfirmationDescription =>
+      'This card will be removed from your list.';
+
+  @override
+  String get cardDeleteFailed => 'Unable to delete card. Try again.';
+
+  @override
   String get settingsTab => 'Settings';
 
   @override

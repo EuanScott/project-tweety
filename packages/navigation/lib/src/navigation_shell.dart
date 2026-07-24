@@ -150,7 +150,7 @@ class _NavigationShellState<TTab extends Object>
     });
   }
 
-  void _onDestinationSelected(int index) {
+  Future<void> _onDestinationSelected(int index) async {
     final tabConfig = widget.tabs[index];
 
     if (index != widget.navigationShell.currentIndex) {
@@ -163,6 +163,12 @@ class _NavigationShellState<TTab extends Object>
 
     if (currentPath != tabConfig.rootPath) {
       widget.onTabRouteSelected?.call(tabConfig.routeName);
+      final canReset = await _tabReselectController.requestBranchReset(
+        tabConfig.tab,
+      );
+      if (!mounted || !canReset) {
+        return;
+      }
       widget.navigationShell.goBranch(index, initialLocation: true);
       return;
     }

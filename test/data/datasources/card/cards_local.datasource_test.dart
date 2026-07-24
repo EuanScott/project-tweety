@@ -87,7 +87,7 @@ void main() {
     });
 
     test('creates a readable card in dirty created state', () async {
-      await dataSource.createCard(
+      final createdCard = await dataSource.createCard(
         const CardDto(
           id: 'card-11',
           title: 'New card',
@@ -99,6 +99,9 @@ void main() {
       final dirtyCards = await dataSource.getDirtyCards();
 
       expect(storedCard?.title, 'New card');
+      expect(createdCard.id, 'card-11');
+      expect(createdCard.syncStatus, CardSyncStatus.created);
+      expect(createdCard.updatedAt?.isUtc, isTrue);
       expect(dirtyCards.single.id, 'card-11');
       expect(dirtyCards.single.syncStatus, CardSyncStatus.created);
       expect(dirtyCards.single.updatedAt?.isUtc, isTrue);
@@ -118,7 +121,7 @@ void main() {
     });
 
     test('updates a synced card into dirty updated state', () async {
-      await dataSource.updateCard(
+      final updatedCard = await dataSource.updateCard(
         const CardDto(
           id: 'card-1',
           title: 'Updated card',
@@ -130,6 +133,8 @@ void main() {
       final dirtyCards = await dataSource.getDirtyCards();
 
       expect(storedCard?.title, 'Updated card');
+      expect(updatedCard?.title, 'Updated card');
+      expect(updatedCard?.syncStatus, CardSyncStatus.updated);
       expect(dirtyCards.single.id, 'card-1');
       expect(dirtyCards.single.syncStatus, CardSyncStatus.updated);
       expect(dirtyCards.single.updatedAt?.isUtc, isTrue);
@@ -177,7 +182,7 @@ void main() {
       () async {
         await dataSource.deleteCard('card-1');
 
-        await dataSource.updateCard(
+        final staleUpdate = await dataSource.updateCard(
           const CardDto(
             id: 'card-1',
             title: 'Stale update',
@@ -188,6 +193,7 @@ void main() {
         final dirtyCards = await dataSource.getDirtyCards();
 
         expect(await dataSource.getCardById('card-1'), isNull);
+        expect(staleUpdate, isNull);
         expect(dirtyCards.single.id, 'card-1');
         expect(dirtyCards.single.syncStatus, CardSyncStatus.deleted);
         expect(dirtyCards.single.title, 'Card Title 1');
@@ -206,6 +212,13 @@ void main() {
       await dataSource.deleteCard('card-11');
 
       expect(await dataSource.getCardById('card-11'), isNull);
+      expect(await dataSource.getDirtyCards(), isEmpty);
+    });
+
+    test('treats deleting a missing card as an idempotent success', () async {
+      await dataSource.deleteCard('missing-card');
+
+      expect(await dataSource.getCards(), hasLength(10));
       expect(await dataSource.getDirtyCards(), isEmpty);
     });
 

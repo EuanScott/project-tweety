@@ -172,6 +172,162 @@ abstract class AppLocalizations {
   /// **'Try opening the card again.'**
   String get cardDetailsLoadFailedDescription;
 
+  /// No description provided for @cardCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New card'**
+  String get cardCreateTitle;
+
+  /// No description provided for @cardCreateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create card'**
+  String get cardCreateAction;
+
+  /// No description provided for @cardCreateTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get cardCreateTitleLabel;
+
+  /// No description provided for @cardCreateDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get cardCreateDescriptionLabel;
+
+  /// No description provided for @cardCreateTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a title.'**
+  String get cardCreateTitleRequired;
+
+  /// No description provided for @cardCreateDescriptionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a description.'**
+  String get cardCreateDescriptionRequired;
+
+  /// No description provided for @cardCreateEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards yet'**
+  String get cardCreateEmptyTitle;
+
+  /// No description provided for @cardCreateEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first card to get started.'**
+  String get cardCreateEmptyDescription;
+
+  /// No description provided for @cardCreateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save card. Try again.'**
+  String get cardCreateFailed;
+
+  /// No description provided for @cardEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit card'**
+  String get cardEditTitle;
+
+  /// No description provided for @cardEditAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit card'**
+  String get cardEditAction;
+
+  /// No description provided for @cardEditSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get cardEditSaveAction;
+
+  /// No description provided for @cardEditCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cardEditCancelAction;
+
+  /// No description provided for @cardEditFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to update card. Try again.'**
+  String get cardEditFailed;
+
+  /// No description provided for @cardEditNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Card no longer exists.'**
+  String get cardEditNotFound;
+
+  /// No description provided for @cardEditReturnToCardsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to cards'**
+  String get cardEditReturnToCardsAction;
+
+  /// No description provided for @cardDiscardConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get cardDiscardConfirmationTitle;
+
+  /// No description provided for @cardDiscardConfirmationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your unsaved changes will be lost.'**
+  String get cardDiscardConfirmationDescription;
+
+  /// No description provided for @cardDiscardCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get cardDiscardCancelAction;
+
+  /// No description provided for @cardDiscardAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes'**
+  String get cardDiscardAction;
+
+  /// No description provided for @cardDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete card'**
+  String get cardDeleteAction;
+
+  /// No description provided for @cardDeleteRetryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry deletion'**
+  String get cardDeleteRetryAction;
+
+  /// No description provided for @cardDeleteCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep card'**
+  String get cardDeleteCancelAction;
+
+  /// No description provided for @cardDeleteConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete card?'**
+  String get cardDeleteConfirmationTitle;
+
+  /// No description provided for @cardDeleteConfirmationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This card will be removed from your list.'**
+  String get cardDeleteConfirmationDescription;
+
+  /// No description provided for @cardDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to delete card. Try again.'**
+  String get cardDeleteFailed;
+
   /// Label for settings tab
   ///
   /// In en, this message translates to:

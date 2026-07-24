@@ -165,6 +165,102 @@ void main() {
       expect(hasExpectedTint, isTrue);
       expect(_textColor(tester, 'Cancel'), primary);
     });
+
+    testWidgets('renders a destructive Material button on Android', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: const AppButton.destructive(
+            onPressed: _noop,
+            child: Text('Delete'),
+          ),
+        ),
+      );
+
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(CupertinoButton), findsNothing);
+    });
+
+    testWidgets('renders a destructive Cupertino button on iOS', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          home: const AppButton.destructive(
+            onPressed: _noop,
+            child: Text('Delete'),
+          ),
+        ),
+      );
+
+      expect(find.byType(CupertinoButton), findsOneWidget);
+      expect(find.byType(ElevatedButton), findsNothing);
+    });
+  });
+
+  group('showAppConfirmationDialog', () {
+    testWidgets('renders a Material confirmation with caller-owned copy', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => showAppConfirmationDialog(
+                context: context,
+                title: 'Delete card?',
+                content: 'This cannot be undone.',
+                cancelLabel: 'Keep',
+                confirmLabel: 'Delete',
+                isDestructive: true,
+              ),
+              child: const Text('Open'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.text('Delete card?'), findsOneWidget);
+      expect(find.text('This cannot be undone.'), findsOneWidget);
+    });
+
+    testWidgets('renders a Cupertino confirmation with caller-owned copy', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          home: Builder(
+            builder: (context) => ElevatedButton(
+              onPressed: () => showAppConfirmationDialog(
+                context: context,
+                title: 'Delete card?',
+                content: 'This cannot be undone.',
+                cancelLabel: 'Keep',
+                confirmLabel: 'Delete',
+                isDestructive: true,
+              ),
+              child: const Text('Open'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoAlertDialog), findsOneWidget);
+      expect(find.text('Delete card?'), findsOneWidget);
+      expect(find.text('This cannot be undone.'), findsOneWidget);
+    });
   });
 
   group('AppListTile', () {
