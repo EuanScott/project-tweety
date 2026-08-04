@@ -24,7 +24,7 @@ giving that a try. After all, this project isn't being worked on in a big corpor
 Nothing fancy here, I'm just following the "Get started" guide on
 the [Official Flutter Docs](https://docs.flutter.dev/get-started/install)
 
-This project requires Flutter `3.44.6` (Dart `3.12.2`). After installing
+This project requires Flutter `3.44.8` (Dart `3.12.2`). After installing
 dependencies, use the following validation loop:
 
 ```sh

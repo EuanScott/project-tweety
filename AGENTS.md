@@ -85,3 +85,18 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
 - Avoid committing build artifacts or platform-specific output unless the user explicitly asks for them.
 - Prefer editing source files under `lib/`, `test/`, and project config files over touching generated directories like `build/`, `.dart_tool/`, `android/build/`, or `ios/Pods/`.
 - Prefer placing reusable app-wide theming in `packages/design_system` instead of recreating it under `lib/`.
+
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked as GitHub issues on `EuanScott/project-tweety`, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default canonical triage labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` at the repo root (create lazily) + ADRs under `docs/decisions/`. See `docs/agents/domain.md`.
