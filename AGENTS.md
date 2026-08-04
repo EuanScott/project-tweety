@@ -30,7 +30,7 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
   - `tool/templates/feature/data/repositories/_template.repository_impl.dart`
   - `lib/domain/_template/README.md` when a domain branch is justified
   - `tool/templates/feature/presentation/pages/_template.page.dart`
-  - `tool/templates/feature/presentation/pages/widgets/_template_view.widget.dart`
+  - `tool/templates/feature/presentation/pages/widgets/_template_error.widget.dart`
   - `tool/templates/feature/presentation/pages/bloc/`
 - Do not add a domain layer by default. Assume the BFF owns mobile-specific shaping and most business logic; add `lib/domain` only case-by-case for mobile-owned policy or custom app behavior, such as settings.
 - Full feature scaffolds, new shared widgets, existing shared-widget updates, and proactive single-view performance audits may select their matching local skill implicitly.
@@ -43,7 +43,9 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
   referenced `_template` files as the source of truth for concrete scaffold
   structure.
 - Visible UI in pages and app-level shared widgets must use the adaptive primitives exported by `package:design_system` when a matching primitive exists.
-- Keep page-local helper widgets in `lib/presentation/pages/<feature>/widgets/` as `part` files of the page library, named `<feature>_<widget>.widget.dart` with `part of '../<feature>.page.dart';`. The page owns the provider lifecycle, `GetIt.I` resolution, and navigation; `widgets/` files are UI only and may consume state and dispatch events but must not resolve DI, reach lower layers, or hold business policy.
+- Keep the route entry, `GetIt.I` resolution, provider lifecycle, and the root state-routing view in `<feature>.page.dart`. The root view is the page's body, not a helper; extracting it leaves a file that no longer shows what the route renders.
+- Keep the root view as its own `const` widget class rather than merging it into the page class. It needs a `BuildContext` below any page-owned `BlocProvider`, or `context.read`/`context.watch` in the page's own `build` resolves above the provider and throws at callback time; `BlocBuilder` and `BlocListener` passed as a direct `child:` are exempt because they resolve from their own element. A `const` root view also stops the rebuild traversal when the page rebuilds on an inherited-widget dependency such as `AppLocalizations.of(context)`.
+- Keep the pure UI helper widgets that root view composes in `lib/presentation/pages/<feature>/widgets/` as `part` files of the page library, named `<feature>_<widget>.widget.dart` with `part of '../<feature>.page.dart';`. They may consume state and dispatch events but must not resolve DI, reach lower layers, or hold business policy.
 - Remember that `part` files cannot declare imports: every import a page-local widget needs belongs in the `.page.dart` file. Widgets reused across pages belong in `lib/presentation/widgets/` or `packages/design_system` instead.
 - Add missing native/adaptive UI primitives to `packages/design_system` before using raw Material or Cupertino controls repeatedly in pages or shared widgets. The design-system primitive owns the Material/Cupertino branching; callers express app intent.
 - Standardize filenames on `feature_or_entity.role.dart`.

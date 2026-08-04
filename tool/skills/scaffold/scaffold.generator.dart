@@ -80,9 +80,10 @@ final class ScaffoldGenerator {
         target: 'lib/presentation/pages/$feature/$feature.page.dart',
       ),
       _TemplateArtifact(
-        source: featurePageViewWidgetTemplate,
+        source: featurePageErrorWidgetTemplate,
         target:
-            'lib/presentation/pages/$feature/widgets/${feature}_view.widget.dart',
+            'lib/presentation/pages/$feature/widgets/'
+            '${feature}_error.widget.dart',
       ),
       _TemplateArtifact(
         source: featureBlocTemplate,
@@ -118,11 +119,12 @@ final class ScaffoldGenerator {
       ),
       replacements,
     );
-    final view = await _renderTemplate(
+    final error = await _renderTemplate(
       _TemplateArtifact(
-        source: featurePageViewWidgetTemplate,
+        source: featurePageErrorWidgetTemplate,
         target:
-            'lib/presentation/pages/$feature/widgets/${feature}_view.widget.dart',
+            'lib/presentation/pages/$feature/widgets/'
+            '${feature}_error.widget.dart',
       ),
       replacements,
     );
@@ -148,13 +150,7 @@ final class ScaffoldGenerator {
               '..$initialLoadMethod()',
             ),
       ),
-      ScaffoldFile(
-        path: view.path,
-        content: view.content.replaceAll(
-          '${featureClass}Bloc',
-          '${featureClass}Cubit',
-        ),
-      ),
+      error,
       ScaffoldFile(
         path: 'lib/presentation/pages/$feature/cubit/$feature.cubit.dart',
         content: _cubitSource(

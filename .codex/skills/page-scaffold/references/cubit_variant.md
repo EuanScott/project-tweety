@@ -5,7 +5,7 @@ Read this reference only when the user explicitly requests `controller: cubit`.
 Create exactly:
 
 - `lib/presentation/pages/<feature_name>/<feature_name>.page.dart`
-- `lib/presentation/pages/<feature_name>/widgets/<feature_name>_view.widget.dart`
+- `lib/presentation/pages/<feature_name>/widgets/<feature_name>_error.widget.dart`
 - `lib/presentation/pages/<feature_name>/cubit/<feature_name>.cubit.dart`
 - `lib/presentation/pages/<feature_name>/cubit/<feature_name>.state.dart`
 
