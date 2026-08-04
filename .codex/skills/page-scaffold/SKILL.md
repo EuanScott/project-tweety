@@ -40,6 +40,7 @@ If the dependency is missing, stop without editing and direct the work to `$feat
 Use BLoC unless the user explicitly selected Cubit. Create the BLoC manifest:
 
 - `lib/presentation/pages/<feature_name>/<feature_name>.page.dart`
+- `lib/presentation/pages/<feature_name>/widgets/<feature_name>_view.widget.dart`
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.bloc.dart`
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.event.dart`
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.state.dart`
@@ -55,6 +56,8 @@ initial operation, observable states, and first user-visible result. Run it and
 confirm the expected missing-flow failure.
 
 Mirror the BLoC `_template` for provider ownership, `GetIt.I`, Freezed state, feature-scoped status, loading/success/failure handling, and small explicit events. Keep the initial state payload-free unless the existing dependency returns data required by `page_intent`.
+
+Keep the page file to provider ownership and DI; put helper widgets under `widgets/` as `part` files of the page library, UI only, with imports on the page.
 
 Use app/design-system primitives for visible controls and feedback when available. Keep business policy in the existing dependency or controller orchestration, not the widget tree. Add navigation or localization only when explicitly included in the request and target manifest.
 

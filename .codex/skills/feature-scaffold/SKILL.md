@@ -43,6 +43,7 @@ Use the no-domain manifest by default:
 - `lib/data/repositories/<folder_key>/<feature_name>.repository.dart`
 - `lib/data/repositories/<folder_key>/<feature_name>.repository_impl.dart`
 - `lib/presentation/pages/<feature_name>/<feature_name>.page.dart`
+- `lib/presentation/pages/<feature_name>/widgets/<feature_name>_view.widget.dart`
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.bloc.dart`
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.event.dart`
 - `lib/presentation/pages/<feature_name>/bloc/<feature_name>.state.dart`
@@ -102,7 +103,7 @@ On the no-domain path, make the data contract app-facing and inject it into pres
 
 ### 5. Create presentation last
 
-Mirror the BLoC `_template` by default: use one Freezed state, a feature-scoped status enum, a small event set, `GetIt.I`, page-owned provider lifecycle, and design-system/app primitives for visible UI. Keep the initial state payload-free unless real behavior requires data.
+Mirror the BLoC `_template` by default: use one Freezed state, a feature-scoped status enum, a small event set, `GetIt.I`, page-owned provider lifecycle, and design-system/app primitives for visible UI. Keep the initial state payload-free unless real behavior requires data. Keep page-local helper widgets under `widgets/` as UI-only `part` files of the page library.
 
 When the user explicitly requests Cubit, read [the Cubit variant](../page-scaffold/references/cubit_variant.md) and replace the BLoC/event portion of the manifest; do not claim `_template` is a Cubit template.
 

@@ -32,6 +32,7 @@ void main() {
           'lib/data/repositories/order_history/order_history.repository.dart',
           'lib/data/repositories/order_history/order_history.repository_impl.dart',
           'lib/presentation/pages/order_history/order_history.page.dart',
+          'lib/presentation/pages/order_history/widgets/order_history_view.widget.dart',
           'lib/presentation/pages/order_history/bloc/order_history.bloc.dart',
           'lib/presentation/pages/order_history/bloc/order_history.event.dart',
           'lib/presentation/pages/order_history/bloc/order_history.state.dart',
@@ -48,14 +49,29 @@ void main() {
           contains("import 'order_history.repository.dart';"),
         );
         expect(
+          manifest.files[2].content,
+          allOf(
+            contains("part 'widgets/order_history_view.widget.dart';"),
+            isNot(contains('class _OrderHistoryView')),
+          ),
+        );
+        expect(
           manifest.files[3].content,
+          allOf(
+            contains("part of '../order_history.page.dart';"),
+            contains('class _OrderHistoryView extends StatelessWidget'),
+            contains('BlocBuilder<OrderHistoryBloc, OrderHistoryState>'),
+          ),
+        );
+        expect(
+          manifest.files[4].content,
           contains(
             "import 'package:project_tweety/data/repositories/order_history/"
             "order_history.repository.dart';",
           ),
         );
         expect(
-          manifest.files[3].content,
+          manifest.files[4].content,
           contains('await _repository.loadOrders();'),
         );
         expect(
@@ -246,6 +262,7 @@ void main() {
         'lib/data/repositories/order_history/order_history.repository.dart',
         'lib/data/repositories/order_history/order_history.repository_impl.dart',
         'lib/presentation/pages/order_history/order_history.page.dart',
+        'lib/presentation/pages/order_history/widgets/order_history_view.widget.dart',
         'lib/presentation/pages/order_history/cubit/order_history.cubit.dart',
         'lib/presentation/pages/order_history/cubit/order_history.state.dart',
       ]);
@@ -254,10 +271,18 @@ void main() {
         allOf(
           contains("import 'cubit/order_history.cubit.dart';"),
           contains('GetIt.I<OrderHistoryCubit>()..loadOrders()'),
+          contains("part 'widgets/order_history_view.widget.dart';"),
         ),
       );
       expect(
         manifest.files[3].content,
+        allOf(
+          contains("part of '../order_history.page.dart';"),
+          contains('BlocBuilder<OrderHistoryCubit, OrderHistoryState>'),
+        ),
+      );
+      expect(
+        manifest.files[4].content,
         allOf(
           contains('class OrderHistoryCubit extends Cubit<OrderHistoryState>'),
           contains('Future<void> loadOrders() async'),
@@ -330,7 +355,7 @@ void main() {
           );
 
       expect(
-        manifest.files[3].content,
+        manifest.files[4].content,
         contains(
           "import 'package:project_tweety/data/repositories/commerce/"
           "orders.repository.dart';",
@@ -365,7 +390,7 @@ void main() {
           contains('Future<void> loadTemplate();'),
         );
         expect(
-          manifest.files[3].content,
+          manifest.files[4].content,
           contains(
             "import 'package:project_tweety/data/repositories/template_tools/"
             "my_template.repository.dart';",
@@ -490,7 +515,7 @@ void main() {
           reason: verb,
         );
         expect(
-          manifest.files[3].content,
+          manifest.files[4].content,
           contains('await _repository.$expectedMethod();'),
           reason: verb,
         );
@@ -837,6 +862,7 @@ void main() {
             'lib/data/repositories/orders/orders.repository.dart',
             'lib/data/repositories/orders/orders.repository_impl.dart',
             'lib/presentation/pages/orders/orders.page.dart',
+            'lib/presentation/pages/orders/widgets/orders_view.widget.dart',
             'lib/presentation/pages/orders/bloc/orders.bloc.dart',
             'lib/presentation/pages/orders/bloc/orders.event.dart',
             'lib/presentation/pages/orders/bloc/orders.state.dart',

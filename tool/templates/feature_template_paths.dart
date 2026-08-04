@@ -4,6 +4,9 @@ const featureRepositoryImplementationTemplate =
     'tool/templates/feature/data/repositories/_template.repository_impl.dart';
 const featurePageTemplate =
     'tool/templates/feature/presentation/pages/_template.page.dart';
+const featurePageViewWidgetTemplate =
+    'tool/templates/feature/presentation/pages/widgets/'
+    '_template_view.widget.dart';
 const featureBlocTemplate =
     'tool/templates/feature/presentation/pages/bloc/_template.bloc.dart';
 const featureBlocEventTemplate =
@@ -15,6 +18,7 @@ const featureProductionTemplatePaths = <String>[
   featureRepositoryContractTemplate,
   featureRepositoryImplementationTemplate,
   featurePageTemplate,
+  featurePageViewWidgetTemplate,
   featureBlocTemplate,
   featureBlocEventTemplate,
   featureBlocStateTemplate,
