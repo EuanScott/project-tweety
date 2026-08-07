@@ -26,22 +26,22 @@ class _DynamicFormState extends State<DynamicForm> {
   // TODO: Pass in from the calling page this formInputData
   List<FormInputData> formInputData = [
     FormInputData(
-      name: "Text Input",
+      name: 'Text Input',
       type: FormInputType.text,
       isRequired: true,
-      errorMessage: "Text input is required",
+      errorMessage: 'Text input is required',
     ),
     FormInputData(
-      name: "Numeric Input",
+      name: 'Numeric Input',
       type: FormInputType.number,
       isRequired: true,
-      errorMessage: "Numeric input is required",
+      errorMessage: 'Numeric input is required',
     ),
     FormInputData(
-      name: "Dropdown",
+      name: 'Dropdown',
       type: FormInputType.dropdown,
       isRequired: true,
-      errorMessage: "Dropdown selection is required",
+      errorMessage: 'Dropdown selection is required',
       inputOptions: [
         'Option 1',
         'Option 2',
@@ -53,17 +53,17 @@ class _DynamicFormState extends State<DynamicForm> {
       ],
     ),
     FormInputData(
-      name: "Radio",
+      name: 'Radio',
       type: FormInputType.radio,
       isRequired: true,
-      errorMessage: "Checkbox is required",
+      errorMessage: 'Checkbox is required',
       inputOptions: ['Yes', 'No', 'Maybe'],
     ),
     FormInputData(
-      name: "Checkbox",
+      name: 'Checkbox',
       type: FormInputType.checkbox,
       isRequired: true,
-      errorMessage: "At least one option must be selected",
+      errorMessage: 'At least one option must be selected',
     ),
   ];
 

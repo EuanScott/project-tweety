@@ -49,4 +49,5 @@ dart run tool/decisions/adr.dart generate-index
 | ID | Title | Status |
 |----|-------|--------|
 | [0001](0001-record-architecture-decisions.md) | Record architecture decisions | proposed |
+| [0002](0002-test-layer-conventions.md) | Test layer conventions | proposed |
 <!-- adr-index:end -->

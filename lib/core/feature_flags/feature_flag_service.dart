@@ -1,3 +1,7 @@
+// Dormant stub: the Firebase Remote Config wiring is commented out until the
+// dependency is added, so its imports and private helper read as unused.
+// ignore_for_file: unused_import, unused_element
+
 import 'dart:developer';
 
 // import 'package:firebase_remote_config/firebase_remote_config.dart';

@@ -5,6 +5,7 @@ source folder.
 
 ## Testing Guides
 
+- [Testing overview: directories, naming, and the shared harness](testing/README.md)
 - [Navigation, deep links, and route guards](testing/navigation.md)
 
 ## Architecture
@@ -22,3 +23,4 @@ source folder.
 
 - [SQLite cards app persistence](plans/cards_sqlite_data_layer.md)
 - [Complete Cards SQLite integration](plans/cards_sqlite_end_to_end_integration.md)
+- [ADR backlog and drafting prompts](plans/adr_backlog.md)

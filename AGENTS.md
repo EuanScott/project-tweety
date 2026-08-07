@@ -62,6 +62,10 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
   - `.repository_impl.dart`
   - `.datasource.dart`
   - `.usecase.dart`
+- Test files always end `_test.dart`, singular. The Dart runner globs exactly
+  that, so a file named `_tests.dart` is silently never collected. Combine the
+  role suffix with it where a role applies: `cards.bloc_test.dart`,
+  `app_modal.widget_test.dart`.
 - Do not add inline comments unless they clarify non-obvious behavior that cannot be expressed cleanly in code.
 
 ## Generated Files
@@ -81,6 +85,12 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
 - Refresh localization output after ARB changes: `flutter gen-l10n`
 
 ## Testing Guidance
+- Read the [testing guide](docs/testing/README.md) for the three test execution
+  contexts, the layer-to-test-type mapping, and the shared harness in
+  `test/support/`. The rationale is [ADR-0002](docs/decisions/0002-test-layer-conventions.md).
+- Default to constructing the subject under test directly. Use `GetIt` only for
+  tests that drive `MyApp`, and go through `useAppHarness()` when you do.
+- Prefer adding a parameter to `FakeCardsRepository` over writing a new fake.
 - Prefer targeted tests first, then broader validation if needed.
 - Add or update tests near the affected area when the repo already has an appropriate test pattern.
 - Avoid fixing unrelated failing tests as part of a focused task.

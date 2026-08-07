@@ -31,22 +31,24 @@ dependencies, use the following validation loop:
 dart format --output=none --set-exit-if-changed .
 flutter analyze --no-fatal-infos
 dart run tool/agent_context/validate.dart
-dart run very_good_cli:very_good test --fail-fast
+flutter test
 ```
 
 Run one test file with:
 
 ```sh
-dart run very_good_cli:very_good test test/path_test.dart --fail-fast
+flutter test test/path_test.dart
 ```
 
-The optimized runner aggregates tests for faster unit and widget feedback. If
-you need to diagnose a runner-specific failure, append `--no-optimization`.
+This is the same command CI runs, so a green local loop means a green build.
 Native Android and iOS coverage remains an explicit device/simulator check:
 
 ```sh
 flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>
 ```
+
+See [the testing guide](docs/testing/README.md) for what belongs in `test/`,
+`integration_test/`, and `test_driver/`.
 
 ## Project Docs
 

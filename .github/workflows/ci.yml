@@ -27,11 +27,17 @@ jobs:
         run: flutter gen-l10n
 
       - name: Analyze
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
         continue-on-error: true
 
       - name: Test
-        run: flutter test
+        run: flutter test --coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/lcov.info
 
       - name: Install design_system dependencies
         working-directory: packages/design_system
@@ -39,7 +45,7 @@ jobs:
 
       - name: Analyze design_system
         working-directory: packages/design_system
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
         continue-on-error: true
 
       - name: Test design_system
@@ -52,7 +58,7 @@ jobs:
 
       - name: Analyze navigation
         working-directory: packages/navigation
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
         continue-on-error: true
 
       - name: Test navigation

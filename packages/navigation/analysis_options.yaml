@@ -1,0 +1,8 @@
+# Mirrors the root analysis_options.yaml. Analysis options do not cascade across
+# pubspec boundaries, so package lints must be declared here to be enforced.
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    avoid_print: true
+    prefer_single_quotes: true
