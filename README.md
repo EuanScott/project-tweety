@@ -25,7 +25,13 @@ Nothing fancy here, I'm just following the "Get started" guide on
 the [Official Flutter Docs](https://docs.flutter.dev/get-started/install)
 
 This project requires Flutter `3.44.8` (Dart `3.12.2`). After installing
-dependencies, use the following validation loop:
+dependencies, enable the repo's git hooks once per clone:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+Then use the following validation loop:
 
 ```sh
 dart format --output=none --set-exit-if-changed .
@@ -40,7 +46,10 @@ Run one test file with:
 flutter test test/path_test.dart
 ```
 
-This is the same command CI runs, so a green local loop means a green build.
+This loop is a superset of CI: CI runs analysis and tests, while the agent
+context validator is local-only. A green local loop therefore means a green
+build, but not the reverse.
+
 Native Android and iOS coverage remains an explicit device/simulator check:
 
 ```sh
@@ -49,6 +58,28 @@ flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>
 
 See [the testing guide](docs/testing/README.md) for what belongs in `test/`,
 `integration_test/`, and `test_driver/`.
+
+### Pre-commit hook
+
+`.githooks/pre-commit` runs the three agent-tooling validators on every commit,
+in about a second:
+
+```sh
+dart run tool/agent_context/validate.dart
+dart run tool/skills/validate.dart
+dart run tool/decisions/adr.dart check
+```
+
+These guard `AGENTS.md` line budgets, Markdown link integrity, skill word
+budgets, and ADR structure. They fail silently in the sense that nothing else
+catches them, so the hook is the enforcement point.
+
+Bypass with `git commit --no-verify`.
+
+Two caveats. The validators read the working tree rather than the index, so a
+partially staged commit is checked against what is on disk, not what is being
+committed. And the hook needs `dart` on `PATH`, which a GUI git client may not
+provide.
 
 ## Project Docs
 

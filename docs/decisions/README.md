@@ -33,7 +33,7 @@ lines. Supersession values use links such as
 `proposed` records are editable and ready for review. A human reviewer changes
 a proposal to `accepted` or `rejected`; accepted and rejected decision bodies
 are then immutable. A later accepted ADR may supersede an older one by adding
-`supersedes` to the replacement and `superseded_by` plus `superseded` status to
+`Supersedes` to the replacement and `Superseded by` plus `superseded` status to
 the predecessor. `deprecated` means a decision should no longer guide new work
 without a specific replacement.
 
@@ -50,4 +50,5 @@ dart run tool/decisions/adr.dart generate-index
 |----|-------|--------|
 | [0001](0001-record-architecture-decisions.md) | Record architecture decisions | proposed |
 | [0002](0002-test-layer-conventions.md) | Test layer conventions | proposed |
+| [0003](0003-pre-commit-validator-enforcement.md) | Pre-commit validator enforcement | proposed |
 <!-- adr-index:end -->

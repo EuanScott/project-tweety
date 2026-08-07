@@ -79,10 +79,12 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
 
 ## Common Commands
 - Install dependencies: `flutter pub get`
+- Enable the repo git hooks (once per clone): `git config core.hooksPath .githooks`
 - Run the app: `flutter run`
 - Run tests: `flutter test`
 - Regenerate DI/build_runner output: `dart run build_runner build --delete-conflicting-outputs`
 - Refresh localization output after ARB changes: `flutter gen-l10n`
+- `.githooks/pre-commit` runs the agent context, skill, and ADR validators on every commit; bypass with `git commit --no-verify`.
 
 ## Testing Guidance
 - Read the [testing guide](docs/testing/README.md) for the three test execution
