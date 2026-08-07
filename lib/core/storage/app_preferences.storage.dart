@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const Object _unset = Object();
+part 'app_preferences.storage.freezed.dart';
 
 // TODO:
 // * core/storage currently depends on Flutter ThemeMode, which leaks UI concerns into storage.
@@ -12,24 +13,14 @@ const Object _unset = Object();
 // * ensureDefaultsExist() writes defaults eagerly, which is fine for preferences but not a good default for a generic cache service.
 // * There are two different AppPreferences models, one in core storage and one in domain, which works but adds naming friction.
 
-@immutable
-class AppPreferences {
-  const AppPreferences({this.themeMode = ThemeMode.system, this.languageCode});
+@freezed
+abstract class AppPreferences with _$AppPreferences {
+  const factory AppPreferences({
+    @Default(ThemeMode.system) ThemeMode themeMode,
+    String? languageCode,
+  }) = _AppPreferences;
 
-  final ThemeMode themeMode;
-  final String? languageCode;
-
-  AppPreferences copyWith({
-    ThemeMode? themeMode,
-    Object? languageCode = _unset,
-  }) {
-    return AppPreferences(
-      themeMode: themeMode ?? this.themeMode,
-      languageCode: identical(languageCode, _unset)
-          ? this.languageCode
-          : languageCode as String?,
-    );
-  }
+  const AppPreferences._();
 
   Map<String, Object?> toJson() {
     return <String, Object?>{
@@ -47,10 +38,10 @@ class AppPreferences {
       return const AppPreferences();
     }
 
-    return AppPreferences.fromJson(decoded);
+    return _fromJson(decoded);
   }
 
-  factory AppPreferences.fromJson(Map<String, dynamic> json) {
+  static AppPreferences _fromJson(Map<String, dynamic> json) {
     return AppPreferences(
       themeMode: _themeModeFromName(json['themeMode']) ?? ThemeMode.system,
       languageCode: json['languageCode'] as String?,

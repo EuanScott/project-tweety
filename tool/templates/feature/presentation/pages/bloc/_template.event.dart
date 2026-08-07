@@ -1,12 +1,6 @@
 part of '_template.bloc.dart';
 
-sealed class TemplateEvent extends Equatable {
-  const TemplateEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-final class TemplateStarted extends TemplateEvent {
-  const TemplateStarted();
+@freezed
+sealed class TemplateEvent with _$TemplateEvent {
+  const factory TemplateEvent.started() = TemplateStarted;
 }

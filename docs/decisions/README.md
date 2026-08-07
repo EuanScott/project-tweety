@@ -51,4 +51,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0001](0001-record-architecture-decisions.md) | Record architecture decisions | proposed |
 | [0002](0002-test-layer-conventions.md) | Test layer conventions | proposed |
 | [0003](0003-pre-commit-validator-enforcement.md) | Pre-commit validator enforcement | proposed |
+| [0004](0004-value-type-conventions.md) | Value type conventions | proposed |
 <!-- adr-index:end -->

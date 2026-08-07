@@ -8,35 +8,15 @@ enum CardsEditStatus { idle, updating, success, failure, notFound }
 
 enum CardsDeleteStatus { idle, deleting, success, failure }
 
-enum CardsDetailStatus { loading, success, missing, failure }
+@freezed
+sealed class CardsDetail with _$CardsDetail {
+  const factory CardsDetail.loading() = CardsDetailLoading;
 
-class CardsDetail extends Equatable {
-  const CardsDetail._({required this.status, this.card, this.errorMessage});
+  const factory CardsDetail.success(Card card) = CardsDetailSuccess;
 
-  const CardsDetail.loading() : this._(status: CardsDetailStatus.loading);
+  const factory CardsDetail.missing() = CardsDetailMissing;
 
-  const CardsDetail.success(Card card)
-    : this._(status: CardsDetailStatus.success, card: card);
-
-  const CardsDetail.missing() : this._(status: CardsDetailStatus.missing);
-
-  const CardsDetail.failure(String errorMessage)
-    : this._(status: CardsDetailStatus.failure, errorMessage: errorMessage);
-
-  final CardsDetailStatus status;
-  final Card? card;
-  final String? errorMessage;
-
-  bool get isLoading => status == CardsDetailStatus.loading;
-
-  bool get isSuccess => status == CardsDetailStatus.success;
-
-  bool get isMissing => status == CardsDetailStatus.missing;
-
-  bool get isFailure => status == CardsDetailStatus.failure;
-
-  @override
-  List<Object?> get props => [status, card, errorMessage];
+  const factory CardsDetail.failure(String errorMessage) = CardsDetailFailure;
 }
 
 @freezed

@@ -1,25 +1,24 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Card extends Equatable {
-  const Card({
-    required this.id,
-    required this.title,
-    required this.description,
-  });
+part 'cards.repository.freezed.dart';
 
-  final String id;
-  final String title;
-  final String description;
-
-  @override
-  List<Object> get props => [id, title, description];
+@freezed
+abstract class Card with _$Card {
+  const factory Card({
+    required String id,
+    required String title,
+    required String description,
+  }) = _Card;
 }
 
-class CardDraft extends Equatable {
-  const CardDraft({required this.title, required this.description});
+@freezed
+abstract class CardDraft with _$CardDraft {
+  const factory CardDraft({
+    required String title,
+    required String description,
+  }) = _CardDraft;
 
-  final String title;
-  final String description;
+  const CardDraft._();
 
   Set<CardDraftField> get invalidFields {
     return {
@@ -31,9 +30,6 @@ class CardDraft extends Equatable {
   CardDraft trimmed() {
     return CardDraft(title: title.trim(), description: description.trim());
   }
-
-  @override
-  List<Object> get props => [title, description];
 }
 
 enum CardDraftField { title, description }

@@ -1,59 +1,23 @@
 part of 'cards.bloc.dart';
 
-sealed class CardsEvent extends Equatable {
-  const CardsEvent();
+@freezed
+sealed class CardsEvent with _$CardsEvent {
+  const factory CardsEvent.started() = CardsStarted;
 
-  @override
-  List<Object> get props => [];
-}
+  const factory CardsEvent.createStarted() = CardsCreateStarted;
 
-final class CardsStarted extends CardsEvent {
-  const CardsStarted();
-}
+  const factory CardsEvent.draftChanged(CardDraft draft) = CardsDraftChanged;
 
-final class CardsCreateStarted extends CardsEvent {
-  const CardsCreateStarted();
-}
+  const factory CardsEvent.createSubmitted() = CardsCreateSubmitted;
 
-final class CardsDraftChanged extends CardsEvent {
-  const CardsDraftChanged(this.draft);
+  const factory CardsEvent.editStarted(String cardId) = CardsEditStarted;
 
-  final CardDraft draft;
+  const factory CardsEvent.editCancelled() = CardsEditCancelled;
 
-  @override
-  List<Object> get props => [draft];
-}
+  const factory CardsEvent.draftDiscarded() = CardsDraftDiscarded;
 
-final class CardsCreateSubmitted extends CardsEvent {
-  const CardsCreateSubmitted();
-}
+  const factory CardsEvent.editSubmitted() = CardsEditSubmitted;
 
-final class CardsEditStarted extends CardsEvent {
-  const CardsEditStarted(this.cardId);
-
-  final String cardId;
-
-  @override
-  List<Object> get props => [cardId];
-}
-
-final class CardsEditCancelled extends CardsEvent {
-  const CardsEditCancelled();
-}
-
-final class CardsDraftDiscarded extends CardsEvent {
-  const CardsDraftDiscarded();
-}
-
-final class CardsEditSubmitted extends CardsEvent {
-  const CardsEditSubmitted();
-}
-
-final class CardsDeleteSubmitted extends CardsEvent {
-  const CardsDeleteSubmitted(this.cardId);
-
-  final String cardId;
-
-  @override
-  List<Object> get props => [cardId];
+  const factory CardsEvent.deleteSubmitted(String cardId) =
+      CardsDeleteSubmitted;
 }

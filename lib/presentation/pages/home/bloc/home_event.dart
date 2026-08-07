@@ -1,21 +1,8 @@
 part of 'home_bloc.dart';
 
-sealed class HomeEvent extends Equatable {
-  const HomeEvent();
+@freezed
+sealed class HomeEvent with _$HomeEvent {
+  const factory HomeEvent.started() = HomeStarted;
 
-  @override
-  List<Object> get props => [];
-}
-
-final class HomeStarted extends HomeEvent {
-  const HomeStarted();
-}
-
-final class HomeActionPressed extends HomeEvent {
-  const HomeActionPressed(this.action);
-
-  final HomeAction action;
-
-  @override
-  List<Object> get props => [action];
+  const factory HomeEvent.actionPressed(HomeAction action) = HomeActionPressed;
 }

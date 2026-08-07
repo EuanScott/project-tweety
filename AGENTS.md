@@ -62,6 +62,11 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
   - `.repository_impl.dart`
   - `.datasource.dart`
   - `.usecase.dart`
+- Immutable value types use `freezed` in every layer — entities, app-facing
+  repository values, storage models, events, and state. Never hand-write a
+  `copyWith` sentinel or an `Equatable` `props` override. Prefer a sealed
+  `freezed` union over a status enum plus nullable fields. See
+  [ADR-0004](docs/decisions/0004-value-type-conventions.md).
 - Test files always end `_test.dart`, singular. The Dart runner globs exactly
   that, so a file named `_tests.dart` is silently never collected. Combine the
   role suffix with it where a role applies: `cards.bloc_test.dart`,

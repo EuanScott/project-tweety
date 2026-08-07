@@ -54,40 +54,20 @@ class _CardDetailsView extends StatelessWidget {
 
     return BlocBuilder<CardsBloc, CardsState>(
       builder: (context, state) {
-        final detail = state.detailFor(cardId);
-
-        if (detail.isLoading) {
-          return const Center(child: AppLoadingIndicator());
-        }
-
-        if (detail.isFailure) {
-          return _CardDetailsMessage(
+        return switch (state.detailFor(cardId)) {
+          CardsDetailLoading() => const Center(child: AppLoadingIndicator()),
+          CardsDetailFailure(:final errorMessage) => _CardDetailsMessage(
             title: l10n.cardDetailsLoadFailedTitle,
-            description:
-                detail.errorMessage ?? l10n.cardDetailsLoadFailedDescription,
-          );
-        }
-
-        if (detail.isMissing) {
-          return _CardDetailsMessage(
+            description: errorMessage,
+          ),
+          CardsDetailMissing() => _CardDetailsMessage(
             title: l10n.cardDetailsMissingTitle,
             description: l10n.cardDetailsMissingDescription,
-          );
-        }
-
-        final card = detail.card;
-        if (card == null) {
-          return _CardDetailsMessage(
-            title: l10n.cardDetailsMissingTitle,
-            description: l10n.cardDetailsMissingDescription,
-          );
-        }
-
-        if (state.isEditingCard(cardId)) {
-          return _CardDetailsEditor(cardId: cardId);
-        }
-
-        return _CardDetailsBody(card: card);
+          ),
+          CardsDetailSuccess(:final card) => state.isEditingCard(cardId)
+              ? _CardDetailsEditor(cardId: cardId)
+              : _CardDetailsBody(card: card),
+        };
       },
     );
   }

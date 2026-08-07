@@ -49,7 +49,7 @@ $Res call({
 });
 
 
-
+$AppPreferencesCopyWith<$Res>? get appPreferences;
 
 }
 /// @nodoc
@@ -70,7 +70,19 @@ as AppPreferences?,errorMessage: freezed == errorMessage ? _self.errorMessage : 
 as String?,
   ));
 }
+/// Create a copy of AppPreferencesState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AppPreferencesCopyWith<$Res>? get appPreferences {
+    if (_self.appPreferences == null) {
+    return null;
+  }
 
+  return $AppPreferencesCopyWith<$Res>(_self.appPreferences!, (value) {
+    return _then(_self.copyWith(appPreferences: value));
+  });
+}
 }
 
 
@@ -249,7 +261,7 @@ $Res call({
 });
 
 
-
+@override $AppPreferencesCopyWith<$Res>? get appPreferences;
 
 }
 /// @nodoc
@@ -271,7 +283,19 @@ as String?,
   ));
 }
 
+/// Create a copy of AppPreferencesState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AppPreferencesCopyWith<$Res>? get appPreferences {
+    if (_self.appPreferences == null) {
+    return null;
+  }
 
+  return $AppPreferencesCopyWith<$Res>(_self.appPreferences!, (value) {
+    return _then(_self.copyWith(appPreferences: value));
+  });
+}
 }
 
 // dart format on

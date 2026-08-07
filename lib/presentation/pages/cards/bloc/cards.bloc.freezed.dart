@@ -12,6 +12,984 @@ part of 'cards.bloc.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
+mixin _$CardsEvent {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsEvent()';
+}
+
+
+}
+
+/// @nodoc
+class $CardsEventCopyWith<$Res>  {
+$CardsEventCopyWith(CardsEvent _, $Res Function(CardsEvent) __);
+}
+
+
+/// Adds pattern-matching-related methods to [CardsEvent].
+extension CardsEventPatterns on CardsEvent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CardsStarted value)?  started,TResult Function( CardsCreateStarted value)?  createStarted,TResult Function( CardsDraftChanged value)?  draftChanged,TResult Function( CardsCreateSubmitted value)?  createSubmitted,TResult Function( CardsEditStarted value)?  editStarted,TResult Function( CardsEditCancelled value)?  editCancelled,TResult Function( CardsDraftDiscarded value)?  draftDiscarded,TResult Function( CardsEditSubmitted value)?  editSubmitted,TResult Function( CardsDeleteSubmitted value)?  deleteSubmitted,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case CardsStarted() when started != null:
+return started(_that);case CardsCreateStarted() when createStarted != null:
+return createStarted(_that);case CardsDraftChanged() when draftChanged != null:
+return draftChanged(_that);case CardsCreateSubmitted() when createSubmitted != null:
+return createSubmitted(_that);case CardsEditStarted() when editStarted != null:
+return editStarted(_that);case CardsEditCancelled() when editCancelled != null:
+return editCancelled(_that);case CardsDraftDiscarded() when draftDiscarded != null:
+return draftDiscarded(_that);case CardsEditSubmitted() when editSubmitted != null:
+return editSubmitted(_that);case CardsDeleteSubmitted() when deleteSubmitted != null:
+return deleteSubmitted(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CardsStarted value)  started,required TResult Function( CardsCreateStarted value)  createStarted,required TResult Function( CardsDraftChanged value)  draftChanged,required TResult Function( CardsCreateSubmitted value)  createSubmitted,required TResult Function( CardsEditStarted value)  editStarted,required TResult Function( CardsEditCancelled value)  editCancelled,required TResult Function( CardsDraftDiscarded value)  draftDiscarded,required TResult Function( CardsEditSubmitted value)  editSubmitted,required TResult Function( CardsDeleteSubmitted value)  deleteSubmitted,}){
+final _that = this;
+switch (_that) {
+case CardsStarted():
+return started(_that);case CardsCreateStarted():
+return createStarted(_that);case CardsDraftChanged():
+return draftChanged(_that);case CardsCreateSubmitted():
+return createSubmitted(_that);case CardsEditStarted():
+return editStarted(_that);case CardsEditCancelled():
+return editCancelled(_that);case CardsDraftDiscarded():
+return draftDiscarded(_that);case CardsEditSubmitted():
+return editSubmitted(_that);case CardsDeleteSubmitted():
+return deleteSubmitted(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CardsStarted value)?  started,TResult? Function( CardsCreateStarted value)?  createStarted,TResult? Function( CardsDraftChanged value)?  draftChanged,TResult? Function( CardsCreateSubmitted value)?  createSubmitted,TResult? Function( CardsEditStarted value)?  editStarted,TResult? Function( CardsEditCancelled value)?  editCancelled,TResult? Function( CardsDraftDiscarded value)?  draftDiscarded,TResult? Function( CardsEditSubmitted value)?  editSubmitted,TResult? Function( CardsDeleteSubmitted value)?  deleteSubmitted,}){
+final _that = this;
+switch (_that) {
+case CardsStarted() when started != null:
+return started(_that);case CardsCreateStarted() when createStarted != null:
+return createStarted(_that);case CardsDraftChanged() when draftChanged != null:
+return draftChanged(_that);case CardsCreateSubmitted() when createSubmitted != null:
+return createSubmitted(_that);case CardsEditStarted() when editStarted != null:
+return editStarted(_that);case CardsEditCancelled() when editCancelled != null:
+return editCancelled(_that);case CardsDraftDiscarded() when draftDiscarded != null:
+return draftDiscarded(_that);case CardsEditSubmitted() when editSubmitted != null:
+return editSubmitted(_that);case CardsDeleteSubmitted() when deleteSubmitted != null:
+return deleteSubmitted(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  started,TResult Function()?  createStarted,TResult Function( CardDraft draft)?  draftChanged,TResult Function()?  createSubmitted,TResult Function( String cardId)?  editStarted,TResult Function()?  editCancelled,TResult Function()?  draftDiscarded,TResult Function()?  editSubmitted,TResult Function( String cardId)?  deleteSubmitted,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case CardsStarted() when started != null:
+return started();case CardsCreateStarted() when createStarted != null:
+return createStarted();case CardsDraftChanged() when draftChanged != null:
+return draftChanged(_that.draft);case CardsCreateSubmitted() when createSubmitted != null:
+return createSubmitted();case CardsEditStarted() when editStarted != null:
+return editStarted(_that.cardId);case CardsEditCancelled() when editCancelled != null:
+return editCancelled();case CardsDraftDiscarded() when draftDiscarded != null:
+return draftDiscarded();case CardsEditSubmitted() when editSubmitted != null:
+return editSubmitted();case CardsDeleteSubmitted() when deleteSubmitted != null:
+return deleteSubmitted(_that.cardId);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  started,required TResult Function()  createStarted,required TResult Function( CardDraft draft)  draftChanged,required TResult Function()  createSubmitted,required TResult Function( String cardId)  editStarted,required TResult Function()  editCancelled,required TResult Function()  draftDiscarded,required TResult Function()  editSubmitted,required TResult Function( String cardId)  deleteSubmitted,}) {final _that = this;
+switch (_that) {
+case CardsStarted():
+return started();case CardsCreateStarted():
+return createStarted();case CardsDraftChanged():
+return draftChanged(_that.draft);case CardsCreateSubmitted():
+return createSubmitted();case CardsEditStarted():
+return editStarted(_that.cardId);case CardsEditCancelled():
+return editCancelled();case CardsDraftDiscarded():
+return draftDiscarded();case CardsEditSubmitted():
+return editSubmitted();case CardsDeleteSubmitted():
+return deleteSubmitted(_that.cardId);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  started,TResult? Function()?  createStarted,TResult? Function( CardDraft draft)?  draftChanged,TResult? Function()?  createSubmitted,TResult? Function( String cardId)?  editStarted,TResult? Function()?  editCancelled,TResult? Function()?  draftDiscarded,TResult? Function()?  editSubmitted,TResult? Function( String cardId)?  deleteSubmitted,}) {final _that = this;
+switch (_that) {
+case CardsStarted() when started != null:
+return started();case CardsCreateStarted() when createStarted != null:
+return createStarted();case CardsDraftChanged() when draftChanged != null:
+return draftChanged(_that.draft);case CardsCreateSubmitted() when createSubmitted != null:
+return createSubmitted();case CardsEditStarted() when editStarted != null:
+return editStarted(_that.cardId);case CardsEditCancelled() when editCancelled != null:
+return editCancelled();case CardsDraftDiscarded() when draftDiscarded != null:
+return draftDiscarded();case CardsEditSubmitted() when editSubmitted != null:
+return editSubmitted();case CardsDeleteSubmitted() when deleteSubmitted != null:
+return deleteSubmitted(_that.cardId);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class CardsStarted implements CardsEvent {
+  const CardsStarted();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsStarted);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsEvent.started()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsCreateStarted implements CardsEvent {
+  const CardsCreateStarted();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsCreateStarted);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsEvent.createStarted()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsDraftChanged implements CardsEvent {
+  const CardsDraftChanged(this.draft);
+  
+
+ final  CardDraft draft;
+
+/// Create a copy of CardsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CardsDraftChangedCopyWith<CardsDraftChanged> get copyWith => _$CardsDraftChangedCopyWithImpl<CardsDraftChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDraftChanged&&(identical(other.draft, draft) || other.draft == draft));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,draft);
+
+@override
+String toString() {
+  return 'CardsEvent.draftChanged(draft: $draft)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CardsDraftChangedCopyWith<$Res> implements $CardsEventCopyWith<$Res> {
+  factory $CardsDraftChangedCopyWith(CardsDraftChanged value, $Res Function(CardsDraftChanged) _then) = _$CardsDraftChangedCopyWithImpl;
+@useResult
+$Res call({
+ CardDraft draft
+});
+
+
+$CardDraftCopyWith<$Res> get draft;
+
+}
+/// @nodoc
+class _$CardsDraftChangedCopyWithImpl<$Res>
+    implements $CardsDraftChangedCopyWith<$Res> {
+  _$CardsDraftChangedCopyWithImpl(this._self, this._then);
+
+  final CardsDraftChanged _self;
+  final $Res Function(CardsDraftChanged) _then;
+
+/// Create a copy of CardsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? draft = null,}) {
+  return _then(CardsDraftChanged(
+null == draft ? _self.draft : draft // ignore: cast_nullable_to_non_nullable
+as CardDraft,
+  ));
+}
+
+/// Create a copy of CardsEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CardDraftCopyWith<$Res> get draft {
+  
+  return $CardDraftCopyWith<$Res>(_self.draft, (value) {
+    return _then(_self.copyWith(draft: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class CardsCreateSubmitted implements CardsEvent {
+  const CardsCreateSubmitted();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsCreateSubmitted);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsEvent.createSubmitted()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsEditStarted implements CardsEvent {
+  const CardsEditStarted(this.cardId);
+  
+
+ final  String cardId;
+
+/// Create a copy of CardsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CardsEditStartedCopyWith<CardsEditStarted> get copyWith => _$CardsEditStartedCopyWithImpl<CardsEditStarted>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsEditStarted&&(identical(other.cardId, cardId) || other.cardId == cardId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,cardId);
+
+@override
+String toString() {
+  return 'CardsEvent.editStarted(cardId: $cardId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CardsEditStartedCopyWith<$Res> implements $CardsEventCopyWith<$Res> {
+  factory $CardsEditStartedCopyWith(CardsEditStarted value, $Res Function(CardsEditStarted) _then) = _$CardsEditStartedCopyWithImpl;
+@useResult
+$Res call({
+ String cardId
+});
+
+
+
+
+}
+/// @nodoc
+class _$CardsEditStartedCopyWithImpl<$Res>
+    implements $CardsEditStartedCopyWith<$Res> {
+  _$CardsEditStartedCopyWithImpl(this._self, this._then);
+
+  final CardsEditStarted _self;
+  final $Res Function(CardsEditStarted) _then;
+
+/// Create a copy of CardsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? cardId = null,}) {
+  return _then(CardsEditStarted(
+null == cardId ? _self.cardId : cardId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CardsEditCancelled implements CardsEvent {
+  const CardsEditCancelled();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsEditCancelled);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsEvent.editCancelled()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsDraftDiscarded implements CardsEvent {
+  const CardsDraftDiscarded();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDraftDiscarded);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsEvent.draftDiscarded()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsEditSubmitted implements CardsEvent {
+  const CardsEditSubmitted();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsEditSubmitted);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsEvent.editSubmitted()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsDeleteSubmitted implements CardsEvent {
+  const CardsDeleteSubmitted(this.cardId);
+  
+
+ final  String cardId;
+
+/// Create a copy of CardsEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CardsDeleteSubmittedCopyWith<CardsDeleteSubmitted> get copyWith => _$CardsDeleteSubmittedCopyWithImpl<CardsDeleteSubmitted>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDeleteSubmitted&&(identical(other.cardId, cardId) || other.cardId == cardId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,cardId);
+
+@override
+String toString() {
+  return 'CardsEvent.deleteSubmitted(cardId: $cardId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CardsDeleteSubmittedCopyWith<$Res> implements $CardsEventCopyWith<$Res> {
+  factory $CardsDeleteSubmittedCopyWith(CardsDeleteSubmitted value, $Res Function(CardsDeleteSubmitted) _then) = _$CardsDeleteSubmittedCopyWithImpl;
+@useResult
+$Res call({
+ String cardId
+});
+
+
+
+
+}
+/// @nodoc
+class _$CardsDeleteSubmittedCopyWithImpl<$Res>
+    implements $CardsDeleteSubmittedCopyWith<$Res> {
+  _$CardsDeleteSubmittedCopyWithImpl(this._self, this._then);
+
+  final CardsDeleteSubmitted _self;
+  final $Res Function(CardsDeleteSubmitted) _then;
+
+/// Create a copy of CardsEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? cardId = null,}) {
+  return _then(CardsDeleteSubmitted(
+null == cardId ? _self.cardId : cardId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$CardsDetail {
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDetail);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsDetail()';
+}
+
+
+}
+
+/// @nodoc
+class $CardsDetailCopyWith<$Res>  {
+$CardsDetailCopyWith(CardsDetail _, $Res Function(CardsDetail) __);
+}
+
+
+/// Adds pattern-matching-related methods to [CardsDetail].
+extension CardsDetailPatterns on CardsDetail {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CardsDetailLoading value)?  loading,TResult Function( CardsDetailSuccess value)?  success,TResult Function( CardsDetailMissing value)?  missing,TResult Function( CardsDetailFailure value)?  failure,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case CardsDetailLoading() when loading != null:
+return loading(_that);case CardsDetailSuccess() when success != null:
+return success(_that);case CardsDetailMissing() when missing != null:
+return missing(_that);case CardsDetailFailure() when failure != null:
+return failure(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CardsDetailLoading value)  loading,required TResult Function( CardsDetailSuccess value)  success,required TResult Function( CardsDetailMissing value)  missing,required TResult Function( CardsDetailFailure value)  failure,}){
+final _that = this;
+switch (_that) {
+case CardsDetailLoading():
+return loading(_that);case CardsDetailSuccess():
+return success(_that);case CardsDetailMissing():
+return missing(_that);case CardsDetailFailure():
+return failure(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CardsDetailLoading value)?  loading,TResult? Function( CardsDetailSuccess value)?  success,TResult? Function( CardsDetailMissing value)?  missing,TResult? Function( CardsDetailFailure value)?  failure,}){
+final _that = this;
+switch (_that) {
+case CardsDetailLoading() when loading != null:
+return loading(_that);case CardsDetailSuccess() when success != null:
+return success(_that);case CardsDetailMissing() when missing != null:
+return missing(_that);case CardsDetailFailure() when failure != null:
+return failure(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( Card card)?  success,TResult Function()?  missing,TResult Function( String errorMessage)?  failure,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case CardsDetailLoading() when loading != null:
+return loading();case CardsDetailSuccess() when success != null:
+return success(_that.card);case CardsDetailMissing() when missing != null:
+return missing();case CardsDetailFailure() when failure != null:
+return failure(_that.errorMessage);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( Card card)  success,required TResult Function()  missing,required TResult Function( String errorMessage)  failure,}) {final _that = this;
+switch (_that) {
+case CardsDetailLoading():
+return loading();case CardsDetailSuccess():
+return success(_that.card);case CardsDetailMissing():
+return missing();case CardsDetailFailure():
+return failure(_that.errorMessage);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( Card card)?  success,TResult? Function()?  missing,TResult? Function( String errorMessage)?  failure,}) {final _that = this;
+switch (_that) {
+case CardsDetailLoading() when loading != null:
+return loading();case CardsDetailSuccess() when success != null:
+return success(_that.card);case CardsDetailMissing() when missing != null:
+return missing();case CardsDetailFailure() when failure != null:
+return failure(_that.errorMessage);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class CardsDetailLoading implements CardsDetail {
+  const CardsDetailLoading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDetailLoading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsDetail.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsDetailSuccess implements CardsDetail {
+  const CardsDetailSuccess(this.card);
+  
+
+ final  Card card;
+
+/// Create a copy of CardsDetail
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CardsDetailSuccessCopyWith<CardsDetailSuccess> get copyWith => _$CardsDetailSuccessCopyWithImpl<CardsDetailSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDetailSuccess&&(identical(other.card, card) || other.card == card));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,card);
+
+@override
+String toString() {
+  return 'CardsDetail.success(card: $card)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CardsDetailSuccessCopyWith<$Res> implements $CardsDetailCopyWith<$Res> {
+  factory $CardsDetailSuccessCopyWith(CardsDetailSuccess value, $Res Function(CardsDetailSuccess) _then) = _$CardsDetailSuccessCopyWithImpl;
+@useResult
+$Res call({
+ Card card
+});
+
+
+$CardCopyWith<$Res> get card;
+
+}
+/// @nodoc
+class _$CardsDetailSuccessCopyWithImpl<$Res>
+    implements $CardsDetailSuccessCopyWith<$Res> {
+  _$CardsDetailSuccessCopyWithImpl(this._self, this._then);
+
+  final CardsDetailSuccess _self;
+  final $Res Function(CardsDetailSuccess) _then;
+
+/// Create a copy of CardsDetail
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? card = null,}) {
+  return _then(CardsDetailSuccess(
+null == card ? _self.card : card // ignore: cast_nullable_to_non_nullable
+as Card,
+  ));
+}
+
+/// Create a copy of CardsDetail
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CardCopyWith<$Res> get card {
+  
+  return $CardCopyWith<$Res>(_self.card, (value) {
+    return _then(_self.copyWith(card: value));
+  });
+}
+}
+
+/// @nodoc
+
+
+class CardsDetailMissing implements CardsDetail {
+  const CardsDetailMissing();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDetailMissing);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CardsDetail.missing()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class CardsDetailFailure implements CardsDetail {
+  const CardsDetailFailure(this.errorMessage);
+  
+
+ final  String errorMessage;
+
+/// Create a copy of CardsDetail
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CardsDetailFailureCopyWith<CardsDetailFailure> get copyWith => _$CardsDetailFailureCopyWithImpl<CardsDetailFailure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CardsDetailFailure&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,errorMessage);
+
+@override
+String toString() {
+  return 'CardsDetail.failure(errorMessage: $errorMessage)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CardsDetailFailureCopyWith<$Res> implements $CardsDetailCopyWith<$Res> {
+  factory $CardsDetailFailureCopyWith(CardsDetailFailure value, $Res Function(CardsDetailFailure) _then) = _$CardsDetailFailureCopyWithImpl;
+@useResult
+$Res call({
+ String errorMessage
+});
+
+
+
+
+}
+/// @nodoc
+class _$CardsDetailFailureCopyWithImpl<$Res>
+    implements $CardsDetailFailureCopyWith<$Res> {
+  _$CardsDetailFailureCopyWithImpl(this._self, this._then);
+
+  final CardsDetailFailure _self;
+  final $Res Function(CardsDetailFailure) _then;
+
+/// Create a copy of CardsDetail
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? errorMessage = null,}) {
+  return _then(CardsDetailFailure(
+null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$CardsState {
 
  CardsStatus get status; List<Card> get items; String? get errorMessage; CardDraft get draft; CardDraft? get initialDraft; Set<CardDraftField> get invalidDraftFields; bool get hasSubmittedCreate; CardsCreateStatus get createStatus; bool get createError; String? get createdCardId; String? get editingCardId; bool get hasSubmittedEdit; CardsEditStatus get editStatus; bool get editError; String? get missingEditCardId; String? get updatedCardId; CardsDeleteStatus get deleteStatus; String? get deletingCardId; String? get deleteErrorCardId; String? get deletedCardId;
@@ -49,7 +1027,7 @@ $Res call({
 });
 
 
-
+$CardDraftCopyWith<$Res> get draft;$CardDraftCopyWith<$Res>? get initialDraft;
 
 }
 /// @nodoc
@@ -87,7 +1065,28 @@ as String?,deletedCardId: freezed == deletedCardId ? _self.deletedCardId : delet
 as String?,
   ));
 }
+/// Create a copy of CardsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CardDraftCopyWith<$Res> get draft {
+  
+  return $CardDraftCopyWith<$Res>(_self.draft, (value) {
+    return _then(_self.copyWith(draft: value));
+  });
+}/// Create a copy of CardsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CardDraftCopyWith<$Res>? get initialDraft {
+    if (_self.initialDraft == null) {
+    return null;
+  }
 
+  return $CardDraftCopyWith<$Res>(_self.initialDraft!, (value) {
+    return _then(_self.copyWith(initialDraft: value));
+  });
+}
 }
 
 
@@ -295,7 +1294,7 @@ $Res call({
 });
 
 
-
+@override $CardDraftCopyWith<$Res> get draft;@override $CardDraftCopyWith<$Res>? get initialDraft;
 
 }
 /// @nodoc
@@ -334,7 +1333,28 @@ as String?,
   ));
 }
 
+/// Create a copy of CardsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CardDraftCopyWith<$Res> get draft {
+  
+  return $CardDraftCopyWith<$Res>(_self.draft, (value) {
+    return _then(_self.copyWith(draft: value));
+  });
+}/// Create a copy of CardsState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CardDraftCopyWith<$Res>? get initialDraft {
+    if (_self.initialDraft == null) {
+    return null;
+  }
 
+  return $CardDraftCopyWith<$Res>(_self.initialDraft!, (value) {
+    return _then(_self.copyWith(initialDraft: value));
+  });
+}
 }
 
 // dart format on
