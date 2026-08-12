@@ -86,7 +86,7 @@ void main() {
       expect(card, isNull);
     });
 
-    test('creates a readable card in dirty created state', () async {
+    test('creates a readable card in unsynced created state', () async {
       final createdCard = await dataSource.createCard(
         const CardDto(
           id: 'card-11',
@@ -96,15 +96,15 @@ void main() {
       );
 
       final storedCard = await dataSource.getCardById('card-11');
-      final dirtyCards = await dataSource.getDirtyCards();
+      final unsyncedCards = await dataSource.getUnsyncedCards();
 
       expect(storedCard?.title, 'New card');
       expect(createdCard.id, 'card-11');
       expect(createdCard.syncStatus, CardSyncStatus.created);
       expect(createdCard.updatedAt?.isUtc, isTrue);
-      expect(dirtyCards.single.id, 'card-11');
-      expect(dirtyCards.single.syncStatus, CardSyncStatus.created);
-      expect(dirtyCards.single.updatedAt?.isUtc, isTrue);
+      expect(unsyncedCards.single.id, 'card-11');
+      expect(unsyncedCards.single.syncStatus, CardSyncStatus.created);
+      expect(unsyncedCards.single.updatedAt?.isUtc, isTrue);
     });
 
     test('rejects a duplicate card id through SQLite constraints', () async {
@@ -120,7 +120,7 @@ void main() {
       );
     });
 
-    test('updates a synced card into dirty updated state', () async {
+    test('updates a synced card into unsynced updated state', () async {
       final updatedCard = await dataSource.updateCard(
         const CardDto(
           id: 'card-1',
@@ -130,14 +130,14 @@ void main() {
       );
 
       final storedCard = await dataSource.getCardById('card-1');
-      final dirtyCards = await dataSource.getDirtyCards();
+      final unsyncedCards = await dataSource.getUnsyncedCards();
 
       expect(storedCard?.title, 'Updated card');
       expect(updatedCard?.title, 'Updated card');
       expect(updatedCard?.syncStatus, CardSyncStatus.updated);
-      expect(dirtyCards.single.id, 'card-1');
-      expect(dirtyCards.single.syncStatus, CardSyncStatus.updated);
-      expect(dirtyCards.single.updatedAt?.isUtc, isTrue);
+      expect(unsyncedCards.single.id, 'card-1');
+      expect(unsyncedCards.single.syncStatus, CardSyncStatus.updated);
+      expect(unsyncedCards.single.updatedAt?.isUtc, isTrue);
     });
 
     test('keeps an updated unsynced card in created state', () async {
@@ -156,11 +156,11 @@ void main() {
         ),
       );
 
-      final dirtyCards = await dataSource.getDirtyCards();
+      final unsyncedCards = await dataSource.getUnsyncedCards();
 
-      expect(dirtyCards.single.id, 'card-11');
-      expect(dirtyCards.single.title, 'Updated new card');
-      expect(dirtyCards.single.syncStatus, CardSyncStatus.created);
+      expect(unsyncedCards.single.id, 'card-11');
+      expect(unsyncedCards.single.title, 'Updated new card');
+      expect(unsyncedCards.single.syncStatus, CardSyncStatus.created);
     });
 
     test('tombstones a synced card and hides it from reads', () async {
@@ -168,13 +168,13 @@ void main() {
 
       final storedCard = await dataSource.getCardById('card-1');
       final cards = await dataSource.getCards();
-      final dirtyCards = await dataSource.getDirtyCards();
+      final unsyncedCards = await dataSource.getUnsyncedCards();
 
       expect(storedCard, isNull);
       expect(cards.map((item) => item.id), isNot(contains('card-1')));
-      expect(dirtyCards.single.id, 'card-1');
-      expect(dirtyCards.single.syncStatus, CardSyncStatus.deleted);
-      expect(dirtyCards.single.deletedAt?.isUtc, isTrue);
+      expect(unsyncedCards.single.id, 'card-1');
+      expect(unsyncedCards.single.syncStatus, CardSyncStatus.deleted);
+      expect(unsyncedCards.single.deletedAt?.isUtc, isTrue);
     });
 
     test(
@@ -190,13 +190,13 @@ void main() {
           ),
         );
 
-        final dirtyCards = await dataSource.getDirtyCards();
+        final unsyncedCards = await dataSource.getUnsyncedCards();
 
         expect(await dataSource.getCardById('card-1'), isNull);
         expect(staleUpdate, isNull);
-        expect(dirtyCards.single.id, 'card-1');
-        expect(dirtyCards.single.syncStatus, CardSyncStatus.deleted);
-        expect(dirtyCards.single.title, 'Card Title 1');
+        expect(unsyncedCards.single.id, 'card-1');
+        expect(unsyncedCards.single.syncStatus, CardSyncStatus.deleted);
+        expect(unsyncedCards.single.title, 'Card Title 1');
       },
     );
 
@@ -212,14 +212,14 @@ void main() {
       await dataSource.deleteCard('card-11');
 
       expect(await dataSource.getCardById('card-11'), isNull);
-      expect(await dataSource.getDirtyCards(), isEmpty);
+      expect(await dataSource.getUnsyncedCards(), isEmpty);
     });
 
     test('treats deleting a missing card as an idempotent success', () async {
       await dataSource.deleteCard('missing-card');
 
       expect(await dataSource.getCards(), hasLength(10));
-      expect(await dataSource.getDirtyCards(), isEmpty);
+      expect(await dataSource.getUnsyncedCards(), isEmpty);
     });
 
     test('marks uploaded changes synced and removes tombstones', () async {
@@ -244,7 +244,7 @@ void main() {
       final createdCard = await dataSource.getCardById('card-11');
       final updatedCard = await dataSource.getCardById('card-1');
 
-      expect(await dataSource.getDirtyCards(), isEmpty);
+      expect(await dataSource.getUnsyncedCards(), isEmpty);
       expect(createdCard?.syncStatus, CardSyncStatus.synced);
       expect(createdCard?.lastSyncedAt?.isUtc, isTrue);
       expect(updatedCard?.syncStatus, CardSyncStatus.synced);
@@ -255,7 +255,7 @@ void main() {
     test('accepts an empty uploaded card batch', () async {
       await dataSource.markCardsSynced(const []);
 
-      expect(await dataSource.getDirtyCards(), isEmpty);
+      expect(await dataSource.getUnsyncedCards(), isEmpty);
     });
   });
 }

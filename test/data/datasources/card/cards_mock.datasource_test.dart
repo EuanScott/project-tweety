@@ -4,7 +4,7 @@ import 'package:project_tweety/data/datasources/card/cards_mock.datasource.dart'
 import 'package:project_tweety/data/dtos/card/card.dto.dart';
 
 void main() {
-  test('follows the datasource dirty-sync contract', () async {
+  test('follows the datasource unsynced-cards contract', () async {
     final CardsDataSource dataSource = MockCardsDataSource();
     final createdCard = await dataSource.createCard(
       const CardDto(
@@ -17,13 +17,13 @@ void main() {
     expect(createdCard.syncStatus, CardSyncStatus.created);
     expect(createdCard.updatedAt?.isUtc, isTrue);
 
-    final dirtyCards = await dataSource.getDirtyCards();
-    expect(dirtyCards.single.id, 'card-11');
-    expect(dirtyCards.single.syncStatus, CardSyncStatus.created);
+    final unsyncedCards = await dataSource.getUnsyncedCards();
+    expect(unsyncedCards.single.id, 'card-11');
+    expect(unsyncedCards.single.syncStatus, CardSyncStatus.created);
 
     await dataSource.markCardsSynced(['card-11']);
 
-    expect(await dataSource.getDirtyCards(), isEmpty);
+    expect(await dataSource.getUnsyncedCards(), isEmpty);
     final syncedCard = await dataSource.getCardById('card-11');
     expect(syncedCard?.syncStatus, CardSyncStatus.synced);
     expect(syncedCard?.lastSyncedAt?.isUtc, isTrue);
@@ -39,8 +39,8 @@ void main() {
       isNot(contains('card-1')),
     );
     expect(await dataSource.getCardById('card-1'), isNull);
-    final dirtyCards = await dataSource.getDirtyCards();
-    expect(dirtyCards.single.id, 'card-1');
-    expect(dirtyCards.single.syncStatus, CardSyncStatus.deleted);
+    final unsyncedCards = await dataSource.getUnsyncedCards();
+    expect(unsyncedCards.single.id, 'card-1');
+    expect(unsyncedCards.single.syncStatus, CardSyncStatus.deleted);
   });
 }

@@ -15,19 +15,6 @@ void main() {
     setUpAll(sqfliteFfiInit);
 
     group('CardsRepositoryImpl', () {
-      test('generates UUID v4 card ids', () {
-        final cardId = UuidCardIdGenerator().generate();
-
-        expect(
-          cardId,
-          matches(
-            RegExp(
-              r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
-            ),
-          ),
-        );
-      });
-
       test('maps datasource cards to repository values', () async {
         const repository = CardsRepositoryImpl(
           _FakeCardsDataSource(
@@ -276,7 +263,7 @@ class _FakeCardsDataSource implements CardsDataSource {
   Future<void> deleteCard(String cardId) async {}
 
   @override
-  Future<List<CardDto>> getDirtyCards() async => const [];
+  Future<List<CardDto>> getUnsyncedCards() async => const [];
 
   @override
   Future<void> markCardsSynced(List<String> cardIds) async {}

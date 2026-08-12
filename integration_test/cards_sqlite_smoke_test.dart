@@ -59,7 +59,7 @@ Future<void> _exerciseCrudAndInternalReopen(WidgetTester tester) async {
 
   expect(createdCard.id, _smokeCardId, reason: 'Use the stable relaunch key.');
   expect(
-    await _dirtyCard(dataSource),
+    await _unsyncedCard(dataSource),
     isA<CardDto>()
         .having((card) => card.id, 'id', _smokeCardId)
         .having(
@@ -77,7 +77,7 @@ Future<void> _exerciseCrudAndInternalReopen(WidgetTester tester) async {
     ),
   );
   expect(createdAndEditedCard.title, 'Native persistence smoke edited');
-  expect((await _dirtyCard(dataSource)).syncStatus, CardSyncStatus.created);
+  expect((await _unsyncedCard(dataSource)).syncStatus, CardSyncStatus.created);
 
   await dataSource.markCardsSynced([_smokeCardId]);
   expect(
@@ -93,7 +93,7 @@ Future<void> _exerciseCrudAndInternalReopen(WidgetTester tester) async {
     ),
   );
   expect(updatedCard.title, 'Native persistence smoke updated');
-  expect((await _dirtyCard(dataSource)).syncStatus, CardSyncStatus.updated);
+  expect((await _unsyncedCard(dataSource)).syncStatus, CardSyncStatus.updated);
 
   await _verifyListAndDetailFlow(tester, updatedCard);
 
@@ -104,7 +104,7 @@ Future<void> _exerciseCrudAndInternalReopen(WidgetTester tester) async {
     isNot(contains(_smokeCardId)),
   );
   expect(
-    await _dirtyCard(dataSource),
+    await _unsyncedCard(dataSource),
     isA<CardDto>()
         .having((card) => card.id, 'id', _smokeCardId)
         .having(
@@ -125,14 +125,14 @@ Future<void> _exerciseCrudAndInternalReopen(WidgetTester tester) async {
     isNot(contains(_smokeCardId)),
   );
   expect(
-    (await _dirtyCard(reopenedDataSource)).syncStatus,
+    (await _unsyncedCard(reopenedDataSource)).syncStatus,
     CardSyncStatus.deleted,
   );
 
   if (!_preserveSmokeTombstone) {
     await reopenedDataSource.markCardsSynced([_smokeCardId]);
     expect(
-      (await reopenedDataSource.getDirtyCards()).map((card) => card.id),
+      (await reopenedDataSource.getUnsyncedCards()).map((card) => card.id),
       isNot(contains(_smokeCardId)),
     );
   }
@@ -150,7 +150,7 @@ Future<void> _verifyProcessRelaunch(WidgetTester tester) async {
     isNot(contains(_smokeCardId)),
   );
   expect(
-    await _dirtyCard(dataSource),
+    await _unsyncedCard(dataSource),
     isA<CardDto>()
         .having((card) => card.id, 'id', _smokeCardId)
         .having(
@@ -163,7 +163,7 @@ Future<void> _verifyProcessRelaunch(WidgetTester tester) async {
 
   await dataSource.markCardsSynced([_smokeCardId]);
   expect(
-    (await dataSource.getDirtyCards()).map((card) => card.id),
+    (await dataSource.getUnsyncedCards()).map((card) => card.id),
     isNot(contains(_smokeCardId)),
   );
 
@@ -202,8 +202,8 @@ Future<void> _removePreviousSmokeCard(
   await dataSource.markCardsSynced([_smokeCardId]);
 }
 
-Future<CardDto> _dirtyCard(CardsDataSource dataSource) async {
-  final cards = await dataSource.getDirtyCards();
+Future<CardDto> _unsyncedCard(CardsDataSource dataSource) async {
+  final cards = await dataSource.getUnsyncedCards();
   return cards.singleWhere((card) => card.id == _smokeCardId);
 }
 

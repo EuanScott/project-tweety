@@ -11,7 +11,7 @@ abstract class CardsDataSource {
 
   Future<void> deleteCard(String cardId);
 
-  Future<List<CardDto>> getDirtyCards();
+  Future<List<CardDto>> getUnsyncedCards();
 
   Future<void> markCardsSynced(List<String> cardIds);
 }

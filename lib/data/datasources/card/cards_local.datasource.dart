@@ -119,7 +119,7 @@ class CardsLocalDataSource implements CardsDataSource {
   }
 
   @override
-  Future<List<CardDto>> getDirtyCards() {
+  Future<List<CardDto>> getUnsyncedCards() {
     return _database.read((db) async {
       final rows = await db.query(
         _tableName,

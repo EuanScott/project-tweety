@@ -95,7 +95,7 @@ class MockCardsDataSource implements CardsDataSource {
   }
 
   @override
-  Future<List<CardDto>> getDirtyCards() async {
+  Future<List<CardDto>> getUnsyncedCards() async {
     return List<CardDto>.unmodifiable(
       _cards.where((card) => card.syncStatus != CardSyncStatus.synced),
     );
