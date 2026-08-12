@@ -2,21 +2,16 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
-import 'package:project_tweety/domain/usecases/app_preferences/get_app_preferences.usecase.dart';
-import 'package:project_tweety/domain/usecases/app_preferences/save_app_preferences.usecase.dart';
+import 'package:project_tweety/domain/repositories/app_preferences/app_preferences.repository.dart';
 
 part 'app_preferences.state.dart';
 part 'app_preferences.cubit.freezed.dart';
 
 @injectable
 class AppPreferencesCubit extends Cubit<AppPreferencesState> {
-  AppPreferencesCubit(
-    this._getAppPreferencesUseCase,
-    this._saveAppPreferencesUseCase,
-  ) : super(const AppPreferencesState());
+  AppPreferencesCubit(this._repository) : super(const AppPreferencesState());
 
-  final GetAppPreferencesUseCase _getAppPreferencesUseCase;
-  final SaveAppPreferencesUseCase _saveAppPreferencesUseCase;
+  final AppPreferencesRepository _repository;
 
   Future<void> loadAppPreferences() async {
     emit(
@@ -28,7 +23,7 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
     );
 
     try {
-      final appPreferences = await _getAppPreferencesUseCase();
+      final appPreferences = await _repository.getAppPreferences();
 
       emit(
         state.copyWith(
@@ -85,7 +80,7 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
     );
 
     try {
-      await _saveAppPreferencesUseCase(appPreferences);
+      await _repository.saveAppPreferences(appPreferences);
     } catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(
