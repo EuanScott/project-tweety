@@ -20,6 +20,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install very_good_cli
+        run: |
+          dart pub global activate very_good_cli
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+
       - name: Generate DI/build_runner output
         run: dart run build_runner build --delete-conflicting-outputs
 
@@ -31,7 +36,7 @@ jobs:
         continue-on-error: true
 
       - name: Test
-        run: flutter test --coverage
+        run: very_good test --coverage
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4
@@ -50,7 +55,7 @@ jobs:
 
       - name: Test design_system
         working-directory: packages/design_system
-        run: flutter test
+        run: very_good test
 
       - name: Install navigation dependencies
         working-directory: packages/navigation
@@ -63,4 +68,4 @@ jobs:
 
       - name: Test navigation
         working-directory: packages/navigation
-        run: flutter test
+        run: very_good test
