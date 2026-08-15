@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:injectable/injectable.dart';
 
 abstract class AnalyticsService {

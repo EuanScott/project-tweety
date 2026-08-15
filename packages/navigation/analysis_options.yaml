@@ -1,5 +1,14 @@
 # Mirrors the root analysis_options.yaml. Analysis options do not cascade across
 # pubspec boundaries, so package lints must be declared here to be enforced.
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 include: package:flutter_lints/flutter.yaml
 
 linter:

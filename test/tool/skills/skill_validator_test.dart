@@ -12,9 +12,8 @@ void main() {
       final fixture = await _SkillFixture.create();
       addTearDown(fixture.dispose);
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(result.isValid, isFalse);
       expect(result.diagnostics, hasLength(1));
@@ -33,9 +32,8 @@ void main() {
       addTearDown(fixture.dispose);
       await fixture.addSkill('valid-skill');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(result.isValid, isTrue);
       expect(result.diagnostics, isEmpty);
@@ -55,9 +53,8 @@ name: [broken
 ## Workflow
 ''');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -83,9 +80,8 @@ license: MIT
 Run the workflow safely.
 ''');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -98,9 +94,8 @@ Run the workflow safely.
       addTearDown(fixture.dispose);
       await fixture.addSkill('invalid_name');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -118,9 +113,8 @@ Run the workflow safely.
         await fixture.readSkillMarkdown('first-skill'),
       );
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -226,9 +220,8 @@ description: Validate a focused local workflow safely.
 When `--help` is present, return usage safely.
 ''');
 
-        final result = SkillValidator(
-          repositoryRoot: fixture.repositoryRoot,
-        ).validate();
+        final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
 
         expect(
           result.diagnostics.where(
@@ -252,9 +245,8 @@ policy:
   allow_implicit_invocation: "false"
 ''');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -280,9 +272,8 @@ policy:
   allow_implicit_invocation: false
 ''');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics
@@ -307,9 +298,8 @@ policy:
   allow_implicit_invocation: false
 ''');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.where(
@@ -332,9 +322,8 @@ policy:
   allow_implicit_invocation: false
 ''');
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -360,9 +349,8 @@ policy:
         'This reference is not reachable from the skill.',
       );
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -380,9 +368,8 @@ policy:
         '$skillMarkdown\nInspect `lib/missing_feature.dart`.\n',
       );
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -415,9 +402,8 @@ policy:
           'Inspect `lib/missing_shared_feature.dart` before continuing.\n',
         );
 
-        final result = SkillValidator(
-          repositoryRoot: fixture.repositoryRoot,
-        ).validate();
+        final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
 
         expect(
           result.diagnostics
@@ -450,9 +436,8 @@ policy:
         '# Details\n\n$paragraph\n',
       );
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -460,59 +445,55 @@ policy:
       );
     });
 
-    test(
-      'reports corpus-wide duplicate paragraphs once across skill and references',
-      () async {
-        final fixture = await _SkillFixture.create();
-        addTearDown(fixture.dispose);
-        await fixture.addSkill('first-skill');
-        await fixture.addSkill('second-skill');
-        const skillParagraph =
-            'This substantial routing paragraph deliberately repeats across '
-            'two different skill instruction files for validation coverage.';
-        const referenceParagraph =
-            'This substantial reference paragraph deliberately repeats between '
-            'a local reference and shared guidance for validation coverage.';
-        final firstMarkdown = await fixture.readSkillMarkdown('first-skill');
-        await fixture.writeSkillMarkdown(
-          'first-skill',
-          '$firstMarkdown\n$skillParagraph\n\n'
-              'Read [local details](references/local.md).\n\n'
-              'Read [shared details](../references/shared.md).\n',
-        );
-        final secondMarkdown = await fixture.readSkillMarkdown('second-skill');
-        await fixture.writeSkillMarkdown(
-          'second-skill',
-          '$secondMarkdown\n$skillParagraph\n\n'
-              'Read [shared details](../references/shared.md).\n',
-        );
-        await fixture.writeReference(
-          'first-skill',
-          'local.md',
-          '# Local details\n\n$referenceParagraph\n',
-        );
-        await fixture.writeSharedReference(
-          'shared.md',
-          '# Shared details\n\n$referenceParagraph\n',
-        );
+    test('reports corpus-wide duplicate paragraphs once across skill and references', () async {
+      final fixture = await _SkillFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.addSkill('first-skill');
+      await fixture.addSkill('second-skill');
+      const skillParagraph =
+          'This substantial routing paragraph deliberately repeats across '
+          'two different skill instruction files for validation coverage.';
+      const referenceParagraph =
+          'This substantial reference paragraph deliberately repeats between '
+          'a local reference and shared guidance for validation coverage.';
+      final firstMarkdown = await fixture.readSkillMarkdown('first-skill');
+      await fixture.writeSkillMarkdown(
+        'first-skill',
+        '$firstMarkdown\n$skillParagraph\n\n'
+            'Read [local details](references/local.md).\n\n'
+            'Read [shared details](../references/shared.md).\n',
+      );
+      final secondMarkdown = await fixture.readSkillMarkdown('second-skill');
+      await fixture.writeSkillMarkdown(
+        'second-skill',
+        '$secondMarkdown\n$skillParagraph\n\n'
+            'Read [shared details](../references/shared.md).\n',
+      );
+      await fixture.writeReference(
+        'first-skill',
+        'local.md',
+        '# Local details\n\n$referenceParagraph\n',
+      );
+      await fixture.writeSharedReference(
+        'shared.md',
+        '# Shared details\n\n$referenceParagraph\n',
+      );
 
-        final result = SkillValidator(
-          repositoryRoot: fixture.repositoryRoot,
-        ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
-        final duplicates = result.diagnostics.where(
-          (diagnostic) => diagnostic.code == 'content.paragraph.duplicate',
-        );
-        expect(duplicates, hasLength(2));
-        expect(
-          duplicates.map((diagnostic) => diagnostic.path).toSet(),
-          equals(<String>{
-            '.codex/skills/second-skill/SKILL.md',
-            '.codex/skills/references/shared.md',
-          }),
-        );
-      },
-    );
+      final duplicates = result.diagnostics.where(
+        (diagnostic) => diagnostic.code == 'content.paragraph.duplicate',
+      );
+      expect(duplicates, hasLength(2));
+      expect(
+        duplicates.map((diagnostic) => diagnostic.path).toSet(),
+        equals(<String>{
+          '.codex/skills/second-skill/SKILL.md',
+          '.codex/skills/references/shared.md',
+        }),
+      );
+    });
 
     test('rejects README files inside skill directories', () async {
       final fixture = await _SkillFixture.create();
@@ -524,9 +505,8 @@ policy:
         '# Duplicated skill documentation\n',
       );
 
-      final result = SkillValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -678,13 +658,13 @@ policy:
 ''');
   }
 
-  Future<void> writeSkillMarkdown(String name, String contents) => File(
-    '${repositoryRoot.path}/.codex/skills/$name/SKILL.md',
-  ).writeAsString(contents);
+  Future<void> writeSkillMarkdown(String name, String contents) =>
+      File('${repositoryRoot.path}/.codex/skills/$name/SKILL.md')
+          .writeAsString(contents);
 
-  Future<String> readSkillMarkdown(String name) => File(
-    '${repositoryRoot.path}/.codex/skills/$name/SKILL.md',
-  ).readAsString();
+  Future<String> readSkillMarkdown(String name) =>
+      File('${repositoryRoot.path}/.codex/skills/$name/SKILL.md')
+          .readAsString();
 
   Future<void> writeReference(
     String skillName,
@@ -695,22 +675,21 @@ policy:
       '${repositoryRoot.path}/.codex/skills/$skillName/references',
     );
     await referenceDirectory.create(recursive: true);
-    await File(
-      '${referenceDirectory.path}/$referenceName',
-    ).writeAsString(contents);
+    await File('${referenceDirectory.path}/$referenceName')
+        .writeAsString(contents);
   }
 
-  Future<void> writeOpenAiMetadata(String skillName, String contents) => File(
-    '${repositoryRoot.path}/.codex/skills/$skillName/agents/openai.yaml',
-  ).writeAsString(contents);
+  Future<void> writeOpenAiMetadata(String skillName, String contents) =>
+      File('${repositoryRoot.path}/.codex/skills/$skillName/agents/openai.yaml')
+          .writeAsString(contents);
 
   Future<void> writeSkillFile(
     String skillName,
     String relativePath,
     String contents,
-  ) => File(
-    '${repositoryRoot.path}/.codex/skills/$skillName/$relativePath',
-  ).writeAsString(contents);
+  ) =>
+      File('${repositoryRoot.path}/.codex/skills/$skillName/$relativePath')
+          .writeAsString(contents);
 
   Future<void> writeSharedReference(String name, String contents) async {
     final directory = Directory(

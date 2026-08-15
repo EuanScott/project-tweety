@@ -11,9 +11,8 @@ void main() {
       final fixture = await _ContextFixture.create();
       addTearDown(fixture.dispose);
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(result.isValid, isTrue);
     });
@@ -23,9 +22,8 @@ void main() {
       addTearDown(fixture.dispose);
       await fixture.write('lib/AGENTS.md', List.filled(51, 'Rule').join('\n'));
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -43,9 +41,8 @@ void main() {
           List.filled(51, 'Skill guidance').join('\n'),
         );
 
-        final result = ContextValidator(
-          repositoryRoot: fixture.repositoryRoot,
-        ).validate();
+        final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
 
         expect(result.isValid, isTrue);
       },
@@ -56,9 +53,8 @@ void main() {
       addTearDown(fixture.dispose);
       await fixture.write('lib/AGENTS.md', '[Missing](../docs/missing.md)');
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -71,9 +67,8 @@ void main() {
       addTearDown(fixture.dispose);
       await fixture.write('AGENTS.md', '[Missing](docs/missing.md)');
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -86,9 +81,8 @@ void main() {
       addTearDown(fixture.dispose);
       await File('${fixture.repositoryRoot.path}/docs/source_map.md').delete();
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -101,9 +95,8 @@ void main() {
       addTearDown(fixture.dispose);
       await fixture.write('docs/source_map.md', '[Missing](missing.md)');
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -119,9 +112,8 @@ void main() {
         '// generated',
       );
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -132,13 +124,11 @@ void main() {
     test('rejects a missing canonical template', () async {
       final fixture = await _ContextFixture.create();
       addTearDown(fixture.dispose);
-      await File(
-        '${fixture.repositoryRoot.path}/$featurePageTemplate',
-      ).delete();
+      await File('${fixture.repositoryRoot.path}/$featurePageTemplate')
+          .delete();
 
-      final result = ContextValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),

@@ -45,42 +45,43 @@ void main() {
       },
     );
 
-    test('getData sends a GET request and handles a successful response', () async {
-      final services = Services(
-        client: MockClient((request) async {
-          expect(request.method, 'GET');
-          expect(request.url.path, '/posts');
+    test(
+      'getData sends a GET request and handles a successful response',
+      () async {
+        final services = Services(
+          client: MockClient((request) async {
+            expect(request.method, 'GET');
+            expect(request.url.path, '/posts');
 
-          return _jsonResponse([
-            {
-              'userId': 1,
-              'id': 1,
-              'title':
-                  'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
-              'body':
-                  'quia et suscipit\n'
-                  'suscipit recusandae consequuntur expedita et cum\n'
-                  'reprehenderit molestiae ut ut quas totam\n'
-                  'nostrum rerum est autem sunt rem eveniet architecto',
-            },
-          ]);
-        }),
-      );
+            return _jsonResponse([
+              {
+                'userId': 1,
+                'id': 1,
+                'title': 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
+                'body':
+                    'quia et suscipit\n'
+                    'suscipit recusandae consequuntur expedita et cum\n'
+                    'reprehenderit molestiae ut ut quas totam\n'
+                    'nostrum rerum est autem sunt rem eveniet architecto',
+              },
+            ]);
+          }),
+        );
 
-      final response = await services.getData('/posts');
+        final response = await services.getData('/posts');
 
-      expect(response[0], {
-        'userId': 1,
-        'id': 1,
-        'title':
-            'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
-        'body':
-            'quia et suscipit\n'
-            'suscipit recusandae consequuntur expedita et cum\n'
-            'reprehenderit molestiae ut ut quas totam\n'
-            'nostrum rerum est autem sunt rem eveniet architecto',
-      });
-    });
+        expect(response[0], {
+          'userId': 1,
+          'id': 1,
+          'title': 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
+          'body':
+              'quia et suscipit\n'
+              'suscipit recusandae consequuntur expedita et cum\n'
+              'reprehenderit molestiae ut ut quas totam\n'
+              'nostrum rerum est autem sunt rem eveniet architecto',
+        });
+      },
+    );
 
     test(
       'getData requests a single post and handles a successful response',
@@ -93,8 +94,7 @@ void main() {
             return _jsonResponse({
               'userId': 1,
               'id': 1,
-              'title':
-                  'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
+              'title': 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
               'body':
                   'quia et suscipit\n'
                   'suscipit recusandae consequuntur expedita et cum\n'
@@ -109,8 +109,7 @@ void main() {
         expect(response, {
           'userId': 1,
           'id': 1,
-          'title':
-              'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
+          'title': 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
           'body':
               'quia et suscipit\n'
               'suscipit recusandae consequuntur expedita et cum\n'

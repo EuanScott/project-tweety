@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+
 import 'analytics_service.dart';
 
 @lazySingleton

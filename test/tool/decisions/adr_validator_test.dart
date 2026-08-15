@@ -22,9 +22,8 @@ void main() {
       );
       await fixture.writeCatalog();
 
-      final result = AdrValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = AdrValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(result.isValid, isTrue);
       expect(result.diagnostics, isEmpty);
@@ -52,9 +51,8 @@ Unknown.
 ''');
       await fixture.writeCatalog();
 
-      final result = AdrValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = AdrValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
       final codes = result.diagnostics.map((diagnostic) => diagnostic.code);
 
       expect(result.isValid, isFalse);
@@ -90,9 +88,8 @@ Unknown.
       );
       await fixture.writeCatalog();
 
-      final result = AdrValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = AdrValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
       final codes = result.diagnostics.map((diagnostic) => diagnostic.code);
 
       expect(codes, contains('adr.supersession.cycle'));
@@ -115,9 +112,8 @@ Unknown.
       );
       await fixture.writeCatalog();
 
-      final result = AdrValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = AdrValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -143,9 +139,8 @@ Unknown.
         );
         await fixture.writeCatalog();
 
-        final result = AdrValidator(
-          repositoryRoot: fixture.repositoryRoot,
-        ).validate();
+        final result = AdrValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
 
         expect(
           result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -181,9 +176,8 @@ The team has a documented direction.
 ''');
       await fixture.writeCatalog();
 
-      final result = AdrValidator(
-        repositoryRoot: fixture.repositoryRoot,
-      ).validate();
+      final result = AdrValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
 
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -210,9 +204,8 @@ The team has a documented direction.
         );
         await fixture.writeCatalog();
 
-        final result = AdrValidator(
-          repositoryRoot: fixture.repositoryRoot,
-        ).validate();
+        final result = AdrValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
 
         expect(
           result.diagnostics.map((diagnostic) => diagnostic.code),
@@ -272,9 +265,8 @@ The team has a documented direction.
   }
 
   Future<void> writeCatalog() async {
-    final index = AdrValidator(
-      repositoryRoot: repositoryRoot,
-    ).generateCatalog();
+    final index = AdrValidator(repositoryRoot: repositoryRoot)
+        .generateCatalog();
     await write('docs/decisions/README.md', '''
 # Architecture Decision Records
 

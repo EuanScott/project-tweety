@@ -1,7 +1,6 @@
 import 'package:design_system/design_system.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/core/analytics/analytics_facade.dart';
 import 'package:project_tweety/dart_init.dart';
@@ -86,9 +85,7 @@ class _MyAppState extends State<MyApp> {
             locale: _locale(appPreferences.languageCode),
             localizationsDelegates: const [
               AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             restorationScopeId: 'project_tweety_app',

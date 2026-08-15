@@ -18,15 +18,14 @@ void main() {
         addTearDown(fixture.dispose);
 
         final manifest =
-            await ScaffoldGenerator(
-              repositoryRoot: fixture.repositoryRoot,
-            ).render(
-              const ScaffoldRequest(
-                feature: 'order_history',
-                layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
-                initialLoadOperation: 'load_orders',
-              ),
-            );
+            await ScaffoldGenerator(repositoryRoot: fixture.repositoryRoot)
+                .render(
+                  const ScaffoldRequest(
+                    feature: 'order_history',
+                    layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
+                    initialLoadOperation: 'load_orders',
+                  ),
+                );
 
         expect(manifest.files.map((file) => file.path), [
           'lib/data/repositories/order_history/order_history.repository.dart',
@@ -242,75 +241,79 @@ void main() {
       },
     );
 
-    test('renders the explicit Cubit manifest without BLoC artifacts', () async {
-      final fixture = await _ScaffoldFixture.create();
-      addTearDown(fixture.dispose);
+    test(
+      'renders the explicit Cubit manifest without BLoC artifacts',
+      () async {
+        final fixture = await _ScaffoldFixture.create();
+        addTearDown(fixture.dispose);
 
-      final manifest =
-          await ScaffoldGenerator(
-            repositoryRoot: fixture.repositoryRoot,
-          ).render(
-            const ScaffoldRequest(
-              feature: 'order_history',
-              layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
-              initialLoadOperation: 'load_orders',
-              controller: ScaffoldController.cubit,
-            ),
-          );
+        final manifest =
+            await ScaffoldGenerator(repositoryRoot: fixture.repositoryRoot)
+                .render(
+                  const ScaffoldRequest(
+                    feature: 'order_history',
+                    layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
+                    initialLoadOperation: 'load_orders',
+                    controller: ScaffoldController.cubit,
+                  ),
+                );
 
-      expect(manifest.files.map((file) => file.path), [
-        'lib/data/repositories/order_history/order_history.repository.dart',
-        'lib/data/repositories/order_history/order_history.repository_impl.dart',
-        'lib/presentation/pages/order_history/order_history.page.dart',
-        'lib/presentation/pages/order_history/widgets/order_history_error.widget.dart',
-        'lib/presentation/pages/order_history/cubit/order_history.cubit.dart',
-        'lib/presentation/pages/order_history/cubit/order_history.state.dart',
-      ]);
-      expect(
-        manifest.files[2].content,
-        allOf(
-          contains("import 'cubit/order_history.cubit.dart';"),
-          contains('GetIt.I<OrderHistoryCubit>()..loadOrders()'),
-          contains("part 'widgets/order_history_error.widget.dart';"),
-          contains('BlocBuilder<OrderHistoryCubit, OrderHistoryState>'),
-        ),
-      );
-      expect(
-        manifest.files[3].content,
-        allOf(
-          contains("part of '../order_history.page.dart';"),
-          contains('class _OrderHistoryError extends StatelessWidget'),
-        ),
-      );
-      expect(
-        manifest.files[4].content,
-        allOf(
-          contains('class OrderHistoryCubit extends Cubit<OrderHistoryState>'),
-          contains('Future<void> loadOrders() async'),
-          contains('await _repository.loadOrders();'),
-          contains("part 'order_history.cubit.freezed.dart';"),
-        ),
-      );
-      expect(
-        manifest.files.every(
-          (file) =>
-              !file.path.endsWith('.bloc.dart') &&
-              !file.path.endsWith('.event.dart') &&
-              !file.path.endsWith('.freezed.dart'),
-        ),
-        isTrue,
-      );
-      final formatter = DartFormatter(
-        languageVersion: DartFormatter.latestLanguageVersion,
-      );
-      for (final file in manifest.files) {
+        expect(manifest.files.map((file) => file.path), [
+          'lib/data/repositories/order_history/order_history.repository.dart',
+          'lib/data/repositories/order_history/order_history.repository_impl.dart',
+          'lib/presentation/pages/order_history/order_history.page.dart',
+          'lib/presentation/pages/order_history/widgets/order_history_error.widget.dart',
+          'lib/presentation/pages/order_history/cubit/order_history.cubit.dart',
+          'lib/presentation/pages/order_history/cubit/order_history.state.dart',
+        ]);
         expect(
-          formatter.format(file.content, uri: file.path),
-          file.content,
-          reason: '${file.path} must be formatter-stable for --check',
+          manifest.files[2].content,
+          allOf(
+            contains("import 'cubit/order_history.cubit.dart';"),
+            contains('GetIt.I<OrderHistoryCubit>()..loadOrders()'),
+            contains("part 'widgets/order_history_error.widget.dart';"),
+            contains('BlocBuilder<OrderHistoryCubit, OrderHistoryState>'),
+          ),
         );
-      }
-    });
+        expect(
+          manifest.files[3].content,
+          allOf(
+            contains("part of '../order_history.page.dart';"),
+            contains('class _OrderHistoryError extends StatelessWidget'),
+          ),
+        );
+        expect(
+          manifest.files[4].content,
+          allOf(
+            contains(
+              'class OrderHistoryCubit extends Cubit<OrderHistoryState>',
+            ),
+            contains('Future<void> loadOrders() async'),
+            contains('await _repository.loadOrders();'),
+            contains("part 'order_history.cubit.freezed.dart';"),
+          ),
+        );
+        expect(
+          manifest.files.every(
+            (file) =>
+                !file.path.endsWith('.bloc.dart') &&
+                !file.path.endsWith('.event.dart') &&
+                !file.path.endsWith('.freezed.dart'),
+          ),
+          isTrue,
+        );
+        final formatter = DartFormatter(
+          languageVersion: DartFormatter.latestLanguageVersion,
+        );
+        for (final file in manifest.files) {
+          expect(
+            formatter.format(file.content, uri: file.path),
+            file.content,
+            reason: '${file.path} must be formatter-stable for --check',
+          );
+        }
+      },
+    );
 
     test(
       'reports the first missing canonical template deterministically',
@@ -344,16 +347,15 @@ void main() {
       addTearDown(fixture.dispose);
 
       final manifest =
-          await ScaffoldGenerator(
-            repositoryRoot: fixture.repositoryRoot,
-          ).render(
-            const ScaffoldRequest(
-              feature: 'orders',
-              folderKey: 'commerce',
-              layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
-              initialLoadOperation: 'load_orders',
-            ),
-          );
+          await ScaffoldGenerator(repositoryRoot: fixture.repositoryRoot)
+              .render(
+                const ScaffoldRequest(
+                  feature: 'orders',
+                  folderKey: 'commerce',
+                  layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
+                  initialLoadOperation: 'load_orders',
+                ),
+              );
 
       expect(
         manifest.files[4].content,
@@ -371,16 +373,15 @@ void main() {
         addTearDown(fixture.dispose);
 
         final manifest =
-            await ScaffoldGenerator(
-              repositoryRoot: fixture.repositoryRoot,
-            ).render(
-              const ScaffoldRequest(
-                feature: 'my_template',
-                folderKey: 'template_tools',
-                layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
-                initialLoadOperation: 'load_template',
-              ),
-            );
+            await ScaffoldGenerator(repositoryRoot: fixture.repositoryRoot)
+                .render(
+                  const ScaffoldRequest(
+                    feature: 'my_template',
+                    folderKey: 'template_tools',
+                    layers: {ScaffoldLayer.data, ScaffoldLayer.presentation},
+                    initialLoadOperation: 'load_template',
+                  ),
+                );
 
         expect(
           manifest.files.first.path,
@@ -408,47 +409,44 @@ void main() {
       },
     );
 
-    test(
-      'rejects initial load operations that collide with inherited Cubit members',
-      () async {
-        final fixture = await _ScaffoldFixture.create();
-        addTearDown(fixture.dispose);
-        const operations = [
-          'emit',
-          'state',
-          'stream',
-          'add_error',
-          'is_closed',
-          'close',
-          'on_change',
-          'on_error',
-        ];
-        final generator = ScaffoldGenerator(
-          repositoryRoot: fixture.repositoryRoot,
-        );
+    test('rejects initial load operations that collide with inherited Cubit members', () async {
+      final fixture = await _ScaffoldFixture.create();
+      addTearDown(fixture.dispose);
+      const operations = [
+        'emit',
+        'state',
+        'stream',
+        'add_error',
+        'is_closed',
+        'close',
+        'on_change',
+        'on_error',
+      ];
+      final generator = ScaffoldGenerator(
+        repositoryRoot: fixture.repositoryRoot,
+      );
 
-        for (final operation in operations) {
-          await expectLater(
-            generator.render(
-              ScaffoldRequest(
-                feature: 'orders',
-                layers: const {ScaffoldLayer.data, ScaffoldLayer.presentation},
-                initialLoadOperation: operation,
-                controller: ScaffoldController.cubit,
-              ),
+      for (final operation in operations) {
+        await expectLater(
+          generator.render(
+            ScaffoldRequest(
+              feature: 'orders',
+              layers: const {ScaffoldLayer.data, ScaffoldLayer.presentation},
+              initialLoadOperation: operation,
+              controller: ScaffoldController.cubit,
             ),
-            throwsA(
-              isA<ScaffoldException>().having(
-                (error) => error.code,
-                'code',
-                'invalid_name',
-              ),
+          ),
+          throwsA(
+            isA<ScaffoldException>().having(
+              (error) => error.code,
+              'code',
+              'invalid_name',
             ),
-            reason: operation,
-          );
-        }
-      },
-    );
+          ),
+          reason: operation,
+        );
+      }
+    });
 
     test('rejects destructive operations as automatic initial loads', () async {
       final fixture = await _ScaffoldFixture.create();
@@ -607,9 +605,8 @@ void main() {
         await conflict.writeAsString('user-owned');
 
         await expectLater(
-          ScaffoldExecutor(
-            repositoryRoot: fixture.repositoryRoot,
-          ).execute(manifest, mode: ScaffoldMode.write),
+          ScaffoldExecutor(repositoryRoot: fixture.repositoryRoot)
+              .execute(manifest, mode: ScaffoldMode.write),
           throwsA(
             isA<ScaffoldException>()
                 .having((error) => error.code, 'code', 'targets_exist')
@@ -621,9 +618,8 @@ void main() {
 
         for (final artifact in manifest.files.take(manifest.files.length - 1)) {
           expect(
-            File(
-              p.join(fixture.repositoryRoot.path, artifact.path),
-            ).existsSync(),
+            File(p.join(fixture.repositoryRoot.path, artifact.path))
+                .existsSync(),
             isFalse,
           );
         }
@@ -647,9 +643,8 @@ void main() {
       ]);
 
       await expectLater(
-        ScaffoldExecutor(
-          repositoryRoot: fixture.repositoryRoot,
-        ).execute(manifest, mode: ScaffoldMode.write),
+        ScaffoldExecutor(repositoryRoot: fixture.repositoryRoot)
+            .execute(manifest, mode: ScaffoldMode.write),
         throwsA(
           isA<ScaffoldException>().having(
             (error) => error.code,
@@ -674,9 +669,8 @@ void main() {
       ]);
 
       await expectLater(
-        ScaffoldExecutor(
-          repositoryRoot: fixture.repositoryRoot,
-        ).execute(manifest, mode: ScaffoldMode.write),
+        ScaffoldExecutor(repositoryRoot: fixture.repositoryRoot)
+            .execute(manifest, mode: ScaffoldMode.write),
         throwsA(
           isA<ScaffoldException>().having(
             (error) => error.code,
@@ -686,9 +680,8 @@ void main() {
         ),
       );
       expect(
-        File(
-          p.join(fixture.repositoryRoot.path, 'targets/first.dart'),
-        ).existsSync(),
+        File(p.join(fixture.repositoryRoot.path, 'targets/first.dart'))
+            .existsSync(),
         isFalse,
       );
       expect(blockedParent.readAsStringSync(), 'not-a-directory');
@@ -724,15 +717,13 @@ void main() {
         ),
       );
       expect(
-        File(
-          p.join(fixture.repositoryRoot.path, 'generated/first.dart'),
-        ).existsSync(),
+        File(p.join(fixture.repositoryRoot.path, 'generated/first.dart'))
+            .existsSync(),
         isFalse,
       );
       expect(
-        File(
-          p.join(fixture.repositoryRoot.path, 'generated/second.dart'),
-        ).existsSync(),
+        File(p.join(fixture.repositoryRoot.path, 'generated/second.dart'))
+            .existsSync(),
         isFalse,
       );
       expect(
@@ -776,15 +767,13 @@ void main() {
           ),
         );
         expect(
-          File(
-            p.join(fixture.repositoryRoot.path, 'generated/first.dart'),
-          ).existsSync(),
+          File(p.join(fixture.repositoryRoot.path, 'generated/first.dart'))
+              .existsSync(),
           isFalse,
         );
         expect(
-          File(
-            p.join(fixture.repositoryRoot.path, 'generated/second.dart'),
-          ).readAsStringSync(),
+          File(p.join(fixture.repositoryRoot.path, 'generated/second.dart'))
+              .readAsStringSync(),
           'competing writer',
         );
       },

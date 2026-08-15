@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Convenience modal helpers available directly from a [BuildContext].
 extension ModalExtension on BuildContext {

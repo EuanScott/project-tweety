@@ -1,5 +1,5 @@
 import 'package:design_system/design_system.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     as card_model;
@@ -64,9 +64,10 @@ class _CardDetailsView extends StatelessWidget {
             title: l10n.cardDetailsMissingTitle,
             description: l10n.cardDetailsMissingDescription,
           ),
-          CardsDetailSuccess(:final card) => state.isEditingCard(cardId)
-              ? _CardDetailsEditor(cardId: cardId)
-              : _CardDetailsBody(card: card),
+          CardsDetailSuccess(:final card) =>
+            state.isEditingCard(cardId)
+                ? _CardDetailsEditor(cardId: cardId)
+                : _CardDetailsBody(card: card),
         };
       },
     );

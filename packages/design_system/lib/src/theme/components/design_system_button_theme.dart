@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'design_system_text_theme.dart';
 
@@ -17,9 +17,8 @@ class DesignSystemButtonTheme {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textStyle: DesignSystemTextTheme.buttonTextStyle(
-          colorScheme,
-        ).copyWith(color: null),
+        textStyle: DesignSystemTextTheme.buttonTextStyle(colorScheme)
+            .copyWith(color: null),
       ),
     );
   }
@@ -34,9 +33,8 @@ class DesignSystemButtonTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         side: BorderSide(color: colorScheme.primary, width: 1),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textStyle: DesignSystemTextTheme.buttonTextStyle(
-          colorScheme,
-        ).copyWith(color: null),
+        textStyle: DesignSystemTextTheme.buttonTextStyle(colorScheme)
+            .copyWith(color: null),
       ),
     );
   }
@@ -50,9 +48,8 @@ class DesignSystemButtonTheme {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textStyle: DesignSystemTextTheme.buttonTextStyle(
-          colorScheme,
-        ).copyWith(color: null),
+        textStyle: DesignSystemTextTheme.buttonTextStyle(colorScheme)
+            .copyWith(color: null),
       ),
     );
   }

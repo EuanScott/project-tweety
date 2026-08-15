@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'cards.bloc.dart';
@@ -9,6 +9,7 @@ part of 'cards.bloc.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -1041,7 +1042,7 @@ class _$CardsStateCopyWithImpl<$Res>
 /// Create a copy of CardsState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? items = null,Object? errorMessage = freezed,Object? draft = null,Object? initialDraft = freezed,Object? invalidDraftFields = null,Object? hasSubmittedCreate = null,Object? createStatus = null,Object? createError = null,Object? createdCardId = freezed,Object? editingCardId = freezed,Object? hasSubmittedEdit = null,Object? editStatus = null,Object? editError = null,Object? missingEditCardId = freezed,Object? updatedCardId = freezed,Object? deleteStatus = null,Object? deletingCardId = freezed,Object? deleteErrorCardId = freezed,Object? deletedCardId = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(CardsState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as CardsStatus,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
 as List<Card>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -1224,7 +1225,7 @@ return $default(_that.status,_that.items,_that.errorMessage,_that.draft,_that.in
 
 
 class _CardsState extends CardsState {
-  const _CardsState({this.status = CardsStatus.initial, final  List<Card> items = const <Card>[], this.errorMessage, this.draft = const CardDraft(title: '', description: ''), this.initialDraft, final  Set<CardDraftField> invalidDraftFields = const <CardDraftField>{}, this.hasSubmittedCreate = false, this.createStatus = CardsCreateStatus.idle, this.createError = false, this.createdCardId, this.editingCardId, this.hasSubmittedEdit = false, this.editStatus = CardsEditStatus.idle, this.editError = false, this.missingEditCardId, this.updatedCardId, this.deleteStatus = CardsDeleteStatus.idle, this.deletingCardId, this.deleteErrorCardId, this.deletedCardId}): _items = items,_invalidDraftFields = invalidDraftFields,super._();
+  const _CardsState({this.status = CardsStatus.initial,  List<Card> items = const <Card>[], this.errorMessage, this.draft = const CardDraft(title: '', description: ''), this.initialDraft,  Set<CardDraftField> invalidDraftFields = const <CardDraftField>{}, this.hasSubmittedCreate = false, this.createStatus = CardsCreateStatus.idle, this.createError = false, this.createdCardId, this.editingCardId, this.hasSubmittedEdit = false, this.editStatus = CardsEditStatus.idle, this.editError = false, this.missingEditCardId, this.updatedCardId, this.deleteStatus = CardsDeleteStatus.idle, this.deletingCardId, this.deleteErrorCardId, this.deletedCardId}): _items = items,_invalidDraftFields = invalidDraftFields,super._();
   
 
 @override@JsonKey() final  CardsStatus status;

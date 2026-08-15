@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'components/design_system_app_bar_theme.dart';
 import 'components/design_system_bottom_sheet_theme.dart';
