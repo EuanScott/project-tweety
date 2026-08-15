@@ -1,4 +1,6 @@
-include: package:flutter_lints/flutter.yaml
+include:
+  - package:lints/recommended.yaml
+  - package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
@@ -13,15 +15,16 @@ analyzer:
 
 linter:
   rules:
-     avoid_print: true
-     prefer_single_quotes: true
+    avoid_print: true
+    prefer_single_quotes: true
 
+# Check bloc linting rules here: https://bloclibrary.dev/lint/
 bloc:
- rules:
-   avoid_build_context_extensions: false
-   avoid_flutter_imports: error
-   avoid_public_bloc_methods: error
-   avoid_public_fields: warning
-   prefer_build_context_extensions: false
-   prefer_file_naming_conventions: true
-   prefer_void_public_cubit_methods: info
+  rules:
+    avoid_build_context_extensions: false
+    avoid_flutter_imports: error
+    avoid_public_bloc_methods: error
+    avoid_public_fields: warning
+    prefer_build_context_extensions: false
+    prefer_file_naming_conventions: false
+    prefer_void_public_cubit_methods: info

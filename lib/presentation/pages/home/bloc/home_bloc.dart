@@ -13,12 +13,12 @@ enum HomeAction { cancel, next, primary, secondary, back }
 
 @injectable
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc(this.errorReporting) : super(const HomeState()) {
+  HomeBloc(this._errorReporting) : super(const HomeState()) {
     on<HomeStarted>(_onStarted);
     on<HomeActionPressed>(_onActionPressed);
   }
 
-  final ErrorReportingFacade errorReporting;
+  final ErrorReportingFacade _errorReporting;
 
   void _onStarted(HomeStarted event, Emitter<HomeState> emit) {
     emit(state.copyWith(status: HomeStatus.ready));
@@ -31,7 +31,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       emit(state.copyWith(status: HomeStatus.ready, lastAction: event.action));
     } catch (error, stacktrace) {
-      unawaited(errorReporting.recordError(error, stacktrace));
+      unawaited(_errorReporting.recordError(error, stacktrace));
       rethrow;
     }
   }
