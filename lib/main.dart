@@ -56,6 +56,38 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  //region Helpers
+
+  ThemeMode _themeMode(AppPreferencesThemeMode themeMode) {
+    switch (themeMode) {
+      case AppPreferencesThemeMode.system:
+        return ThemeMode.system;
+      case AppPreferencesThemeMode.light:
+        return ThemeMode.light;
+      case AppPreferencesThemeMode.dark:
+        return ThemeMode.dark;
+    }
+  }
+
+  ThemeData _themeData(ThemeData themeData) {
+    final platform = widget.platform;
+    if (platform == null) {
+      return themeData;
+    }
+
+    return themeData.copyWith(platform: platform);
+  }
+
+  Locale? _locale(String? languageCode) {
+    if (languageCode == null) {
+      return null;
+    }
+
+    return Locale(languageCode);
+  }
+
+  //endregion
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -95,33 +127,5 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
-  }
-
-  ThemeMode _themeMode(AppPreferencesThemeMode themeMode) {
-    switch (themeMode) {
-      case AppPreferencesThemeMode.system:
-        return ThemeMode.system;
-      case AppPreferencesThemeMode.light:
-        return ThemeMode.light;
-      case AppPreferencesThemeMode.dark:
-        return ThemeMode.dark;
-    }
-  }
-
-  ThemeData _themeData(ThemeData themeData) {
-    final platform = widget.platform;
-    if (platform == null) {
-      return themeData;
-    }
-
-    return themeData.copyWith(platform: platform);
-  }
-
-  Locale? _locale(String? languageCode) {
-    if (languageCode == null) {
-      return null;
-    }
-
-    return Locale(languageCode);
   }
 }

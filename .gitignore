@@ -35,6 +35,7 @@ migrate_working_dir/
 packages/*/build/
 *.freezed.dart
 *.g.dart
+*.config.dart
 **/.test_runner.dart
 
 # Symbolication related
