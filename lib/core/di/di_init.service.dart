@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 
+import '../platform/orientation_policy.service.dart';
 import '../storage/app_preferences.storage.dart';
 
 /// Orchestrates one-time initialization for app-level services.
@@ -10,9 +11,10 @@ import '../storage/app_preferences.storage.dart';
 /// - The orchestrator resolves and initializes services in a controlled order.
 @singleton
 class DiInitService {
-  DiInitService(this._appPreferencesStorage);
+  DiInitService(this._appPreferencesStorage, this._orientationPolicyService);
 
   final AppPreferencesStorage _appPreferencesStorage;
+  final OrientationPolicyService _orientationPolicyService;
 
   /// Initializes all registered app-level services.
   ///
@@ -20,5 +22,6 @@ class DiInitService {
   ///   - If one service depends on another, be sure to initialize that first, to prevent weird errors.
   Future<void> initializeAllServices() async {
     await _appPreferencesStorage.readPreferences();
+    await _orientationPolicyService.start();
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
-import 'dart:ui' show DisplayFeature, DisplayFeatureState, DisplayFeatureType;
+import 'dart:ui' show DisplayFeature;
 
+import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Lays out primary and secondary content beside each other on wide or foldable
@@ -39,28 +40,8 @@ class SplitPaneLayout extends StatelessWidget {
   }
 
   /// Returns a vertical fold/hinge that splits the current media surface.
-  static DisplayFeature? verticalDisplayFeatureFor(MediaQueryData mediaQuery) {
-    for (final displayFeature in mediaQuery.displayFeatures) {
-      final bounds = displayFeature.bounds;
-      final isFoldableFeature =
-          displayFeature.type == DisplayFeatureType.hinge ||
-          displayFeature.type == DisplayFeatureType.fold;
-      final splitsVertically =
-          bounds.left > 0 &&
-          bounds.right < mediaQuery.size.width &&
-          bounds.height >= mediaQuery.size.height;
-      final isObstructing =
-          bounds.shortestSide > 0 ||
-          displayFeature.state == DisplayFeatureState.postureHalfOpened ||
-          displayFeature.type == DisplayFeatureType.fold;
-
-      if (isFoldableFeature && splitsVertically && isObstructing) {
-        return displayFeature;
-      }
-    }
-
-    return null;
-  }
+  static DisplayFeature? verticalDisplayFeatureFor(MediaQueryData mediaQuery) =>
+      DisplayMetrics.verticalDisplayFeatureFor(mediaQuery);
 
   /// The primary pane, usually a list or master view.
   final Widget primary;
