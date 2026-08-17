@@ -8,6 +8,7 @@ Future<void> dartInit() async {
   await configureCoreDependencies();
 
   // Initialize Firebase pre-DI
+  // TODO: Move Firebase to post first frame startup
   // await Firebase().initialize();
 
   // Initialize all app-level services via the di orchestrator

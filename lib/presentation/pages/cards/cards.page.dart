@@ -23,6 +23,7 @@ part 'widgets/cards_error.widget.dart';
 part 'widgets/cards_list.widget.dart';
 
 // TODO: What about portrait tablet view mode?
+// TODO: Editing on dual screen isn't giving weird stack behaviour
 class Cards extends StatefulWidget {
   const Cards({this.selectedCardId, this.isCreating = false, super.key});
 
