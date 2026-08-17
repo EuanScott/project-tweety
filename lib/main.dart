@@ -12,8 +12,6 @@ import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_pref
 
 import 'l10n/app_localizations.dart';
 
-/// TODO: docs
-/// TODO: code cleanup
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
