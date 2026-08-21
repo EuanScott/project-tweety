@@ -7,7 +7,7 @@ import 'package:project_tweety/presentation/navigation/navigation_extensions.dar
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 class Settings extends StatelessWidget {
-  const Settings({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class Settings extends StatelessWidget {
 }
 
 class _SettingsView extends StatelessWidget {
-  const _SettingsView();
+  const new();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _SettingsView extends StatelessWidget {
 
     return ListView(
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(16),
+      padding: const .all(16),
       children: [
         AppListTile(
           title: Text(l10n.settingsAppPreferencesTitle),

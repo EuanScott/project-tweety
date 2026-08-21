@@ -8,11 +8,11 @@ class const _AppPreferencesError({required final String message})
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const .all(24),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
-            Text(message, textAlign: TextAlign.center),
+            Text(message, textAlign: .center),
             const SizedBox(height: 12),
             AppButton.primary(
               onPressed: () {

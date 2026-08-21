@@ -14,10 +14,9 @@ enum PageTitleBehavior {
 
   /// Whether Cupertino chrome should render a large title.
   bool get usesLargeCupertinoTitle {
-    return this == PageTitleBehavior.large ||
-        this == PageTitleBehavior.largeStatic;
+    return this == .large || this == .largeStatic;
   }
 
   /// Whether large-title chrome can collapse through scroll gestures.
-  bool get allowsCupertinoCollapse => this != PageTitleBehavior.largeStatic;
+  bool get allowsCupertinoCollapse => this != .largeStatic;
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 class SystemTextSettingsService {
-  SystemTextSettingsService._();
+  new _();
 
   static const MethodChannel _channel = MethodChannel(
     'project_tweety/system_text_settings',

@@ -17,7 +17,7 @@ const _allowedStatuses = <String>{
 };
 
 final class AdrDiagnostic {
-  const AdrDiagnostic({
+  const new({
     required this.code,
     required this.message,
     required this.path,
@@ -29,7 +29,7 @@ final class AdrDiagnostic {
 }
 
 final class AdrValidationResult {
-  const AdrValidationResult(this.diagnostics);
+  const new(this.diagnostics);
 
   final List<AdrDiagnostic> diagnostics;
 
@@ -37,7 +37,7 @@ final class AdrValidationResult {
 }
 
 final class AdrValidator {
-  const AdrValidator({required this.repositoryRoot});
+  const new({required this.repositoryRoot});
 
   final Directory repositoryRoot;
 
@@ -511,7 +511,7 @@ final class AdrValidator {
 }
 
 final class _AdrRecord {
-  const _AdrRecord({
+  const new({
     required this.id,
     required this.title,
     required this.status,
@@ -531,7 +531,7 @@ final class _AdrRecord {
 }
 
 final class _AdrReference {
-  const _AdrReference({required this.id, required this.fileName});
+  const new({required this.id, required this.fileName});
 
   final String id;
   final String fileName;

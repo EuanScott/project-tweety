@@ -217,7 +217,7 @@ The team has a documented direction.
 }
 
 final class _AdrFixture {
-  _AdrFixture._(this.repositoryRoot);
+  new _(this.repositoryRoot);
 
   final Directory repositoryRoot;
 

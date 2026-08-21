@@ -3,7 +3,7 @@ import 'package:shared_preferences_platform_interface/types.dart';
 
 final class InMemorySharedPreferencesAsyncPlatform
     extends SharedPreferencesAsyncPlatform {
-  InMemorySharedPreferencesAsyncPlatform([Map<String, Object>? seedData])
+  new([Map<String, Object>? seedData])
     : _data = <String, Object>{...?seedData};
 
   final Map<String, Object> _data;

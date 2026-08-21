@@ -8,13 +8,13 @@ class const _CardsEmpty() extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const .all(24),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             Text(l10n.cardCreateEmptyTitle, style: theme.textTheme.titleMedium),
             const SizedBox(height: 8),
-            Text(l10n.cardCreateEmptyDescription, textAlign: TextAlign.center),
+            Text(l10n.cardCreateEmptyDescription, textAlign: .center),
             const SizedBox(height: 16),
             AppButton.primary(
               onPressed: () => CardsDraftDiscardGuard.discardThen(

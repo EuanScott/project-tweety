@@ -12,7 +12,7 @@ import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 /// reads are a tripwire, and a gated repository whose writes stay pending until
 /// the test completes them.
 class FakeCardsRepository implements CardsRepository {
-  FakeCardsRepository({
+  new({
     List<Card>? cards,
     this.readError,
     this.createError,
@@ -26,7 +26,7 @@ class FakeCardsRepository implements CardsRepository {
   /// Reads the collection through [readCards] and treats any detail read as a
   /// failure, for tests asserting that details derive from the loaded
   /// collection rather than a second round trip.
-  FakeCardsRepository.collectionOnly(Future<List<Card>> Function() readCards)
+  new collectionOnly(Future<List<Card>> Function() readCards)
     : _cards = <Card>[],
       _readCards = readCards,
       _detailReadsSupported = false,
@@ -38,7 +38,7 @@ class FakeCardsRepository implements CardsRepository {
 
   /// Leaves every write pending until [completeCreate], [completeUpdate], or
   /// [completeDelete] is called, so tests can assert in-flight state.
-  FakeCardsRepository.gated()
+  new gated()
     : _cards = <Card>[],
       _readCards = null,
       _detailReadsSupported = true,

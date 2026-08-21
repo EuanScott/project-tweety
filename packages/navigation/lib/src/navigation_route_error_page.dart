@@ -31,9 +31,9 @@ class const NavigationRouteErrorPage({
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const .all(24),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: [
                 Icon(
                   Icons.map_outlined,
@@ -44,10 +44,10 @@ class const NavigationRouteErrorPage({
                 Text(
                   title,
                   style: theme.textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
+                  textAlign: .center,
                 ),
                 const SizedBox(height: 8),
-                Text(description, textAlign: TextAlign.center),
+                Text(description, textAlign: .center),
                 const SizedBox(height: 24),
                 FilledButton(
                   onPressed: onActionPressed,

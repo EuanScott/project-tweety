@@ -18,7 +18,7 @@ import 'design_color_schemes.dart';
 /// supplied through [DesignBrand]. This keeps the visual system consistent
 /// while still allowing different branded experiences.
 class DesignSystemTheme {
-  DesignSystemTheme._();
+  new _();
 
   /// Builds the light theme for a given [brand].
   static ThemeData light({DesignBrand brand = DesignBrands.tweetyB2c}) {

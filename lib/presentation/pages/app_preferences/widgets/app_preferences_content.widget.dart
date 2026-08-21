@@ -12,7 +12,7 @@ class const _AppPreferencesContent({
     final direction = Directionality.of(context);
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const .all(16),
       children: [
         AppPickerField<app_preferences_entity.AppPreferencesThemeMode>(
           label: l10n.appPreferencesThemeLabel,
@@ -100,11 +100,11 @@ class const _AppPreferencesContent({
     app_preferences_entity.AppPreferencesThemeMode themeMode,
   ) {
     switch (themeMode) {
-      case app_preferences_entity.AppPreferencesThemeMode.system:
+      case .system:
         return l10n.appPreferencesThemeSystem;
-      case app_preferences_entity.AppPreferencesThemeMode.light:
+      case .light:
         return l10n.appPreferencesThemeLight;
-      case app_preferences_entity.AppPreferencesThemeMode.dark:
+      case .dark:
         return l10n.appPreferencesThemeDark;
     }
   }
@@ -114,7 +114,7 @@ class const _AppPreferencesContent({
     app_preferences_entity.AppPreferencesThemeMode themeMode,
     app_preferences_entity.AppPreferencesThemeMode deviceThemeMode,
   ) {
-    if (themeMode != app_preferences_entity.AppPreferencesThemeMode.system) {
+    if (themeMode != .system) {
       return _themeModeLabel(l10n, themeMode);
     }
 
@@ -127,8 +127,7 @@ class const _AppPreferencesContent({
     AppLocalizations l10n,
     app_preferences_entity.AppPreferencesThemeMode deviceThemeMode,
   ) {
-    if (appPreferences.themeMode !=
-        app_preferences_entity.AppPreferencesThemeMode.system) {
+    if (appPreferences.themeMode != .system) {
       return l10n.appPreferencesThemeDeviceSetting(
         _themeModeLabel(l10n, deviceThemeMode),
       );
@@ -160,9 +159,9 @@ class const _AppPreferencesContent({
 
   String _directionLabel(AppLocalizations l10n, TextDirection direction) {
     switch (direction) {
-      case TextDirection.ltr:
+      case .ltr:
         return l10n.appPreferencesDirectionLtr;
-      case TextDirection.rtl:
+      case .rtl:
         return l10n.appPreferencesDirectionRtl;
     }
   }

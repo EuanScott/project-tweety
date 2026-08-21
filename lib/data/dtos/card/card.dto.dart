@@ -40,7 +40,7 @@ class const CardDto({
     };
   }
 
-  factory CardDto.fromDatabaseRow(Map<String, Object?> row) {
+  factory fromDatabaseRow(Map<String, Object?> row) {
     return CardDto(
       id: row['id']! as String,
       title: row['title']! as String,

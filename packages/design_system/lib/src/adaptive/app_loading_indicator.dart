@@ -9,7 +9,7 @@ import 'app_design_platform.dart';
 /// code so loading states stay native per platform.
 class AppLoadingIndicator extends StatelessWidget {
   /// Creates a centered-size adaptive loading indicator.
-  const AppLoadingIndicator({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {

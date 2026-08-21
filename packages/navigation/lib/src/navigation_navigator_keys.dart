@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 /// Holds root and branch navigator keys for a tabbed router.
 class NavigationNavigatorKeys<TTab extends Object> {
   /// Creates root and branch navigator keys for [tabs].
-  NavigationNavigatorKeys(Iterable<TTab> tabs)
+  new(Iterable<TTab> tabs)
     : root = GlobalKey<NavigatorState>(debugLabel: 'rootNavigator'),
       _branchKeys = <TTab, GlobalKey<NavigatorState>>{
         for (final tab in tabs)

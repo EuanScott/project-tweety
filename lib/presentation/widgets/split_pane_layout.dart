@@ -41,8 +41,8 @@ class const SplitPaneLayout({
   final BorderRadius secondaryBorderRadius = _secondaryBorderRadius,
   super.key,
 }) extends StatelessWidget {
-  static const BorderRadius _secondaryBorderRadius = BorderRadius.only(
-    topLeft: Radius.circular(16),
+  static const BorderRadius _secondaryBorderRadius = .only(
+    topLeft: .circular(16),
   );
 
   /// Returns whether a two-pane layout should be used for the current surface.
@@ -141,8 +141,10 @@ class const SplitPaneLayout({
   }
 }
 
-class const _PrimaryPane({required final double? width, required final Widget child})
-    extends StatelessWidget {
+class const _PrimaryPane({
+  required final double? width,
+  required final Widget child,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = this.width;

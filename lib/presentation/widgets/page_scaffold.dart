@@ -40,7 +40,7 @@ class const PageScaffold({
   /// Material platforms currently render all variants with the standard
   /// [ToolBar]. Cupertino platforms render large-title variants with
   /// [CupertinoSliverNavigationBar].
-  final PageTitleBehavior titleBehavior = PageTitleBehavior.standard,
+  final PageTitleBehavior titleBehavior = .standard,
 
   /// Width at which [secondaryBody] is shown beside [body].
   final double secondaryBreakpoint = 600,
@@ -55,7 +55,7 @@ class const PageScaffold({
   final EdgeInsetsGeometry bodyPadding = _bodyPadding,
   super.key,
 }) extends StatelessWidget {
-  static const EdgeInsets _bodyPadding = EdgeInsets.symmetric(horizontal: 16);
+  static const EdgeInsets _bodyPadding = .symmetric(horizontal: 16);
   static const double _cupertinoLargeTitleBodyTopInset = 16;
 
   /// Whether the current surface should render primary and secondary panes.
@@ -78,7 +78,7 @@ class const PageScaffold({
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cupertinoBackgroundColor = theme.brightness == Brightness.dark
+    final cupertinoBackgroundColor = theme.brightness == .dark
         ? theme.appBarTheme.backgroundColor
         : null;
 
@@ -102,7 +102,7 @@ class const PageScaffold({
               top: false,
               child: _PageScaffoldBody(
                 scaffold: this,
-                additionalPadding: const EdgeInsets.only(
+                additionalPadding: const .only(
                   top: _cupertinoLargeTitleBodyTopInset,
                 ),
               ),
@@ -135,7 +135,7 @@ class const PageScaffold({
     }
 
     return CupertinoButton(
-      padding: EdgeInsets.zero,
+      padding: .zero,
       onPressed: action.onPressed,
       child: Icon(action.icon),
     );
@@ -144,7 +144,7 @@ class const PageScaffold({
 
 class const _PageScaffoldBody({
   required final PageScaffold scaffold,
-  final EdgeInsetsGeometry additionalPadding = EdgeInsets.zero,
+  final EdgeInsetsGeometry additionalPadding = .zero,
 }) extends StatefulWidget {
   @override
   State<_PageScaffoldBody> createState() => _PageScaffoldBodyState();

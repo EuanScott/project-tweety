@@ -13,7 +13,7 @@ enum HomeAction { cancel, next, primary, secondary, back }
 
 @injectable
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc(this._errorReporting) : super(const HomeState()) {
+  new(this._errorReporting) : super(const HomeState()) {
     on<HomeStarted>(_onStarted);
     on<HomeActionPressed>(_onActionPressed);
   }

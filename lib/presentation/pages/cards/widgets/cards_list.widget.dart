@@ -7,7 +7,7 @@ class const _CardsList({
   required final Future<void> Function() onRefresh,
   super.key,
 }) extends StatefulWidget {
-  static const EdgeInsets _listPadding = EdgeInsets.symmetric(vertical: 8);
+  static const EdgeInsets _listPadding = .symmetric(vertical: 8);
 
   @override
   State<_CardsList> createState() => _CardsListState();
@@ -61,10 +61,10 @@ class _CardsListState extends State<_CardsList> {
 
           return Card(
             key: _itemKeyFor(item.id),
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            margin: const .symmetric(vertical: 8),
             color: theme.cardTheme.color,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: .circular(12),
               side: BorderSide(
                 color: isSelected
                     ? theme.colorScheme.primary
@@ -73,13 +73,13 @@ class _CardsListState extends State<_CardsList> {
               ),
             ),
             elevation: 3,
-            clipBehavior: Clip.antiAlias,
+            clipBehavior: .antiAlias,
             child: InkWell(
               onTap: () => widget.onCardSelected(item.id),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const .all(16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(item.title, style: theme.textTheme.titleMedium),
                     const SizedBox(height: 8),

@@ -12,18 +12,18 @@ class const _PrimaryActions() extends StatelessWidget {
           const HomeActionPressed(HomeAction.cancel),
         );
       },
-      child: const Text('Cancel', textAlign: TextAlign.center),
+      child: const Text('Cancel', textAlign: .center),
     );
     final nextButton = AppButton.primary(
       onPressed: () {
         context.read<HomeBloc>().add(const HomeActionPressed(HomeAction.next));
       },
-      child: const Text('Next', textAlign: TextAlign.center),
+      child: const Text('Next', textAlign: .center),
     );
 
     if (useVerticalLayout) {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: .stretch,
         children: [cancelButton, const SizedBox(height: 12), nextButton],
       );
     }

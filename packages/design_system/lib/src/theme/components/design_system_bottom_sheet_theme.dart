@@ -1,15 +1,15 @@
 import 'package:material_ui/material_ui.dart';
 
 class DesignSystemBottomSheetTheme {
-  DesignSystemBottomSheetTheme._();
+  new _();
 
   static BottomSheetThemeData light(ColorScheme colorScheme) {
     return BottomSheetThemeData(
       dragHandleColor: colorScheme.primary,
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       showDragHandle: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: .vertical(top: Radius.circular(16)),
       ),
     );
   }
@@ -17,10 +17,10 @@ class DesignSystemBottomSheetTheme {
   static BottomSheetThemeData dark(ColorScheme colorScheme) {
     return BottomSheetThemeData(
       dragHandleColor: colorScheme.primary,
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       showDragHandle: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: .vertical(top: Radius.circular(16)),
       ),
     );
   }

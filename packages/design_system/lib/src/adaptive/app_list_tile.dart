@@ -29,7 +29,7 @@ class const AppListTile({
     }
 
     return ListTile(
-      contentPadding: EdgeInsets.zero,
+      contentPadding: .zero,
       title: title,
       subtitle: subtitle,
       trailing: trailing,

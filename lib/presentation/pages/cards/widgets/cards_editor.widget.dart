@@ -35,7 +35,7 @@ class _CardEditorState extends State<_CardEditor> {
           final isCreating = state.isCreating;
 
           return ListView(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const .symmetric(vertical: 16),
             children: [
               Text(
                 l10n.cardCreateTitle,
@@ -49,7 +49,7 @@ class _CardEditorState extends State<_CardEditor> {
                 errorText: invalidDraftFields.contains(CardDraftField.title)
                     ? l10n.cardCreateTitleRequired
                     : null,
-                textInputAction: TextInputAction.next,
+                textInputAction: .next,
                 onChanged: (_) => _onDraftChanged(context),
               ),
               const SizedBox(height: 16),
@@ -63,7 +63,7 @@ class _CardEditorState extends State<_CardEditor> {
                     invalidDraftFields.contains(CardDraftField.description)
                     ? l10n.cardCreateDescriptionRequired
                     : null,
-                textInputAction: TextInputAction.done,
+                textInputAction: .done,
                 onChanged: (_) => _onDraftChanged(context),
               ),
               if (state.createError) ...[

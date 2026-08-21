@@ -311,7 +311,7 @@ void main() {
 enum _ModalVariant { page, compact, blocking }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({
+  const new({
     required this.home,
     this.mediaQuerySize = const Size(400, 800),
   });
@@ -329,7 +329,7 @@ class _TestApp extends StatelessWidget {
 }
 
 class _ModalLauncher extends StatelessWidget {
-  const _ModalLauncher({
+  const new({
     required this.variant,
     this.borderRadius,
     this.maxHeightFactor,
@@ -381,7 +381,7 @@ class _ModalLauncher extends StatelessWidget {
 }
 
 class _CompactDefaultLauncher extends StatelessWidget {
-  const _CompactDefaultLauncher();
+  const new();
 
   @override
   Widget build(BuildContext context) {
@@ -402,7 +402,7 @@ class _CompactDefaultLauncher extends StatelessWidget {
 }
 
 class _ResultHarness extends StatefulWidget {
-  const _ResultHarness({required this.variant, this.canPop = true});
+  const new({required this.variant, this.canPop = true});
 
   final _ModalVariant variant;
   final bool canPop;
@@ -457,7 +457,7 @@ class _ResultHarnessState extends State<_ResultHarness> {
 }
 
 class _NestedNavigatorHarness extends StatelessWidget {
-  const _NestedNavigatorHarness({
+  const new({
     required this.variant,
     required this.useRootNavigator,
   });
@@ -489,7 +489,7 @@ class _NestedNavigatorHarness extends StatelessWidget {
 }
 
 class _ModalContent extends StatelessWidget {
-  const _ModalContent();
+  const new();
 
   @override
   Widget build(BuildContext context) {
@@ -498,7 +498,7 @@ class _ModalContent extends StatelessWidget {
 }
 
 class _ResultModalContent extends StatelessWidget {
-  const _ResultModalContent();
+  const new();
 
   @override
   Widget build(BuildContext context) {

@@ -70,7 +70,7 @@ class const AppPickerField<T>({
             child: Column(
               children: [
                 Align(
-                  alignment: AlignmentDirectional.centerEnd,
+                  alignment: .centerEnd,
                   child: CupertinoButton(
                     onPressed: () {
                       Navigator.of(context).pop();

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 final class ComparisonOutcome {
-  const ComparisonOutcome({
+  const new({
     required this.outputFile,
     required this.hasRegressions,
   });
@@ -14,7 +14,7 @@ final class ComparisonOutcome {
 }
 
 final class EvalComparator {
-  const EvalComparator();
+  const new();
 
   ComparisonOutcome compare({
     required String baselinePath,

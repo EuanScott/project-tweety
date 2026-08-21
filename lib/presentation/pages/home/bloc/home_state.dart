@@ -4,9 +4,9 @@ enum HomeStatus { initial, ready }
 
 @freezed
 abstract class HomeState with _$HomeState {
-  const HomeState._();
+  const new _();
 
-  const factory HomeState({
+  const factory({
     @Default(HomeStatus.initial) HomeStatus status,
     HomeAction? lastAction,
   }) = _HomeState;

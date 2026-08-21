@@ -10,20 +10,20 @@ enum CardsDeleteStatus { idle, deleting, success, failure }
 
 @freezed
 sealed class CardsDetail with _$CardsDetail {
-  const factory CardsDetail.loading() = CardsDetailLoading;
+  const factory loading() = CardsDetailLoading;
 
-  const factory CardsDetail.success(Card card) = CardsDetailSuccess;
+  const factory success(Card card) = CardsDetailSuccess;
 
-  const factory CardsDetail.missing() = CardsDetailMissing;
+  const factory missing() = CardsDetailMissing;
 
-  const factory CardsDetail.failure(String errorMessage) = CardsDetailFailure;
+  const factory failure(String errorMessage) = CardsDetailFailure;
 }
 
 @freezed
 abstract class CardsState with _$CardsState {
-  const CardsState._();
+  const new _();
 
-  const factory CardsState({
+  const factory({
     @Default(CardsStatus.initial) CardsStatus status,
     @Default(<Card>[]) List<Card> items,
     String? errorMessage,
@@ -81,21 +81,19 @@ abstract class CardsState with _$CardsState {
 
   CardsDetail detailFor(String cardId) {
     if (isInitial || isLoading) {
-      return const CardsDetail.loading();
+      return const .loading();
     }
 
     if (isFailure) {
-      return CardsDetail.failure(
-        errorMessage ?? 'Unable to load cards right now.',
-      );
+      return .failure(errorMessage ?? 'Unable to load cards right now.');
     }
 
     for (final card in items) {
       if (card.id == cardId) {
-        return CardsDetail.success(card);
+        return .success(card);
       }
     }
 
-    return const CardsDetail.missing();
+    return const .missing();
   }
 }

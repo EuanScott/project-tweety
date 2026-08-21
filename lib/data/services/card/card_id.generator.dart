@@ -7,7 +7,7 @@ abstract interface class CardIdGenerator {
 
 @LazySingleton(as: CardIdGenerator)
 class UuidCardIdGenerator implements CardIdGenerator {
-  UuidCardIdGenerator() : _uuid = Uuid();
+  new() : _uuid = Uuid();
 
   final Uuid _uuid;
 

@@ -615,7 +615,7 @@ Read [shared guidance](../references/shared.md).
 }
 
 class _SkillFixture {
-  _SkillFixture._(this.repositoryRoot);
+  new _(this.repositoryRoot);
 
   final Directory repositoryRoot;
 

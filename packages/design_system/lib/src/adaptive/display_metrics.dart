@@ -8,7 +8,7 @@ import 'package:material_ui/material_ui.dart';
 /// hinge/fold detection so pane layouts and the orientation policy cannot
 /// drift apart.
 class DisplayMetrics {
-  const DisplayMetrics._();
+  const new _();
 
   /// Shortest side, in logical pixels, at which a surface counts as expanded.
   static const double expandedBreakpoint = 600;

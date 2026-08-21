@@ -8,7 +8,7 @@ import 'design_brand.dart';
 /// apps can either use one of these directly or define and pass their own
 /// [DesignBrand] instances.
 class DesignBrands {
-  DesignBrands._();
+  new _();
 
   /// The default consumer-facing Tweety brand.
   static const tweetyB2c = DesignBrand(

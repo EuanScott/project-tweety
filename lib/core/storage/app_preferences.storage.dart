@@ -15,12 +15,12 @@ part 'app_preferences.storage.freezed.dart';
 
 @freezed
 abstract class AppPreferences with _$AppPreferences {
-  const factory AppPreferences({
+  const factory({
     @Default(ThemeMode.system) ThemeMode themeMode,
     String? languageCode,
   }) = _AppPreferences;
 
-  const AppPreferences._();
+  const new _();
 
   Map<String, Object?> toJson() {
     return <String, Object?>{
@@ -31,7 +31,7 @@ abstract class AppPreferences with _$AppPreferences {
 
   String toStorageValue() => jsonEncode(toJson());
 
-  factory AppPreferences.fromStorageValue(String source) {
+  factory fromStorageValue(String source) {
     final decoded = jsonDecode(source);
 
     if (decoded is! Map<String, dynamic>) {
@@ -43,16 +43,16 @@ abstract class AppPreferences with _$AppPreferences {
 
   static AppPreferences _fromJson(Map<String, dynamic> json) {
     return AppPreferences(
-      themeMode: _themeModeFromName(json['themeMode']) ?? ThemeMode.system,
+      themeMode: _themeModeFromName(json['themeMode']) ?? .system,
       languageCode: json['languageCode'] as String?,
     );
   }
 
   static ThemeMode? _themeModeFromName(Object? value) {
     return switch (value) {
-      'system' => ThemeMode.system,
-      'light' => ThemeMode.light,
-      'dark' => ThemeMode.dark,
+      'system' => .system,
+      'light' => .light,
+      'dark' => .dark,
       _ => null,
     };
   }
@@ -60,7 +60,7 @@ abstract class AppPreferences with _$AppPreferences {
 
 @LazySingleton()
 class AppPreferencesStorage {
-  AppPreferencesStorage() : _preferences = SharedPreferencesAsync();
+  new() : _preferences = SharedPreferencesAsync();
 
   static const String _storageKey = 'app_cache.preferences';
 

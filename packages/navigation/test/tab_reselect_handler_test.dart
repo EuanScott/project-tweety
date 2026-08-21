@@ -69,7 +69,7 @@ void main() {
 }
 
 class _Harness extends StatelessWidget {
-  const _Harness({
+  const new({
     required this.controller,
     required this.tab,
     required this.onReselect,

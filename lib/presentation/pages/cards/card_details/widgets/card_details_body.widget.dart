@@ -21,7 +21,7 @@ class _CardDetailsBodyState extends State<_CardDetailsBody> {
         final hasDeleteError = state.hasDeleteErrorFor(card.id);
 
         return ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const .all(16),
           children: [
             Text(card.title, style: theme.textTheme.headlineSmall),
             const SizedBox(height: 12),

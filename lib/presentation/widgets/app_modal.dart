@@ -13,8 +13,8 @@ import 'package:material_ui/material_ui.dart';
 class const AppModal({required final Widget child, super.key})
     extends StatelessWidget {
   /// The topLeft and topRight border radius to be applied to the modal.
-  static const BorderRadiusGeometry defaultBorderRadius = BorderRadius.vertical(
-    top: Radius.circular(16.0),
+  static const BorderRadiusGeometry defaultBorderRadius = .vertical(
+    top: .circular(16),
   );
 
   /// The default height of the modal, that can be overridden.
@@ -168,7 +168,7 @@ class const AppModal({required final Widget child, super.key})
 
   @override
   Widget build(BuildContext context) {
-    var content = child;
+    final content = child;
     return content;
   }
 }

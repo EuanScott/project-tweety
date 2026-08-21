@@ -37,6 +37,14 @@ linter:
     close_sinks: true
     use_decorated_box: true
 
+    # --- new in Dart 3.13, not yet enabled by very_good_analysis 10.3.0 ---
+    use_declaring_parameters: true
+    unnecessary_primary_constructor_body: true
+    unnecessary_type_name_in_constructor: true
+    empty_container_bodies: true
+    initialize_in_field_declaration: true
+    unnecessary_const_in_enum_constructor: true
+
     # --- suppressed: style noise, not correctness ---
     lines_longer_than_80_chars: false                  # dart_style already enforces width
     public_member_api_docs: false                      # no external consumers

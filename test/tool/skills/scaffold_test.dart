@@ -1023,7 +1023,7 @@ void main() {
 }
 
 class _ScaffoldFixture {
-  _ScaffoldFixture._(this.repositoryRoot);
+  new _(this.repositoryRoot);
 
   final Directory repositoryRoot;
 

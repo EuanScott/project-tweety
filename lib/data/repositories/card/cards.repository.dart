@@ -4,7 +4,7 @@ part 'cards.repository.freezed.dart';
 
 @freezed
 abstract class Card with _$Card {
-  const factory Card({
+  const factory({
     required String id,
     required String title,
     required String description,
@@ -13,12 +13,12 @@ abstract class Card with _$Card {
 
 @freezed
 abstract class CardDraft with _$CardDraft {
-  const factory CardDraft({
+  const factory({
     required String title,
     required String description,
   }) = _CardDraft;
 
-  const CardDraft._();
+  const new _();
 
   Set<CardDraftField> get invalidFields {
     return {
@@ -35,7 +35,7 @@ abstract class CardDraft with _$CardDraft {
 enum CardDraftField { title, description }
 
 class InvalidCardDraftException implements Exception {
-  InvalidCardDraftException(Iterable<CardDraftField> invalidFields)
+  new(Iterable<CardDraftField> invalidFields)
     : invalidFields = Set<CardDraftField>.unmodifiable(invalidFields);
 
   final Set<CardDraftField> invalidFields;

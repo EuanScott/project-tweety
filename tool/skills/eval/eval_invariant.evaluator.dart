@@ -1,7 +1,7 @@
 import 'eval.manifest.dart';
 
 final class InvariantContext {
-  const InvariantContext({
+  const new({
     required this.exitCode,
     required this.gitDiff,
     required this.finalOutput,
@@ -17,7 +17,7 @@ final class InvariantContext {
 }
 
 final class InvariantResult {
-  const InvariantResult({
+  const new({
     required this.id,
     required this.kind,
     required this.passed,
@@ -38,7 +38,7 @@ final class InvariantResult {
 }
 
 final class InvariantEvaluator {
-  const InvariantEvaluator();
+  const new();
 
   InvariantResult evaluate(EvalInvariant invariant, InvariantContext context) {
     final configuration = invariant.configuration;

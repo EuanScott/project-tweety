@@ -4,7 +4,7 @@ import 'design_brand.dart';
 
 /// Maps high-level brand tokens into Material [ColorScheme] instances.
 class DesignColorSchemes {
-  DesignColorSchemes._();
+  new _();
 
   /// Builds the light-mode color scheme for a given [brand].
   static ColorScheme light(DesignBrand brand) {

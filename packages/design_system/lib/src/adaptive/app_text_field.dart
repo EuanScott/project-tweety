@@ -57,7 +57,7 @@ class const _CupertinoTextField({
     final theme = CupertinoTheme.of(context);
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: [
         Text(label, style: theme.textTheme.textStyle),
         const SizedBox(height: 8),

@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'design_system_text_theme.dart';
 
 class DesignSystemAppBarTheme {
-  DesignSystemAppBarTheme._();
+  new _();
 
   static AppBarTheme light(ColorScheme colorScheme) {
     final textTheme = DesignSystemTextTheme.build(colorScheme);

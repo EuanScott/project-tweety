@@ -54,7 +54,7 @@ class _WebviewModalState extends State<WebviewModal> {
           if (_isLoading)
             const Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 children: [AppLoadingIndicator()],
               ),
             ),
@@ -62,7 +62,7 @@ class _WebviewModalState extends State<WebviewModal> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          padding: const .symmetric(horizontal: 16.0, vertical: 8.0),
           child: Row(
             children: [
               Expanded(

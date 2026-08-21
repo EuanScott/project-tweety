@@ -4,9 +4,9 @@ enum AppPreferencesStatus { initial, loading, success, failure }
 
 @freezed
 abstract class AppPreferencesState with _$AppPreferencesState {
-  const AppPreferencesState._();
+  const new _();
 
-  const factory AppPreferencesState({
+  const factory({
     @Default(AppPreferencesStatus.initial) AppPreferencesStatus status,
     AppPreferences? appPreferences,
     String? errorMessage,

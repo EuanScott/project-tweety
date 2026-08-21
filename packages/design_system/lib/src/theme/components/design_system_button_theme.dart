@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'design_system_text_theme.dart';
 
 class DesignSystemButtonTheme {
-  DesignSystemButtonTheme._();
+  new _();
 
   static ElevatedButtonThemeData elevated(ColorScheme colorScheme) {
     return ElevatedButtonThemeData(
@@ -14,8 +14,8 @@ class DesignSystemButtonTheme {
         elevation: 2,
         foregroundColor: colorScheme.onPrimary,
         minimumSize: const Size.fromHeight(48),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const .symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: .circular(12)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: DesignSystemTextTheme.buttonTextStyle(colorScheme)
             .copyWith(color: null),
@@ -29,8 +29,8 @@ class DesignSystemButtonTheme {
         disabledForegroundColor: colorScheme.onSurface.withAlpha(120),
         foregroundColor: colorScheme.primary,
         minimumSize: const Size.fromHeight(48),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const .symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: .circular(12)),
         side: BorderSide(color: colorScheme.primary, width: 1),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: DesignSystemTextTheme.buttonTextStyle(colorScheme)
@@ -45,8 +45,8 @@ class DesignSystemButtonTheme {
         disabledForegroundColor: colorScheme.onSurface.withAlpha(120),
         foregroundColor: colorScheme.primary,
         minimumSize: const Size.fromHeight(48),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const .symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: .circular(12)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: DesignSystemTextTheme.buttonTextStyle(colorScheme)
             .copyWith(color: null),

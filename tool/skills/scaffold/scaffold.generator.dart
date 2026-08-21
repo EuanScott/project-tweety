@@ -7,7 +7,7 @@ import 'scaffold.models.dart';
 
 /// Builds deterministic source manifests from this repository's `_template`.
 final class ScaffoldGenerator {
-  const ScaffoldGenerator({required this.repositoryRoot});
+  const new({required this.repositoryRoot});
 
   final Directory repositoryRoot;
 
@@ -197,7 +197,7 @@ final _dartFormatter = DartFormatter(
 );
 
 final class _TemplateArtifact {
-  const _TemplateArtifact({required this.source, required this.target});
+  const new({required this.source, required this.target});
 
   final String source;
   final String target;

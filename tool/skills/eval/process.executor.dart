@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 final class ProcessRequest {
-  const ProcessRequest({
+  const new({
     required this.executable,
     required this.arguments,
     required this.workingDirectory,
@@ -19,7 +19,7 @@ final class ProcessRequest {
 }
 
 final class ProcessExecution {
-  const ProcessExecution({
+  const new({
     required this.exitCode,
     required this.stdout,
     required this.stderr,
@@ -44,7 +44,7 @@ typedef ProcessStarter =
     });
 
 final class SystemProcessExecutor implements ProcessExecutor {
-  SystemProcessExecutor({ProcessStarter? processStarter})
+  new({ProcessStarter? processStarter})
     : _processStarter = processStarter ?? _startProcess;
 
   final ProcessStarter _processStarter;

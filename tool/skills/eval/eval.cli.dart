@@ -10,7 +10,7 @@ import 'eval_invariant.evaluator.dart';
 import 'process.executor.dart';
 
 final class EvalCli {
-  EvalCli({
+  new({
     ProcessExecutor? processExecutor,
     void Function(String)? writeLine,
     DateTime Function()? now,
@@ -413,9 +413,9 @@ Options:
 }
 
 final class _ParsedOptions {
-  _ParsedOptions(this._values);
+  new(this._values);
 
-  factory _ParsedOptions.parse(
+  factory parse(
     List<String> arguments, {
     required Set<String> supported,
   }) {

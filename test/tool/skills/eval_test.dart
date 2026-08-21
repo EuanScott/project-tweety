@@ -1021,7 +1021,7 @@ Map<String, dynamic> _summaryRun({
 };
 
 final class _FakeProcessExecutor implements ProcessExecutor {
-  _FakeProcessExecutor({
+  new({
     required this.codexOutput,
     this.gitDiffExitCode = 0,
     this.gitDiffStderr = '',

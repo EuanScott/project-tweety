@@ -8,7 +8,7 @@ import 'scaffold.models.dart';
 /// reserved target. A caught failure rolls back targets reserved by this run;
 /// this is not an all-or-nothing, crash-atomic transaction across directories.
 final class ScaffoldExecutor {
-  ScaffoldExecutor({
+  new({
     required this.repositoryRoot,
     Future<void> Function(File staged, File target)? commit,
     Future<void> Function(File target)? reserve,
@@ -206,7 +206,7 @@ final class ScaffoldExecutor {
 }
 
 final class _WritePreflight {
-  const _WritePreflight(this.missingParents);
+  const new(this.missingParents);
 
   final Set<String> missingParents;
 }

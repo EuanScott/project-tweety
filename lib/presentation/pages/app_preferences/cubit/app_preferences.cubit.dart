@@ -9,7 +9,7 @@ part 'app_preferences.cubit.freezed.dart';
 
 @injectable
 class AppPreferencesCubit extends Cubit<AppPreferencesState> {
-  AppPreferencesCubit(this._repository) : super(const AppPreferencesState());
+  new(this._repository) : super(const AppPreferencesState());
 
   final AppPreferencesRepository _repository;
 

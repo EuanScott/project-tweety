@@ -9,32 +9,32 @@ import 'app_design_platform.dart';
 /// and should not care whether the current surface is Material or Cupertino.
 class AppButton extends StatelessWidget {
   /// Creates the primary action button.
-  const AppButton.primary({
+  const new primary({
     required this.onPressed,
     required this.child,
     super.key,
-  }) : _variant = _AppButtonVariant.primary;
+  }) : _variant = .primary;
 
   /// Creates the secondary action button.
-  const AppButton.secondary({
+  const new secondary({
     required this.onPressed,
     required this.child,
     super.key,
-  }) : _variant = _AppButtonVariant.secondary;
+  }) : _variant = .secondary;
 
   /// Creates the low-emphasis text action button.
-  const AppButton.text({
+  const new text({
     required this.onPressed,
     required this.child,
     super.key,
-  }) : _variant = _AppButtonVariant.text;
+  }) : _variant = .text;
 
   /// Creates an action button for irreversible or destructive operations.
-  const AppButton.destructive({
+  const new destructive({
     required this.onPressed,
     required this.child,
     super.key,
-  }) : _variant = _AppButtonVariant.destructive;
+  }) : _variant = .destructive;
 
   final VoidCallback? onPressed;
   final Widget child;
@@ -51,13 +51,13 @@ class AppButton extends StatelessWidget {
 
   Widget _buildMaterial(BuildContext context) {
     switch (_variant) {
-      case _AppButtonVariant.primary:
+      case .primary:
         return ElevatedButton(onPressed: onPressed, child: child);
-      case _AppButtonVariant.secondary:
+      case .secondary:
         return OutlinedButton(onPressed: onPressed, child: child);
-      case _AppButtonVariant.text:
+      case .text:
         return TextButton(onPressed: onPressed, child: child);
-      case _AppButtonVariant.destructive:
+      case .destructive:
         return ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
@@ -70,9 +70,9 @@ class AppButton extends StatelessWidget {
   }
 
   Widget _buildCupertino(BuildContext context) {
-    final isPrimary = _variant == _AppButtonVariant.primary;
-    final isSecondary = _variant == _AppButtonVariant.secondary;
-    final isDestructive = _variant == _AppButtonVariant.destructive;
+    final isPrimary = _variant == .primary;
+    final isSecondary = _variant == .secondary;
+    final isDestructive = _variant == .destructive;
     final colorScheme = Theme.of(context).colorScheme;
     final primaryColor = CupertinoTheme.of(context).primaryColor;
     final foregroundColor = isPrimary
@@ -87,7 +87,7 @@ class AppButton extends StatelessWidget {
           : isDestructive
           ? CupertinoColors.systemRed.resolveFrom(context)
           : null,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const .symmetric(horizontal: 16, vertical: 12),
       child: IconTheme(
         data: IconThemeData(color: foregroundColor),
         child: DefaultTextStyle.merge(
@@ -104,7 +104,7 @@ class AppButton extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: primaryColor.withAlpha(31),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: .circular(12),
       ),
       child: button,
     );

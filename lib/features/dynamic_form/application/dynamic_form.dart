@@ -22,19 +22,19 @@ class _DynamicFormState extends State<DynamicForm> {
   List<FormInputData> formInputData = [
     FormInputData(
       name: 'Text Input',
-      type: FormInputType.text,
+      type: .text,
       isRequired: true,
       errorMessage: 'Text input is required',
     ),
     FormInputData(
       name: 'Numeric Input',
-      type: FormInputType.number,
+      type: .number,
       isRequired: true,
       errorMessage: 'Numeric input is required',
     ),
     FormInputData(
       name: 'Dropdown',
-      type: FormInputType.dropdown,
+      type: .dropdown,
       isRequired: true,
       errorMessage: 'Dropdown selection is required',
       inputOptions: [
@@ -49,14 +49,14 @@ class _DynamicFormState extends State<DynamicForm> {
     ),
     FormInputData(
       name: 'Radio',
-      type: FormInputType.radio,
+      type: .radio,
       isRequired: true,
       errorMessage: 'Checkbox is required',
       inputOptions: ['Yes', 'No', 'Maybe'],
     ),
     FormInputData(
       name: 'Checkbox',
-      type: FormInputType.checkbox,
+      type: .checkbox,
       isRequired: true,
       errorMessage: 'At least one option must be selected',
     ),
@@ -79,7 +79,7 @@ class _DynamicFormState extends State<DynamicForm> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const .all(16),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -89,7 +89,7 @@ class _DynamicFormState extends State<DynamicForm> {
                     int index = entry.key;
                     FormInputData formInput = entry.value;
                     switch (formInput.type) {
-                      case FormInputType.text:
+                      case .text:
                         return TextFormField(
                           decoration: InputDecoration(
                             labelText: formInput.name,
@@ -98,7 +98,7 @@ class _DynamicFormState extends State<DynamicForm> {
                               formOutputData[index].value = value,
                         );
                       // TODO: The UI should not accept non-numbers and should inform the user of as much
-                      case FormInputType.number:
+                      case .number:
                         return TextFormField(
                           decoration: InputDecoration(
                             labelText: formInput.name,
@@ -107,7 +107,7 @@ class _DynamicFormState extends State<DynamicForm> {
                           onChanged: (value) => formOutputData[index].value =
                               int.tryParse(value) ?? 0,
                         );
-                      case FormInputType.dropdown:
+                      case .dropdown:
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -130,7 +130,7 @@ class _DynamicFormState extends State<DynamicForm> {
                             ),
                           ],
                         );
-                      case FormInputType.radio:
+                      case .radio:
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -155,7 +155,7 @@ class _DynamicFormState extends State<DynamicForm> {
                             ),
                           ],
                         );
-                      case FormInputType.checkbox:
+                      case .checkbox:
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

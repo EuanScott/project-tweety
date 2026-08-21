@@ -10,17 +10,17 @@ class const _CardDetailsMessage({
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const .all(24),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             Text(
               title,
               style: theme.textTheme.titleMedium,
-              textAlign: TextAlign.center,
+              textAlign: .center,
             ),
             const SizedBox(height: 8),
-            Text(description, textAlign: TextAlign.center),
+            Text(description, textAlign: .center),
           ],
         ),
       ),

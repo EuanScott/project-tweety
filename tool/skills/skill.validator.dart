@@ -5,7 +5,7 @@ import 'package:yaml/yaml.dart';
 
 /// Configurable limits enforced by [SkillValidator].
 final class SkillValidationBudgets {
-  const SkillValidationBudgets({
+  const new({
     this.descriptionWords = 35,
     this.descriptionCorpusWords = 175,
     this.bodyWords = 900,
@@ -26,7 +26,7 @@ final class SkillValidationBudgets {
 
 /// Machine-readable validation issue.
 final class SkillDiagnostic {
-  const SkillDiagnostic({
+  const new({
     required this.code,
     required this.message,
     required this.path,
@@ -45,7 +45,7 @@ final class SkillDiagnostic {
 
 /// Result returned from validating a local skill corpus.
 final class SkillValidationResult {
-  const SkillValidationResult(this.diagnostics);
+  const new(this.diagnostics);
 
   final List<SkillDiagnostic> diagnostics;
 
@@ -61,7 +61,7 @@ final class SkillValidationResult {
 
 /// Validates all skills under `.codex/skills` in [repositoryRoot].
 final class SkillValidator {
-  const SkillValidator({
+  const new({
     required this.repositoryRoot,
     this.budgets = const SkillValidationBudgets(),
   });
@@ -700,7 +700,7 @@ _SkillDocument _parseSkillDocument(String source) {
 }
 
 final class _SkillDocument {
-  const _SkillDocument({required this.frontmatter, required this.body});
+  const new({required this.frontmatter, required this.body});
 
   final YamlMap frontmatter;
   final String body;
@@ -743,7 +743,7 @@ Iterable<String> _localMarkdownTargets(String markdown) sync* {
 }
 
 final class _ReferenceInspection {
-  const _ReferenceInspection({required this.reachableMarkdownFiles});
+  const new({required this.reachableMarkdownFiles});
 
   final List<File> reachableMarkdownFiles;
 }

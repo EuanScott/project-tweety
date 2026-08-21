@@ -220,7 +220,7 @@ void main() {
 }
 
 class _ControlledOpenDatabaseFactory implements DatabaseFactory {
-  _ControlledOpenDatabaseFactory(this._delegate, {this.firstOpenError});
+  new(this._delegate, {this.firstOpenError});
 
   final DatabaseFactory _delegate;
   final Object? firstOpenError;

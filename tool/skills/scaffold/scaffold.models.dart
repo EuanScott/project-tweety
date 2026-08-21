@@ -15,7 +15,7 @@ enum ScaffoldDriftKind { missing, contentMismatch, targetNotFile }
 
 /// Inputs that determine one scaffold manifest.
 final class ScaffoldRequest {
-  const ScaffoldRequest({
+  const new({
     required this.feature,
     required this.layers,
     required this.initialLoadOperation,
@@ -34,7 +34,7 @@ final class ScaffoldRequest {
 
 /// One source input in a generated scaffold.
 final class ScaffoldFile {
-  const ScaffoldFile({required this.path, required this.content});
+  const new({required this.path, required this.content});
 
   final String path;
   final String content;
@@ -44,7 +44,7 @@ final class ScaffoldFile {
 
 /// Exact, ordered source files for a generated scaffold.
 final class ScaffoldManifest {
-  ScaffoldManifest(Iterable<ScaffoldFile> files)
+  new(Iterable<ScaffoldFile> files)
     : files = List.unmodifiable(files);
 
   final List<ScaffoldFile> files;
@@ -56,7 +56,7 @@ final class ScaffoldManifest {
 
 /// One ordered difference found by [ScaffoldMode.check].
 final class ScaffoldDrift {
-  const ScaffoldDrift({required this.path, required this.kind});
+  const new({required this.path, required this.kind});
 
   final String path;
   final ScaffoldDriftKind kind;
@@ -66,7 +66,7 @@ final class ScaffoldDrift {
 
 /// Result of applying one [ScaffoldMode] to a rendered manifest.
 final class ScaffoldExecution {
-  const ScaffoldExecution({
+  const new({
     required this.mode,
     required this.status,
     required this.manifest,
@@ -81,7 +81,7 @@ final class ScaffoldExecution {
 
 /// Structured failure exposed by the scaffold library and CLI.
 final class ScaffoldException implements Exception {
-  const ScaffoldException({
+  const new({
     required this.code,
     required this.message,
     this.paths = const [],

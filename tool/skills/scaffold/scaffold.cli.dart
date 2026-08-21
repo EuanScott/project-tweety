@@ -5,7 +5,7 @@ import 'scaffold.dart';
 
 /// Command-line adapter for deterministic Project Tweety scaffolds.
 final class ScaffoldCli {
-  ScaffoldCli({
+  new({
     Directory? repositoryRoot,
     void Function(String line)? writeOutput,
     void Function(String line)? writeError,
@@ -56,7 +56,7 @@ final class ScaffoldCli {
 }
 
 final class _ScaffoldInvocation {
-  const _ScaffoldInvocation({required this.request, required this.mode});
+  const new({required this.request, required this.mode});
 
   final ScaffoldRequest request;
   final ScaffoldMode mode;

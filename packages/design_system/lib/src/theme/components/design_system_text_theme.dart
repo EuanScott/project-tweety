@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DesignSystemTextTheme {
-  DesignSystemTextTheme._();
+  new _();
 
   static TextStyle buttonTextStyle(ColorScheme colorScheme) {
     return _createTextStyle(

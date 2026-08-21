@@ -9,7 +9,7 @@ part 'cards.bloc.freezed.dart';
 
 @injectable
 class CardsBloc extends Bloc<CardsEvent, CardsState> {
-  CardsBloc(this._cardsRepository) : super(const CardsState()) {
+  new(this._cardsRepository) : super(const CardsState()) {
     on<CardsStarted>(_onStarted);
     on<CardsCreateStarted>(_onCreateStarted);
     on<CardsDraftChanged>(_onDraftChanged);

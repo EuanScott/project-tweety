@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'design_system_text_theme.dart';
 
 class DesignSystemNavigationBarTheme {
-  DesignSystemNavigationBarTheme._();
+  new _();
 
   static NavigationBarThemeData build(ColorScheme colorScheme) {
     final labelStyle = DesignSystemTextTheme.build(colorScheme).labelMedium;

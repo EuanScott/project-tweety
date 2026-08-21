@@ -4,7 +4,7 @@ import 'error_reporting_service.dart';
 
 @lazySingleton
 class ErrorReportingFacade {
-  ErrorReportingFacade(Iterable<ErrorReportingService> services)
+  new(Iterable<ErrorReportingService> services)
     : _services = List.unmodifiable(services);
 
   final List<ErrorReportingService> _services;

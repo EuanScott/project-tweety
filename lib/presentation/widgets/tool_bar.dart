@@ -61,7 +61,7 @@ class const ToolBar({
 }) extends StatelessWidget implements PreferredSizeWidget {
   /// Returns the standard Material app bar height.
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const .fromHeight(kToolbarHeight);
 
   @override
   AppBar build(BuildContext context) {

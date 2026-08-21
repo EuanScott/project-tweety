@@ -57,15 +57,12 @@ abstract class AppDatabaseWriteExecutor extends AppDatabaseReadExecutor {
 
 @LazySingleton(as: AppDatabase)
 class SqfliteAppDatabase implements AppDatabase {
-  SqfliteAppDatabase()
-    : _databaseFactory = sqflite.databaseFactory,
-      _databasePath = null;
+  new() : _databaseFactory = sqflite.databaseFactory, _databasePath = null;
 
-  SqfliteAppDatabase.test({
-    required sqflite.DatabaseFactory databaseFactory,
-    required String databasePath,
-  }) : _databaseFactory = databaseFactory,
-       _databasePath = databasePath;
+  new test({
+    required this._databaseFactory,
+    required String this._databasePath,
+  });
 
   final sqflite.DatabaseFactory _databaseFactory;
   final String? _databasePath;
@@ -207,8 +204,9 @@ class SqfliteAppDatabase implements AppDatabase {
   }
 }
 
-class const _SqfliteAppDatabaseExecutor(final sqflite.DatabaseExecutor _database)
-    implements AppDatabaseWriteExecutor {
+class const _SqfliteAppDatabaseExecutor(
+  final sqflite.DatabaseExecutor _database,
+) implements AppDatabaseWriteExecutor {
   @override
   Future<void> execute(String sql, [List<Object?>? arguments]) {
     return _database.execute(sql, arguments);

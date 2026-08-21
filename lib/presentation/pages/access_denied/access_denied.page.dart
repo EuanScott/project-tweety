@@ -4,7 +4,7 @@ import 'package:project_tweety/presentation/navigation/navigation_extensions.dar
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
 
 class AccessDeniedPage extends StatelessWidget {
-  const AccessDeniedPage({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class AccessDeniedPage extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 360),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               Icon(
                 Icons.lock_outline,
@@ -27,10 +27,10 @@ class AccessDeniedPage extends StatelessWidget {
               Text(
                 l10n.accessDeniedTitle,
                 style: Theme.of(context).textTheme.headlineSmall,
-                textAlign: TextAlign.center,
+                textAlign: .center,
               ),
               const SizedBox(height: 8),
-              Text(l10n.accessDeniedDescription, textAlign: TextAlign.center),
+              Text(l10n.accessDeniedDescription, textAlign: .center),
               const SizedBox(height: 24),
               FilledButton(
                 onPressed: context.goHome,

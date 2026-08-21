@@ -17,10 +17,8 @@ class Services({
   http.Client? client,
   final String baseUrl = 'https://jsonplaceholder.typicode.com',
 }) {
-  this : _client = client ?? http.Client(), _baseUrl = baseUrl;
-
-  final http.Client _client;
-  final String _baseUrl;
+  final http.Client _client = client ?? http.Client();
+  final String _baseUrl = baseUrl;
 
   /// Creates data by sending a POST request to the specified URL.
   ///

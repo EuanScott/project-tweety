@@ -3,7 +3,7 @@
 /// Keep raw route strings here so feature pages can navigate through helpers
 /// instead of hard-coding names or paths.
 class AppRoutes {
-  const AppRoutes._();
+  const new _();
 
   /// Entry location that redirects to [homePath].
   static const rootPath = '/';

@@ -16,7 +16,7 @@ import 'bloc/home_bloc.dart';
 part 'widgets/home_primary_actions.widget.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +45,14 @@ class Home extends StatelessWidget {
 }
 
 class _HomeView extends StatelessWidget {
-  const _HomeView();
+  const new();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const .symmetric(vertical: 16),
       children: [
         // TODO: Better usecase widgets for things like buttons so that the robots doesn't invent anything
         // TODO: Maybe make list of implemented widgets to view, rather than everything on this page (UI library vibes)

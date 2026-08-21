@@ -17,13 +17,13 @@ enum AppDesignPlatform {
     final platform = Theme.of(context).platform;
 
     switch (platform) {
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
+      case .iOS:
+      case .macOS:
         return AppDesignPlatform.cupertino;
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
+      case .android:
+      case .fuchsia:
+      case .linux:
+      case .windows:
         return AppDesignPlatform.material;
     }
   }

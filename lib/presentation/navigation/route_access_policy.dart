@@ -5,7 +5,7 @@ import 'routes.dart';
 /// Keep policy decisions here so `router.dart` can stay focused on composing
 /// the route tree and adapting decisions into go_router redirects.
 class RouteAccessPolicy {
-  const RouteAccessPolicy({required this.canAccessSettings});
+  const new({required this.canAccessSettings});
 
   /// Temporary manual tester for proving guarded navigation behavior.
   ///
@@ -22,9 +22,9 @@ class RouteAccessPolicy {
 }
 
 class RouteGuardDecision {
-  const RouteGuardDecision.allow() : redirectPath = null;
+  const new allow() : redirectPath = null;
 
-  const RouteGuardDecision.redirect(this.redirectPath);
+  const new redirect(this.redirectPath);
 
   final String? redirectPath;
 }

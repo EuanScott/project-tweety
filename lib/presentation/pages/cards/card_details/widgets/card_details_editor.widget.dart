@@ -48,7 +48,7 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
           final disabled = isMissing || isUpdating;
 
           return ListView(
-            padding: const EdgeInsets.all(16),
+            padding: const .all(16),
             children: [
               Text(
                 l10n.cardEditTitle,
@@ -63,7 +63,7 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
                     state.invalidDraftFields.contains(CardDraftField.title)
                     ? l10n.cardCreateTitleRequired
                     : null,
-                textInputAction: TextInputAction.next,
+                textInputAction: .next,
                 onChanged: (_) => _onDraftChanged(context),
               ),
               const SizedBox(height: 16),
@@ -79,7 +79,7 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
                     )
                     ? l10n.cardCreateDescriptionRequired
                     : null,
-                textInputAction: TextInputAction.done,
+                textInputAction: .done,
                 onChanged: (_) => _onDraftChanged(context),
               ),
               if (state.editError) ...[

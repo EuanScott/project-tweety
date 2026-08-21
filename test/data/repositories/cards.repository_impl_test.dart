@@ -245,7 +245,7 @@ void main() {
 }
 
 class _FakeCardsDataSource implements CardsDataSource {
-  const _FakeCardsDataSource({
+  const new({
     this.cards = const [],
     this.cardsById = const {},
   });
@@ -276,7 +276,7 @@ class _FakeCardsDataSource implements CardsDataSource {
 }
 
 class _RecordingCardsDataSource extends _FakeCardsDataSource {
-  _RecordingCardsDataSource({required this.createdCard});
+  new({required this.createdCard});
 
   final CardDto createdCard;
   CardDto? createdDraft;
@@ -289,14 +289,14 @@ class _RecordingCardsDataSource extends _FakeCardsDataSource {
 }
 
 class _MissingUpdateCardsDataSource extends _FakeCardsDataSource {
-  const _MissingUpdateCardsDataSource();
+  const new();
 
   @override
   Future<CardDto?> updateCard(CardDto card) async => null;
 }
 
 class _FixedCardIdGenerator implements CardIdGenerator {
-  const _FixedCardIdGenerator(this.value);
+  const new(this.value);
 
   final String value;
 

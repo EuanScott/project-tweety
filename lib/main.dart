@@ -53,12 +53,12 @@ class _MyAppState extends State<MyApp> {
 
   ThemeMode _themeMode(AppPreferencesThemeMode themeMode) {
     switch (themeMode) {
-      case AppPreferencesThemeMode.system:
-        return ThemeMode.system;
-      case AppPreferencesThemeMode.light:
-        return ThemeMode.light;
-      case AppPreferencesThemeMode.dark:
-        return ThemeMode.dark;
+      case .system:
+        return .system;
+      case .light:
+        return .light;
+      case .dark:
+        return .dark;
     }
   }
 

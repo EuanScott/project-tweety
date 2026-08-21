@@ -10,7 +10,7 @@ import 'package:project_tweety/core/feature_flags/feature_flag_keys.dart';
 
 @injectable
 class FeatureFlagService {
-  FeatureFlagService(/*this._remoteConfig*/);
+  new(/*this._remoteConfig*/);
 
   // late final FirebaseRemoteConfig _remoteConfig;
 

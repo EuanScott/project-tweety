@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 final class CodexEventSummary {
-  const CodexEventSummary({
+  const new({
     required this.events,
     required this.usage,
     required this.toolCalls,
@@ -11,7 +11,7 @@ final class CodexEventSummary {
     required this.harnessErrors,
   });
 
-  factory CodexEventSummary.parse(String jsonLines) {
+  factory parse(String jsonLines) {
     final events = <Map<String, dynamic>>[];
     final harnessErrors = <String>[];
     final lines = const LineSplitter().convert(jsonLines);
@@ -152,13 +152,13 @@ final class CodexEventSummary {
 }
 
 final class TokenUsage {
-  const TokenUsage({
+  const new({
     required this.inputTokens,
     required this.cachedInputTokens,
     required this.outputTokens,
   });
 
-  const TokenUsage.zero()
+  const new zero()
     : inputTokens = 0,
       cachedInputTokens = 0,
       outputTokens = 0;

@@ -8,7 +8,7 @@ class const AppLanguageOption({
 }
 
 class AppLanguageOptions {
-  AppLanguageOptions._();
+  new _();
 
   static const supported = <AppLanguageOption>[
     AppLanguageOption(languageCode: 'en', nativeLabel: 'English'),

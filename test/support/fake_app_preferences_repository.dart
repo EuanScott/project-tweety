@@ -4,7 +4,7 @@ import 'package:project_tweety/domain/repositories/app_preferences/app_preferenc
 
 /// In-memory [AppPreferencesRepository] that records every save.
 class FakeAppPreferencesRepository implements AppPreferencesRepository {
-  FakeAppPreferencesRepository([
+  new([
     AppPreferences currentPreferences = const AppPreferences(),
   ]) : _currentPreferences = currentPreferences;
 

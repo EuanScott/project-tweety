@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'design_system_text_theme.dart';
 
 class DesignSystemNavigationDrawerTheme {
-  DesignSystemNavigationDrawerTheme._();
+  new _();
 
   static NavigationDrawerThemeData build(
     ColorScheme colorScheme, {
@@ -19,7 +19,7 @@ class DesignSystemNavigationDrawerTheme {
       elevation: 3,
       indicatorColor: indicatorColor,
       indicatorShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: .circular(8),
       ),
       labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((states) {
         final color = states.contains(WidgetState.selected)

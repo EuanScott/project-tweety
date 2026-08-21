@@ -7,13 +7,13 @@ import '../templates/feature_template_paths.dart';
 const _sourceMapPath = 'docs/source_map.md';
 
 final class ContextValidationBudgets {
-  const ContextValidationBudgets({this.scopedLines = 50});
+  const new({this.scopedLines = 50});
 
   final int scopedLines;
 }
 
 final class ContextDiagnostic {
-  const ContextDiagnostic({
+  const new({
     required this.code,
     required this.message,
     required this.path,
@@ -25,7 +25,7 @@ final class ContextDiagnostic {
 }
 
 final class ContextValidationResult {
-  const ContextValidationResult(this.diagnostics);
+  const new(this.diagnostics);
 
   final List<ContextDiagnostic> diagnostics;
 
@@ -33,7 +33,7 @@ final class ContextValidationResult {
 }
 
 final class ContextValidator {
-  const ContextValidator({
+  const new({
     required this.repositoryRoot,
     this.budgets = const ContextValidationBudgets(),
   });

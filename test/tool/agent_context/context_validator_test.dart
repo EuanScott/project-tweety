@@ -139,7 +139,7 @@ void main() {
 }
 
 final class _ContextFixture {
-  _ContextFixture._(this.repositoryRoot);
+  new _(this.repositoryRoot);
 
   final Directory repositoryRoot;
 

@@ -20,7 +20,7 @@ abstract class ErrorReportingService {
 @Named('crashlytics')
 @LazySingleton(as: ErrorReportingService)
 class FirebaseErrorReportingService implements ErrorReportingService {
-  FirebaseErrorReportingService(/*this._crashlytics*/);
+  new(/*this._crashlytics*/);
 
   // final FirebaseCrashlytics _crashlytics;
 
@@ -48,7 +48,7 @@ class FirebaseErrorReportingService implements ErrorReportingService {
 @Named('coralogix')
 @LazySingleton(as: ErrorReportingService)
 class CoralogixErrorReportingService implements ErrorReportingService {
-  CoralogixErrorReportingService(/*this._cx*/);
+  new(/*this._cx*/);
 
   // final CxFlutterPlugin _cx;
 

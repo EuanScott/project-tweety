@@ -4,9 +4,9 @@ import 'dart:io';
 final class EvalManifest {
   static const defaultTimeout = Duration(minutes: 10);
 
-  const EvalManifest({required this.tiers, required this.cases});
+  const new({required this.tiers, required this.cases});
 
-  factory EvalManifest.read(File file) {
+  factory read(File file) {
     final decoded = jsonDecode(file.readAsStringSync());
     if (decoded is! Map<String, dynamic> || decoded['schemaVersion'] != 1) {
       throw const FormatException('Manifest schemaVersion must be 1.');
@@ -82,7 +82,7 @@ final class EvalManifest {
 }
 
 final class EvalTier {
-  const EvalTier({
+  const new({
     required this.name,
     required this.defaultReplicas,
     required this.timeout,
@@ -100,7 +100,7 @@ final class EvalTier {
 }
 
 final class EvalCase {
-  const EvalCase({
+  const new({
     required this.id,
     required this.skill,
     required this.category,
@@ -110,7 +110,7 @@ final class EvalCase {
     required this.timeout,
   });
 
-  factory EvalCase.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     String requireString(String key) {
       final value = json[key];
       if (value is! String || value.trim().isEmpty) {
@@ -162,13 +162,13 @@ final class EvalCase {
 }
 
 final class EvalInvariant {
-  const EvalInvariant({
+  const new({
     required this.id,
     required this.kind,
     required this.configuration,
   });
 
-  factory EvalInvariant.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     final id = json['id'];
     final kind = json['kind'];
     if (id is! String || id.isEmpty || kind is! String || kind.isEmpty) {

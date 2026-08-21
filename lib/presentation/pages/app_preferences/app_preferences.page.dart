@@ -16,7 +16,7 @@ part 'widgets/app_preferences_content.widget.dart';
 part 'widgets/app_preferences_error.widget.dart';
 
 class AppPreferencesPage extends StatelessWidget {
-  const AppPreferencesPage({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class AppPreferencesPage extends StatelessWidget {
 }
 
 class _AppPreferencesView extends StatelessWidget {
-  const _AppPreferencesView();
+  const new();
 
   @override
   Widget build(BuildContext context) {

@@ -48,8 +48,7 @@ class _NavigationShellState<TTab extends Object>
         builder: (context, constraints) {
           final useRail = constraints.maxWidth >= _mediumWidthBreakpoint;
           final useDrawer = constraints.maxWidth >= _drawerWidthBreakpoint;
-          final useCupertinoNavigation =
-              Theme.of(context).platform == TargetPlatform.iOS;
+          final useCupertinoNavigation = Theme.of(context).platform == .iOS;
           final useCupertinoTabBar = useCupertinoNavigation && !useRail;
           final content = _NavigationContentTheme(
             useSideNavigation: useRail,
@@ -206,7 +205,7 @@ class const _MaterialSideNavigation<TTab extends Object>({
       onDestinationSelected: onDestinationSelected,
       children: [
         Align(
-          alignment: AlignmentDirectional.centerEnd,
+          alignment: .centerEnd,
           child: IconButton(
             tooltip: _sideNavigationToggleTooltip,
             icon: const Icon(Icons.menu_open),
@@ -251,14 +250,12 @@ class const _CupertinoSideNavigation<TTab extends Object>({
       child: SafeArea(
         right: false,
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          padding: const .symmetric(horizontal: 12, vertical: 16),
           children: [
             Align(
-              alignment: isCollapsed
-                  ? AlignmentDirectional.center
-                  : AlignmentDirectional.centerEnd,
+              alignment: isCollapsed ? .center : .centerEnd,
               child: CupertinoButton(
-                padding: EdgeInsets.zero,
+                padding: .zero,
                 minimumSize: const Size.square(44),
                 onPressed: onToggleCollapsed,
                 child: Tooltip(
@@ -286,7 +283,7 @@ class const _CupertinoSideNavigation<TTab extends Object>({
                     color: indexedTab.$1 == selectedIndex
                         ? theme.primaryColor.withAlpha(31)
                         : null,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: .circular(10),
                   ),
                   child: CupertinoListTile(
                     leading: Icon(
@@ -334,13 +331,13 @@ class const _CollapsedCupertinoSideNavigationItem({
     return Tooltip(
       message: label,
       child: CupertinoButton(
-        padding: EdgeInsets.zero,
+        padding: .zero,
         minimumSize: const Size.square(48),
         onPressed: onTap,
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: isSelected ? theme.primaryColor.withAlpha(31) : null,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: .circular(10),
           ),
           child: SizedBox.square(
             dimension: 48,
