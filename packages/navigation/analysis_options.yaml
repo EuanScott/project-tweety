@@ -1,6 +1,20 @@
 # Mirrors the root analysis_options.yaml. Analysis options do not cascade across
 # pubspec boundaries, so package lints must be declared here to be enforced.
+# The bloc: section is omitted deliberately — these packages contain no blocs.
+include: package:very_good_analysis/analysis_options.yaml
+
 analyzer:
+  errors:
+    # very_good_analysis pins close_sinks to `ignore`. Enabling the lint rule
+    # alone is not enough — this errors: entry wins, so both are required.
+    close_sinks: info
+    # Deprecated in Dart 3.13 but still enabled by very_good_analysis 10.3.0.
+    # Suppressed here rather than under linter: — naming a deprecated rule there
+    # triggers deprecated_lint even when set to false.
+    avoid_private_typedef_functions: ignore
+    one_member_abstracts: ignore
+    unnecessary_await_in_return: ignore
+
   exclude:
     - build/**
     - android/**
@@ -9,9 +23,21 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
-include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    avoid_print: true
-    prefer_single_quotes: true
+    # --- re-add what very_good_analysis omits ---
+    close_sinks: true
+    use_decorated_box: true
+
+    # --- suppressed: style noise, not correctness ---
+    lines_longer_than_80_chars: false                  # dart_style already enforces width
+    public_member_api_docs: false
+    avoid_types_on_closure_parameters: false
+    directives_ordering: false
+    always_use_package_imports: false
+    avoid_redundant_argument_values: false
+    flutter_style_todos: false
+    avoid_catches_without_on_clauses: false
+    always_put_required_named_parameters_first: false
+

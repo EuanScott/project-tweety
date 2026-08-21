@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +14,7 @@ import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_pref
 
 import 'l10n/app_localizations.dart';
 
+// TODO: Check Dart 3.13 constructor usages
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -91,7 +94,11 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => GetIt.I<AppPreferencesCubit>()..loadAppPreferences(),
+          create: (_) {
+            final cubit = GetIt.I<AppPreferencesCubit>();
+            unawaited(cubit.loadAppPreferences());
+            return cubit;
+          },
         ),
       ],
       child: BlocBuilder<AppPreferencesCubit, AppPreferencesState>(

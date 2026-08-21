@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:design_system/design_system.dart';
@@ -87,29 +88,37 @@ class _HomeView extends StatelessWidget {
         Text('Modals', style: theme.textTheme.headlineSmall),
         AppButton.text(
           onPressed: () {
-            context.showAppModal(const Center(child: Text('Modal content')));
+            unawaited(
+              context.showAppModal(
+                const Center(child: Text('Modal content')),
+              ),
+            );
           },
           child: const Text('Context Modal'),
         ),
         AppButton.text(
           onPressed: () {
-            AppModal.page<bool>(
-              context: context,
-              child: const Center(child: Text('Modal content')),
+            unawaited(
+              AppModal.page<bool>(
+                context: context,
+                child: const Center(child: Text('Modal content')),
+              ),
             );
           },
           child: const Text('Page Modal'),
         ),
         AppButton.text(
           onPressed: () {
-            AppModal.blocking<bool>(
-              context: context,
-              child: Center(
-                child: AppButton.text(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text('Close Modal'),
+            unawaited(
+              AppModal.blocking<bool>(
+                context: context,
+                child: Center(
+                  child: AppButton.text(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: const Text('Close Modal'),
+                  ),
                 ),
               ),
             );

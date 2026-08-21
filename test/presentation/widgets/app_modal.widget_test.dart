@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/presentation/widgets/app_modal.dart';
@@ -386,9 +388,11 @@ class _CompactDefaultLauncher extends StatelessWidget {
     return Center(
       child: TextButton(
         onPressed: () {
-          AppModal.compact<void>(
-            context: context,
-            child: const _ModalContent(),
+          unawaited(
+            AppModal.compact<void>(
+              context: context,
+              child: const _ModalContent(),
+            ),
           );
         },
         child: const Text('open-modal'),
@@ -468,10 +472,12 @@ class _NestedNavigatorHarness extends StatelessWidget {
         child: TextButton(
           onPressed: () {
             if (variant == _ModalVariant.blocking) {
-              AppModal.blocking<void>(
-                context: context,
-                useRootNavigator: useRootNavigator,
-                child: const _ModalContent(),
+              unawaited(
+                AppModal.blocking<void>(
+                  context: context,
+                  useRootNavigator: useRootNavigator,
+                  child: const _ModalContent(),
+                ),
               );
             }
           },

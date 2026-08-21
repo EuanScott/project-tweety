@@ -24,6 +24,9 @@ class FakeAppPreferencesRepository implements AppPreferencesRepository {
 /// Swaps the registered [AppPreferencesRepository] for [repository].
 void replaceAppPreferencesRepository(AppPreferencesRepository repository) {
   GetIt.I
+    // GetIt.unregister returns FutureOr and completes synchronously here:
+    // the fakes register no async disposers, so there is no future to await.
+    // ignore: discarded_futures
     ..unregister<AppPreferencesRepository>()
     ..registerLazySingleton<AppPreferencesRepository>(() => repository);
 }

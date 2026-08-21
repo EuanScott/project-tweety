@@ -24,3 +24,7 @@ source folder.
 - [SQLite cards app persistence](plans/cards_sqlite_data_layer.md)
 - [Complete Cards SQLite integration](plans/cards_sqlite_end_to_end_integration.md)
 
+## Research
+
+- [Dart/Flutter lint rules beyond flutter_lints](research/dart_flutter_lint_rules.md)
+

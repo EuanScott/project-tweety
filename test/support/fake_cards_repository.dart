@@ -207,6 +207,9 @@ class FakeCardsRepository implements CardsRepository {
 /// dependencies from `GetIt`.
 void replaceCardsRepository(CardsRepository repository) {
   GetIt.I
+    // GetIt.unregister returns FutureOr and completes synchronously here:
+    // the fakes register no async disposers, so there is no future to await.
+    // ignore: discarded_futures
     ..unregister<CardsRepository>()
     ..registerLazySingleton<CardsRepository>(() => repository);
 }

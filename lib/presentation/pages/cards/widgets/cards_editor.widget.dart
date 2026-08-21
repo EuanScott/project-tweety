@@ -26,7 +26,9 @@ class _CardEditorState extends State<_CardEditor> {
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) {
-          CardsDraftDiscardGuard.discardThen(context, context.goCards);
+          unawaited(
+            CardsDraftDiscardGuard.discardThen(context, context.goCards),
+          );
         }
       },
       child: BlocBuilder<CardsBloc, CardsState>(

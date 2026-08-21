@@ -37,7 +37,10 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
 - Layer-only `$data-scaffold`, `$domain-scaffold`, and `$page-scaffold` flows require explicit invocation. Ordinary behaviour changes stay in the normal implementation/TDD flow.
 
 ## Working Conventions
-- Follow the existing lint rules in `analysis_options.yaml`, especially `avoid_print: true` and `prefer_single_quotes: true`.
+
+- Follow the existing lint rules in `analysis_options.yaml`. The workspace uses  `very_good_analysis` (not
+  `flutter_lints`), with `strict-casts`,  `strict-inference`, and `strict-raw-types` enabled. Suppressions are listed
+  explicitly with a reason.
 - Match the current import style: package imports for app entrypoints and shared modules, relative imports where already generated or established.
 - Treat this document as the source of truth for repository policy; use the
   referenced `_template` files as the source of truth for concrete scaffold

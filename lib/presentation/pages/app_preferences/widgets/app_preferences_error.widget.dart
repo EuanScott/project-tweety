@@ -19,7 +19,9 @@ class _AppPreferencesError extends StatelessWidget {
             const SizedBox(height: 12),
             AppButton.primary(
               onPressed: () {
-                context.read<AppPreferencesCubit>().loadAppPreferences();
+                unawaited(
+                  context.read<AppPreferencesCubit>().loadAppPreferences(),
+                );
               },
               child: Text(l10n.appPreferencesRetry),
             ),

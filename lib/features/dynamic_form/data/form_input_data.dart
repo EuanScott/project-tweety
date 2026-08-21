@@ -5,7 +5,7 @@ class FormInputData {
   FormInputType type;
   bool isRequired;
   String errorMessage;
-  List<dynamic>? inputOptions;
+  List<String>? inputOptions;
 
   FormInputData({
     required this.name,

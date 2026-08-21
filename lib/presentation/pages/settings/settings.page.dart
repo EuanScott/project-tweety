@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
@@ -35,7 +37,7 @@ class _SettingsView extends StatelessWidget {
           subtitle: Text(l10n.settingsAppPreferencesSubtitle),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            context.openAppPreferences();
+            unawaited(context.openAppPreferences());
           },
         ),
       ],

@@ -46,6 +46,22 @@ void main() {
     );
 
     test(
+      'postData throws at the decode boundary when the body is not an object',
+      () async {
+        final services = Services(
+          client: MockClient(
+            (request) async => _jsonResponse(['not', 'an', 'object'], 201),
+          ),
+        );
+
+        await expectLater(
+          services.postData('/posts', body: {'title': 'Title'}),
+          throwsA(isA<TypeError>()),
+        );
+      },
+    );
+
+    test(
       'getData sends a GET request and handles a successful response',
       () async {
         final services = Services(
@@ -175,7 +191,7 @@ void main() {
           headers: {'Content-Type': 'application/json'},
         );
 
-        expect(response, {});
+        expect(response, <String, dynamic>{});
       },
     );
   });

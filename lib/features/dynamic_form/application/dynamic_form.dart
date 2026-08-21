@@ -72,7 +72,7 @@ class _DynamicFormState extends State<DynamicForm> {
     FormOutputData(key: 'numericValue', value: 0),
     FormOutputData(key: 'dropdownValue', value: ''),
     FormOutputData(key: 'radioValue', value: ''),
-    FormOutputData(key: 'checkboxValue', value: []),
+    FormOutputData(key: 'checkboxValue', value: <String>[]),
   ];
 
   // TODO: Find a better way of handling this (this isn't dynamic)
@@ -146,7 +146,9 @@ class _DynamicFormState extends State<DynamicForm> {
                                     (option) => RadioListTile<String>(
                                       title: Text(option),
                                       value: option,
-                                      groupValue: formOutputData[index].value,
+                                      groupValue:
+                                          formOutputData[index].value
+                                              as String?,
                                       onChanged: (value) {
                                         setState(() {
                                           formOutputData[index].value = value;
@@ -198,7 +200,7 @@ class _DynamicFormState extends State<DynamicForm> {
 
 class RadioButtonWidget extends StatefulWidget {
   final String title;
-  final Function(bool) onChanged;
+  final void Function(bool) onChanged;
 
   const RadioButtonWidget({
     super.key,

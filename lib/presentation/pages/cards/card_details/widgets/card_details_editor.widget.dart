@@ -36,9 +36,11 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) {
-          CardsDraftDiscardGuard.discardThen(
-            context,
-            () => context.read<CardsBloc>().add(const CardsEditCancelled()),
+          unawaited(
+            CardsDraftDiscardGuard.discardThen(
+              context,
+              () => context.read<CardsBloc>().add(const CardsEditCancelled()),
+            ),
           );
         }
       },

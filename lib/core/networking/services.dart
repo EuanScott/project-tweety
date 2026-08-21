@@ -44,7 +44,7 @@ class Services {
     if (response.statusCode != 201) {
       throw Exception('Failed to POST data. Error: ${response.statusCode}');
     }
-    return _decodeJsonData(response.body);
+    return _decodeJsonData(response.body) as Map<String, dynamic>;
   }
 
   /// Fetches data from the specified URL using a GET request.
@@ -82,7 +82,7 @@ class Services {
     if (response.statusCode != 200) {
       throw Exception('Failed to PUT data. Error: ${response.statusCode}');
     }
-    return _decodeJsonData(response.body);
+    return _decodeJsonData(response.body) as Map<String, dynamic>;
   }
 
   /// Deletes data by sending a DELETE request to the specified URL.
@@ -105,7 +105,7 @@ class Services {
     if (response.statusCode != 200) {
       throw Exception('Failed to DELETE data. Error: ${response.statusCode}');
     }
-    return _decodeJsonData(response.body);
+    return _decodeJsonData(response.body) as Map<String, dynamic>;
   }
 
   //region Helpers
@@ -184,7 +184,7 @@ class Services {
   /// [data] The map data to be encoded.
   ///
   /// Returns a JSON string representation of [data].
-  _encodeJsonData(Map<String, dynamic> data) => convert.jsonEncode(data);
+  String _encodeJsonData(Map<String, dynamic> data) => convert.jsonEncode(data);
 
   //endregion
 }

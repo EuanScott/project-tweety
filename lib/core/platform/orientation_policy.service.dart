@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
@@ -38,7 +40,7 @@ class OrientationPolicyService with WidgetsBindingObserver {
 
   @override
   void didChangeMetrics() {
-    _applyForCurrentView();
+    unawaited(_applyForCurrentView());
   }
 
   /// Applies the policy for the supplied surface.

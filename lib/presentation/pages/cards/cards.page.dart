@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -124,15 +126,17 @@ class _CardsState extends State<Cards> {
   }
 
   void _selectCard(BuildContext context, String cardId) {
-    CardsDraftDiscardGuard.discardThen(
-      context,
-      () => _navigateToCard(context, cardId),
+    unawaited(
+      CardsDraftDiscardGuard.discardThen(
+        context,
+        () => _navigateToCard(context, cardId),
+      ),
     );
   }
 
   void _navigateToCard(BuildContext context, String cardId) {
     if (widget.selectedCardId == null) {
-      context.openCardDetails(cardId);
+      unawaited(context.openCardDetails(cardId));
       return;
     }
 
