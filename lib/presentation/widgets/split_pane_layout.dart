@@ -10,21 +10,37 @@ import 'package:material_ui/material_ui.dart';
 /// The widget owns split-pane mechanics only: breakpoint decisions, foldable
 /// display-feature handling, pane sizing, clipping, and primary scroll
 /// controller isolation.
-class SplitPaneLayout extends StatelessWidget {
-  /// Creates a split-pane layout for the supplied primary and secondary panes.
-  const SplitPaneLayout({
-    required this.primary,
-    required this.secondary,
-    required this.displayFeature,
-    required this.constraints,
-    required this.resolvedPadding,
-    required this.globalOffset,
-    this.primaryWidth,
-    this.paneGap = 16,
-    this.secondaryBorderRadius = _secondaryBorderRadius,
-    super.key,
-  });
+/// Creates a split-pane layout for the supplied primary and secondary panes.
+class const SplitPaneLayout({
+  /// The primary pane, usually a list or master view.
+  required final Widget primary,
 
+  /// The secondary pane, usually details for the selected primary item.
+  required final Widget secondary,
+
+  /// Optional foldable display feature used to place panes around a hinge/fold.
+  required final DisplayFeature? displayFeature,
+
+  /// Constraints from the surrounding page body.
+  required final BoxConstraints constraints,
+
+  /// Resolved body padding used to calculate local foldable pane widths.
+  required final EdgeInsets resolvedPadding,
+
+  /// The page body's global offset, used to translate display features into the
+  /// local coordinate space.
+  required final Offset globalOffset,
+
+  /// Optional fixed width for the primary pane on non-foldable layouts.
+  final double? primaryWidth,
+
+  /// Horizontal gap on either side of the divider on non-foldable layouts.
+  final double paneGap = 16,
+
+  /// Border radius applied to the secondary pane clip.
+  final BorderRadius secondaryBorderRadius = _secondaryBorderRadius,
+  super.key,
+}) extends StatelessWidget {
   static const BorderRadius _secondaryBorderRadius = BorderRadius.only(
     topLeft: Radius.circular(16),
   );
@@ -42,34 +58,6 @@ class SplitPaneLayout extends StatelessWidget {
   /// Returns a vertical fold/hinge that splits the current media surface.
   static DisplayFeature? verticalDisplayFeatureFor(MediaQueryData mediaQuery) =>
       DisplayMetrics.verticalDisplayFeatureFor(mediaQuery);
-
-  /// The primary pane, usually a list or master view.
-  final Widget primary;
-
-  /// The secondary pane, usually details for the selected primary item.
-  final Widget secondary;
-
-  /// Optional foldable display feature used to place panes around a hinge/fold.
-  final DisplayFeature? displayFeature;
-
-  /// Constraints from the surrounding page body.
-  final BoxConstraints constraints;
-
-  /// Resolved body padding used to calculate local foldable pane widths.
-  final EdgeInsets resolvedPadding;
-
-  /// The page body's global offset, used to translate display features into the
-  /// local coordinate space.
-  final Offset globalOffset;
-
-  /// Optional fixed width for the primary pane on non-foldable layouts.
-  final double? primaryWidth;
-
-  /// Horizontal gap on either side of the divider on non-foldable layouts.
-  final double paneGap;
-
-  /// Border radius applied to the secondary pane clip.
-  final BorderRadius secondaryBorderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -153,12 +141,8 @@ class SplitPaneLayout extends StatelessWidget {
   }
 }
 
-class _PrimaryPane extends StatelessWidget {
-  const _PrimaryPane({required this.width, required this.child});
-
-  final double? width;
-  final Widget child;
-
+class const _PrimaryPane({required final double? width, required final Widget child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = this.width;
@@ -172,12 +156,10 @@ class _PrimaryPane extends StatelessWidget {
   }
 }
 
-class _SecondaryPane extends StatelessWidget {
-  const _SecondaryPane({required this.borderRadius, required this.child});
-
-  final BorderRadius borderRadius;
-  final Widget child;
-
+class const _SecondaryPane({
+  required final BorderRadius borderRadius,
+  required final Widget child,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PrimaryScrollController.none(

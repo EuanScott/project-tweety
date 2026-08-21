@@ -19,25 +19,15 @@ enum CardSyncStatus {
   }
 }
 
-class CardDto {
-  const CardDto({
-    required this.id,
-    required this.title,
-    required this.description,
-    this.syncStatus = CardSyncStatus.synced,
-    this.updatedAt,
-    this.lastSyncedAt,
-    this.deletedAt,
-  });
-
-  final String id;
-  final String title;
-  final String description;
-  final CardSyncStatus syncStatus;
-  final DateTime? updatedAt;
-  final DateTime? lastSyncedAt;
-  final DateTime? deletedAt;
-
+class const CardDto({
+  required final String id,
+  required final String title,
+  required final String description,
+  final CardSyncStatus syncStatus = CardSyncStatus.synced,
+  final DateTime? updatedAt,
+  final DateTime? lastSyncedAt,
+  final DateTime? deletedAt,
+}) {
   Map<String, Object?> toDatabaseRow() {
     return <String, Object?>{
       'id': id,

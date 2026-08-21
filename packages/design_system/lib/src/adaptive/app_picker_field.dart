@@ -4,37 +4,28 @@ import 'package:material_ui/material_ui.dart';
 import 'app_design_platform.dart';
 
 /// A selectable value shown by [AppPickerField].
-class AppPickerOption<T> {
-  /// Creates a picker option with a stable [value] and display [label].
-  const AppPickerOption({required this.value, required this.label});
-
+class const AppPickerOption<T>({
   /// The value emitted when this option is selected.
-  final T value;
+  required final T value,
 
   /// The user-facing label for this option.
-  final String label;
-}
+  required final String label,
+});
 
 /// An app-level picker field that adapts to the active design language.
 ///
 /// Material platforms render a dropdown form field. Cupertino platforms render
 /// a tappable settings-style row that opens a wheel picker sheet.
-class AppPickerField<T> extends StatelessWidget {
-  /// Creates an adaptive picker field.
-  const AppPickerField({
-    required this.label,
-    required this.value,
-    required this.options,
-    required this.onChanged,
-    this.helperText,
-    super.key,
-  }) : assert(options.length > 0, 'options must not be empty');
-
-  final String label;
-  final T value;
-  final List<AppPickerOption<T>> options;
-  final ValueChanged<T> onChanged;
-  final String? helperText;
+/// Creates an adaptive picker field.
+class const AppPickerField<T>({
+  required final String label,
+  required final T value,
+  required final List<AppPickerOption<T>> options,
+  required final ValueChanged<T> onChanged,
+  final String? helperText,
+  super.key,
+}) extends StatelessWidget {
+  this : assert(options.length > 0, 'options must not be empty');
 
   @override
   Widget build(BuildContext context) {

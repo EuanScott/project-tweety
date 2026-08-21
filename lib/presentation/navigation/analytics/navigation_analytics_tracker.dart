@@ -8,11 +8,7 @@ import 'package:project_tweety/core/analytics/analytics_facade.dart';
 /// Both navigator observers and tab selections can report route names. This
 /// tracker keeps the last screen name so repeated rebuilds or branch switches
 /// do not spam analytics.
-class NavigationAnalyticsTracker {
-  /// Creates a tracker backed by [AnalyticsFacade].
-  NavigationAnalyticsTracker(this._analyticsFacade);
-
-  final AnalyticsFacade _analyticsFacade;
+class NavigationAnalyticsTracker(final AnalyticsFacade _analyticsFacade) {
   String? _lastScreenName;
 
   /// Tracks a [Route] using its settings name and runtime type.

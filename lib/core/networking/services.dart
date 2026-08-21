@@ -12,13 +12,12 @@ import 'package:http/http.dart' as http;
 /// It also includes helper methods for sending HTTP requests and decoding JSON data.
 ///
 /// Note: Created entirely using DuckDuckGo AI Chat (GPT-3.5 Turbo model) && Github Co-pilot
-class Services {
-  // TODO: When I get around to using this, make this configurable. Either from a build config, or if running tests, by using whatever I have set in code
-  Services({
-    http.Client? client,
-    String baseUrl = 'https://jsonplaceholder.typicode.com',
-  }) : _client = client ?? http.Client(),
-       _baseUrl = baseUrl;
+// TODO: When I get around to using this, make this configurable. Either from a build config, or if running tests, by using whatever I have set in code
+class Services({
+  http.Client? client,
+  final String baseUrl = 'https://jsonplaceholder.typicode.com',
+}) {
+  this : _client = client ?? http.Client(), _baseUrl = baseUrl;
 
   final http.Client _client;
   final String _baseUrl;

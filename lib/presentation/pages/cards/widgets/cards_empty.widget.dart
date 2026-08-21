@@ -1,8 +1,6 @@
 part of '../cards.page.dart';
 
-class _CardsEmpty extends StatelessWidget {
-  const _CardsEmpty();
-
+class const _CardsEmpty() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

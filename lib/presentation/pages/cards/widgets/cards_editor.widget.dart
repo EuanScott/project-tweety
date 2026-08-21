@@ -1,8 +1,6 @@
 part of '../cards.page.dart';
 
-class _CardEditor extends StatefulWidget {
-  const _CardEditor();
-
+class const _CardEditor() extends StatefulWidget {
   @override
   State<_CardEditor> createState() => _CardEditorState();
 }

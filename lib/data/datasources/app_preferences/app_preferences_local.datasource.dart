@@ -3,11 +3,9 @@ import 'package:project_tweety/core/storage/app_preferences.storage.dart'
     as storage;
 
 @lazySingleton
-class AppPreferencesLocalDataSource {
-  const AppPreferencesLocalDataSource(this._appPreferencesStorage);
-
-  final storage.AppPreferencesStorage _appPreferencesStorage;
-
+class const AppPreferencesLocalDataSource(
+  final storage.AppPreferencesStorage _appPreferencesStorage,
+) {
   Future<storage.AppPreferences> readAppPreferences() {
     return _appPreferencesStorage.readPreferences();
   }

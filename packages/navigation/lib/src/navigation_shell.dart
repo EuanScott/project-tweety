@@ -13,24 +13,18 @@ const String _sideNavigationToggleTooltip = 'Toggle side navigation';
 /// each tab's nested navigation stack. Tapping a nested active tab returns it
 /// to its root route; tapping an active root tab can run a registered
 /// [TabReselectController] callback.
-class NavigationShell<TTab extends Object> extends StatefulWidget {
-  /// Creates a shell around [navigationShell].
-  const NavigationShell({
-    required this.navigationShell,
-    required this.tabs,
-    this.onTabRouteSelected,
-    super.key,
-  });
-
+/// Creates a shell around [navigationShell].
+class const NavigationShell<TTab extends Object>({
   /// The shell route object supplied by `go_router`.
-  final StatefulNavigationShell navigationShell;
+  required final StatefulNavigationShell navigationShell,
 
   /// Ordered top-level tab configurations.
-  final List<NavigationTabConfig<TTab>> tabs;
+  required final List<NavigationTabConfig<TTab>> tabs,
 
   /// Optional route-name callback used by analytics when tabs are selected.
-  final ValueChanged<String>? onTabRouteSelected;
-
+  final ValueChanged<String>? onTabRouteSelected,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<NavigationShell<TTab>> createState() => _NavigationShellState<TTab>();
 }
@@ -177,21 +171,13 @@ class _NavigationShellState<TTab extends Object>
   }
 }
 
-class _MaterialSideNavigation<TTab extends Object> extends StatelessWidget {
-  const _MaterialSideNavigation({
-    required this.isCollapsed,
-    required this.selectedIndex,
-    required this.tabs,
-    required this.onDestinationSelected,
-    required this.onToggleCollapsed,
-  });
-
-  final bool isCollapsed;
-  final int selectedIndex;
-  final List<NavigationTabConfig<TTab>> tabs;
-  final ValueChanged<int> onDestinationSelected;
-  final VoidCallback onToggleCollapsed;
-
+class const _MaterialSideNavigation<TTab extends Object>({
+  required final bool isCollapsed,
+  required final int selectedIndex,
+  required final List<NavigationTabConfig<TTab>> tabs,
+  required final ValueChanged<int> onDestinationSelected,
+  required final VoidCallback onToggleCollapsed,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isCollapsed) {
@@ -238,21 +224,13 @@ class _MaterialSideNavigation<TTab extends Object> extends StatelessWidget {
   }
 }
 
-class _CupertinoSideNavigation<TTab extends Object> extends StatelessWidget {
-  const _CupertinoSideNavigation({
-    required this.isCollapsed,
-    required this.selectedIndex,
-    required this.tabs,
-    required this.onDestinationSelected,
-    required this.onToggleCollapsed,
-  });
-
-  final bool isCollapsed;
-  final int selectedIndex;
-  final List<NavigationTabConfig<TTab>> tabs;
-  final ValueChanged<int> onDestinationSelected;
-  final VoidCallback onToggleCollapsed;
-
+class const _CupertinoSideNavigation<TTab extends Object>({
+  required final bool isCollapsed,
+  required final int selectedIndex,
+  required final List<NavigationTabConfig<TTab>> tabs,
+  required final ValueChanged<int> onDestinationSelected,
+  required final VoidCallback onToggleCollapsed,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CupertinoTheme.of(context);
@@ -343,19 +321,12 @@ class _CupertinoSideNavigation<TTab extends Object> extends StatelessWidget {
   }
 }
 
-class _CollapsedCupertinoSideNavigationItem extends StatelessWidget {
-  const _CollapsedCupertinoSideNavigationItem({
-    required this.isSelected,
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  final bool isSelected;
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
+class const _CollapsedCupertinoSideNavigationItem({
+  required final bool isSelected,
+  required final IconData icon,
+  required final String label,
+  required final VoidCallback onTap,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = CupertinoTheme.of(context);
@@ -386,17 +357,11 @@ class _CollapsedCupertinoSideNavigationItem extends StatelessWidget {
   }
 }
 
-class _NavigationContentTheme extends StatelessWidget {
-  const _NavigationContentTheme({
-    required this.useSideNavigation,
-    required this.useDrawer,
-    required this.child,
-  });
-
-  final bool useSideNavigation;
-  final bool useDrawer;
-  final Widget child;
-
+class const _NavigationContentTheme({
+  required final bool useSideNavigation,
+  required final bool useDrawer,
+  required final Widget child,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!useSideNavigation) {

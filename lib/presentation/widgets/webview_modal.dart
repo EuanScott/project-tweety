@@ -9,12 +9,8 @@ import 'app_modal.dart';
 /// This widget is responsible only for hosting the web view and returning the
 /// user's modal action. Any workflow-specific behaviour should remain in the
 /// caller or in dedicated child widgets.
-class WebviewModal extends StatefulWidget {
-  const WebviewModal({super.key, required this.url});
-
-  /// The URL loaded inside the embedded web view.
-  final String url;
-
+class const WebviewModal({super.key, required final String url})
+    extends StatefulWidget {
   @override
   State<WebviewModal> createState() => _WebviewModalState();
 

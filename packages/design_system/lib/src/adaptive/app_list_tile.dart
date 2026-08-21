@@ -7,21 +7,14 @@ import 'app_design_platform.dart';
 ///
 /// The caller owns navigation and business behavior through [onTap]. This
 /// widget owns only the standard row structure and platform rendering choice.
-class AppListTile extends StatelessWidget {
-  /// Creates a standard adaptive list tile.
-  const AppListTile({
-    required this.title,
-    this.subtitle,
-    this.trailing,
-    this.onTap,
-    super.key,
-  });
-
-  final Widget title;
-  final Widget? subtitle;
-  final Widget? trailing;
-  final VoidCallback? onTap;
-
+/// Creates a standard adaptive list tile.
+class const AppListTile({
+  required final Widget title,
+  final Widget? subtitle,
+  final Widget? trailing,
+  final VoidCallback? onTap,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (AppDesignPlatform.of(context).isCupertino) {

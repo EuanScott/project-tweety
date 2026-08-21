@@ -32,40 +32,33 @@ import 'package:material_ui/material_ui.dart';
 ///   body: const SizedBox.shrink(),
 /// )
 /// ```
-class ToolBarAction {
-  /// Creates a typed trailing app-bar action.
-  ///
-  /// The [icon] and [onPressed] callback are required. [tooltip] is optional
-  /// and defaults to an empty string when omitted.
-  const ToolBarAction({
-    required this.icon,
-    required this.onPressed,
-    this.tooltip = '',
-  });
-
+/// Creates a typed trailing app-bar action.
+///
+/// The [icon] and [onPressed] callback are required. [tooltip] is optional
+/// and defaults to an empty string when omitted.
+class const ToolBarAction({
   /// The icon shown for this action.
-  final IconData icon;
+  required final IconData icon,
 
   /// The callback invoked when the action is pressed.
-  final VoidCallback onPressed;
+  required final VoidCallback onPressed,
 
   /// The tooltip announced when the action is focused or long-pressed.
-  final String tooltip;
-}
+  final String tooltip = '',
+});
 
-class ToolBar extends StatelessWidget implements PreferredSizeWidget {
-  /// Creates a standard app bar with an optional trailing action.
-  ///
-  /// The leading area is not manually overridden, so Flutter can infer the
-  /// appropriate platform navigation affordance automatically.
-  const ToolBar({required this.title, this.trailingAction, super.key});
-
+/// Creates a standard app bar with an optional trailing action.
+///
+/// The leading area is not manually overridden, so Flutter can infer the
+/// appropriate platform navigation affordance automatically.
+class const ToolBar({
   /// The text shown in the centre of the app bar.
-  final String title;
+  required final String title,
 
   /// The optional typed trailing action rendered in the app bar.
-  final ToolBarAction? trailingAction;
-
+  final ToolBarAction? trailingAction,
+  super.key,
+}) extends StatelessWidget implements PreferredSizeWidget {
   /// Returns the standard Material app bar height.
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

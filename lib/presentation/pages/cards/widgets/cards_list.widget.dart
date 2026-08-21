@@ -1,20 +1,13 @@
 part of '../cards.page.dart';
 
-class _CardsList extends StatefulWidget {
+class const _CardsList({
+  required final List<card_model.Card> items,
+  required final String? selectedCardId,
+  required final ValueChanged<String> onCardSelected,
+  required final Future<void> Function() onRefresh,
+  super.key,
+}) extends StatefulWidget {
   static const EdgeInsets _listPadding = EdgeInsets.symmetric(vertical: 8);
-
-  const _CardsList({
-    required this.items,
-    required this.selectedCardId,
-    required this.onCardSelected,
-    required this.onRefresh,
-    super.key,
-  });
-
-  final List<card_model.Card> items;
-  final String? selectedCardId;
-  final ValueChanged<String> onCardSelected;
-  final Future<void> Function() onRefresh;
 
   @override
   State<_CardsList> createState() => _CardsListState();

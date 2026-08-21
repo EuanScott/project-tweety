@@ -1,10 +1,7 @@
 part of '../app_preferences.page.dart';
 
-class _AppPreferencesError extends StatelessWidget {
-  const _AppPreferencesError({required this.message});
-
-  final String message;
-
+class const _AppPreferencesError({required final String message})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

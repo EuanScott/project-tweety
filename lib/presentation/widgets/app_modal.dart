@@ -10,9 +10,8 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// The returned [Future<T?>] completes when the modal is dismissed and carries
 /// the optional value passed to `Navigator.pop`.
-class AppModal extends StatelessWidget {
-  const AppModal({required this.child, super.key});
-
+class const AppModal({required final Widget child, super.key})
+    extends StatelessWidget {
   /// The topLeft and topRight border radius to be applied to the modal.
   static const BorderRadiusGeometry defaultBorderRadius = BorderRadius.vertical(
     top: Radius.circular(16.0),
@@ -20,9 +19,6 @@ class AppModal extends StatelessWidget {
 
   /// The default height of the modal, that can be overridden.
   static const double standardMaxHeightFactor = 0.95;
-
-  /// The widget rendered inside the modal.
-  final Widget child;
 
   /// Shows the standard app bottom-sheet modal.
   ///

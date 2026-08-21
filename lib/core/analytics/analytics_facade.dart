@@ -3,11 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'analytics_service.dart';
 
 @lazySingleton
-class AnalyticsFacade {
-  AnalyticsFacade(this._services);
-
-  final Iterable<AnalyticsService> _services;
-
+class AnalyticsFacade(final Iterable<AnalyticsService> _services) {
   Future<void> setUserId(String userId) async {
     for (final s in _services) {
       try {

@@ -6,12 +6,10 @@ import 'package:project_tweety/data/services/card/card_id.generator.dart';
 import 'cards.repository.dart';
 
 @LazySingleton(as: CardsRepository)
-class CardsRepositoryImpl implements CardsRepository {
-  const CardsRepositoryImpl(this._dataSource, this._cardIdGenerator);
-
-  final CardsDataSource _dataSource;
-  final CardIdGenerator _cardIdGenerator;
-
+class const CardsRepositoryImpl(
+  final CardsDataSource _dataSource,
+  final CardIdGenerator _cardIdGenerator,
+) implements CardsRepository {
   @override
   Future<List<Card>> getCards() async {
     final items = await _dataSource.getCards();

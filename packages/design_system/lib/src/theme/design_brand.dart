@@ -5,58 +5,30 @@ import 'package:material_ui/material_ui.dart';
 /// A [DesignBrand] contains the values that are expected to differ between
 /// applications or product variants, such as B2C and B2B, while the overall
 /// theme structure remains the same.
-class DesignBrand {
-  const DesignBrand({
-    required this.name,
-    required this.primary,
-    required this.onPrimary,
-    required this.secondary,
-    required this.onSecondary,
-    required this.disabledColor,
-    required this.error,
-    required this.success,
-    required this.warning,
-    required this.info,
-    required this.surfaceLight,
-    required this.surfaceVariantLight,
-    required this.onSurfaceLight,
-    required this.surfaceDark,
-    required this.surfaceVariantDark,
-    required this.onSurfaceDark,
-    required this.navigationSurfaceLight,
-    required this.onNavigationSurfaceLight,
-    required this.navigationSelectedLight,
-    required this.onNavigationSelectedLight,
-    required this.navigationSurfaceDark,
-    required this.onNavigationSurfaceDark,
-    required this.navigationSelectedDark,
-    required this.onNavigationSelectedDark,
-    required this.outline,
-  });
-
-  final String name;
-  final Color primary;
-  final Color onPrimary;
-  final Color secondary;
-  final Color onSecondary;
-  final Color disabledColor;
-  final Color error;
-  final Color success;
-  final Color warning;
-  final Color info;
-  final Color surfaceLight;
-  final Color surfaceVariantLight;
-  final Color onSurfaceLight;
-  final Color surfaceDark;
-  final Color surfaceVariantDark;
-  final Color onSurfaceDark;
-  final Color navigationSurfaceLight;
-  final Color onNavigationSurfaceLight;
-  final Color navigationSelectedLight;
-  final Color onNavigationSelectedLight;
-  final Color navigationSurfaceDark;
-  final Color onNavigationSurfaceDark;
-  final Color navigationSelectedDark;
-  final Color onNavigationSelectedDark;
-  final Color outline;
-}
+class const DesignBrand({
+  required final String name,
+  required final Color primary,
+  required final Color onPrimary,
+  required final Color secondary,
+  required final Color onSecondary,
+  required final Color disabledColor,
+  required final Color error,
+  required final Color success,
+  required final Color warning,
+  required final Color info,
+  required final Color surfaceLight,
+  required final Color surfaceVariantLight,
+  required final Color onSurfaceLight,
+  required final Color surfaceDark,
+  required final Color surfaceVariantDark,
+  required final Color onSurfaceDark,
+  required final Color navigationSurfaceLight,
+  required final Color onNavigationSurfaceLight,
+  required final Color navigationSelectedLight,
+  required final Color onNavigationSelectedLight,
+  required final Color navigationSurfaceDark,
+  required final Color onNavigationSurfaceDark,
+  required final Color navigationSelectedDark,
+  required final Color onNavigationSelectedDark,
+  required final Color outline,
+});

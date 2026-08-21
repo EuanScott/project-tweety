@@ -18,11 +18,8 @@ part 'widgets/card_details_editor.widget.dart';
 part 'widgets/card_details_empty_state.widget.dart';
 part 'widgets/card_details_message.widget.dart';
 
-class CardDetailsPage extends StatelessWidget {
-  const CardDetailsPage({required this.cardId, super.key});
-
-  final String cardId;
-
+class const CardDetailsPage({required final String cardId, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -34,22 +31,16 @@ class CardDetailsPage extends StatelessWidget {
   }
 }
 
-class CardDetailsContent extends StatelessWidget {
-  const CardDetailsContent({required this.cardId, super.key});
-
-  final String cardId;
-
+class const CardDetailsContent({required final String cardId, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _CardDetailsView(cardId: cardId);
   }
 }
 
-class _CardDetailsView extends StatelessWidget {
-  const _CardDetailsView({required this.cardId});
-
-  final String cardId;
-
+class const _CardDetailsView({required final String cardId})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

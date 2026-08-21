@@ -8,24 +8,18 @@ import 'package:navigation/src/tab_reselect/tab_reselect_scope.dart';
 /// navigation item should perform page-specific work, such as scrolling a list
 /// to the top. The navigation shell only runs these callbacks while the tab is
 /// already on its root route.
-class TabReselectHandler<TTab extends Object> extends StatefulWidget {
-  /// Creates a handler that registers [onReselect] for [tab].
-  const TabReselectHandler({
-    required this.tab,
-    required this.onReselect,
-    required this.child,
-    super.key,
-  });
-
+/// Creates a handler that registers [onReselect] for [tab].
+class const TabReselectHandler<TTab extends Object>({
   /// The root tab this handler belongs to.
-  final TTab tab;
+  required final TTab tab,
 
   /// Callback invoked when the user taps the active tab on its root route.
-  final VoidCallback onReselect;
+  required final VoidCallback onReselect,
 
   /// The page subtree that owns the callback lifecycle.
-  final Widget child;
-
+  required final Widget child,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<TabReselectHandler<TTab>> createState() =>
       _TabReselectHandlerState<TTab>();

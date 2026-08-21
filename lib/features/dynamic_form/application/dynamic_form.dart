@@ -6,16 +6,11 @@ import 'package:material_ui/material_ui.dart';
 import '../data/data.dart';
 
 @Deprecated('Just a tester, leave for now')
-class DynamicForm extends StatefulWidget {
-  final List<FormInputData> inputData;
-  final List<FormOutputData> outputData;
-
-  const DynamicForm({
-    super.key,
-    required this.inputData,
-    required this.outputData,
-  });
-
+class const DynamicForm({
+  super.key,
+  required final List<FormInputData> inputData,
+  required final List<FormOutputData> outputData,
+}) extends StatefulWidget {
   @override
   State<DynamicForm> createState() => _DynamicFormState();
 }
@@ -198,16 +193,11 @@ class _DynamicFormState extends State<DynamicForm> {
   }
 }
 
-class RadioButtonWidget extends StatefulWidget {
-  final String title;
-  final void Function(bool) onChanged;
-
-  const RadioButtonWidget({
-    super.key,
-    required this.title,
-    required this.onChanged,
-  });
-
+class const RadioButtonWidget({
+  super.key,
+  required final String title,
+  required final void Function(bool) onChanged,
+}) extends StatefulWidget {
   @override
   RadioButtonWidgetState createState() => RadioButtonWidgetState();
 }

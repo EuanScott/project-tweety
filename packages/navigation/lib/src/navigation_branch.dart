@@ -6,28 +6,19 @@ import 'package:go_router/go_router.dart';
 /// The consuming app supplies the actual [routes], including page builders and
 /// nested routes. The shared router factory wraps those routes in a
 /// [StatefulShellBranch].
-class NavigationBranch<TTab extends Object> {
-  /// Creates a branch for [tab].
-  const NavigationBranch({
-    required this.tab,
-    required this.routes,
-    this.restorationScopeId,
-    this.observers,
-    this.navigatorKey,
-  });
-
+class const NavigationBranch<TTab extends Object>({
   /// The app-owned tab identifier this branch belongs to.
-  final TTab tab;
+  required final TTab tab,
 
   /// The app-owned route tree for this branch.
-  final List<RouteBase> routes;
+  required final List<RouteBase> routes,
 
   /// Optional restoration scope for the branch navigator.
-  final String? restorationScopeId;
+  final String? restorationScopeId,
 
   /// Optional observers for this branch navigator.
-  final List<NavigatorObserver>? observers;
+  final List<NavigatorObserver>? observers,
 
   /// Optional navigator key for this branch.
-  final GlobalKey<NavigatorState>? navigatorKey;
-}
+  final GlobalKey<NavigatorState>? navigatorKey,
+});

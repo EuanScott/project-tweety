@@ -7,11 +7,8 @@ import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
 
 import 'bloc/cards.bloc.dart';
 
-class CardsDraftDiscardGuard extends StatefulWidget {
-  const CardsDraftDiscardGuard({required this.child, super.key});
-
-  final Widget child;
-
+class const CardsDraftDiscardGuard({required final Widget child, super.key})
+    extends StatefulWidget {
   static Future<void> discardThen(
     BuildContext context,
     VoidCallback onDiscard,

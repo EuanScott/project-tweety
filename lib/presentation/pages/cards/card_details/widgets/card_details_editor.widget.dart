@@ -1,10 +1,7 @@
 part of '../card_details.page.dart';
 
-class _CardDetailsEditor extends StatefulWidget {
-  const _CardDetailsEditor({required this.cardId});
-
-  final String cardId;
-
+class const _CardDetailsEditor({required final String cardId})
+    extends StatefulWidget {
   @override
   State<_CardDetailsEditor> createState() => _CardDetailsEditorState();
 }

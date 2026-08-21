@@ -41,11 +41,7 @@ class InvalidCardDraftException implements Exception {
   final Set<CardDraftField> invalidFields;
 }
 
-class CardNotFoundException implements Exception {
-  const CardNotFoundException(this.cardId);
-
-  final String cardId;
-}
+class const CardNotFoundException(final String cardId) implements Exception;
 
 abstract class CardsRepository {
   Future<List<Card>> getCards();

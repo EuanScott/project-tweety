@@ -7,11 +7,9 @@ import 'package:project_tweety/domain/entities/app_preferences/app_preferences.e
 import 'package:project_tweety/domain/repositories/app_preferences/app_preferences.repository.dart';
 
 @LazySingleton(as: AppPreferencesRepository)
-class AppPreferencesRepositoryImpl implements AppPreferencesRepository {
-  const AppPreferencesRepositoryImpl(this._localDataSource);
-
-  final AppPreferencesLocalDataSource _localDataSource;
-
+class const AppPreferencesRepositoryImpl(
+  final AppPreferencesLocalDataSource _localDataSource,
+) implements AppPreferencesRepository {
   @override
   Future<AppPreferences> getAppPreferences() async {
     final appPreferences = await _localDataSource.readAppPreferences();

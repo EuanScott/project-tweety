@@ -14,7 +14,6 @@ import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_pref
 
 import 'l10n/app_localizations.dart';
 
-// TODO: Check Dart 3.13 constructor usages
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,23 +22,16 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({
-    this.initialLocation,
-    this.analyticsFacade,
-    this.platform,
-    this.canAccessSettings = const bool.fromEnvironment(
-      'CAN_ACCESS_SETTINGS',
-      defaultValue: true,
-    ),
-    super.key,
-  });
-
-  final String? initialLocation;
-  final AnalyticsFacade? analyticsFacade;
-  final TargetPlatform? platform;
-  final bool canAccessSettings;
-
+class const MyApp({
+  final String? initialLocation,
+  final AnalyticsFacade? analyticsFacade,
+  final TargetPlatform? platform,
+  final bool canAccessSettings = const bool.fromEnvironment(
+    'CAN_ACCESS_SETTINGS',
+    defaultValue: true,
+  ),
+  super.key,
+}) extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }

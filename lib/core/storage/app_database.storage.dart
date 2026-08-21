@@ -207,11 +207,8 @@ class SqfliteAppDatabase implements AppDatabase {
   }
 }
 
-class _SqfliteAppDatabaseExecutor implements AppDatabaseWriteExecutor {
-  const _SqfliteAppDatabaseExecutor(this._database);
-
-  final sqflite.DatabaseExecutor _database;
-
+class const _SqfliteAppDatabaseExecutor(final sqflite.DatabaseExecutor _database)
+    implements AppDatabaseWriteExecutor {
   @override
   Future<void> execute(String sql, [List<Object?>? arguments]) {
     return _database.execute(sql, arguments);

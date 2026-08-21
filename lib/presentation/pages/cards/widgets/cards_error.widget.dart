@@ -1,10 +1,7 @@
 part of '../cards.page.dart';
 
-class _CardsError extends StatelessWidget {
-  const _CardsError({required this.message});
-
-  final String message;
-
+class const _CardsError({required final String message})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(

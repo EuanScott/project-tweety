@@ -4,20 +4,15 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// Feature code should use this instead of directly constructing
 /// [RefreshIndicator] so refresh presentation can stay centralized.
-class AppRefreshIndicator extends StatelessWidget {
-  /// Creates an adaptive pull-to-refresh wrapper around [child].
-  const AppRefreshIndicator({
-    required this.onRefresh,
-    required this.child,
-    super.key,
-  });
-
+/// Creates an adaptive pull-to-refresh wrapper around [child].
+class const AppRefreshIndicator({
   /// Callback invoked when the user triggers pull-to-refresh.
-  final Future<void> Function() onRefresh;
+  required final Future<void> Function() onRefresh,
 
   /// The scrollable content that can be refreshed.
-  final Widget child;
-
+  required final Widget child,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(onRefresh: onRefresh, child: child);

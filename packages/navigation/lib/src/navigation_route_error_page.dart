@@ -4,32 +4,24 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// The consuming app provides localized text and decides where the primary
 /// action should navigate.
-class NavigationRouteErrorPage extends StatelessWidget {
-  /// Creates a route error page.
-  const NavigationRouteErrorPage({
-    required this.title,
-    required this.description,
-    required this.actionLabel,
-    required this.onActionPressed,
-    this.error,
-    super.key,
-  });
-
-  /// The router error that caused this page to render.
-  final Exception? error;
-
+/// Creates a route error page.
+class const NavigationRouteErrorPage({
   /// The title shown in the app bar and page body.
-  final String title;
+  required final String title,
 
   /// The body text explaining the navigation error.
-  final String description;
+  required final String description,
 
   /// The primary action label.
-  final String actionLabel;
+  required final String actionLabel,
 
   /// Callback invoked by the primary action.
-  final VoidCallback onActionPressed;
+  required final VoidCallback onActionPressed,
 
+  /// The router error that caused this page to render.
+  final Exception? error,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

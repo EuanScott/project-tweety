@@ -10,12 +10,10 @@ import '../storage/app_preferences.storage.dart';
 ///   then configure DI, then call into a single orchestrator.
 /// - The orchestrator resolves and initializes services in a controlled order.
 @singleton
-class DiInitService {
-  DiInitService(this._appPreferencesStorage, this._orientationPolicyService);
-
-  final AppPreferencesStorage _appPreferencesStorage;
-  final OrientationPolicyService _orientationPolicyService;
-
+class DiInitService(
+  final AppPreferencesStorage _appPreferencesStorage,
+  final OrientationPolicyService _orientationPolicyService,
+) {
   /// Initializes all registered app-level services.
   ///
   /// Notes on ordering:

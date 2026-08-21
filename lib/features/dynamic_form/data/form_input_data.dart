@@ -1,20 +1,12 @@
 export 'form_input_data.dart';
 
-class FormInputData {
-  String name;
-  FormInputType type;
-  bool isRequired;
-  String errorMessage;
-  List<String>? inputOptions;
-
-  FormInputData({
-    required this.name,
-    required this.type,
-    required this.isRequired,
-    required this.errorMessage,
-    this.inputOptions,
-  });
-}
+class FormInputData({
+  required var String name,
+  required var FormInputType type,
+  required var bool isRequired,
+  required var String errorMessage,
+  var List<String>? inputOptions,
+});
 
 enum FormInputType {
   text,

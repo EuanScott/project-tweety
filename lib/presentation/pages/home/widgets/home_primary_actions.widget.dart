@@ -1,8 +1,6 @@
 part of '../home.page.dart';
 
-class _PrimaryActions extends StatelessWidget {
-  const _PrimaryActions();
-
+class const _PrimaryActions() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textScaleFactor = MediaQuery.textScalerOf(context).scale(1);

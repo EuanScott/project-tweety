@@ -1,11 +1,9 @@
 part of '../card_details.page.dart';
 
-class _CardDetailsMessage extends StatelessWidget {
-  const _CardDetailsMessage({required this.title, required this.description});
-
-  final String title;
-  final String description;
-
+class const _CardDetailsMessage({
+  required final String title,
+  required final String description,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

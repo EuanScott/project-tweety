@@ -2,16 +2,14 @@
 ///
 /// A guard belongs to one [tab]. While a decision is pending, subsequent reset
 /// requests are rejected so a confirmation UI cannot be opened repeatedly.
-class TabBranchResetGuard<TTab extends Object> {
-  /// Creates a branch-reset guard for [tab].
-  TabBranchResetGuard({required this.tab, required this.onResetRequested});
-
+/// Creates a branch-reset guard for [tab].
+class TabBranchResetGuard<TTab extends Object>({
   /// The tab whose nested branch this guard protects.
-  final TTab tab;
+  required final TTab tab,
 
   /// Resolves to whether the branch may reset.
-  final Future<bool> Function() onResetRequested;
-
+  required final Future<bool> Function() onResetRequested,
+}) {
   bool _isResetPending = false;
 
   /// Requests permission to reset the branch.

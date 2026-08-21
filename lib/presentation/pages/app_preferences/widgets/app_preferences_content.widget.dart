@@ -1,10 +1,8 @@
 part of '../app_preferences.page.dart';
 
-class _AppPreferencesContent extends StatelessWidget {
-  const _AppPreferencesContent({required this.appPreferences});
-
-  final app_preferences_entity.AppPreferences appPreferences;
-
+class const _AppPreferencesContent({
+  required final app_preferences_entity.AppPreferences appPreferences,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

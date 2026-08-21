@@ -18,22 +18,43 @@ export 'package:project_tweety/presentation/widgets/page_title_behavior.dart';
 ///
 /// Business logic such as BLoC creation, event dispatching, and navigation
 /// decisions should stay in the calling page.
-class PageScaffold extends StatelessWidget {
-  /// Creates a page scaffold with a standard app bar and padded safe body.
-  const PageScaffold({
-    required this.title,
-    required this.body,
-    this.secondaryBody,
-    this.trailingAction,
-    this.floatingActionButton,
-    this.titleBehavior = PageTitleBehavior.standard,
-    this.secondaryBreakpoint = 600,
-    this.primaryBodyWidth,
-    this.paneGap = 16,
-    this.bodyPadding = _bodyPadding,
-    super.key,
-  });
+/// Creates a page scaffold with a standard app bar and padded safe body.
+class const PageScaffold({
+  /// The title rendered in the shared app bar.
+  required final String title,
 
+  /// The primary content of the page.
+  required final Widget body,
+
+  /// Optional secondary content shown beside [body] on wider layouts.
+  final Widget? secondaryBody,
+
+  /// The optional typed trailing action rendered in the shared app bar.
+  final ToolBarAction? trailingAction,
+
+  /// The optional floating action button for the page.
+  final Widget? floatingActionButton,
+
+  /// How the page title should be presented.
+  ///
+  /// Material platforms currently render all variants with the standard
+  /// [ToolBar]. Cupertino platforms render large-title variants with
+  /// [CupertinoSliverNavigationBar].
+  final PageTitleBehavior titleBehavior = PageTitleBehavior.standard,
+
+  /// Width at which [secondaryBody] is shown beside [body].
+  final double secondaryBreakpoint = 600,
+
+  /// Optional fixed width for [body] when [secondaryBody] is visible.
+  final double? primaryBodyWidth,
+
+  /// Horizontal gap on either side of the divider between body panes.
+  final double paneGap = 16,
+
+  /// Padding applied around the safe body area.
+  final EdgeInsetsGeometry bodyPadding = _bodyPadding,
+  super.key,
+}) extends StatelessWidget {
   static const EdgeInsets _bodyPadding = EdgeInsets.symmetric(horizontal: 16);
   static const double _cupertinoLargeTitleBodyTopInset = 16;
 
@@ -53,40 +74,6 @@ class PageScaffold extends StatelessWidget {
       breakpoint: secondaryBreakpoint,
     );
   }
-
-  /// The title rendered in the shared app bar.
-  final String title;
-
-  /// The primary content of the page.
-  final Widget body;
-
-  /// Optional secondary content shown beside [body] on wider layouts.
-  final Widget? secondaryBody;
-
-  /// The optional typed trailing action rendered in the shared app bar.
-  final ToolBarAction? trailingAction;
-
-  /// The optional floating action button for the page.
-  final Widget? floatingActionButton;
-
-  /// How the page title should be presented.
-  ///
-  /// Material platforms currently render all variants with the standard
-  /// [ToolBar]. Cupertino platforms render large-title variants with
-  /// [CupertinoSliverNavigationBar].
-  final PageTitleBehavior titleBehavior;
-
-  /// Width at which [secondaryBody] is shown beside [body].
-  final double secondaryBreakpoint;
-
-  /// Optional fixed width for [body] when [secondaryBody] is visible.
-  final double? primaryBodyWidth;
-
-  /// Horizontal gap on either side of the divider between body panes.
-  final double paneGap;
-
-  /// Padding applied around the safe body area.
-  final EdgeInsetsGeometry bodyPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -155,15 +142,10 @@ class PageScaffold extends StatelessWidget {
   }
 }
 
-class _PageScaffoldBody extends StatefulWidget {
-  const _PageScaffoldBody({
-    required this.scaffold,
-    this.additionalPadding = EdgeInsets.zero,
-  });
-
-  final PageScaffold scaffold;
-  final EdgeInsetsGeometry additionalPadding;
-
+class const _PageScaffoldBody({
+  required final PageScaffold scaffold,
+  final EdgeInsetsGeometry additionalPadding = EdgeInsets.zero,
+}) extends StatefulWidget {
   @override
   State<_PageScaffoldBody> createState() => _PageScaffoldBodyState();
 }

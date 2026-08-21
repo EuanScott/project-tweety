@@ -26,12 +26,11 @@ part 'widgets/cards_list.widget.dart';
 
 // TODO: What about portrait tablet view mode?
 // TODO: Editing on dual screen isn't giving weird stack behaviour
-class Cards extends StatefulWidget {
-  const Cards({this.selectedCardId, this.isCreating = false, super.key});
-
-  final String? selectedCardId;
-  final bool isCreating;
-
+class const Cards({
+  final String? selectedCardId,
+  final bool isCreating = false,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<Cards> createState() => _CardsState();
 }
@@ -148,17 +147,11 @@ class _CardsState extends State<Cards> {
   }
 }
 
-class _CardsView extends StatelessWidget {
-  const _CardsView({
-    required this.listKey,
-    required this.selectedCardId,
-    required this.onCardSelected,
-  });
-
-  final GlobalKey<_CardsListState> listKey;
-  final String? selectedCardId;
-  final ValueChanged<String> onCardSelected;
-
+class const _CardsView({
+  required final GlobalKey<_CardsListState> listKey,
+  required final String? selectedCardId,
+  required final ValueChanged<String> onCardSelected,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: buildWhen and listenWhen for small dedicated UI tasks (snackbar or only conditional rebuilds required)
