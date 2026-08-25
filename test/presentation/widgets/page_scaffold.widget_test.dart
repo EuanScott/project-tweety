@@ -35,6 +35,64 @@ void main() {
       expect(find.text('Primary'), findsOneWidget);
     });
 
+    testWidgets('renders and triggers the trailing action on Android', (
+      tester,
+    ) async {
+      var pressed = false;
+
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.android,
+        surfaceSize: const Size(400, 800),
+        scaffold: PageScaffold(
+          title: 'Test',
+          body: const Text('Primary'),
+          trailingAction: ToolBarAction(
+            icon: Icons.add,
+            tooltip: 'Add',
+            onPressed: () => pressed = true,
+          ),
+        ),
+      );
+
+      expect(find.byType(AppIconButton), findsOneWidget);
+      expect(find.byIcon(Icons.add), findsOneWidget);
+
+      await tester.tap(find.byType(AppIconButton));
+      await tester.pumpAndSettle();
+
+      expect(pressed, isTrue);
+    });
+
+    testWidgets('renders and triggers the trailing action on iOS', (
+      tester,
+    ) async {
+      var pressed = false;
+
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(400, 800),
+        scaffold: PageScaffold(
+          title: 'Test',
+          body: const Text('Primary'),
+          trailingAction: ToolBarAction(
+            icon: Icons.add,
+            tooltip: 'Add',
+            onPressed: () => pressed = true,
+          ),
+        ),
+      );
+
+      expect(find.byType(AppIconButton), findsOneWidget);
+      expect(find.byIcon(Icons.add), findsOneWidget);
+
+      await tester.tap(find.byType(AppIconButton));
+      await tester.pumpAndSettle();
+
+      expect(pressed, isTrue);
+    });
+
     testWidgets('renders Material page chrome on Android', (tester) async {
       await _pumpScaffold(
         tester,

@@ -13,7 +13,6 @@ import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
-import 'package:project_tweety/presentation/widgets/tool_bar.dart';
 
 import 'bloc/cards.bloc.dart';
 import 'card_details/card_details.page.dart';

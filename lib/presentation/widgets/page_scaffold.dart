@@ -3,16 +3,38 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:project_tweety/presentation/widgets/page_title_behavior.dart';
 import 'package:project_tweety/presentation/widgets/split_pane_layout.dart';
-import 'package:project_tweety/presentation/widgets/tool_bar.dart';
 
 export 'package:project_tweety/presentation/widgets/page_title_behavior.dart';
+
+/// A typed, cross-platform trailing app-bar action.
+///
+/// [ToolBarAction] is the shared interface consumed by both platform
+/// adapters inside [PageScaffold]: the Material branch renders it as an
+/// [AppIconButton] in the [AppBar], and the Cupertino branch renders the
+/// same value as an [AppIconButton] in its navigation bar. Construct one
+/// [ToolBarAction] and both platforms render and behave identically —
+/// callers never branch on platform themselves.
+class const ToolBarAction({
+  /// The icon shown for this action, on both platforms.
+  required final IconData icon,
+
+  /// The callback invoked when the action is pressed, on both platforms.
+  required final VoidCallback onPressed,
+
+  /// {@template tool_bar_action_tooltip}
+  /// Announced as the Material tooltip on long-press/hover, and as the
+  /// Cupertino accessibility semantic label. Defaults to an empty string,
+  /// which mutes both.
+  /// {@endtemplate}
+  final String tooltip = '',
+});
 
 /// A shared page shell that standardises the app scaffold structure.
 ///
 /// This widget owns the common presentation layout for top-level and nested
-/// pages:
-/// - [Scaffold]
-/// - [ToolBar]
+/// pages, and is the single interface for a page header on both platforms:
+/// - [Scaffold] with a Material [AppBar], or [CupertinoPageScaffold] with
+///   Cupertino navigation chrome
 /// - [SafeArea]
 /// - consistent body padding
 ///
@@ -29,7 +51,8 @@ class const PageScaffold({
   /// Optional secondary content shown beside [body] on wider layouts.
   final Widget? secondaryBody,
 
-  /// The optional typed trailing action rendered in the shared app bar.
+  /// The optional typed trailing action rendered in the shared app bar. See
+  /// [ToolBarAction] for the shared cross-platform contract.
   final ToolBarAction? trailingAction,
 
   /// The optional floating action button for the page.
@@ -38,7 +61,7 @@ class const PageScaffold({
   /// How the page title should be presented.
   ///
   /// Material platforms currently render all variants with the standard
-  /// [ToolBar]. Cupertino platforms render large-title variants with
+  /// [AppBar]. Cupertino platforms render large-title variants with
   /// [CupertinoSliverNavigationBar].
   final PageTitleBehavior titleBehavior = .standard,
 
@@ -122,22 +145,52 @@ class const PageScaffold({
     }
 
     return Scaffold(
-      appBar: ToolBar(title: title, trailingAction: trailingAction),
+      appBar: _MaterialToolBar(title: title, trailingAction: trailingAction),
       body: SafeArea(child: _PageScaffoldBody(scaffold: this)),
       floatingActionButton: floatingActionButton,
     );
   }
 
+  /// The Cupertino counterpart of [_MaterialToolBar]'s trailing action —
+  /// same [ToolBarAction], same [AppIconButton], per the shared contract on
+  /// [ToolBarAction].
   Widget? get _cupertinoTrailingAction {
     final action = trailingAction;
     if (action == null) {
       return null;
     }
 
-    return CupertinoButton(
-      padding: .zero,
+    return AppIconButton(
+      icon: action.icon,
       onPressed: action.onPressed,
-      child: Icon(action.icon),
+      semanticLabel: action.tooltip,
+    );
+  }
+}
+
+/// The Material counterpart of [PageScaffold]'s Cupertino navigation
+/// chrome. Not part of [PageScaffold]'s public interface — [PageScaffold]
+/// is the single public page-header abstraction for both platforms.
+class const _MaterialToolBar({
+  required final String title,
+  final ToolBarAction? trailingAction,
+}) extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const .fromHeight(kToolbarHeight);
+
+  @override
+  AppBar build(BuildContext context) {
+    return AppBar(
+      title: Text(title),
+      actions: trailingAction != null
+          ? [
+              AppIconButton(
+                icon: trailingAction!.icon,
+                onPressed: trailingAction!.onPressed,
+                semanticLabel: trailingAction!.tooltip,
+              ),
+            ]
+          : const [],
     );
   }
 }
