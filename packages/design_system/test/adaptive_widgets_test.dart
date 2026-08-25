@@ -199,6 +199,54 @@ void main() {
     });
   });
 
+  group('AppIconButton', () {
+    testWidgets('renders a Material icon button on Android', (tester) async {
+      var pressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: AppIconButton(
+            icon: Icons.close,
+            onPressed: () => pressed = true,
+            semanticLabel: 'Close',
+          ),
+        ),
+      );
+
+      expect(find.byType(IconButton), findsOneWidget);
+      expect(find.byType(CupertinoButton), findsNothing);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+
+      await tester.tap(find.byType(IconButton));
+
+      expect(pressed, isTrue);
+    });
+
+    testWidgets('renders a Cupertino icon button on iOS', (tester) async {
+      var pressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          home: AppIconButton(
+            icon: Icons.close,
+            onPressed: () => pressed = true,
+            semanticLabel: 'Close',
+          ),
+        ),
+      );
+
+      expect(find.byType(CupertinoButton), findsOneWidget);
+      expect(find.byType(IconButton), findsNothing);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+
+      await tester.tap(find.byType(CupertinoButton));
+
+      expect(pressed, isTrue);
+    });
+  });
+
   group('showAppConfirmationDialog', () {
     testWidgets('renders a Material confirmation with caller-owned copy', (
       tester,

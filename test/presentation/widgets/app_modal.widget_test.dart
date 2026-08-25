@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/presentation/widgets/app_modal.dart';
@@ -305,6 +306,390 @@ void main() {
         expect(find.text('standalone-child'), findsOneWidget);
       });
     });
+
+    group('close button', () {
+      testWidgets('does not show a close button on .page', (tester) async {
+        await tester.pumpWidget(
+          const _TestApp(home: _ModalLauncher(variant: _ModalVariant.page)),
+        );
+
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+        expect(find.byIcon(Icons.close), findsNothing);
+      });
+
+      testWidgets('does not show a close button on .compact', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          const _TestApp(home: _ModalLauncher(variant: _ModalVariant.compact)),
+        );
+
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+        expect(find.byIcon(Icons.close), findsNothing);
+      });
+
+      testWidgets('never shows a close button on .blocking', (tester) async {
+        await tester.pumpWidget(
+          const _TestApp(
+            home: _ModalLauncher(variant: _ModalVariant.blocking),
+          ),
+        );
+
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+        expect(find.byIcon(Icons.close), findsNothing);
+      });
+    });
+
+    group('default height', () {
+      testWidgets('.page defaults to standardMaxHeightFactor of the screen', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          const _TestApp(
+            mediaQuerySize: Size(400, 800),
+            home: _ModalLauncher(variant: _ModalVariant.page),
+          ),
+        );
+
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+        final bottomSheet = tester.widget<BottomSheet>(
+          find.byType(BottomSheet),
+        );
+
+        expect(
+          bottomSheet.constraints!.maxHeight,
+          800 * AppModal.standardMaxHeightFactor,
+        );
+      });
+
+      testWidgets(
+        '.blocking defaults to standardMaxHeightFactor of the screen',
+        (tester) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              mediaQuerySize: Size(400, 800),
+              home: _ModalLauncher(variant: _ModalVariant.blocking),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          final bottomSheet = tester.widget<BottomSheet>(
+            find.byType(BottomSheet),
+          );
+
+          expect(
+            bottomSheet.constraints!.maxHeight,
+            800 * AppModal.standardMaxHeightFactor,
+          );
+        },
+      );
+    });
+
+    group('cupertino', () {
+      group('close button', () {
+        testWidgets('shows a close button by default on .page', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ModalLauncher(variant: _ModalVariant.page),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          expect(find.byIcon(Icons.close), findsOneWidget);
+        });
+
+        testWidgets('shows a close button by default on .compact', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ModalLauncher(variant: _ModalVariant.compact),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          expect(find.byIcon(Icons.close), findsOneWidget);
+        });
+
+        testWidgets('never shows a close button on .blocking', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ModalLauncher(variant: _ModalVariant.blocking),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          expect(find.byIcon(Icons.close), findsNothing);
+        });
+
+        testWidgets('hides the close button when showCloseButton is false', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ModalLauncher(
+                variant: _ModalVariant.page,
+                showCloseButton: false,
+              ),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          expect(find.byIcon(Icons.close), findsNothing);
+        });
+
+        testWidgets('tapping it pops the modal with a null result on .page', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ResultHarness(variant: _ModalVariant.page),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+          await _tapAndFinishTransition(tester, find.byIcon(Icons.close));
+
+          expect(find.text('result:none'), findsOneWidget);
+        });
+      });
+
+      group('default height', () {
+        testWidgets(
+          '.page defaults to standardMaxHeightFactor of the screen',
+          (tester) async {
+            await tester.pumpWidget(
+              const _TestApp(
+                platform: TargetPlatform.iOS,
+                mediaQuerySize: Size(400, 800),
+                home: _ModalLauncher(variant: _ModalVariant.page),
+              ),
+            );
+
+            await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+            final container = tester.widget<Container>(
+              find.byType(Container),
+            );
+
+            expect(
+              container.constraints!.maxHeight,
+              800 * AppModal.standardMaxHeightFactor,
+            );
+          },
+        );
+
+        testWidgets(
+          '.blocking defaults to standardMaxHeightFactor of the screen',
+          (tester) async {
+            await tester.pumpWidget(
+              const _TestApp(
+                platform: TargetPlatform.iOS,
+                mediaQuerySize: Size(400, 800),
+                home: _ModalLauncher(variant: _ModalVariant.blocking),
+              ),
+            );
+
+            await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+            final container = tester.widget<Container>(
+              find.byType(Container),
+            );
+
+            expect(
+              container.constraints!.maxHeight,
+              800 * AppModal.standardMaxHeightFactor,
+            );
+          },
+        );
+      });
+
+      group('.page', () {
+        testWidgets('renders the provided child', (tester) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ModalLauncher(variant: _ModalVariant.page),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          expect(find.text('modal-child'), findsOneWidget);
+        });
+
+        testWidgets('returns the value passed to Navigator.pop', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ResultHarness(variant: _ModalVariant.page),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+          await _tapAndFinishTransition(tester, find.text('close-with-true'));
+
+          expect(find.text('result:true'), findsOneWidget);
+        });
+
+        testWidgets('applies the provided border radius', (tester) async {
+          const radius = Radius.circular(24);
+
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ModalLauncher(
+                variant: _ModalVariant.page,
+                borderRadius: BorderRadius.only(
+                  topLeft: radius,
+                  topRight: radius,
+                ),
+              ),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          final clipRRect = tester.widget<ClipRRect>(find.byType(ClipRRect));
+
+          expect(
+            clipRRect.borderRadius,
+            const BorderRadius.only(topLeft: radius, topRight: radius),
+          );
+        });
+
+        testWidgets(
+          'applies a max height constraint when maxHeightFactor is provided',
+          (tester) async {
+            await tester.pumpWidget(
+              const _TestApp(
+                platform: TargetPlatform.iOS,
+                mediaQuerySize: Size(400, 800),
+                home: _ModalLauncher(
+                  variant: _ModalVariant.page,
+                  maxHeightFactor: 0.5,
+                ),
+              ),
+            );
+
+            await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+            const expectedMaxHeight = 800 * 0.5;
+
+            final container = tester.widget<Container>(
+              find.byType(Container),
+            );
+
+            expect(container.constraints, isNotNull);
+            expect(container.constraints!.maxHeight, expectedMaxHeight);
+          },
+        );
+
+        testWidgets('disables system back dismissal when canPop is false', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ResultHarness(
+                variant: _ModalVariant.page,
+                canPop: false,
+              ),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+          await _handlePopRouteAndFinishTransition(tester);
+
+          expect(find.text('modal-child'), findsOneWidget);
+          expect(find.text('result:none'), findsOneWidget);
+        });
+      });
+
+      group('.blocking', () {
+        testWidgets('is not dismissed by tapping outside the modal', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ModalLauncher(variant: _ModalVariant.blocking),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          await tester.tapAt(const Offset(10, 10));
+          await tester.pump();
+          await tester.pump(_modalTransitionDuration);
+
+          expect(find.text('modal-child'), findsOneWidget);
+        });
+
+        testWidgets('returns the value passed to Navigator.pop', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              home: _ResultHarness(variant: _ModalVariant.blocking),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+          await _tapAndFinishTransition(tester, find.text('close-with-false'));
+
+          expect(find.text('result:false'), findsOneWidget);
+        });
+
+        testWidgets('uses the root navigator when useRootNavigator is true', (
+          tester,
+        ) async {
+          final rootObserver = _TestNavigatorObserver();
+          final nestedObserver = _TestNavigatorObserver();
+
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: ThemeData(platform: TargetPlatform.iOS),
+              navigatorObservers: [rootObserver],
+              home: Navigator(
+                observers: [nestedObserver],
+                onGenerateRoute: (_) => MaterialPageRoute<void>(
+                  builder: (_) => const _NestedNavigatorHarness(
+                    variant: _ModalVariant.blocking,
+                    useRootNavigator: true,
+                  ),
+                ),
+              ),
+            ),
+          );
+
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+          expect(rootObserver.pushedRoutes.length, greaterThan(0));
+        });
+      });
+    });
   });
 }
 
@@ -314,16 +699,21 @@ class _TestApp extends StatelessWidget {
   const new({
     required this.home,
     this.mediaQuerySize = const Size(400, 800),
+    this.platform = TargetPlatform.android,
   });
 
   final Widget home;
   final Size mediaQuerySize;
+  final TargetPlatform platform;
 
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQueryData(size: mediaQuerySize, disableAnimations: true),
-      child: MaterialApp(home: Scaffold(body: home)),
+      child: MaterialApp(
+        theme: ThemeData(platform: platform),
+        home: Scaffold(body: home),
+      ),
     );
   }
 }
@@ -334,12 +724,14 @@ class _ModalLauncher extends StatelessWidget {
     this.borderRadius,
     this.maxHeightFactor,
     this.showDragHandle,
+    this.showCloseButton = true,
   });
 
   final _ModalVariant variant;
   final BorderRadiusGeometry? borderRadius;
   final double? maxHeightFactor;
   final bool? showDragHandle;
+  final bool showCloseButton;
 
   @override
   Widget build(BuildContext context) {
@@ -357,24 +749,26 @@ class _ModalLauncher extends StatelessWidget {
         return AppModal.page<void>(
           context: context,
           child: const _ModalContent(),
-          borderRadius: borderRadius ?? AppModal.defaultBorderRadius,
+          borderRadius: borderRadius ?? DesignSystemBottomSheetTheme.radius,
           maxHeightFactor: maxHeightFactor ?? AppModal.standardMaxHeightFactor,
           showDragHandle: showDragHandle ?? true,
+          showCloseButton: showCloseButton,
         );
       case _ModalVariant.compact:
         return AppModal.compact<void>(
           context: context,
           child: const _ModalContent(),
-          borderRadius: borderRadius ?? AppModal.defaultBorderRadius,
+          borderRadius: borderRadius ?? DesignSystemBottomSheetTheme.radius,
           maxHeightFactor: maxHeightFactor,
           showDragHandle: showDragHandle ?? false,
+          showCloseButton: showCloseButton,
         );
       case _ModalVariant.blocking:
         return AppModal.blocking<void>(
           context: context,
           child: const _ModalContent(),
-          borderRadius: borderRadius ?? AppModal.defaultBorderRadius,
-          maxHeightFactor: maxHeightFactor,
+          borderRadius: borderRadius ?? DesignSystemBottomSheetTheme.radius,
+          maxHeightFactor: maxHeightFactor ?? AppModal.standardMaxHeightFactor,
         );
     }
   }

@@ -3,14 +3,16 @@ import 'package:material_ui/material_ui.dart';
 class DesignSystemBottomSheetTheme {
   new _();
 
+  static const BorderRadiusGeometry radius = .vertical(
+    top: Radius.circular(16),
+  );
+
   static BottomSheetThemeData light(ColorScheme colorScheme) {
     return BottomSheetThemeData(
       dragHandleColor: colorScheme.primary,
       clipBehavior: .antiAlias,
       showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: .vertical(top: Radius.circular(16)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: radius),
     );
   }
 
@@ -19,9 +21,7 @@ class DesignSystemBottomSheetTheme {
       dragHandleColor: colorScheme.primary,
       clipBehavior: .antiAlias,
       showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: .vertical(top: Radius.circular(16)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: radius),
     );
   }
 }
