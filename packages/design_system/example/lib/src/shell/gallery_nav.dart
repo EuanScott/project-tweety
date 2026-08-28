@@ -21,9 +21,19 @@ class const GalleryNav({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final navTheme = DesignSystemTheme.dark(
+    final baseNavTheme = DesignSystemTheme.dark(
       brand: DesignBrands.tweetyB2c,
     ).copyWith(platform: TargetPlatform.android);
+
+    // Local, gallery-only deviation from the shared navigationDrawerTheme:
+    // square (not rounded) selection indicator, tinted with the brand's
+    // teal rather than the dark theme's own selected-indicator color.
+    final navTheme = baseNavTheme.copyWith(
+      navigationDrawerTheme: baseNavTheme.navigationDrawerTheme.copyWith(
+        indicatorShape: const RoundedRectangleBorder(),
+        indicatorColor: baseNavTheme.colorScheme.primary,
+      ),
+    );
 
     return Theme(
       data: navTheme,
@@ -59,7 +69,12 @@ class const GalleryNav({
       for (final entry in entries)
         NavigationDrawerDestination(
           icon: const Icon(Icons.widgets_outlined),
-          label: Text(entry.label),
+          label: Text(
+            entry.label,
+            overflow: .ellipsis,
+            maxLines: 1,
+            softWrap: false,
+          ),
         ),
     ];
   }
