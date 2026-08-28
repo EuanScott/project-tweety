@@ -13,6 +13,8 @@ export 'src/adaptive/app_list_tile.dart';
 export 'src/adaptive/app_loading_indicator.dart';
 export 'src/adaptive/app_picker_field.dart';
 export 'src/adaptive/app_refresh_indicator.dart';
+export 'src/adaptive/app_segmented_control.dart';
+export 'src/adaptive/app_switch.dart';
 export 'src/adaptive/app_text_field.dart';
 export 'src/theme/components/design_system_bottom_sheet_theme.dart';
 export 'src/theme/design_brand.dart';

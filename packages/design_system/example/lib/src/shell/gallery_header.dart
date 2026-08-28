@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Title bar above a showcase, with the light/dark toggle.
@@ -16,14 +17,13 @@ class const GalleryHeader({
           Expanded(
             child: Text(title, style: Theme.of(context).textTheme.titleLarge),
           ),
-          SegmentedButton<Brightness>(
+          AppSegmentedControl<Brightness>(
+            value: brightness,
             segments: const [
-              ButtonSegment(value: .light, label: Text('Light')),
-              ButtonSegment(value: .dark, label: Text('Dark')),
+              AppPickerOption(value: .light, label: 'Light'),
+              AppPickerOption(value: .dark, label: 'Dark'),
             ],
-            selected: {brightness},
-            onSelectionChanged: (selection) =>
-                onBrightnessChanged(selection.first),
+            onChanged: onBrightnessChanged,
           ),
         ],
       ),

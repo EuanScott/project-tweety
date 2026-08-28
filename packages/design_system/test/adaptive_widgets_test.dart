@@ -383,6 +383,114 @@ void main() {
       expect(find.text('System'), findsOneWidget);
     });
   });
+
+  group('AppSwitch', () {
+    testWidgets('renders a Material switch on Android', (tester) async {
+      var value = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: Scaffold(
+            body: AppSwitch(value: value, onChanged: (v) => value = v),
+          ),
+        ),
+      );
+
+      expect(find.byType(Switch), findsOneWidget);
+      expect(find.byType(CupertinoSwitch), findsNothing);
+
+      await tester.tap(find.byType(Switch));
+
+      expect(value, isTrue);
+    });
+
+    testWidgets('renders a Cupertino switch on iOS', (tester) async {
+      var value = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          home: Scaffold(
+            body: AppSwitch(value: value, onChanged: (v) => value = v),
+          ),
+        ),
+      );
+
+      expect(find.byType(CupertinoSwitch), findsOneWidget);
+      expect(find.byType(Switch), findsNothing);
+
+      await tester.tap(find.byType(CupertinoSwitch));
+
+      expect(value, isTrue);
+    });
+  });
+
+  group('AppSegmentedControl', () {
+    testWidgets('renders a Material segmented button on Android', (
+      tester,
+    ) async {
+      String? selected;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: Scaffold(
+            body: AppSegmentedControl<String>(
+              value: 'light',
+              segments: const [
+                AppPickerOption(value: 'light', label: 'Light'),
+                AppPickerOption(value: 'dark', label: 'Dark'),
+              ],
+              onChanged: (value) => selected = value,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(SegmentedButton<String>), findsOneWidget);
+      expect(
+        find.byType(CupertinoSlidingSegmentedControl<String>),
+        findsNothing,
+      );
+
+      await tester.tap(find.text('Dark'));
+
+      expect(selected, 'dark');
+    });
+
+    testWidgets('renders a Cupertino sliding segmented control on iOS', (
+      tester,
+    ) async {
+      String? selected;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.iOS),
+          home: Scaffold(
+            body: AppSegmentedControl<String>(
+              value: 'light',
+              segments: const [
+                AppPickerOption(value: 'light', label: 'Light'),
+                AppPickerOption(value: 'dark', label: 'Dark'),
+              ],
+              onChanged: (value) => selected = value,
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        find.byType(CupertinoSlidingSegmentedControl<String>),
+        findsOneWidget,
+      );
+      expect(find.byType(SegmentedButton<String>), findsNothing);
+
+      await tester.tap(find.text('Dark'));
+
+      expect(selected, 'dark');
+    });
+  });
 }
 
 Color? _textColor(WidgetTester tester, String text) {

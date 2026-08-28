@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Shared no-op callback for showcases demonstrating an enabled widget with
@@ -28,27 +29,26 @@ class const ShowcaseControls({
         runSpacing: 8,
         crossAxisAlignment: .center,
         children: [
-          if (variantOptions != null)
-            DropdownButton<String>(
-              value: variantValue,
-              items: variantOptions!
-                  .map(
-                    (option) =>
-                        DropdownMenuItem(value: option, child: Text(option)),
-                  )
-                  .toList(growable: false),
-              onChanged: (value) {
-                if (value != null) {
-                  onVariantChanged?.call(value);
-                }
-              },
+          if (variantOptions != null && variantValue != null)
+            SizedBox(
+              width: 200,
+              child: AppPickerField<String>(
+                label: 'Variant',
+                value: variantValue!,
+                options: variantOptions!
+                    .map(
+                      (option) => AppPickerOption(value: option, label: option),
+                    )
+                    .toList(growable: false),
+                onChanged: (value) => onVariantChanged?.call(value),
+              ),
             ),
           if (enabled != null)
             Row(
               mainAxisSize: .min,
               children: [
                 const Text('Enabled'),
-                Switch(value: enabled!, onChanged: onEnabledChanged),
+                AppSwitch(value: enabled!, onChanged: onEnabledChanged),
               ],
             ),
         ],
