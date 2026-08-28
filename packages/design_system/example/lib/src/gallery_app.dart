@@ -11,8 +11,8 @@ class const GalleryApp({super.key}) extends StatelessWidget {
     return MaterialApp(
       title: 'design_system Component Gallery',
       debugShowCheckedModeBanner: false,
-      theme: DesignSystemTheme.light(),
-      darkTheme: DesignSystemTheme.dark(),
+      theme: DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
+      darkTheme: DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
