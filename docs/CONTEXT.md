@@ -86,3 +86,22 @@ See `AppDesignPlatform`
 canonical definition — branch on Material vs. Cupertino presentation, not raw
 `TargetPlatform`. Defined here only as a pointer so this glossary doesn't
 drift from that doc comment.
+
+### Windowed presentation
+
+A **windowed presentation** is the choice between an edge-anchored sheet and
+a centered, fixed-max-width dialog. It is a dimension orthogonal to **modal
+variant** and to **design language**: it is driven purely by
+`DisplayMetrics.isExpandedSurface`
+(`packages/design_system/lib/src/adaptive/display_metrics.dart`) — tablet-
+sized shortest side or an active fold/hinge split — never by
+`AppDesignPlatform`. A tablet in Cupertino mode still gets Cupertino-styled
+content, just inside a windowed container instead of a sheet; all three
+modal variants (`page`, `compact`, `blocking`) switch presentation together
+on the same surface check.
+
+The windowed presentation drops drag-to-dismiss entirely (no edge to drag
+from) and, unlike the sheet presentation, renders the close affordance on
+Material too whenever `showCloseButton` is true — sheet-mode Material relies
+on its drag handle and tap-outside dismissal instead, but windowed mode has
+no drag handle to fall back on, so both design languages get the icon there.

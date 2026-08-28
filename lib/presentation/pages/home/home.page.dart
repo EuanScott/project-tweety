@@ -113,11 +113,11 @@ class _HomeView extends StatelessWidget {
               AppModal.blocking<bool>(
                 context: context,
                 child: Center(
-                  child: AppButton.text(
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    child: const Text('Close Modal'),
+                  child: Builder(
+                    builder: (modalContext) => AppButton.text(
+                      onPressed: () => Navigator.of(modalContext).pop(true),
+                      child: const Text('Close Modal'),
+                    ),
                   ),
                 ),
               ),
