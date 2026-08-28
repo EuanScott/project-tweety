@@ -12,8 +12,9 @@ import '../catalog/gallery_entry.dart';
 /// `navigationDrawerTheme` — the same theme the real app's tablet-width
 /// permanent drawer renders with — instead of hand-copied color logic.
 ///
-/// Always dark-teal, independent of the rest of the app's theme — a fixed
-/// brand rail, same as many real apps' persistent nav.
+/// Always the light-theme navigation tint, independent of the rest of the
+/// app's theme — a fixed brand rail, same as many real apps' persistent
+/// nav.
 class const GalleryNav({
   required final GalleryEntry selected,
   required final ValueChanged<GalleryEntry> onSelected,
@@ -21,7 +22,7 @@ class const GalleryNav({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final navTheme = DesignSystemTheme.dark(
+    final navTheme = DesignSystemTheme.light(
       brand: DesignBrands.tweetyB2c,
     ).copyWith(platform: TargetPlatform.android);
 
