@@ -29,7 +29,6 @@ class _GalleryShellState extends State<GalleryShell> {
               onSelected: (entry) => setState(() => _selected = entry),
             ),
           ),
-          const VerticalDivider(width: 1),
           Expanded(
             child: Column(
               children: [

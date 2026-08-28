@@ -60,11 +60,18 @@ class const GalleryNav({
       for (final entry in entries)
         NavigationDrawerDestination(
           icon: const Icon(Icons.widgets_outlined),
-          label: Text(
-            entry.label,
-            overflow: .ellipsis,
-            maxLines: 1,
-            softWrap: false,
+          // NavigationDrawerDestination doesn't bound its label's width
+          // itself, so overflow/maxLines on the Text alone has nothing to
+          // truncate against — this ConstrainedBox is what actually gives
+          // the ellipsis a width to trigger at.
+          label: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 150),
+            child: Text(
+              entry.label,
+              overflow: .ellipsis,
+              maxLines: 1,
+              softWrap: false,
+            ),
           ),
         ),
     ];
