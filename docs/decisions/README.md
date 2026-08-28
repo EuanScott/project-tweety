@@ -52,4 +52,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0002](0002-test-layer-conventions.md) | Test layer conventions | proposed |
 | [0003](0003-pre-commit-validator-enforcement.md) | Pre-commit validator enforcement | proposed |
 | [0004](0004-value-type-conventions.md) | Value type conventions | proposed |
+| [0005](0005-design-system-example-app-location.md) | design_system example app lives inside the package | proposed |
 <!-- adr-index:end -->
