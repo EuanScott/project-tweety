@@ -5,6 +5,8 @@ import '../showcases/app_list_tile_showcase.dart';
 import '../showcases/app_loading_indicator_showcase.dart';
 import '../showcases/app_picker_field_showcase.dart';
 import '../showcases/app_refresh_indicator_showcase.dart';
+import '../showcases/app_segmented_control_showcase.dart';
+import '../showcases/app_switch_showcase.dart';
 import '../showcases/app_text_field_showcase.dart';
 import 'gallery_entry.dart';
 
@@ -39,6 +41,20 @@ final List<GalleryEntry> galleryCatalog = [
     category: .inputs,
     showcaseBuilder: (context, brightness) =>
         AppPickerFieldShowcase(brightness: brightness),
+  ),
+  GalleryEntry(
+    id: 'app_switch',
+    label: 'AppSwitch',
+    category: .inputs,
+    showcaseBuilder: (context, brightness) =>
+        AppSwitchShowcase(brightness: brightness),
+  ),
+  GalleryEntry(
+    id: 'app_segmented_control',
+    label: 'AppSegmentedControl',
+    category: .inputs,
+    showcaseBuilder: (context, brightness) =>
+        AppSegmentedControlShowcase(brightness: brightness),
   ),
   GalleryEntry(
     id: 'app_loading_indicator',
