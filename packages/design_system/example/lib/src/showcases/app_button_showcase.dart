@@ -46,7 +46,7 @@ class _AppButtonShowcaseState extends State<AppButtonShowcase> {
   }
 
   Widget _buildButton() {
-    final onPressed = _enabled ? _noop : null;
+    final onPressed = _enabled ? noop : null;
     const label = Text('Continue');
 
     switch (_variant) {
@@ -60,6 +60,4 @@ class _AppButtonShowcaseState extends State<AppButtonShowcase> {
         return AppButton.destructive(onPressed: onPressed, child: label);
     }
   }
-
-  void _noop() {}
 }

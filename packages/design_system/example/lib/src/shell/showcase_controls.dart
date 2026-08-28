@@ -1,5 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 
+/// Shared no-op callback for showcases demonstrating an enabled widget with
+/// nothing real to do when pressed/tapped.
+void noop() {}
+
 /// Uniform, minimal control bar shared by every showcase: an optional
 /// variant picker and an optional enabled/disabled toggle. No free-text
 /// inputs — every showcase's other content is hardcoded dummy data.

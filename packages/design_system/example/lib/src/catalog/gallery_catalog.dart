@@ -1,4 +1,10 @@
 import '../showcases/app_button_showcase.dart';
+import '../showcases/app_icon_button_showcase.dart';
+import '../showcases/app_list_tile_showcase.dart';
+import '../showcases/app_loading_indicator_showcase.dart';
+import '../showcases/app_picker_field_showcase.dart';
+import '../showcases/app_refresh_indicator_showcase.dart';
+import '../showcases/app_text_field_showcase.dart';
 import 'gallery_entry.dart';
 
 /// The full set of design_system widgets tracked by the gallery, in nav
@@ -12,35 +18,47 @@ final List<GalleryEntry> galleryCatalog = [
     showcaseBuilder: (context, brightness) =>
         AppButtonShowcase(brightness: brightness),
   ),
-  const GalleryEntry(
+  GalleryEntry(
     id: 'app_icon_button',
     label: 'AppIconButton',
     category: .actions,
+    showcaseBuilder: (context, brightness) =>
+        AppIconButtonShowcase(brightness: brightness),
   ),
-  const GalleryEntry(
+  GalleryEntry(
     id: 'app_text_field',
     label: 'AppTextField',
     category: .inputs,
+    showcaseBuilder: (context, brightness) =>
+        AppTextFieldShowcase(brightness: brightness),
   ),
-  const GalleryEntry(
+  GalleryEntry(
     id: 'app_picker_field',
     label: 'AppPickerField',
     category: .inputs,
+    showcaseBuilder: (context, brightness) =>
+        AppPickerFieldShowcase(brightness: brightness),
   ),
-  const GalleryEntry(
+  GalleryEntry(
     id: 'app_loading_indicator',
     label: 'AppLoadingIndicator',
     category: .feedback,
+    showcaseBuilder: (context, brightness) =>
+        AppLoadingIndicatorShowcase(brightness: brightness),
   ),
-  const GalleryEntry(
+  GalleryEntry(
     id: 'app_refresh_indicator',
     label: 'AppRefreshIndicator',
     category: .feedback,
+    showcaseBuilder: (context, brightness) =>
+        AppRefreshIndicatorShowcase(brightness: brightness),
   ),
-  const GalleryEntry(
+  GalleryEntry(
     id: 'app_list_tile',
     label: 'AppListTile',
     category: .lists,
+    showcaseBuilder: (context, brightness) =>
+        AppListTileShowcase(brightness: brightness),
   ),
   const GalleryEntry(
     id: 'app_confirmation_dialog',
