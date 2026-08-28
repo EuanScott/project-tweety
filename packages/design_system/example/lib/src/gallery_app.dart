@@ -18,6 +18,17 @@ class const GalleryApp({super.key}) extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      // The gallery's own chrome (nav, header, showcase controls) must
+      // always render Material — only the two comparison panes inside a
+      // showcase should ever show Cupertino, and each pane already sets
+      // its own explicit platform override regardless of this ambient
+      // value.
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(platform: TargetPlatform.android),
+          child: child!,
+        );
+      },
       home: const GalleryShell(),
     );
   }
