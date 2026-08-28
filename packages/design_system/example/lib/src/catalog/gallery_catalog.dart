@@ -1,4 +1,5 @@
 import '../showcases/app_button_showcase.dart';
+import '../showcases/app_confirmation_dialog_placeholder.dart';
 import '../showcases/app_icon_button_showcase.dart';
 import '../showcases/app_list_tile_showcase.dart';
 import '../showcases/app_loading_indicator_showcase.dart';
@@ -60,9 +61,11 @@ final List<GalleryEntry> galleryCatalog = [
     showcaseBuilder: (context, brightness) =>
         AppListTileShowcase(brightness: brightness),
   ),
-  const GalleryEntry(
+  GalleryEntry(
     id: 'app_confirmation_dialog',
     label: 'AppConfirmationDialog',
     category: .dialogs,
+    showcaseBuilder: (context, brightness) =>
+        const AppConfirmationDialogPlaceholder(),
   ),
 ];
