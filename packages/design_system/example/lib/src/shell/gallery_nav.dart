@@ -60,7 +60,12 @@ class const GalleryNav({
       for (final entry in entries)
         NavigationDrawerDestination(
           icon: const Icon(Icons.widgets_outlined),
-          label: Text(entry.label),
+          label: Text(
+            entry.label,
+            overflow: .ellipsis,
+            maxLines: 1,
+            softWrap: false,
+          ),
         ),
     ];
   }
