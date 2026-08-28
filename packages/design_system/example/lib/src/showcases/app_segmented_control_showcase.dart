@@ -9,10 +9,7 @@ enum _Size { small, medium, large }
 /// Showcase for [AppSegmentedControl]. Selection is driven by the widget's
 /// own tap interaction, so there's no separate external control for it —
 /// same as [AppPickerField]'s showcase.
-class const AppSegmentedControlShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatefulWidget {
+class const AppSegmentedControlShowcase({super.key}) extends StatefulWidget {
   @override
   State<AppSegmentedControlShowcase> createState() =>
       _AppSegmentedControlShowcaseState();
@@ -36,7 +33,6 @@ class _AppSegmentedControlShowcaseState
         const ShowcaseControls(),
         Expanded(
           child: ComparisonView(
-            brightness: widget.brightness,
             contentBuilder: (context) => AppSegmentedControl<_Size>(
               value: _selected,
               segments: _segments,

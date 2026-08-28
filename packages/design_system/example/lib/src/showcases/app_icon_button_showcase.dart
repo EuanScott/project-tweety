@@ -6,10 +6,7 @@ import '../shell/showcase_controls.dart';
 
 /// Showcase for [AppIconButton]. `onPressed` is non-nullable on the widget
 /// itself, so there's no enabled/disabled state to demonstrate.
-class const AppIconButtonShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatelessWidget {
+class const AppIconButtonShowcase({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,7 +15,6 @@ class const AppIconButtonShowcase({
         const ShowcaseControls(),
         Expanded(
           child: ComparisonView(
-            brightness: brightness,
             contentBuilder: (context) => const AppIconButton(
               icon: Icons.close,
               onPressed: noop,

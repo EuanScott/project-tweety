@@ -6,10 +6,7 @@ import '../shell/showcase_controls.dart';
 
 /// Showcase for [AppSwitch], demonstrating its on/off state and its
 /// enabled/disabled state (`onChanged` is nullable on the widget).
-class const AppSwitchShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatefulWidget {
+class const AppSwitchShowcase({super.key}) extends StatefulWidget {
   @override
   State<AppSwitchShowcase> createState() => _AppSwitchShowcaseState();
 }
@@ -29,7 +26,6 @@ class _AppSwitchShowcaseState extends State<AppSwitchShowcase> {
         ),
         Expanded(
           child: ComparisonView(
-            brightness: widget.brightness,
             contentBuilder: (context) => AppSwitch(
               value: _value,
               onChanged: _enabled

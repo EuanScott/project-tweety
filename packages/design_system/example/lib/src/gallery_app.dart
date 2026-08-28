@@ -11,8 +11,11 @@ class const GalleryApp({super.key}) extends StatelessWidget {
     return MaterialApp(
       title: 'design_system Component Gallery',
       debugShowCheckedModeBanner: false,
+      // Alternate (dark) preview theming is deferred — see the component
+      // gallery backlog. No darkTheme/themeMode is configured, so this is
+      // the only theme MaterialApp ever resolves, regardless of the host's
+      // system theme mode.
       theme: DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
-      darkTheme: DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

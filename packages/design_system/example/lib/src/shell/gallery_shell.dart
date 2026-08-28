@@ -16,7 +16,6 @@ class const GalleryShell({super.key}) extends StatefulWidget {
 
 class _GalleryShellState extends State<GalleryShell> {
   GalleryEntry _selected = galleryCatalog.first;
-  Brightness _brightness = .light;
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +33,11 @@ class _GalleryShellState extends State<GalleryShell> {
           Expanded(
             child: Column(
               children: [
-                GalleryHeader(
-                  title: _selected.label,
-                  brightness: _brightness,
-                  onBrightnessChanged: (brightness) =>
-                      setState(() => _brightness = brightness),
-                ),
+                GalleryHeader(title: _selected.label),
                 const Divider(height: 1),
                 Expanded(
                   child:
-                      _selected.showcaseBuilder?.call(context, _brightness) ??
+                      _selected.showcaseBuilder?.call(context) ??
                       const NotYetImplemented(),
                 ),
               ],

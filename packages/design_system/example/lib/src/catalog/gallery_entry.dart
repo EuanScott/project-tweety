@@ -2,11 +2,8 @@ import 'package:material_ui/material_ui.dart';
 
 import 'gallery_category.dart';
 
-/// Builds a showcase page for the given [brightness].
-typedef GalleryShowcaseBuilder = Widget Function(
-  BuildContext context,
-  Brightness brightness,
-);
+/// Builds a showcase page.
+typedef GalleryShowcaseBuilder = Widget Function(BuildContext context);
 
 /// One nav entry in the component gallery.
 ///

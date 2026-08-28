@@ -8,10 +8,7 @@ enum _ButtonVariant { primary, secondary, text, destructive }
 
 /// Showcase for [AppButton], demonstrating every variant and its
 /// enabled/disabled state in both comparison panes.
-class const AppButtonShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatefulWidget {
+class const AppButtonShowcase({super.key}) extends StatefulWidget {
   @override
   State<AppButtonShowcase> createState() => _AppButtonShowcaseState();
 }
@@ -36,10 +33,7 @@ class _AppButtonShowcaseState extends State<AppButtonShowcase> {
           onEnabledChanged: (value) => setState(() => _enabled = value),
         ),
         Expanded(
-          child: ComparisonView(
-            brightness: widget.brightness,
-            contentBuilder: (context) => _buildButton(),
-          ),
+          child: ComparisonView(contentBuilder: (context) => _buildButton()),
         ),
       ],
     );

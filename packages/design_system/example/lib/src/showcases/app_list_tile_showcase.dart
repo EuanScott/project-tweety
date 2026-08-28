@@ -6,10 +6,7 @@ import '../shell/showcase_controls.dart';
 
 /// Showcase for [AppListTile], demonstrating its enabled/disabled state
 /// (`onTap` is nullable on the widget) in both comparison panes.
-class const AppListTileShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatefulWidget {
+class const AppListTileShowcase({super.key}) extends StatefulWidget {
   @override
   State<AppListTileShowcase> createState() => _AppListTileShowcaseState();
 }
@@ -28,7 +25,6 @@ class _AppListTileShowcaseState extends State<AppListTileShowcase> {
         ),
         Expanded(
           child: ComparisonView(
-            brightness: widget.brightness,
             contentBuilder: (context) => AppListTile(
               title: const Text('Notifications'),
               subtitle: const Text('Get notified about activity'),

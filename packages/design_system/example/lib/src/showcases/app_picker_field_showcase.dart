@@ -8,10 +8,7 @@ enum _Size { small, medium, large }
 
 /// Showcase for [AppPickerField]. Selection is driven by the widget's own
 /// tap-to-pick interaction, so there's no separate external control for it.
-class const AppPickerFieldShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatefulWidget {
+class const AppPickerFieldShowcase({super.key}) extends StatefulWidget {
   @override
   State<AppPickerFieldShowcase> createState() => _AppPickerFieldShowcaseState();
 }
@@ -33,7 +30,6 @@ class _AppPickerFieldShowcaseState extends State<AppPickerFieldShowcase> {
         const ShowcaseControls(),
         Expanded(
           child: ComparisonView(
-            brightness: widget.brightness,
             contentBuilder: (context) => AppPickerField<_Size>(
               label: 'Size',
               value: _selected,

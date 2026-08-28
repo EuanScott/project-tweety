@@ -6,10 +6,7 @@ import '../shell/showcase_controls.dart';
 
 /// Showcase for [AppLoadingIndicator]. It takes no parameters, so there's
 /// nothing to control.
-class const AppLoadingIndicatorShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatelessWidget {
+class const AppLoadingIndicatorShowcase({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,7 +15,6 @@ class const AppLoadingIndicatorShowcase({
         const ShowcaseControls(),
         Expanded(
           child: ComparisonView(
-            brightness: brightness,
             contentBuilder: (context) => const AppLoadingIndicator(),
           ),
         ),

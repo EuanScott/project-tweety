@@ -6,10 +6,7 @@ import '../shell/showcase_controls.dart';
 
 /// Showcase for [AppRefreshIndicator], wrapping a dummy scrollable list so
 /// pull-to-refresh has something to demonstrate against.
-class const AppRefreshIndicatorShowcase({
-  required final Brightness brightness,
-  super.key,
-}) extends StatelessWidget {
+class const AppRefreshIndicatorShowcase({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,7 +15,6 @@ class const AppRefreshIndicatorShowcase({
         const ShowcaseControls(),
         Expanded(
           child: ComparisonView(
-            brightness: brightness,
             contentBuilder: (context) => AppRefreshIndicator(
               onRefresh: () => Future<void>.delayed(const Duration(seconds: 1)),
               child: ListView(

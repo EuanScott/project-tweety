@@ -3,9 +3,11 @@ import 'package:material_ui/material_ui.dart';
 import 'comparison_pane.dart';
 
 /// Renders [contentBuilder] simultaneously under the iOS and Android design
-/// languages, restyled by [brightness].
+/// languages.
+///
+/// Always previews against a light surface — alternate (dark) preview
+/// theming is deferred; see the component gallery backlog.
 class const ComparisonView({
-  required final Brightness brightness,
   required final WidgetBuilder contentBuilder,
   super.key,
 }) extends StatelessWidget {
@@ -17,7 +19,7 @@ class const ComparisonView({
           child: ComparisonPane(
             label: 'iOS',
             platform: .iOS,
-            brightness: brightness,
+            brightness: .light,
             contentBuilder: contentBuilder,
           ),
         ),
@@ -26,7 +28,7 @@ class const ComparisonView({
           child: ComparisonPane(
             label: 'Android',
             platform: .android,
-            brightness: brightness,
+            brightness: .light,
             contentBuilder: contentBuilder,
           ),
         ),

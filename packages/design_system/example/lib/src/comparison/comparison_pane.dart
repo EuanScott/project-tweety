@@ -18,7 +18,11 @@ class const ComparisonPane({
     final paneTheme = baseTheme.copyWith(platform: platform);
 
     return ColoredBox(
-      color: paneTheme.scaffoldBackgroundColor,
+      // colorScheme.surface, not scaffoldBackgroundColor: in dark mode the
+      // latter resolves to brand.surfaceDark (near-black) while the design
+      // calls for the lighter surfaceVariantDark tone, which is what
+      // colorScheme.surface maps to per DesignColorSchemes.dark.
+      color: paneTheme.colorScheme.surface,
       child: Theme(
         data: paneTheme,
         child: Column(
