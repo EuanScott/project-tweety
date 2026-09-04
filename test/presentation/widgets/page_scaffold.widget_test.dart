@@ -418,9 +418,41 @@ void main() {
 
       expect(find.byKey(primaryKey), findsOneWidget);
       expect(find.byKey(secondaryKey), findsOneWidget);
-      expect(find.byType(VerticalDivider), findsNothing);
-      expect(tester.getSize(find.byKey(primaryKey)).width, 232);
-      expect(tester.getTopLeft(find.byKey(secondaryKey)).dx, 348);
+      // 232pt pane, less the 16pt gutter that keeps content off the divider.
+      expect(tester.getSize(find.byKey(primaryKey)).width, 216);
+      expect(tester.getTopLeft(find.byKey(secondaryKey)).dx, 364);
+    });
+
+    testWidgets('shows the secondary body when the pane scope says split', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(platform: TargetPlatform.android),
+          home: const MediaQuery(
+            data: MediaQueryData(size: Size(500, 800)),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: SizedBox(
+                width: 500,
+                height: 800,
+                child: PaneLayoutScope(
+                  breakpoint: 400,
+                  child: PageScaffold(
+                    title: 'Test',
+                    body: Text('Primary'),
+                    secondaryBody: Text('Secondary'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Primary'), findsOneWidget);
+      expect(find.text('Secondary'), findsOneWidget);
     });
 
     testWidgets('rounds the secondary body top-left corner at wide widths', (
@@ -481,7 +513,10 @@ Future<void> _pumpScaffold(
             ),
             child: Align(
               alignment: Alignment.topLeft,
-              child: SizedBox.fromSize(size: surfaceSize, child: scaffold),
+              child: SizedBox.fromSize(
+                size: surfaceSize,
+                child: PaneLayoutScope(child: scaffold),
+              ),
             ),
           ),
         ),

@@ -51,6 +51,14 @@ class const PageScaffold({
   /// Optional secondary content shown beside [body] on wider layouts.
   final Widget? secondaryBody,
 
+  /// The optional typed leading action rendered in the shared app bar.
+  ///
+  /// Supply this only when the platform's automatic back affordance is wrong or
+  /// absent — a page reached by a cold deep link has no route to pop, so it has
+  /// no automatic back button. See [ToolBarAction] for the shared
+  /// cross-platform contract.
+  final ToolBarAction? leadingAction,
+
   /// The optional typed trailing action rendered in the shared app bar. See
   /// [ToolBarAction] for the shared cross-platform contract.
   final ToolBarAction? trailingAction,
@@ -65,9 +73,6 @@ class const PageScaffold({
   /// [CupertinoSliverNavigationBar].
   final PageTitleBehavior titleBehavior = .standard,
 
-  /// Width at which [secondaryBody] is shown beside [body].
-  final double secondaryBreakpoint = 600,
-
   /// Optional fixed width for [body] when [secondaryBody] is visible.
   final double? primaryBodyWidth,
 
@@ -80,23 +85,6 @@ class const PageScaffold({
 }) extends StatelessWidget {
   static const EdgeInsets _bodyPadding = .symmetric(horizontal: 16);
   static const double _cupertinoLargeTitleBodyTopInset = 16;
-
-  /// Whether the current surface should render primary and secondary panes.
-  ///
-  /// Real foldable display features win over the width breakpoint so a device
-  /// hinge or fold is respected even when the full window is below the tablet
-  /// fallback width.
-  static bool usesSplitPaneLayout(
-    BuildContext context,
-    BoxConstraints constraints, {
-    double secondaryBreakpoint = 600,
-  }) {
-    return SplitPaneLayout.shouldUse(
-      context,
-      constraints,
-      breakpoint: secondaryBreakpoint,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +104,7 @@ class const PageScaffold({
               return [
                 CupertinoSliverNavigationBar(
                   backgroundColor: cupertinoBackgroundColor,
+                  leading: _cupertinoLeadingAction,
                   largeTitle: Text(title),
                   trailing: _cupertinoTrailingAction,
                 ),
@@ -137,6 +126,7 @@ class const PageScaffold({
       return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           backgroundColor: cupertinoBackgroundColor,
+          leading: _cupertinoLeadingAction,
           middle: Text(title),
           trailing: _cupertinoTrailingAction,
         ),
@@ -145,17 +135,25 @@ class const PageScaffold({
     }
 
     return Scaffold(
-      appBar: _MaterialToolBar(title: title, trailingAction: trailingAction),
+      appBar: _MaterialToolBar(
+        title: title,
+        leadingAction: leadingAction,
+        trailingAction: trailingAction,
+      ),
       body: SafeArea(child: _PageScaffoldBody(scaffold: this)),
       floatingActionButton: floatingActionButton,
     );
   }
 
+  /// The Cupertino counterpart of [_MaterialToolBar]'s leading action.
+  Widget? get _cupertinoLeadingAction => _actionButton(leadingAction);
+
   /// The Cupertino counterpart of [_MaterialToolBar]'s trailing action —
   /// same [ToolBarAction], same [AppIconButton], per the shared contract on
   /// [ToolBarAction].
-  Widget? get _cupertinoTrailingAction {
-    final action = trailingAction;
+  Widget? get _cupertinoTrailingAction => _actionButton(trailingAction);
+
+  static Widget? _actionButton(ToolBarAction? action) {
     if (action == null) {
       return null;
     }
@@ -173,6 +171,7 @@ class const PageScaffold({
 /// is the single public page-header abstraction for both platforms.
 class const _MaterialToolBar({
   required final String title,
+  final ToolBarAction? leadingAction,
   final ToolBarAction? trailingAction,
 }) extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -181,6 +180,13 @@ class const _MaterialToolBar({
   @override
   AppBar build(BuildContext context) {
     return AppBar(
+      leading: leadingAction != null
+          ? AppIconButton(
+              icon: leadingAction!.icon,
+              onPressed: leadingAction!.onPressed,
+              semanticLabel: leadingAction!.tooltip,
+            )
+          : null,
       title: Text(title),
       actions: trailingAction != null
           ? [
@@ -198,75 +204,24 @@ class const _MaterialToolBar({
 class const _PageScaffoldBody({
   required final PageScaffold scaffold,
   final EdgeInsetsGeometry additionalPadding = .zero,
-}) extends StatefulWidget {
-  @override
-  State<_PageScaffoldBody> createState() => _PageScaffoldBodyState();
-}
-
-class _PageScaffoldBodyState extends State<_PageScaffoldBody> {
-  Offset _globalOffset = Offset.zero;
-
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    _syncGlobalOffsetAfterLayout();
+    final secondaryBody = scaffold.secondaryBody;
+    final showSecondary =
+        secondaryBody != null &&
+        PaneLayoutScope.of(context) == PaneLayoutMode.split;
 
-    final scaffold = widget.scaffold;
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final secondaryBody = scaffold.secondaryBody;
-        final mediaQuery = MediaQuery.of(context);
-        final displayFeature = SplitPaneLayout.verticalDisplayFeatureFor(
-          mediaQuery,
-        );
-        final showSecondary =
-            secondaryBody != null &&
-            PageScaffold.usesSplitPaneLayout(
-              context,
-              constraints,
-              secondaryBreakpoint: scaffold.secondaryBreakpoint,
-            );
-        final bodyPadding = scaffold.bodyPadding.add(widget.additionalPadding);
-        final resolvedPadding = bodyPadding.resolve(Directionality.of(context));
-
-        return Padding(
-          padding: bodyPadding,
-          child: showSecondary
-              ? SplitPaneLayout(
-                  primary: scaffold.body,
-                  secondary: secondaryBody,
-                  displayFeature: displayFeature,
-                  constraints: constraints,
-                  resolvedPadding: resolvedPadding,
-                  globalOffset: _globalOffset,
-                  primaryWidth: scaffold.primaryBodyWidth,
-                  paneGap: scaffold.paneGap,
-                )
-              : scaffold.body,
-        );
-      },
+    return Padding(
+      padding: scaffold.bodyPadding.add(additionalPadding),
+      child: showSecondary
+          ? SplitPaneLayout(
+              primary: scaffold.body,
+              secondary: secondaryBody,
+              primaryWidth: scaffold.primaryBodyWidth,
+              paneGap: scaffold.paneGap,
+            )
+          : scaffold.body,
     );
-  }
-
-  void _syncGlobalOffsetAfterLayout() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-
-      final renderObject = context.findRenderObject();
-      if (renderObject is! RenderBox || !renderObject.hasSize) {
-        return;
-      }
-
-      final globalOffset = renderObject.localToGlobal(Offset.zero);
-      if (globalOffset == _globalOffset) {
-        return;
-      }
-
-      setState(() {
-        _globalOffset = globalOffset;
-      });
-    });
   }
 }

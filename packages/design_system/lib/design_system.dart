@@ -9,6 +9,7 @@ export 'src/adaptive/app_confirmation_dialog.dart';
 export 'src/adaptive/app_design_platform.dart';
 export 'src/adaptive/app_icon_button.dart';
 export 'src/adaptive/display_metrics.dart';
+export 'src/adaptive/pane_layout.dart';
 export 'src/adaptive/app_list_tile.dart';
 export 'src/adaptive/app_loading_indicator.dart';
 export 'src/adaptive/app_picker_field.dart';

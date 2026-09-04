@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:navigation/navigation.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     as card_model
@@ -35,8 +36,6 @@ class const Cards({
 }
 
 class _CardsState extends State<Cards> {
-  static const double _secondaryBreakpoint = 600;
-
   final GlobalKey<_CardsListState> _cardsListKey = GlobalKey<_CardsListState>();
 
   @override
@@ -45,6 +44,12 @@ class _CardsState extends State<Cards> {
     if (widget.isCreating) {
       context.read<CardsBloc>().add(const CardsCreateStarted());
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _flattenStackWhenSplit();
   }
 
   @override
@@ -69,41 +74,34 @@ class _CardsState extends State<Cards> {
         child: TabReselectHandler(
           tab: AppTab.cards,
           onReselect: _scrollToTop,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final showSecondary = PageScaffold.usesSplitPaneLayout(
-                context,
-                constraints,
-                secondaryBreakpoint: _secondaryBreakpoint,
-              );
+          child: Builder(
+            builder: (context) {
+              final isSplit =
+                  PaneLayoutScope.of(context) == PaneLayoutMode.split;
               final selectedCardId = widget.selectedCardId;
 
-              if (!showSecondary && widget.isCreating) {
+              if (!isSplit && widget.isCreating) {
                 return PageScaffold(
                   title: l10n.cardCreateTitle,
                   body: const _CardEditor(),
                 );
               }
 
-              if (!showSecondary && selectedCardId != null) {
+              if (!isSplit && selectedCardId != null) {
                 return CardDetailsPage(cardId: selectedCardId);
               }
 
               return PageScaffold(
                 title: l10n.cardsTab,
-                titleBehavior: showSecondary
+                titleBehavior: isSplit
                     ? PageTitleBehavior.largeStatic
                     : PageTitleBehavior.large,
-                secondaryBreakpoint: _secondaryBreakpoint,
                 trailingAction: widget.isCreating
                     ? null
                     : ToolBarAction(
                         icon: Icons.add,
                         tooltip: l10n.cardCreateAction,
-                        onPressed: () => CardsDraftDiscardGuard.discardThen(
-                          context,
-                          () => context.openNewCard(),
-                        ),
+                        onPressed: () => _createCard(context, isSplit: isSplit),
                       ),
                 secondaryBody: widget.isCreating
                     ? const _CardEditor()
@@ -113,7 +111,8 @@ class _CardsState extends State<Cards> {
                 body: _CardsView(
                   listKey: _cardsListKey,
                   selectedCardId: selectedCardId,
-                  onCardSelected: (cardId) => _selectCard(context, cardId),
+                  onCardSelected: (cardId) =>
+                      _selectCard(context, cardId, isSplit: isSplit),
                 ),
               );
             },
@@ -123,22 +122,89 @@ class _CardsState extends State<Cards> {
     );
   }
 
-  void _selectCard(BuildContext context, String cardId) {
+  void _createCard(BuildContext context, {required bool isSplit}) {
     unawaited(
       CardsDraftDiscardGuard.discardThen(
         context,
-        () => _navigateToCard(context, cardId),
+        () => _navigateToNewCard(context, isSplit: isSplit),
       ),
     );
   }
 
-  void _navigateToCard(BuildContext context, String cardId) {
-    if (widget.selectedCardId == null) {
-      unawaited(context.openCardDetails(cardId));
+  void _selectCard(
+    BuildContext context,
+    String cardId, {
+    required bool isSplit,
+  }) {
+    unawaited(
+      CardsDraftDiscardGuard.discardThen(
+        context,
+        () => _navigateToCard(context, cardId, isSplit: isSplit),
+      ),
+    );
+  }
+
+  /// A split region already shows the secondary pane the editor renders into,
+  /// so opening the editor replaces the location. Pushing would play a page
+  /// transition over a layout that never changed. In a compact region the
+  /// editor is a page of its own and is pushed.
+  void _navigateToNewCard(BuildContext context, {required bool isSplit}) {
+    if (isSplit) {
+      context.goNewCard();
       return;
     }
 
-    context.goCardDetails(cardId);
+    unawaited(context.openNewCard());
+  }
+
+  /// Selecting a card in a split region changes which card the visible details
+  /// pane shows, so it replaces the location instead of stacking a page. In a
+  /// compact region the details are a page of their own and are pushed.
+  void _navigateToCard(
+    BuildContext context,
+    String cardId, {
+    required bool isSplit,
+  }) {
+    if (isSplit) {
+      context.goCardDetails(cardId);
+      return;
+    }
+
+    unawaited(context.openCardDetails(cardId));
+  }
+
+  /// A page pushed while the region was compact is still on the stack when the
+  /// device unfolds or rotates into a split region, where the details already
+  /// sit beside the list. Replacing the location drops that stale page so the
+  /// back affordance does not outlive the layout that justified it.
+  void _flattenStackWhenSplit() {
+    final isTopmostPage = ModalRoute.of(context)?.isCurrent ?? false;
+
+    if (!isTopmostPage ||
+        PaneLayoutScope.of(context) != PaneLayoutMode.split ||
+        !GoRouter.of(context).canPop()) {
+      return;
+    }
+
+    final selectedCardId = widget.selectedCardId;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      if (widget.isCreating) {
+        context.goNewCard();
+        return;
+      }
+
+      if (selectedCardId == null) {
+        context.goCards();
+        return;
+      }
+
+      context.goCardDetails(selectedCardId);
+    });
   }
 
   void _scrollToTop() {

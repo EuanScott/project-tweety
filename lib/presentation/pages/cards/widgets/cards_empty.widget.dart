@@ -17,15 +17,27 @@ class const _CardsEmpty() extends StatelessWidget {
             Text(l10n.cardCreateEmptyDescription, textAlign: .center),
             const SizedBox(height: 16),
             AppButton.primary(
-              onPressed: () => CardsDraftDiscardGuard.discardThen(
-                context,
-                () => context.openNewCard(),
-              ),
+              onPressed: () => _createCard(context),
               child: Text(l10n.cardCreateAction),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _createCard(BuildContext context) {
+    final isSplit = PaneLayoutScope.of(context) == PaneLayoutMode.split;
+
+    unawaited(
+      CardsDraftDiscardGuard.discardThen(context, () {
+        if (isSplit) {
+          context.goNewCard();
+          return;
+        }
+
+        unawaited(context.openNewCard());
+      }),
     );
   }
 }

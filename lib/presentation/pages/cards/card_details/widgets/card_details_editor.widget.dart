@@ -48,7 +48,7 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
           final disabled = isMissing || isUpdating;
 
           return ListView(
-            padding: const .all(16),
+            padding: const .symmetric(vertical: 16),
             children: [
               Text(
                 l10n.cardEditTitle,

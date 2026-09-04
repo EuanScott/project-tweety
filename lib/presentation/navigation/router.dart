@@ -1,6 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:design_system/design_system.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navigation/navigation.dart';
 import 'package:project_tweety/core/analytics/analytics_facade.dart';
@@ -66,33 +68,40 @@ GoRouter createRouter({
         routes: [
           ShellRoute(
             builder: (context, state, child) {
-              return BlocProvider(
-                create: (_) => GetIt.I<CardsBloc>()..add(const CardsStarted()),
-                child: child,
+              return PaneLayoutScope(
+                child: BlocProvider(
+                  create: (_) =>
+                      GetIt.I<CardsBloc>()..add(const CardsStarted()),
+                  child: child,
+                ),
               );
             },
             routes: [
               GoRoute(
                 path: AppRoutes.cardsPath,
                 name: AppRoutes.cardsName,
-                builder: (context, state) => const Cards(),
-                routes: [
-                  GoRoute(
-                    path: AppRoutes.cardsNewPath,
-                    name: AppRoutes.cardsNewName,
-                    builder: (context, state) => const Cards(isCreating: true),
-                  ),
-                  GoRoute(
-                    path: AppRoutes.cardsDetailPath,
-                    name: AppRoutes.cardsDetailName,
-                    builder: (context, state) {
-                      final cardId = state
-                          .pathParameters[AppRoutes.cardsDetailIdParameter]!;
+                pageBuilder: (context, state) =>
+                    _cardsPage(context, state, const Cards()),
+              ),
+              GoRoute(
+                path: AppRoutes.cardsNewPath,
+                name: AppRoutes.cardsNewName,
+                pageBuilder: (context, state) =>
+                    _cardsPage(context, state, const Cards(isCreating: true)),
+              ),
+              GoRoute(
+                path: AppRoutes.cardsDetailPath,
+                name: AppRoutes.cardsDetailName,
+                pageBuilder: (context, state) {
+                  final cardId =
+                      state.pathParameters[AppRoutes.cardsDetailIdParameter]!;
 
-                      return Cards(selectedCardId: cardId);
-                    },
-                  ),
-                ],
+                  return _cardsPage(
+                    context,
+                    state,
+                    Cards(selectedCardId: cardId),
+                  );
+                },
               ),
             ],
           ),
@@ -128,6 +137,31 @@ GoRouter createRouter({
     errorBuilder: _navigationErrorBuilder,
     onTabRouteSelected: analyticsTracker?.trackScreenName,
   );
+}
+
+/// The Cards locations resolve to one page while the region shows both panes.
+///
+/// Moving between the list, a card, and the editor changes what the panes hold,
+/// not which page is on screen. Giving them a shared key keeps the same page
+/// mounted, so the list keeps its scroll position and nothing animates over a
+/// layout that never changed. A compact region genuinely stacks pages, so there
+/// each location keeps its own key and its own transition.
+Page<void> _cardsPage(BuildContext context, GoRouterState state, Widget child) {
+  final isSplit = PaneLayoutScope.of(context) == PaneLayoutMode.split;
+  final isStacked = GoRouter.of(context).canPop();
+
+  if (isSplit && !isStacked) {
+    return NoTransitionPage<void>(
+      key: const ValueKey('cards-panes'),
+      child: child,
+    );
+  }
+
+  return switch (Theme.of(context).platform) {
+    TargetPlatform.iOS ||
+    TargetPlatform.macOS => CupertinoPage<void>(key: state.pageKey, child: child),
+    _ => MaterialPage<void>(key: state.pageKey, child: child),
+  };
 }
 
 String? _settingsAccessRedirect({required RouteAccessPolicy policy}) {

@@ -397,13 +397,9 @@ void main() {
         currentRoutePath(tester),
         '${AppRoutes.cardsDetailFullPathPrefix}card-2',
       );
-
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-
-      expect(currentRoutePath(tester), AppRoutes.cardsPath);
       expect(find.text('card-1'), findsNothing);
-      expect(find.text('card-2'), findsNothing);
+      expect(find.text('card-2'), findsOneWidget);
+      expect(find.byType(BackButton), findsNothing);
     });
   });
 }

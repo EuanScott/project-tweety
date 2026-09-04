@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     as card_model;
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
@@ -26,6 +27,13 @@ class const CardDetailsPage({required final String cardId, super.key})
 
     return PageScaffold(
       title: l10n.cardDetailsTitle,
+      leadingAction: GoRouter.of(context).canPop()
+          ? null
+          : ToolBarAction(
+              icon: Icons.arrow_back,
+              tooltip: l10n.cardsTab,
+              onPressed: context.goCards,
+            ),
       body: CardDetailsContent(cardId: cardId),
     );
   }

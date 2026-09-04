@@ -1,3 +1,5 @@
+import 'dart:ui' show DisplayFeature;
+
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,12 +49,20 @@ void useAppHarness() {
   });
 }
 
+/// Pumps the whole app at [surfaceSize].
+///
+/// [padding] and [displayFeatures] describe the device the app is running on:
+/// safe-area insets and any fold or hinge. Both reach layout code that
+/// classifies the surface, so adaptive behaviour can be driven from here rather
+/// than only at the widget level.
 Future<void> pumpApp(
   WidgetTester tester, {
   Size surfaceSize = const Size(400, 800),
   String? initialLocation,
   bool canAccessSettings = true,
   Brightness platformBrightness = Brightness.light,
+  EdgeInsets padding = EdgeInsets.zero,
+  List<DisplayFeature> displayFeatures = const [],
   TargetPlatform? platform,
   bool settle = true,
 }) async {
@@ -61,7 +71,12 @@ Future<void> pumpApp(
 
   await tester.pumpWidget(
     MediaQuery(
-      data: MediaQueryData(platformBrightness: platformBrightness),
+      data: MediaQueryData(
+        size: surfaceSize,
+        platformBrightness: platformBrightness,
+        padding: padding,
+        displayFeatures: displayFeatures,
+      ),
       child: MyApp(
         initialLocation: initialLocation,
         platform: platform,

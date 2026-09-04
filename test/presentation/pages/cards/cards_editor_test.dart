@@ -113,7 +113,7 @@ void main() {
       await pumpApp(
         tester,
         surfaceSize: const Size(900, 800),
-        initialLocation: AppRoutes.cardsNewFullPath,
+        initialLocation: AppRoutes.cardsNewPath,
         platform: TargetPlatform.iOS,
       );
 
@@ -129,7 +129,7 @@ void main() {
       );
       replaceCardsRepository(FakeCardsRepository(cards: const []));
 
-      await pumpApp(tester, initialLocation: AppRoutes.cardsNewFullPath);
+      await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
 
       final title = find.text('כרטיס חדש').first;
       expect(Directionality.of(tester.element(title)), TextDirection.rtl);
@@ -147,7 +147,7 @@ void main() {
       await tester.tap(find.text('Create card'));
       await tester.pumpAndSettle();
 
-      expect(currentRoutePath(tester), AppRoutes.cardsNewFullPath);
+      expect(currentRoutePath(tester), AppRoutes.cardsNewPath);
     });
 
     testWidgets('opens the editor from the Cards toolbar action', (
@@ -158,13 +158,13 @@ void main() {
       await tester.tap(find.byTooltip('Create card'));
       await tester.pumpAndSettle();
 
-      expect(currentRoutePath(tester), AppRoutes.cardsNewFullPath);
+      expect(currentRoutePath(tester), AppRoutes.cardsNewPath);
     });
 
     testWidgets('keeps a dirty create draft when discard is dismissed', (
       WidgetTester tester,
     ) async {
-      await pumpApp(tester, initialLocation: AppRoutes.cardsNewFullPath);
+      await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
 
       await tester.enterText(find.byType(AppTextField).first, 'Raw title');
       await tester.tap(find.text('Cancel'));
@@ -174,7 +174,7 @@ void main() {
       await tester.tap(find.text('Keep editing'));
       await tester.pumpAndSettle();
 
-      expect(currentRoutePath(tester), AppRoutes.cardsNewFullPath);
+      expect(currentRoutePath(tester), AppRoutes.cardsNewPath);
       expect(
         tester
             .widget<AppTextField>(find.byType(AppTextField).first)
@@ -187,7 +187,7 @@ void main() {
     testWidgets('discards a dirty create draft after confirmation', (
       WidgetTester tester,
     ) async {
-      await pumpApp(tester, initialLocation: AppRoutes.cardsNewFullPath);
+      await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
 
       await tester.enterText(find.byType(AppTextField).first, 'Raw title');
       await tester.tap(find.text('Cancel'));
@@ -201,7 +201,7 @@ void main() {
     testWidgets('guards and de-duplicates dirty active-tab resets', (
       WidgetTester tester,
     ) async {
-      await pumpApp(tester, initialLocation: AppRoutes.cardsNewFullPath);
+      await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
 
       await tester.enterText(find.byType(AppTextField).first, 'Raw title');
       await tester.tap(find.text('Cards'));
@@ -220,7 +220,7 @@ void main() {
     ) async {
       replaceCardsRepository(FakeCardsRepository(cards: const []));
 
-      await pumpApp(tester, initialLocation: AppRoutes.cardsNewFullPath);
+      await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
 
       await tester.tap(find.text('Create card'));
       await tester.pump();
@@ -245,7 +245,7 @@ void main() {
           ),
         );
 
-        await pumpApp(tester, initialLocation: AppRoutes.cardsNewFullPath);
+        await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
 
         await tester.enterText(find.byType(AppTextField).first, 'Raw title');
         await tester.enterText(

@@ -39,6 +39,11 @@ extension AppNavigation on BuildContext {
     );
   }
 
+  /// Replaces the current Cards location with the card creation editor.
+  void goNewCard() {
+    goNamed(AppRoutes.cardsNewName);
+  }
+
   /// Replaces the current Cards branch location with its collection root.
   void goCards() {
     goNamed(AppRoutes.cardsName);

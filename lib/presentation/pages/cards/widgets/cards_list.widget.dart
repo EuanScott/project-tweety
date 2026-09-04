@@ -15,8 +15,21 @@ class const _CardsList({
 
 class _CardsListState extends State<_CardsList> {
   static const Duration _scrollDuration = Duration(milliseconds: 250);
+  static const double _selectedCardElevation = 6;
+
+  /// Where a selected card is placed when it has to be moved. A split region
+  /// shows the details beside the list, so centring keeps the selection next
+  /// to what it opened. A compact region shows the list on its own, where the
+  /// top reads as the natural resting place.
+  static const double _splitCardAlignment = 0.5;
+  static const double _compactCardAlignment = 0;
 
   final ScrollController _materialScrollController = ScrollController();
+
+  /// Set while a card that was never on screen is being brought into view, so
+  /// the intermediate jump that makes it merely visible does not count as
+  /// having placed it.
+  bool _isPlacingOffscreenCard = false;
   final Map<String, GlobalKey> _itemKeys = {};
 
   @override
@@ -62,17 +75,8 @@ class _CardsListState extends State<_CardsList> {
           return Card(
             key: _itemKeyFor(item.id),
             margin: const .symmetric(vertical: 8),
-            color: theme.cardTheme.color,
-            shape: RoundedRectangleBorder(
-              borderRadius: .circular(12),
-              side: BorderSide(
-                color: isSelected
-                    ? theme.colorScheme.primary
-                    : Colors.transparent,
-                width: 2,
-              ),
-            ),
-            elevation: 3,
+            shape: isSelected ? _selectedCardShape(theme) : null,
+            elevation: isSelected ? _selectedCardElevation : null,
             clipBehavior: .antiAlias,
             child: InkWell(
               onTap: () => widget.onCardSelected(item.id),
@@ -91,6 +95,16 @@ class _CardsListState extends State<_CardsList> {
           );
         },
       ),
+    );
+  }
+
+  /// Only selection is expressed here. Colour, elevation, and the shadow that
+  /// lifts a card off the page come from the design system's card theme, so
+  /// cards look the same wherever they are used.
+  ShapeBorder _selectedCardShape(ThemeData theme) {
+    return RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: BorderSide(color: theme.colorScheme.primary, width: 2),
     );
   }
 
@@ -129,14 +143,21 @@ class _CardsListState extends State<_CardsList> {
   void _scrollSelectedCardIntoView(String selectedCardId) {
     final selectedContext = _itemKeys[selectedCardId]?.currentContext;
     if (selectedContext != null) {
+      if (!_isPlacingOffscreenCard && _isSettledInPlace(selectedContext)) {
+        return;
+      }
+
+      _isPlacingOffscreenCard = false;
       Scrollable.ensureVisible(
         selectedContext,
         duration: _scrollDuration,
         curve: Curves.easeOutCubic,
-        alignment: 0.08,
+        alignment: _selectedCardAlignment,
       );
       return;
     }
+
+    _isPlacingOffscreenCard = true;
 
     final selectedIndex = widget.items.indexWhere(
       (item) => item.id == selectedCardId,
@@ -154,6 +175,38 @@ class _CardsListState extends State<_CardsList> {
       targetOffset.clamp(position.minScrollExtent, position.maxScrollExtent),
     );
     _scheduleSelectedCardScroll();
+  }
+
+  double get _selectedCardAlignment {
+    return PaneLayoutScope.of(context) == PaneLayoutMode.split
+        ? _splitCardAlignment
+        : _compactCardAlignment;
+  }
+
+  /// Whether the card is already somewhere the reader can live with: fully on
+  /// screen and no higher than the halfway line. Moving it from there would
+  /// scroll content the reader did not ask to lose.
+  bool _isSettledInPlace(BuildContext cardContext) {
+    final cardBox = cardContext.findRenderObject();
+    final viewportBox = Scrollable.maybeOf(
+      cardContext,
+    )?.context.findRenderObject();
+
+    if (cardBox is! RenderBox ||
+        viewportBox is! RenderBox ||
+        !cardBox.hasSize ||
+        !viewportBox.hasSize) {
+      return false;
+    }
+
+    final top = cardBox.localToGlobal(Offset.zero, ancestor: viewportBox).dy;
+    final bottom = top + cardBox.size.height;
+    final viewportHeight = viewportBox.size.height;
+
+    final isFullyVisible = top >= 0 && bottom <= viewportHeight;
+    final isBelowHalfway = top >= viewportHeight / 2;
+
+    return isFullyVisible && isBelowHalfway;
   }
 
   ScrollPosition? get _primaryScrollPosition {

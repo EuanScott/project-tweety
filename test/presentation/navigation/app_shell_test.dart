@@ -226,9 +226,30 @@ void main() {
           ),
         );
 
-        expect(find.text('Card Title 1'), findsWidgets);
-        expect(resetCardsList.controller!.offset, 0);
         expect(find.text('card-1'), findsNothing);
+        expect(currentRoutePath(tester), AppRoutes.cardsPath);
+        expect(
+          resetCardsList.controller!.offset,
+          greaterThan(0),
+          reason: 'clearing the selection keeps the list where the reader '
+              'left it; a second tap on the active tab scrolls to the top',
+        );
+
+        await tester.tap(find.byIcon(Icons.grid_view_rounded));
+        await tester.pumpAndSettle();
+
+        expect(
+          tester
+              .widget<ListView>(
+                find.byWidgetPredicate(
+                  (widget) => widget is ListView && widget.controller != null,
+                ),
+              )
+              .controller!
+              .offset,
+          0,
+        );
+        expect(find.text('Card Title 1'), findsWidgets);
       },
     );
   });
