@@ -1,5 +1,31 @@
 name: CI
 
+# TESTING STRATEGY (3-Tier)
+#
+# TODO
+# Tier 1: Unit + Widget Tests
+#   - Runs: Every push/PR
+#   - Scope: BLoC logic, widget rendering, UI responsiveness (breakpoints)
+#   - Speed: Fast (<1 min)
+#   - Purpose: Core business functionality, layout behavior
+#
+# Tier 2: Integration Tests
+#   - Runs: Conditional (on code changes to tested features)
+#   - Scope: Important user journeys (list->detail->edit->delete flows)
+#   - Speed: Moderate (2-3 min)
+#   - Purpose: Cross-component behavior, platform-specific flows
+#   - Status: Future - add when >10 integration tests exist
+#
+# Tier 3: Performance + E2E
+#   - Runs: Manual / Scheduled
+#   - Scope: Scroll FPS, device-specific testing, visual regression
+#   - Speed: Slow (5-10 min)
+#   - Purpose: Performance, hardware-specific edge cases
+#   - Status: Excluded for now (solo project, high cost)
+#
+# Rationale: Core business functionality tested in code as much as possible.
+# UI responsiveness (breakpoint layout) -> Tier 1. Performance/E2E -> Tier 3.
+
 on:
   push:
     branches: [main]

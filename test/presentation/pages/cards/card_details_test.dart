@@ -39,5 +39,21 @@ void main() {
         expect(find.text('Unable to load cards right now.'), findsOneWidget);
       },
     );
+
+    // UI Responsiveness Test (previously manual-only)
+    testWidgets('displays card ID as selectable text', (
+      WidgetTester tester,
+    ) async {
+      replaceCardsRepository(FakeCardsRepository());
+
+      await pumpApp(
+        tester,
+        initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SelectableText), findsOneWidget);
+      expect(find.text('card-1'), findsOneWidget);
+    });
   });
 }

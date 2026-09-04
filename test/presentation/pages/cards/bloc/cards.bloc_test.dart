@@ -550,5 +550,28 @@ void main() {
       ],
       errors: () => [isA<StateError>()],
     );
+
+    // UI Responsiveness Test (previously manual-only)
+    blocTest<CardsBloc, CardsState>(
+      'submitting unchanged edit draft exits edit mode without update',
+      build: () => CardsBloc(FakeCardsRepository(cards: const [card])),
+      seed: () => CardsState(
+        status: CardsStatus.success,
+        items: const [card],
+        editingCardId: 'card-1',
+        draft: CardDraft(title: card.title, description: card.description),
+        initialDraft: CardDraft(title: card.title, description: card.description),
+      ),
+      act: (bloc) => bloc.add(const CardsEditSubmitted()),
+      expect: () => [
+        const CardsState(
+          status: CardsStatus.success,
+          items: [card],
+          editingCardId: 'card-1',
+          hasSubmittedEdit: true,
+          editStatus: CardsEditStatus.idle,
+        ),
+      ],
+    );
   });
 }

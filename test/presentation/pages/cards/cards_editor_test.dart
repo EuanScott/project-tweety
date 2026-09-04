@@ -272,5 +272,46 @@ void main() {
         );
       },
     );
+
+    // UI Responsiveness Test (previously manual-only)
+    testWidgets('edit button is disabled during update submission', (
+      WidgetTester tester,
+    ) async {
+      final repository = FakeCardsRepository.gated();
+      replaceCardsRepository(repository);
+
+      await pumpApp(
+        tester,
+        initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+      );
+
+      await tester.tap(find.text('Edit card'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(AppTextField).first, 'Updated title');
+
+      final saveButtonBefore = tester.widget<AppButton>(
+        find.descendant(
+          of: find.byType(ListView),
+          matching: find.text('Save changes'),
+        ),
+      );
+      expect(saveButtonBefore.onPressed, isNotNull);
+
+      await tester.tap(find.text('Save changes'));
+      await tester.pump();
+
+      final saveButtonDuring = tester.widget<AppButton>(
+        find.descendant(
+          of: find.byType(ListView),
+          matching: find.text('Save changes'),
+        ),
+      );
+      expect(saveButtonDuring.onPressed, isNull);
+
+      repository.completeUpdate();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Updated title'), findsOneWidget);
+    });
   });
 }

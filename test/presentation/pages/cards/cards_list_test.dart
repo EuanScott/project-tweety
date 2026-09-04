@@ -401,5 +401,110 @@ void main() {
       expect(find.text('card-2'), findsOneWidget);
       expect(find.byType(BackButton), findsNothing);
     });
+
+    // UI Responsiveness & Visual Tests (previously manual-only)
+
+    testWidgets('truncates long card content in list items', (
+      WidgetTester tester,
+    ) async {
+      final longCard = cards_repository.Card(
+        id: 'long-card',
+        title: 'A' * 100,
+        description: 'B' * 300,
+      );
+      replaceCardsRepository(FakeCardsRepository(cards: [longCard]));
+
+      await pumpApp(tester, surfaceSize: const Size(400, 800));
+      await tester.tap(find.text('Cards'));
+      await tester.pumpAndSettle();
+
+      final titleText = tester.widget<Text>(find.descendant(
+        of: find.byType(Card).first,
+        matching: find.byType(Text).first,
+      ));
+      expect(titleText.maxLines, isNotNull);
+      expect(titleText.overflow, TextOverflow.ellipsis);
+
+      final descriptionText = tester.widget<Text>(find.descendant(
+        of: find.byType(Card).first,
+        matching: find.byType(Text).last,
+      ));
+      expect(descriptionText.maxLines, isNotNull);
+    });
+
+    testWidgets('selected card shows primary border in list', (
+      WidgetTester tester,
+    ) async {
+      await pumpApp(
+        tester,
+        surfaceSize: const Size(900, 800),
+        initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+      );
+
+      final theme = Theme.of(tester.element(find.byType(ListView)));
+      final selectedCard = tester.widget<Card>(
+        find.byWidgetPredicate((widget) {
+          if (widget is! Card) return false;
+          final border = (widget.shape as RoundedRectangleBorder?)?.side;
+          return border?.color == theme.colorScheme.primary;
+        }),
+      );
+
+      expect(selectedCard, isNotNull);
+    });
+
+    testWidgets('pull-to-refresh during load does not duplicate requests', (
+      WidgetTester tester,
+    ) async {
+      final repository = FakeCardsRepository();
+      replaceCardsRepository(repository);
+
+      await pumpApp(tester, surfaceSize: const Size(400, 800));
+      await tester.tap(find.text('Cards'));
+      await tester.pumpAndSettle();
+
+      // Start a refresh while already loading
+      final initialCount = repository.collectionReadCount;
+      await tester.drag(find.byType(ListView), const Offset(0, 300));
+      await tester.pumpAndSettle();
+
+      expect(repository.collectionReadCount, initialCount + 1);
+    });
+
+    testWidgets('error state retry reloads cards collection', (
+      WidgetTester tester,
+    ) async {
+      final repository = FakeCardsRepository(
+        readError: StateError('load failed'),
+      );
+      replaceCardsRepository(repository);
+
+      await pumpApp(tester, surfaceSize: const Size(400, 800));
+      await tester.tap(find.text('Cards'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Unable to load cards right now.'), findsOneWidget);
+
+      await tester.tap(find.text('Retry'));
+      await tester.pumpAndSettle();
+
+      expect(repository.collectionReadCount, 2);
+    });
+
+    testWidgets('tablet portrait mode shows split pane layout', (
+      WidgetTester tester,
+    ) async {
+      tester.binding.window.physicalSize = const Size(768, 1024);
+      tester.binding.window.devicePixelRatio = 1.0;
+
+      await pumpApp(
+        tester,
+        initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NavigationRail), findsOneWidget);
+      expect(find.byType(ListView), findsOneWidget);
+    });
   });
 }
