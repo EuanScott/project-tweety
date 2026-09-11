@@ -163,7 +163,7 @@ Verify the native relaunch smoke test infrastructure exists.
 
 ```bash
 # Prerequisite: Uninstall first
-adb uninstall com.example.project_tweety
+adb uninstall dev.euanscott.projecttweety
 
 # Phase 1: Run smoke test with app left installed
 flutter drive \
@@ -174,7 +174,7 @@ flutter drive \
   --keep-app-running
 
 # Force stop the app
-adb -s <device-id> shell am force-stop com.example.project_tweety
+adb -s <device-id> shell am force-stop dev.euanscott.projecttweety
 
 # Phase 2: Rebuild with verifier
 flutter build apk \
@@ -186,14 +186,14 @@ flutter build apk \
 adb -s <device-id> install -r build/app/outputs/flutter-apk/app-debug.apk
 
 # Relaunch
-adb -s <device-id> shell monkey -p com.example.project_tweety 1
+adb -s <device-id> shell monkey -p dev.euanscott.projecttweety 1
 ```
 
 ### Smoke Test Execution (iOS)
 
 ```bash
 # Prerequisite: Uninstall first
-xcrun simctl uninstall <device-id> com.example.projectTweety
+xcrun simctl uninstall <device-id> dev.euanscott.projecttweety
 
 # Phase 1: Run smoke test with app left installed
 flutter drive \
@@ -204,7 +204,7 @@ flutter drive \
   --keep-app-running
 
 # Terminate the app
-xcrun simctl terminate <device-id> com.example.projectTweety
+xcrun simctl terminate <device-id> dev.euanscott.projecttweety
 
 # Phase 2: Rebuild with verifier
 flutter build ios \
@@ -216,7 +216,7 @@ flutter build ios \
 
 # Reinstall and launch
 xcrun simctl install <device-id> build/ios/iphonesimulator/Runner.app
-xcrun simctl launch <device-id> com.example.projectTweety
+xcrun simctl launch <device-id> dev.euanscott.projecttweety
 ```
 
 ### Expected Smoke Test Output

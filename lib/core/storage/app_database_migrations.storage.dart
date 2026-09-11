@@ -44,6 +44,14 @@ abstract final class AppDatabaseMigrations {
     await db.execute('ALTER TABLE cards ADD COLUMN deleted_at TEXT');
   }
 
+  // TODO: Research the discipline around rewriting an already-run migration.
+  // ADR-0008 decides this seed is gutted to a no-op rather than deleted (the
+  // `default:` branch throws for a missing version) or undone by a later
+  // migration. That means a v3 database created by old code holds ten sample
+  // cards while a v3 database created by new code holds none — same version,
+  // different contents. Exempted here only because nothing has shipped. Find
+  // out what the real options are (backfill-safe no-ops, squashing a baseline
+  // schema, version floors) before relying on this trick again.
   static Future<void> _seedSampleCardsV3(DatabaseExecutor db) async {
     final countRows = await db.rawQuery('SELECT COUNT(*) AS count FROM cards');
     final count = countRows.single['count']! as int;

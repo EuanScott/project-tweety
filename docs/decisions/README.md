@@ -54,4 +54,6 @@ dart run tool/decisions/adr.dart generate-index
 | [0004](0004-value-type-conventions.md) | Value type conventions | proposed |
 | [0005](0005-design-system-example-app-location.md) | design_system example app lives inside the package | proposed |
 | [0006](0006-surface-classification-scopes.md) | Window and region surface classification are separate decisions | proposed |
+| [0007](0007-cards-local-source-of-truth.md) | Local SQLite remains the source of truth for Cards | proposed |
+| [0008](0008-cards-are-owned-by-the-signed-in-account.md) | Cards are owned by the signed-in Account | proposed |
 <!-- adr-index:end -->

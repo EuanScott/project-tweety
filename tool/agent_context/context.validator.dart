@@ -32,6 +32,8 @@ final class ContextValidationResult {
   bool get isValid => diagnostics.isEmpty;
 }
 
+const _excludedDirectorySegments = {'.dart_tool', '.claude', '.git', 'build'};
+
 final class ContextValidator {
   const new({
     required this.repositoryRoot,
@@ -48,7 +50,11 @@ final class ContextValidator {
             .listSync(recursive: true)
             .whereType<File>()
             .where((file) => p.basename(file.path) == 'AGENTS.md')
-            .where((file) => !p.split(file.path).contains('.dart_tool'))
+            .where(
+              (file) => !p
+                  .split(file.path)
+                  .any(_excludedDirectorySegments.contains),
+            )
             .toList()
           ..sort((left, right) => left.path.compareTo(right.path));
 

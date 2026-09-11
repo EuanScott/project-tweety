@@ -121,6 +121,20 @@ void main() {
       );
     });
 
+    test('ignores instruction files inside nested agent worktrees', () async {
+      final fixture = await _ContextFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.write(
+        '.claude/worktrees/agent-abc/AGENTS.md',
+        List.filled(51, 'Rule').join('\n'),
+      );
+
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
+
+      expect(result.isValid, isTrue);
+    });
+
     test('rejects a missing canonical template', () async {
       final fixture = await _ContextFixture.create();
       addTearDown(fixture.dispose);

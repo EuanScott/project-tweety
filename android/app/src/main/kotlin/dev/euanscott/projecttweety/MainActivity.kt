@@ -1,4 +1,4 @@
-package com.example.project_tweety
+package dev.euanscott.projecttweety
 
 
 

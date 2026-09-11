@@ -35,6 +35,28 @@ A **tombstone** is the retained record of a deleted Card while that deletion
 still needs reconciliation. It is not a visible Card and cannot be edited or
 selected as one.
 
+## Sync
+
+A **sync** is a person-initiated attempt to reconcile every dirty card and
+tombstone with the external record. It is deliberate rather than automatic: it
+happens because someone asked for it, not because a Card changed. A sync is
+best effort — reconciling only some of the pending changes leaves the rest
+dirty, and the next sync attempts them again.
+
+## Account
+
+An **Account** is the Google identity a person signs in with, identified by a
+Firebase `uid`. It is not the same as a person: one person may hold several
+Accounts, and each is a separate Account here. Every Card belongs to exactly
+one Account.
+
+## Owner
+
+The **owner** of a Card is the Account that Card belongs to. Ownership is
+permanent for the life of the Card and is not something a person can see or
+change in the app. A Card whose owner is not the signed-in Account is not
+visible, not editable, and not synced.
+
 ## Modal presentation
 
 Vocabulary for `AppModal` (`lib/presentation/widgets/app_modal.dart`) and how
