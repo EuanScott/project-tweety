@@ -56,4 +56,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0006](0006-surface-classification-scopes.md) | Window and region surface classification are separate decisions | proposed |
 | [0007](0007-cards-local-source-of-truth.md) | Local SQLite remains the source of truth for Cards | proposed |
 | [0008](0008-cards-are-owned-by-the-signed-in-account.md) | Cards are owned by the signed-in Account | proposed |
+| [0009](0009-conventional-commit-driven-versioning.md) | Conventional-commit-driven versioning | proposed |
 <!-- adr-index:end -->

@@ -1,0 +1,38 @@
+#!/bin/sh
+# Auto-bumps pubspec.yaml from the Conventional Commit type, then amends the
+# commit so the bump travels with it.
+#
+# Why post-commit and not pre-commit/commit-msg: git builds the commit tree from
+# an in-memory copy of the index taken before those hooks run, so a `git add`
+# inside them updates .git/index but never reaches the commit. post-commit is the
+# only hook where the message is final AND the index change is guaranteed to land.
+#
+# Escape hatch: NO_VERSION_BUMP=1 git commit ...
+set -e
+
+[ -n "${VERSION_BUMP_AMEND:-}" ] && exit 0
+[ "${NO_VERSION_BUMP:-}" = "1" ] && exit 0
+
+GIT_ROOT=$(git rev-parse --show-toplevel)
+
+for f in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD rebase-merge rebase-apply; do
+  if [ -e "$(git rev-parse --git-path "$f")" ]; then exit 0; fi
+done
+
+git rev-parse --verify -q HEAD~1 >/dev/null || exit 0
+
+read_version() {
+  git show "$1:pubspec.yaml" 2>/dev/null | awk '/^version:[[:space:]]/{print $2; exit}'
+}
+
+# A version that already moved in this commit was set by hand. Leave it alone.
+if [ "$(read_version HEAD)" != "$(read_version HEAD~1)" ]; then exit 0; fi
+
+MSG_FILE=$(git rev-parse --git-path COMMIT_EDITMSG)
+git log -1 --pretty=%B > "$MSG_FILE"
+
+OUT=$("$GIT_ROOT/tool/hooks/bump_version.sh" "$MSG_FILE") || exit 0
+[ -n "$OUT" ] || exit 0
+
+VERSION_BUMP_AMEND=1 git commit --amend --no-edit --no-verify -q
+echo "$OUT"

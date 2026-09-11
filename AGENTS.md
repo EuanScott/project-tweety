@@ -93,6 +93,7 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
 - Regenerate DI/build_runner output: `dart run build_runner build --delete-conflicting-outputs`
 - Refresh localization output after ARB changes: `flutter gen-l10n`
 - `.githooks/pre-commit` runs the agent context, skill, and ADR validators on every commit; bypass with `git commit --no-verify`.
+- `.githooks/post-commit` bumps `version:` in `pubspec.yaml` from the Conventional Commit type and amends the commit so the bump travels with it. `feat`/`feature` and any breaking marker bump the minor while the major is `0`; `fix`/`perf` bump the patch; every other type leaves the version alone. Bypass with `NO_VERSION_BUMP=1 git commit ...` (`--no-verify` does not skip it), and a version you change by hand in the same commit is never re-bumped. The bump logic lives in `tool/hooks/bump_version.sh`.
 
 ## Testing Guidance
 - Read the [testing guide](docs/testing/README.md) for the three test execution
