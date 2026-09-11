@@ -388,18 +388,23 @@ void main() {
       act: (bloc) async {
         bloc
           ..add(const CardsEditStarted('card-1'))
+          ..add(
+            const CardsDraftChanged(
+              CardDraft(title: 'Updated title', description: 'Card body'),
+            ),
+          )
           ..add(const CardsEditSubmitted())
           ..add(const CardsEditSubmitted());
         await Future<void>.delayed(Duration.zero);
         expect(controlledCreateRepository.updateRequestCount, 1);
         controlledCreateRepository.completeUpdate(card);
       },
-      skip: 1,
+      skip: 2,
       expect: () => [
         const CardsState(
           status: CardsStatus.success,
           items: [card],
-          draft: CardDraft(title: 'Card Title 1', description: 'Card body'),
+          draft: CardDraft(title: 'Updated title', description: 'Card body'),
           initialDraft: CardDraft(
             title: 'Card Title 1',
             description: 'Card body',
@@ -551,27 +556,35 @@ void main() {
       errors: () => [isA<StateError>()],
     );
 
-    // UI Responsiveness Test (previously manual-only)
+    late FakeCardsRepository unchangedEditRepository;
     blocTest<CardsBloc, CardsState>(
       'submitting unchanged edit draft exits edit mode without update',
-      build: () => CardsBloc(FakeCardsRepository(cards: const [card])),
+      build: () {
+        unchangedEditRepository = FakeCardsRepository(cards: const [card]);
+        return CardsBloc(unchangedEditRepository);
+      },
       seed: () => CardsState(
         status: CardsStatus.success,
         items: const [card],
         editingCardId: 'card-1',
         draft: CardDraft(title: card.title, description: card.description),
-        initialDraft: CardDraft(title: card.title, description: card.description),
+        initialDraft: CardDraft(
+          title: card.title,
+          description: card.description,
+        ),
       ),
       act: (bloc) => bloc.add(const CardsEditSubmitted()),
       expect: () => [
-        const CardsState(
+        CardsState(
           status: CardsStatus.success,
-          items: [card],
-          editingCardId: 'card-1',
-          hasSubmittedEdit: true,
+          items: const [card],
+          draft: CardDraft(title: card.title, description: card.description),
           editStatus: CardsEditStatus.idle,
         ),
       ],
+      verify: (_) {
+        expect(unchangedEditRepository.updateRequestCount, 0);
+      },
     );
   });
 }

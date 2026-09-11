@@ -167,6 +167,23 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
       return;
     }
 
+    final initialDraft = state.initialDraft;
+    if (initialDraft != null && state.draft == initialDraft) {
+      emit(
+        state.copyWith(
+          editingCardId: null,
+          initialDraft: null,
+          invalidDraftFields: const <CardDraftField>{},
+          hasSubmittedEdit: false,
+          editStatus: CardsEditStatus.idle,
+          editError: false,
+          missingEditCardId: null,
+          updatedCardId: null,
+        ),
+      );
+      return;
+    }
+
     emit(
       state.copyWith(
         hasSubmittedEdit: true,

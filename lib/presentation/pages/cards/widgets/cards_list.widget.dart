@@ -17,6 +17,11 @@ class _CardsListState extends State<_CardsList> {
   static const Duration _scrollDuration = Duration(milliseconds: 250);
   static const double _selectedCardElevation = 6;
 
+  /// A list row is a preview, not the content. Capping the lines keeps every
+  /// row a predictable height so a long card cannot push the rest off screen.
+  static const int _titleMaxLines = 1;
+  static const int _descriptionMaxLines = 2;
+
   /// Where a selected card is placed when it has to be moved. A split region
   /// shows the details beside the list, so centring keeps the selection next
   /// to what it opened. A compact region shows the list on its own, where the
@@ -85,9 +90,19 @@ class _CardsListState extends State<_CardsList> {
                 child: Column(
                   crossAxisAlignment: .start,
                   children: [
-                    Text(item.title, style: theme.textTheme.titleMedium),
+                    Text(
+                      item.title,
+                      style: theme.textTheme.titleMedium,
+                      maxLines: _titleMaxLines,
+                      overflow: .ellipsis,
+                    ),
                     const SizedBox(height: 8),
-                    Text(item.description, style: theme.textTheme.bodyMedium),
+                    Text(
+                      item.description,
+                      style: theme.textTheme.bodyMedium,
+                      maxLines: _descriptionMaxLines,
+                      overflow: .ellipsis,
+                    ),
                   ],
                 ),
               ),

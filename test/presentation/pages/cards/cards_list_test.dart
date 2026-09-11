@@ -9,6 +9,7 @@ import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     as cards_repository;
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
 import 'package:project_tweety/presentation/navigation/routes.dart';
+import 'package:project_tweety/presentation/widgets/split_pane_layout.dart';
 
 import '../../../support/app_harness.dart';
 import '../../../support/fake_app_preferences_repository.dart';
@@ -418,18 +419,18 @@ void main() {
       await tester.tap(find.text('Cards'));
       await tester.pumpAndSettle();
 
-      final titleText = tester.widget<Text>(find.descendant(
+      final cardTexts = find.descendant(
         of: find.byType(Card).first,
-        matching: find.byType(Text).first,
-      ));
-      expect(titleText.maxLines, isNotNull);
+        matching: find.byType(Text),
+      );
+
+      final titleText = tester.widget<Text>(cardTexts.first);
+      expect(titleText.maxLines, 1);
       expect(titleText.overflow, TextOverflow.ellipsis);
 
-      final descriptionText = tester.widget<Text>(find.descendant(
-        of: find.byType(Card).first,
-        matching: find.byType(Text).last,
-      ));
-      expect(descriptionText.maxLines, isNotNull);
+      final descriptionText = tester.widget<Text>(cardTexts.last);
+      expect(descriptionText.maxLines, 2);
+      expect(descriptionText.overflow, TextOverflow.ellipsis);
     });
 
     testWidgets('selected card shows primary border in list', (
@@ -441,7 +442,7 @@ void main() {
         initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
       );
 
-      final theme = Theme.of(tester.element(find.byType(ListView)));
+      final theme = Theme.of(tester.element(find.byType(ListView).first));
       final selectedCard = tester.widget<Card>(
         find.byWidgetPredicate((widget) {
           if (widget is! Card) return false;
@@ -494,18 +495,16 @@ void main() {
     testWidgets('tablet portrait mode shows split pane layout', (
       WidgetTester tester,
     ) async {
-      tester.view.physicalSize = const Size(768, 1024);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.reset);
-
       await pumpApp(
         tester,
+        surfaceSize: const Size(768, 1024),
         initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
       );
-      await tester.pumpAndSettle();
 
       expect(find.byType(NavigationRail), findsOneWidget);
-      expect(find.byType(ListView), findsOneWidget);
+      expect(find.byType(SplitPaneLayout), findsOneWidget);
+      expect(find.text('Card Title 1'), findsWidgets);
+      expect(find.text('card-1'), findsOneWidget);
     });
   });
 }

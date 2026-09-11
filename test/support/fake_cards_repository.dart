@@ -37,9 +37,11 @@ class FakeCardsRepository implements CardsRepository {
       deleteError = null;
 
   /// Leaves every write pending until [completeCreate], [completeUpdate], or
-  /// [completeDelete] is called, so tests can assert in-flight state.
-  new gated()
-    : _cards = <Card>[],
+  /// [completeDelete] is called, so tests can assert in-flight state. Pass
+  /// [cards] when the in-flight write is an update or a delete, which needs a
+  /// card to already exist.
+  new gated({List<Card>? cards})
+    : _cards = List<Card>.of(cards ?? const <Card>[]),
       _readCards = null,
       _detailReadsSupported = true,
       _gateWrites = true,

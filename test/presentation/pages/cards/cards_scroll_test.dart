@@ -17,13 +17,16 @@ void main() {
         initialLocation: AppRoutes.cardsPath,
       );
 
-      final before = _cardBounds(tester, 'Card Title 4');
-      expect(before.top, greaterThan(_viewport(tester, 'Card Title 4').center.dy));
+      final before = _cardBounds(tester, 'Card Title 5');
+      expect(
+        before.top,
+        greaterThan(_viewport(tester, 'Card Title 5').center.dy),
+      );
 
-      await tester.tap(find.text('Card Title 4').first);
+      await tester.tap(find.text('Card Title 5').first);
       await tester.pumpAndSettle();
 
-      expect(_cardBounds(tester, 'Card Title 4'), before);
+      expect(_cardBounds(tester, 'Card Title 5'), before);
     });
 
     testWidgets('centres a card selected above the halfway line', (
@@ -56,7 +59,7 @@ void main() {
     testWidgets('centres a card opened by deep link', (tester) async {
       await pumpApp(
         tester,
-        surfaceSize: const Size(1000, 900),
+        surfaceSize: const Size(1000, 600),
         initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-7',
       );
 

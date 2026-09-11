@@ -277,7 +277,9 @@ void main() {
     testWidgets('edit button is disabled during update submission', (
       WidgetTester tester,
     ) async {
-      final repository = FakeCardsRepository.gated();
+      final repository = FakeCardsRepository.gated(
+        cards: [FakeCardsRepository.sampleCards.first],
+      );
       replaceCardsRepository(repository);
 
       await pumpApp(
@@ -290,10 +292,7 @@ void main() {
       await tester.enterText(find.byType(AppTextField).first, 'Updated title');
 
       final saveButtonBefore = tester.widget<AppButton>(
-        find.descendant(
-          of: find.byType(ListView),
-          matching: find.text('Save changes'),
-        ),
+        find.widgetWithText(AppButton, 'Save changes'),
       );
       expect(saveButtonBefore.onPressed, isNotNull);
 
@@ -301,10 +300,7 @@ void main() {
       await tester.pump();
 
       final saveButtonDuring = tester.widget<AppButton>(
-        find.descendant(
-          of: find.byType(ListView),
-          matching: find.text('Save changes'),
-        ),
+        find.widgetWithText(AppButton, 'Save changes'),
       );
       expect(saveButtonDuring.onPressed, isNull);
 
