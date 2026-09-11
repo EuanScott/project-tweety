@@ -494,8 +494,9 @@ void main() {
     testWidgets('tablet portrait mode shows split pane layout', (
       WidgetTester tester,
     ) async {
-      tester.binding.window.physicalSize = const Size(768, 1024);
-      tester.binding.window.devicePixelRatio = 1.0;
+      tester.view.physicalSize = const Size(768, 1024);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
 
       await pumpApp(
         tester,

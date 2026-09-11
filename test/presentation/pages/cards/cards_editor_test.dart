@@ -308,7 +308,13 @@ void main() {
       );
       expect(saveButtonDuring.onPressed, isNull);
 
-      repository.completeUpdate();
+      repository.completeUpdate(
+        cards_repository.Card(
+          id: 'card-1',
+          title: 'Updated title',
+          description: FakeCardsRepository.sampleCards.first.description,
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('Updated title'), findsOneWidget);
