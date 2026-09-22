@@ -121,6 +121,23 @@ void main() {
       );
     });
 
+    test('rejects an unknown layer beneath the feature templates', () async {
+      final fixture = await _ContextFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.write(
+        'tool/templates/feature/application/_template.service.dart',
+        '// stray layer',
+      );
+
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
+
+      expect(
+        result.diagnostics.map((diagnostic) => diagnostic.code),
+        contains('template.layer.unknown'),
+      );
+    });
+
     test('ignores instruction files inside nested agent worktrees', () async {
       final fixture = await _ContextFixture.create();
       addTearDown(fixture.dispose);

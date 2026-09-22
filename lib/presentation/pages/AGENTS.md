@@ -2,7 +2,7 @@
 
 Read this for work under `lib/presentation/pages/`.
 
-- Read the [page templates](../../../tool/templates/feature/presentation/pages/) for the default BLoC shape and [test references](../../../tool/templates/feature/tests/presentation/) before TDD.
+- Read the [page templates](../../../tool/templates/feature/presentation/pages/) for the default BLoC shape and [test references](../../../tool/templates/feature/test/presentation/) before TDD.
 - Use Cubit only for direct commands or simple local state; otherwise use BLoC with explicit events.
 - Pages render app-facing values, own controller lifecycle, and keep policy below the page seam.
 - Keep the route entry, `GetIt.I` resolution, provider lifecycle, and the root state-routing view in `<feature>.page.dart`; the root view is the page's body, not a helper — extracting it leaves a file that no longer shows what the route renders.

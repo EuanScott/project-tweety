@@ -25,10 +25,10 @@ const featureProductionTemplatePaths = <String>[
 ];
 
 const featureTestReferenceTemplatePaths = <String>[
-  'tool/templates/feature/tests/presentation/_template.bloc_test.dart',
-  'tool/templates/feature/tests/data/_template.repository_impl_test.dart',
+  'tool/templates/feature/test/presentation/_template.bloc_test.dart',
+  'tool/templates/feature/test/data/_template.repository_impl_test.dart',
 ];
 
 const domainTemplatePaths = <String>[
-  'tool/templates/domain/README.md',
+  'tool/templates/feature/domain/README.md',
 ];

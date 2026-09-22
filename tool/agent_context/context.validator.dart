@@ -34,6 +34,8 @@ final class ContextValidationResult {
 
 const _excludedDirectorySegments = {'.dart_tool', '.claude', '.git', 'build'};
 
+const _featureTemplateLayers = {'data', 'domain', 'presentation', 'test'};
+
 final class ContextValidator {
   const new({
     required this.repositoryRoot,
@@ -114,6 +116,23 @@ final class ContextValidator {
               path: p.relative(file.path, from: repositoryRoot.path),
             ),
           );
+        }
+      }
+      final featureRoot = Directory(p.join(templatesRoot.path, 'feature'));
+      if (featureRoot.existsSync()) {
+        for (final directory in featureRoot.listSync().whereType<Directory>()) {
+          final layer = p.basename(directory.path);
+          if (!_featureTemplateLayers.contains(layer)) {
+            diagnostics.add(
+              ContextDiagnostic(
+                code: 'template.layer.unknown',
+                message:
+                    'Feature templates mirror lib layers; '
+                    '"$layer" is not one of $_featureTemplateLayers.',
+                path: p.relative(directory.path, from: repositoryRoot.path),
+              ),
+            );
+          }
         }
       }
       for (final path in [

@@ -34,13 +34,16 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
 ## Skill Routing
 - Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
 - Invocation policy lives in each skill's `agents/openai.yaml`; authoring and validation rules live in `.codex/skills/AGENTS.md`.
-- For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain:
+- For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain.
+  Each template path mirrors its destination. `tool/templates/feature/<layer>/...` maps to `lib/<layer>/...`.
+  The `test` branch maps to the repository `test/` root. Only `data`, `domain`, `presentation`, and `test` are valid layer directories.
   - `tool/templates/feature/data/repositories/_template.repository.dart`
   - `tool/templates/feature/data/repositories/_template.repository_impl.dart`
-  - `tool/templates/domain/README.md` when a domain branch is justified
+  - `tool/templates/feature/domain/README.md` when a domain branch is justified
   - `tool/templates/feature/presentation/pages/_template.page.dart`
   - `tool/templates/feature/presentation/pages/widgets/_template_error.widget.dart`
   - `tool/templates/feature/presentation/pages/bloc/`
+  - `tool/templates/feature/test/data/` and `tool/templates/feature/test/presentation/` for TDD references
 - Add `lib/domain` only case-by-case (e.g. settings) — never by default. See `lib/domain/AGENTS.md` for the bar and `lib/AGENTS.md` for the default data-plus-presentation path.
 - Full feature scaffolds, new shared widgets, existing shared-widget updates, and proactive single-view performance audits may select their matching local skill implicitly.
 - Layer-only `$data-scaffold`, `$domain-scaffold`, and `$page-scaffold` flows require explicit invocation. Ordinary behaviour changes stay in the normal implementation/TDD flow.
