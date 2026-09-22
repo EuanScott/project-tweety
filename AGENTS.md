@@ -22,6 +22,15 @@
 
 For cross-cutting orientation, read the [source map](docs/source_map.md).
 
+## Design Principles
+
+Judgement calls, not mechanical gates — weigh per change, don't cite one to justify either extreme.
+
+- **YAGNI**: don't build a layer, abstraction, or config surface ahead of a concrete need. A deeply layered module (e.g. `lib/domain`) earns its cost only when the current task requires it.
+- **SOLID**: apply where it actually reduces coupling or clarifies a responsibility; don't force a pattern the change doesn't call for.
+- **KISS**: keep control flow inline until it earns extraction. Up to two branches (a simple `if`/`else`) stay inline in the calling method; a third branch or more is what justifies a helper method.
+- **DRY**: two occurrences of a snippet may stay duplicated. The third occurrence is what justifies extracting a shared helper.
+
 ## Skill Routing
 - Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
 - Invocation policy lives in each skill's `agents/openai.yaml`; authoring and validation rules live in `.codex/skills/AGENTS.md`.
@@ -32,7 +41,7 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
   - `tool/templates/feature/presentation/pages/_template.page.dart`
   - `tool/templates/feature/presentation/pages/widgets/_template_error.widget.dart`
   - `tool/templates/feature/presentation/pages/bloc/`
-- Do not add a domain layer by default. Assume the BFF owns mobile-specific shaping and most business logic; add `lib/domain` only case-by-case for mobile-owned policy or custom app behavior, such as settings.
+- Add `lib/domain` only case-by-case (e.g. settings) — never by default. See `lib/domain/AGENTS.md` for the bar and `lib/AGENTS.md` for the default data-plus-presentation path.
 - Full feature scaffolds, new shared widgets, existing shared-widget updates, and proactive single-view performance audits may select their matching local skill implicitly.
 - Layer-only `$data-scaffold`, `$domain-scaffold`, and `$page-scaffold` flows require explicit invocation. Ordinary behaviour changes stay in the normal implementation/TDD flow.
 
@@ -45,12 +54,11 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
 - Treat this document as the source of truth for repository policy; use the
   referenced `_template` files as the source of truth for concrete scaffold
   structure.
-- Visible UI in pages and app-level shared widgets must use the adaptive primitives exported by `package:design_system` when a matching primitive exists.
-- Keep the route entry, `GetIt.I` resolution, provider lifecycle, and the root state-routing view in `<feature>.page.dart`. The root view is the page's body, not a helper; extracting it leaves a file that no longer shows what the route renders.
-- Keep the root view as its own `const` widget class rather than merging it into the page class. It needs a `BuildContext` below any page-owned `BlocProvider`, or `context.read`/`context.watch` in the page's own `build` resolves above the provider and throws at callback time; `BlocBuilder` and `BlocListener` passed as a direct `child:` are exempt because they resolve from their own element. A `const` root view also stops the rebuild traversal when the page rebuilds on an inherited-widget dependency such as `AppLocalizations.of(context)`.
-- Keep the pure UI helper widgets that root view composes in `lib/presentation/pages/<feature>/widgets/` as `part` files of the page library, named `<feature>_<widget>.widget.dart` with `part of '../<feature>.page.dart';`. They may consume state and dispatch events but must not resolve DI, reach lower layers, or hold business policy.
-- Remember that `part` files cannot declare imports: every import a page-local widget needs belongs in the `.page.dart` file. Widgets reused across pages belong in `lib/presentation/widgets/` or `packages/design_system` instead.
-- Add missing native/adaptive UI primitives to `packages/design_system` before using raw Material or Cupertino controls repeatedly in pages or shared widgets. The design-system primitive owns the Material/Cupertino branching; callers express app intent.
+- Visible UI in pages and app-level shared widgets must use the adaptive primitives exported by `package:design_system` when a matching primitive exists. Add missing native/adaptive primitives to `packages/design_system` before using raw Material or Cupertino controls repeatedly — the design-system primitive owns the Material/Cupertino branching, callers express app intent.
+- Page composition (route entry, root view, `part`-file widgets) follows `lib/presentation/pages/AGENTS.md` — read it before touching a page.
+
+### Naming
+
 - Standardize filenames on `feature_or_entity.role.dart`.
 - Use `_` inside the business name and `.` before the technical role.
 - Preferred role suffixes are:
@@ -65,15 +73,18 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
   - `.repository_impl.dart`
   - `.datasource.dart`
   - `.usecase.dart`
+- Test files always end `_test.dart`, singular. The Dart runner globs exactly
+  that, so a file named `_tests.dart` is silently never collected. Combine the
+  role suffix with it where a role applies: `cards.bloc_test.dart`,
+  `app_modal.widget_test.dart`.
+
+### Value Types & Comments
+
 - Immutable value types use `freezed` in every layer — entities, app-facing
   repository values, storage models, events, and state. Never hand-write a
   `copyWith` sentinel or an `Equatable` `props` override. Prefer a sealed
   `freezed` union over a status enum plus nullable fields. See
   [ADR-0004](docs/decisions/0004-value-type-conventions.md).
-- Test files always end `_test.dart`, singular. The Dart runner globs exactly
-  that, so a file named `_tests.dart` is silently never collected. Combine the
-  role suffix with it where a role applies: `cards.bloc_test.dart`,
-  `app_modal.widget_test.dart`.
 - Do not add inline comments unless they clarify non-obvious behavior that cannot be expressed cleanly in code.
 
 ## Generated Files
@@ -86,12 +97,7 @@ For cross-cutting orientation, read the [source map](docs/source_map.md).
 - If source annotations, ARB files, or generation inputs change, regenerate instead of patching generated output directly.
 
 ## Common Commands
-- Install dependencies: `flutter pub get`
 - Enable the repo git hooks (once per clone): `git config core.hooksPath .githooks`
-- Run the app: `flutter run`
-- Run tests: `flutter test`
-- Regenerate DI/build_runner output: `dart run build_runner build --delete-conflicting-outputs`
-- Refresh localization output after ARB changes: `flutter gen-l10n`
 - `.githooks/pre-commit` runs the agent context, skill, and ADR validators on every commit; bypass with `git commit --no-verify`.
 - `.githooks/post-commit` bumps `version:` in `pubspec.yaml` from the Conventional Commit type and amends the commit so the bump travels with it. `feat`/`feature` and any breaking marker bump the minor while the major is `0`; `fix`/`perf` bump the patch; every other type leaves the version alone. Bypass with `NO_VERSION_BUMP=1 git commit ...` (`--no-verify` does not skip it), and a version you change by hand in the same commit is never re-bumped. The bump logic lives in `tool/hooks/bump_version.sh`.
 

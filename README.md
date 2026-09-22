@@ -3,22 +3,13 @@
 [![Version](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FEuanScott%2Fproject-tweety%2Fmain%2Fpubspec.yaml&query=%24.version&label=version&color=blue)](pubspec.yaml)
 [![CI](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml)
 
-Not really much going on here. This is just a playground to try out some ideas and some new things that I find cool or
-interesting.
-
-The only real Pathway/Guideline that I am following is [this Flutter Roadmap](https://roadmap.sh/flutter).
-
-Ideas to work on, are logged as [Issues](https://github.com/EuanScott/project-tweety/issues) in the GitHub repo.
-
-_Why a Flutter project_, you may ask? Well that's because at the time of writing this doc, I just came off a Flutter
-project and thought it would be cool to explore some things that I wasn't able to do on that project.
+A playground project to try out some ideas and work on some blockers that I face in my day job. I'm not really building
+anything to serve a purpose here.
 
 ## Development Style
 
-Historically, I've always used the [Git FLow](https://www.gitkraken.com/learn/git/git-flow) approach to software
-development, in particular Mobile App development. I have however, of late come
-across [Trunk Based Development](https://trunkbaseddevelopment.com/) and I think I may just be giving that a try. After
-all, this project isn't being worked on in a big corporate environment.
+Historically, I've always used [Git FLow](https://www.gitkraken.com/learn/git/git-flow), specifically at work. However,
+as this is a playground project, I will be using [Trunk Based Development](https://trunkbaseddevelopment.com/).
 
 ## Setup & Usage
 
@@ -61,7 +52,7 @@ See [the testing guide](docs/testing/README.md) for what belongs in `test/`,
 
 ### Pre-commit hook
 
-`.githooks/pre-commit` runs the three agent-tooling validators on every commit, in about a second:
+`.githooks/pre-commit` runs the three agent-tooling validators on every commit:
 
 ```sh
 dart run tool/agent_context/validate.dart
@@ -83,14 +74,15 @@ provide.
 `pubspec.yaml` is the version of record, and it is maintained by the commit message rather than by hand.
 `.githooks/post-commit` reads the Conventional Commit type and amends the commit with the matching bump:
 
-| Commit type                                                      | Bump                         |
-|------------------------------------------------------------------|------------------------------|
-| `feat`, `feature`                                                | minor                        |
-| `fix`, `perf`                                                    | patch                        |
-| `!` marker or `BREAKING CHANGE:` footer                          | minor while the major is `0` |
-| everything else (`chore`, `docs`, `refactor`, `test`, `ci`, ...) | none                         |
+| Commit type                                                      | Bump                                           |
+|------------------------------------------------------------------|------------------------------------------------|
+| `feat`, `feature`                                                | minor                                          |
+| `fix`, `perf`                                                    | patch                                          |
+| `!` marker or `BREAKING CHANGE:` footer                          | minor while the major is `0`, otherwise major. |
+| everything else (`chore`, `docs`, `refactor`, `test`, `ci`, ...) | none                                           |
 
-Two things follow from the amend. The commit hash printed by `git commit` is stale, so read `git log -1` before quoting
+Two things follow from the amending. The commit hash printed by `git commit` is stale, so read `git log -1` before
+quoting
 one. And `--no-verify` does not skip this hook — git does not pass that flag to `post-commit`. Use
 `NO_VERSION_BUMP=1 git commit ...` instead. A version edited by hand in the same commit is never re-bumped, which is how
 `1.0.0` and any deliberate correction get set.
@@ -98,8 +90,8 @@ one. And `--no-verify` does not skip this hook — git does not pass that flag t
 The version badge at the top of this file reads `pubspec.yaml` from `main`, so it follows a push with no separate
 release step.
 
-The rationale, including why `pre-commit` and `commit-msg` cannot do this, is
-[ADR-0009](docs/decisions/0009-conventional-commit-driven-versioning.md). The mapping itself lives in
+The rationale, including why `pre-commit` and `commit-msg` cannot do this,
+is [ADR-0009](docs/decisions/0009-conventional-commit-driven-versioning.md). The mapping itself lives in
 `tool/hooks/bump_version.sh`.
 
 ## Project Docs

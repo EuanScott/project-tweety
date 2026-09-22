@@ -1,8 +1,10 @@
 # Architecture Overview
 
-This document provides a high-level overview of the architectural patterns, design decisions, and structural conventions used throughout Project Tweety. It serves as a reference for developers working on or reviewing the codebase.
+This document provides a high-level overview of the architectural patterns, design decisions, and structural conventions
+used throughout Project Tweety. It serves as a reference for developers working on or reviewing the codebase.
 
-For detailed rationale behind specific decisions, see the [Architecture Decision Records (ADRs)](../decisions/README.md).
+For detailed rationale behind specific decisions, see
+the [Architecture Decision Records (ADRs)](../decisions/README.md).
 
 ## Table of Contents
 
@@ -23,15 +25,16 @@ For detailed rationale behind specific decisions, see the [Architecture Decision
 
 ## Layered Architecture
 
-The application follows a **Clean Architecture** variant with strictly separated layers. Dependencies flow inward only: **Presentation → Data → Domain**. Inner layers have no knowledge of outer layers.
+The application follows a **Clean Architecture** variant with strictly separated layers. Dependencies flow inward only:
+**Presentation → Data → Domain**. Inner layers have no knowledge of outer layers.
 
-| Layer | Responsibility | Directory |
-|-------|---------------|-----------|
-| **Domain** | Business logic, entities, repository interfaces, use cases | `lib/domain/` |
-| **Data** | Data sources, repository implementations, DTOs, services | `lib/data/` |
-| **Core** | Cross-cutting concerns: DI, analytics, error reporting, storage, networking, platform | `lib/core/` |
-| **Presentation** | UI components, BLoC/Cubit, widgets, routing | `lib/presentation/` |
-| **Features** | Experimental feature modules | `lib/features/` |
+| Layer            | Responsibility                                                                        | Directory           |
+|------------------|---------------------------------------------------------------------------------------|---------------------|
+| **Domain**       | Business logic, entities, repository interfaces, use cases                            | `lib/domain/`       |
+| **Data**         | Data sources, repository implementations, DTOs, services                              | `lib/data/`         |
+| **Core**         | Cross-cutting concerns: DI, analytics, error reporting, storage, networking, platform | `lib/core/`         |
+| **Presentation** | UI components, BLoC/Cubit, widgets, routing                                           | `lib/presentation/` |
+| **Features**     | Experimental feature modules                                                          | `lib/features/`     |
 
 ### Domain Layer (`lib/domain/`)
 
@@ -51,15 +54,15 @@ The application follows a **Clean Architecture** variant with strictly separated
 
 Cross-cutting concerns that span the application:
 
-| Subdirectory | Purpose |
-|--------------|---------|
-| `analytics/` | Analytics tracking facade and services |
-| `di/` | Dependency injection configuration |
-| `error_reporting/` | Error reporting facade and services |
-| `feature_flags/` | Feature flag service and keys |
-| `networking/` | HTTP services and clients |
-| `platform/` | Platform-specific services (orientation, text settings) |
-| `storage/` | Database and preferences storage |
+| Subdirectory       | Purpose                                                 |
+|--------------------|---------------------------------------------------------|
+| `analytics/`       | Analytics tracking facade and services                  |
+| `di/`              | Dependency injection configuration                      |
+| `error_reporting/` | Error reporting facade and services                     |
+| `feature_flags/`   | Feature flag service and keys                           |
+| `networking/`      | HTTP services and clients                               |
+| `platform/`        | Platform-specific services (orientation, text settings) |
+| `storage/`         | Database and preferences storage                        |
 
 ### Presentation Layer (`lib/presentation/`)
 
@@ -83,12 +86,12 @@ The application uses **`get_it`** as the service locator and **`injectable`** fo
 
 ### Usage Patterns
 
-| Annotation | Lifetime | Use Case |
-|------------|----------|----------|
-| `@LazySingleton(as: Interface)` | Singleton, lazy initialization | Services, repositories, data sources |
-| `@singleton` | Singleton, eager initialization | Configuration, constants |
-| `@factory` | New instance per call | BLoCs, Cubits (stateful, scoped to widget tree) |
-| `@injectable` | Default (same as `@factory`) | Classes that should be injected |
+| Annotation                      | Lifetime                        | Use Case                                        |
+|---------------------------------|---------------------------------|-------------------------------------------------|
+| `@LazySingleton(as: Interface)` | Singleton, lazy initialization  | Services, repositories, data sources            |
+| `@singleton`                    | Singleton, eager initialization | Configuration, constants                        |
+| `@factory`                      | New instance per call           | BLoCs, Cubits (stateful, scoped to widget tree) |
+| `@injectable`                   | Default (same as `@factory`)    | Classes that should be injected                 |
 
 ### Modules
 
@@ -106,7 +109,8 @@ abstract class AnalyticsModule {
 
 ### Testing
 
-For tests, prefer **constructing subjects directly** rather than using `GetIt`. The shared test harness (`test/support/`) provides fake implementations for whole-app widget tests.
+For tests, prefer **constructing subjects directly** rather than using `GetIt`. The shared test harness
+(`test/support/`) provides fake implementations for whole-app widget tests.
 
 ---
 
@@ -154,8 +158,10 @@ class CardsRepositoryImpl implements CardsRepository {
 
 ### Key Principles
 
-- **Data Source is the Seam**: `CardsDataSource` is the abstraction point for switching between local SQLite, mock, or future remote implementations
-- **Validation at Repository**: Business rule validation (e.g., `InvalidCardDraftException`) happens in the repository implementation
+- **Data Source is the Seam**: `CardsDataSource` is the abstraction point for switching between local SQLite, mock, or
+  future remote implementations
+- **Validation at Repository**: Business rule validation (e.g., `InvalidCardDraftException`) happens in the repository
+  implementation
 - **Mapping at Boundaries**: Repository implementations map between DTOs and domain entities
 
 ---
@@ -166,10 +172,10 @@ State management uses the **BLoC pattern** via the `bloc` and `flutter_bloc` pac
 
 ### When to Use Each
 
-| Pattern | Use Case | Location |
-|---------|----------|----------|
-| **BLoC** | Complex state with multiple events, async operations, side effects | `lib/presentation/pages/<feature>/bloc/` |
-| **Cubit** | Simpler state with direct state mutations | `lib/presentation/pages/<feature>/cubit/` |
+| Pattern   | Use Case                                                           | Location                                  |
+|-----------|--------------------------------------------------------------------|-------------------------------------------|
+| **BLoC**  | Complex state with multiple events, async operations, side effects | `lib/presentation/pages/<feature>/bloc/`  |
+| **Cubit** | Simpler state with direct state mutations                          | `lib/presentation/pages/<feature>/cubit/` |
 
 ### BLoC Structure
 
@@ -189,10 +195,10 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
     on<CardsCreateSubmitted>(_onCreateSubmitted);
     // ... event handlers
   }
-  
+
   final CardsRepository _cardsRepository;
-  
-  // Event handlers...
+
+// Event handlers...
 }
 ```
 
@@ -230,7 +236,8 @@ MultiBlocProvider(
 
 ## Facade Pattern
 
-The facade pattern is used for cross-cutting services that delegate to multiple underlying implementations. This provides a **single, stable interface** while allowing flexibility in the implementations.
+The facade pattern is used for cross-cutting services that delegate to multiple underlying implementations. This
+provides a **single, stable interface** while allowing flexibility in the implementations.
 
 ### Analytics Facade
 
@@ -294,7 +301,8 @@ class ErrorReportingFacade {
 
 ## DTO Pattern and Mapping
 
-Data Transfer Objects (DTOs) handle serialization and database persistence, while domain entities represent business concepts.
+Data Transfer Objects (DTOs) handle serialization and database persistence, while domain entities represent business
+concepts.
 
 ### Structure
 
@@ -376,12 +384,12 @@ Card (Domain Entity) + CardDraft → CardDto (via repository) → Database Row
 
 ### Usage Across Layers
 
-| Layer | Value Types | Example |
-|-------|-------------|---------|
-| Domain | Entities | `Card`, `AppPreferences` |
-| Data | DTOs, Repository types | `CardDto`, `CardDraft` |
-| Presentation | BLoC state, events | `CardsState`, `CardsEvent` |
-| Core | Configuration, settings | `AppPreferencesStorage` models |
+| Layer        | Value Types             | Example                        |
+|--------------|-------------------------|--------------------------------|
+| Domain       | Entities                | `Card`, `AppPreferences`       |
+| Data         | DTOs, Repository types  | `CardDto`, `CardDraft`         |
+| Presentation | BLoC state, events      | `CardsState`, `CardsEvent`     |
+| Core         | Configuration, settings | `AppPreferencesStorage` models |
 
 ### Sealed Unions
 
@@ -531,7 +539,8 @@ The database includes synchronization support even though Firestore sync is not 
 
 ## Feature Flags
 
-Feature flags are managed via `FeatureFlagService`, currently a dormant stub awaiting Firebase Remote Config integration.
+Feature flags are managed via `FeatureFlagService`, currently a dormant stub awaiting Firebase Remote Config
+integration.
 
 ### Structure
 
@@ -562,22 +571,22 @@ class FeatureFlagKeys {
 
 ### Test Directories
 
-| Directory | Execution Context | Binding | Purpose |
-|-----------|------------------|---------|---------|
-| `test/` | Host Dart VM, headless | `TestWidgetsFlutterBinding` | Unit tests, widget tests |
-| `integration_test/` | Real device/emulator | `IntegrationTestWidgetsFlutterBinding` | Device-only tests |
-| `test_driver/` | Host machine (separate process) | None | Integration test driver |
+| Directory           | Execution Context               | Binding                                | Purpose                  |
+|---------------------|---------------------------------|----------------------------------------|--------------------------|
+| `test/`             | Host Dart VM, headless          | `TestWidgetsFlutterBinding`            | Unit tests, widget tests |
+| `integration_test/` | Real device/emulator            | `IntegrationTestWidgetsFlutterBinding` | Device-only tests        |
+| `test_driver/`      | Host machine (separate process) | None                                   | Integration test driver  |
 
 ### Shared Test Harness
 
 Located in `test/support/`:
 
-| File | Purpose |
-|------|---------|
-| `app_harness.dart` | `useAppHarness()` for setup/teardown, `pumpApp()` for rendering `MyApp`, `currentRoutePath()` |
-| `fake_cards_repository.dart` | Configurable `FakeCardsRepository` with error injection and call counting |
-| `fake_app_preferences_repository.dart` | `FakeAppPreferencesRepository` recording saves |
-| `in_memory_shared_preferences_async_platform.dart` | Platform fake for shared preferences |
+| File                                               | Purpose                                                                                       |
+|----------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `app_harness.dart`                                 | `useAppHarness()` for setup/teardown, `pumpApp()` for rendering `MyApp`, `currentRoutePath()` |
+| `fake_cards_repository.dart`                       | Configurable `FakeCardsRepository` with error injection and call counting                     |
+| `fake_app_preferences_repository.dart`             | `FakeAppPreferencesRepository` recording saves                                                |
+| `in_memory_shared_preferences_async_platform.dart` | Platform fake for shared preferences                                                          |
 
 ### Typical Whole-App Test
 
