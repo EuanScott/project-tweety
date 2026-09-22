@@ -37,7 +37,7 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
 - For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain:
   - `tool/templates/feature/data/repositories/_template.repository.dart`
   - `tool/templates/feature/data/repositories/_template.repository_impl.dart`
-  - `lib/domain/_template/README.md` when a domain branch is justified
+  - `tool/templates/domain/README.md` when a domain branch is justified
   - `tool/templates/feature/presentation/pages/_template.page.dart`
   - `tool/templates/feature/presentation/pages/widgets/_template_error.widget.dart`
   - `tool/templates/feature/presentation/pages/bloc/`

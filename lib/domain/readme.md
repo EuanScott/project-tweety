@@ -6,7 +6,7 @@ optional: ordinary BFF-shaped flows should use data repositories directly.
 ## Canonical guidance
 
 - Implementation rules: [AGENTS.md](AGENTS.md)
-- Structural reference: [_template](_template/README.md)
+- Structural reference: [_template](../../tool/templates/domain/README.md)
 - Domain-only scaffolding: `$domain-scaffold`
 
 Use domain for meaningful app-owned decisions, validation, orchestration,

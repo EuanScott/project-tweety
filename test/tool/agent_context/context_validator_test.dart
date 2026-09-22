@@ -149,6 +149,22 @@ void main() {
         contains('template.missing'),
       );
     });
+
+    test('rejects a missing domain template', () async {
+      final fixture = await _ContextFixture.create();
+      addTearDown(fixture.dispose);
+      await File(
+        '${fixture.repositoryRoot.path}/${domainTemplatePaths.first}',
+      ).delete();
+
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
+
+      expect(
+        result.diagnostics.map((diagnostic) => diagnostic.code),
+        contains('template.missing'),
+      );
+    });
   });
 }
 
@@ -172,6 +188,7 @@ final class _ContextFixture {
     for (final path in [
       ...featureProductionTemplatePaths,
       ...featureTestReferenceTemplatePaths,
+      ...domainTemplatePaths,
     ]) {
       await fixture.write(path, '');
     }

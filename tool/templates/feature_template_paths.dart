@@ -28,3 +28,7 @@ const featureTestReferenceTemplatePaths = <String>[
   'tool/templates/feature/tests/presentation/_template.bloc_test.dart',
   'tool/templates/feature/tests/data/_template.repository_impl_test.dart',
 ];
+
+const domainTemplatePaths = <String>[
+  'tool/templates/domain/README.md',
+];

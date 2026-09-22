@@ -56,7 +56,7 @@ Use the domain manifest only when `domain_reason` identifies real mobile-owned p
 - `lib/data/repositories/<folder_key>/<feature_name>.repository_impl.dart`
 - the same presentation manifest, depending on the use case instead of the repository
 
-On the domain path, read `lib/domain/_template/README.md`, keep the contract in
+On the domain path, read `tool/templates/domain/README.md`, keep the contract in
 domain, and reject pass-through use cases. Add a datasource or DTO only for a
 concrete boundary.
 

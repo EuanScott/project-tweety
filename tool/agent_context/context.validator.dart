@@ -119,6 +119,7 @@ final class ContextValidator {
       for (final path in [
         ...featureProductionTemplatePaths,
         ...featureTestReferenceTemplatePaths,
+        ...domainTemplatePaths,
       ]) {
         if (!File(p.join(repositoryRoot.path, path)).existsSync()) {
           diagnostics.add(
