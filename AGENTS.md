@@ -30,6 +30,7 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
 - **SOLID**: apply where it actually reduces coupling or clarifies a responsibility; don't force a pattern the change doesn't call for.
 - **KISS**: keep control flow inline until it earns extraction. Up to two branches (a simple `if`/`else`) stay inline in the calling method; a third branch or more is what justifies a helper method.
 - **DRY**: two occurrences of a snippet may stay duplicated. The third occurrence is what justifies extracting a shared helper.
+- **Efficiency**: default to linear-time (O(n)) algorithms and single-pass data access. Avoid nested loops or nested lookups over collections (e.g. a `.where`/`.contains` scan inside another loop) when a hash map, set, index, or single pass achieves the same result. Quadratic-or-worse complexity is acceptable only when the input is small and bounded (e.g. a fixed-size UI list) or when a linear rewrite would clearly hurt readability for no real gain — note the reason inline when that trade-off is made.
 
 ## Skill Routing
 - Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
