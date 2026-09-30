@@ -32,6 +32,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -42,13 +46,19 @@ jobs:
         with:
           flutter-version: '3.47.0'
           channel: stable
+          cache: true
 
+      # The root analysis also reads every package, so all of them must resolve first.
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          for pubspec in $(git ls-files '*pubspec.yaml'); do
+            (cd "$(dirname "$pubspec")" && flutter pub get)
+          done
 
+      # Pinned to the version in pubspec.lock.
       - name: Install very_good_cli
         run: |
-          dart pub global activate very_good_cli
+          dart pub global activate very_good_cli 1.3.0
           echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
 
       - name: Generate DI/build_runner output
@@ -57,9 +67,17 @@ jobs:
       - name: Generate localization output
         run: flutter gen-l10n
 
+      - name: Validate agent context, skills, and ADRs
+        run: |
+          dart run tool/agent_context/validate.dart
+          dart run tool/skills/validate.dart
+          dart run tool/decisions/adr.dart check
+
       - name: Analyze
-        run: flutter analyze --no-fatal-infos
-        continue-on-error: true
+        run: flutter analyze --no-fatal-infos --no-pub
+
+      - name: Bloc lint
+        run: tool/hooks/bloc_lint.sh lib test packages
 
       - name: Test
         run: very_good test --coverage
@@ -70,27 +88,9 @@ jobs:
           name: coverage
           path: coverage/lcov.info
 
-      - name: Install design_system dependencies
-        working-directory: packages/design_system
-        run: flutter pub get
-
-      - name: Analyze design_system
-        working-directory: packages/design_system
-        run: flutter analyze --no-fatal-infos
-        continue-on-error: true
-
       - name: Test design_system
         working-directory: packages/design_system
         run: very_good test
-
-      - name: Install navigation dependencies
-        working-directory: packages/navigation
-        run: flutter pub get
-
-      - name: Analyze navigation
-        working-directory: packages/navigation
-        run: flutter analyze --no-fatal-infos
-        continue-on-error: true
 
       - name: Test navigation
         working-directory: packages/navigation

@@ -50,11 +50,12 @@ dart run tool/decisions/adr.dart generate-index
 |----|-------|--------|
 | [0001](0001-record-architecture-decisions.md) | Record architecture decisions | proposed |
 | [0002](0002-test-layer-conventions.md) | Test layer conventions | proposed |
-| [0003](0003-pre-commit-validator-enforcement.md) | Pre-commit validator enforcement | proposed |
+| [0003](0003-pre-commit-validator-enforcement.md) | Pre-commit validator enforcement | superseded → [0010](0010-pre-commit-analysis-and-ci-enforcement.md) |
 | [0004](0004-value-type-conventions.md) | Value type conventions | proposed |
 | [0005](0005-design-system-example-app-location.md) | design_system example app lives inside the package | proposed |
 | [0006](0006-surface-classification-scopes.md) | Window and region surface classification are separate decisions | proposed |
 | [0007](0007-cards-local-source-of-truth.md) | Local SQLite remains the source of truth for Cards | proposed |
 | [0008](0008-cards-are-owned-by-the-signed-in-account.md) | Cards are owned by the signed-in Account | proposed |
 | [0009](0009-conventional-commit-driven-versioning.md) | Conventional-commit-driven versioning | proposed |
+| [0010](0010-pre-commit-analysis-and-ci-enforcement.md) | Pre-commit analysis and CI enforcement | accepted |
 <!-- adr-index:end -->

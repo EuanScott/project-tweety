@@ -1,8 +1,9 @@
 # ADR-0003: Pre-commit validator enforcement
 
-Status: proposed
+Status: superseded
 Date: 2026-08-07
 Decision maker: Euan Scott
+Superseded by: [ADR-0010](0010-pre-commit-analysis-and-ci-enforcement.md)
 
 ## Context
 

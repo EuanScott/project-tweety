@@ -6,3 +6,25 @@ echo "Validating agent context, skills, and ADRs..."
 dart run tool/agent_context/validate.dart
 dart run tool/skills/validate.dart
 dart run tool/decisions/adr.dart check
+
+# Paths mirror analyzer.exclude in analysis_options.yaml.
+staged=$(git diff --cached --name-only --diff-filter=ACMR -- '*.dart' \
+  | grep -vE '^(tool/templates|build|android|ios|web|windows|macos|linux)/' \
+  || true)
+
+if [ -z "$staged" ]; then
+  exit 0
+fi
+
+set -f
+old_ifs=$IFS
+IFS='
+'
+# shellcheck disable=SC2086
+set -- $staged
+IFS=$old_ifs
+set +f
+
+echo "Analyzing $# staged Dart file(s)..."
+flutter analyze --no-fatal-infos --no-pub "$@"
+tool/hooks/bloc_lint.sh "$@"

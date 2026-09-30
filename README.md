@@ -28,7 +28,10 @@ Then use the following validation loop:
 ```sh
 dart format --output=none --set-exit-if-changed .
 flutter analyze --no-fatal-infos
+tool/hooks/bloc_lint.sh lib test packages
 dart run tool/agent_context/validate.dart
+dart run tool/skills/validate.dart
+dart run tool/decisions/adr.dart check
 flutter test
 ```
 
@@ -38,8 +41,8 @@ Run one test file with:
 flutter test test/path_test.dart
 ```
 
-This loop is a superset of CI: CI runs analysis and tests, while the agent context validator is local-only. A green
-local loop therefore means a green build, but not the reverse.
+CI runs the same checks, except formatting, and fails on any analysis or bloc warning or error. Infos never fail a
+build. The rationale is [ADR-0010](docs/decisions/0010-pre-commit-analysis-and-ci-enforcement.md).
 
 Native Android and iOS coverage remains an explicit device/simulator check:
 
@@ -60,14 +63,19 @@ dart run tool/skills/validate.dart
 dart run tool/decisions/adr.dart check
 ```
 
-These guard `AGENTS.md` line budgets, Markdown link integrity, skill word budgets, and ADR structure. They fail silently
-in the sense that nothing else catches them, so the hook is the enforcement point.
+These guard `AGENTS.md` line budgets, Markdown link integrity, skill word budgets, and ADR structure.
 
-Bypass with `git commit --no-verify`.
+When the commit stages Dart files, the hook then runs `flutter analyze --no-fatal-infos` and
+`tool/hooks/bloc_lint.sh` on those files only. Warnings and errors block the commit; infos are printed but do not.
+`bloc lint` applies the `bloc:` rules in `analysis_options.yaml`, which `flutter analyze` ignores. `bloc_tools` is a
+pinned development dependency, so `flutter pub get` installs it.
 
-Two caveats. The validators read the working tree rather than the index, so a partially staged commit is checked against
-what is on disk, not what is being committed. And the hook needs `dart` on `PATH`, which a GUI git client may not
-provide.
+Bypass with `git commit --no-verify`. CI runs the same checks on the whole project, so a bypassed hook still fails the
+build.
+
+Three caveats. The hook reads the working tree rather than the index, so a partially staged file is checked as it is on
+disk, not as it is being committed. It does not report problems in unstaged files that a staged change breaks; CI does.
+And the hook needs `dart` and `flutter` on `PATH`, which a GUI git client may not provide.
 
 ### Versioning
 
@@ -96,7 +104,7 @@ is [ADR-0009](docs/decisions/0009-conventional-commit-driven-versioning.md). The
 
 ## Project Docs
 
-Broader project guides live under [`docs/`](docs/). Current guides include:
+Broader project guides live under `docs/`. Current guides include:
 
 - [Navigation, deep links, and route guards](docs/testing/navigation.md)
 - [Cards SQLite persistence and native smoke testing](docs/architecture/cards_sqlite_foundation.md)

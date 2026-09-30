@@ -102,7 +102,7 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
 
 ## Common Commands
 - Enable the repo git hooks (once per clone): `git config core.hooksPath .githooks`
-- `.githooks/pre-commit` runs the agent context, skill, and ADR validators on every commit; bypass with `git commit --no-verify`.
+- `.githooks/pre-commit` runs the agent context, skill, and ADR validators on every commit, then `flutter analyze --no-fatal-infos` and `tool/hooks/bloc_lint.sh` on the staged Dart files; bypass with `git commit --no-verify`. CI runs the same checks on the whole project and fails on any warning or error ([ADR-0010](docs/decisions/0010-pre-commit-analysis-and-ci-enforcement.md)).
 - `.githooks/post-commit` bumps `version:` in `pubspec.yaml` from the Conventional Commit type and amends the commit so the bump travels with it. `feat`/`feature` and any breaking marker bump the minor while the major is `0`; `fix`/`perf` bump the patch; every other type leaves the version alone. Bypass with `NO_VERSION_BUMP=1 git commit ...` (`--no-verify` does not skip it), and a version you change by hand in the same commit is never re-bumped. The bump logic lives in `tool/hooks/bump_version.sh`.
 
 ## Testing Guidance
