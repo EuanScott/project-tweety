@@ -15,7 +15,6 @@
 - `lib/core`: cross-cutting concerns such as analytics, DI, error reporting, and feature flags
 - `lib/data`: constants, DTOs, datasources, repositories, and services
 - `lib/domain`: optional mobile-owned domain concepts, repository contracts, and use cases for features that need app-specific policy beyond BFF-shaped data
-- `lib/features`: feature-scoped experiments; currently includes `dynamic_form`
 - `lib/presentation`: pages, widgets, extensions, and UI helpers
 - `lib/l10n`: ARB files and generated localization output
 - `test`: widget and shared/unit tests

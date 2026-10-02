@@ -117,7 +117,7 @@ Primary source: Will Larson's [staff archetypes](https://staffeng.com/guides/sta
   the significant choices"). There is no single document that reads as an accumulated
   *architecture* — where `lib/domain` is meant to grow next, which layers are
   considered stable vs. experimental, what "good" looks like across the `core` /
-  `data` / `domain` / `features` / `presentation` split beyond what AGENTS.md states as
+  `data` / `domain` / `presentation` split beyond what AGENTS.md states as
   static policy. An ADR log is a sequence of decisions; a strategy doc would be the
   currently-missing synthesis across them.
 - "Make the change easy, then make the easy change" (prefactoring) is explicitly named
@@ -160,7 +160,7 @@ Explicitly cut: DORA metrics and CI/CD (no deploy pipeline exists yet to measure
 the pipeline first, if ever, before instrumenting it), a standalone technical-strategy
 document (an accumulated architecture doc is real Staff-Architect value, but for a
 one-person repo the ADR log plus AGENTS.md's layering rules already cover "direction" at
-the current project size — revisit once `lib/domain` or `lib/features` actually grows),
+the current project size — revisit once `lib/domain` actually grows),
 and Priority/Size field documentation on the Pecking board (prioritization only needs a
 recorded rationale once there's contention between competing priorities from more than
 one voice).

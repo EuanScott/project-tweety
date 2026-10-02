@@ -34,7 +34,6 @@ The application follows a **Clean Architecture** variant with strictly separated
 | **Data**         | Data sources, repository implementations, DTOs, services                              | `lib/data/`         |
 | **Core**         | Cross-cutting concerns: DI, analytics, error reporting, storage, networking, platform | `lib/core/`         |
 | **Presentation** | UI components, BLoC/Cubit, widgets, routing                                           | `lib/presentation/` |
-| **Features**     | Experimental feature modules                                                          | `lib/features/`     |
 
 ### Domain Layer (`lib/domain/`)
 
@@ -648,10 +647,6 @@ lib/
 │   │   └── app_preferences/
 │   └── repositories/
 │       └── app_preferences/
-├── features/              # Experimental features
-│   └── dynamic_form/
-│       ├── application/
-│       └── data/
 ├── l10n/                  # Localization
 ├── presentation/          # Presentation layer
 │   ├── extensions/

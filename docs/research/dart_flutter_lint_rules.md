@@ -35,9 +35,8 @@ here.
 
 The most valuable thing missing from this repo is not a lint rule at all. Turning
 on `analyzer: language: strict-casts` surfaces **eight genuine type errors** —
-implicit `dynamic` downcasts in `lib/core/networking/services.dart` and
-`lib/features/dynamic_form/` where a `dynamic` value is silently flowing into a
-typed slot. No lint rule list would have caught these. `strict-raw-types` is
+implicit `dynamic` downcasts in `lib/core/networking/services.dart`.
+No lint rule list would have caught these. `strict-raw-types` is
 free (zero new issues), and `strict-inference` costs five annotations.
 
 Beyond that, a large set of real bug-catching lints — `unawaited_futures`,
@@ -166,9 +165,6 @@ error • A value of type 'dynamic' can't be returned from the method 'postData'
         (same for putData:85, deleteData:108)
 error • A value of type 'dynamic' can't be assigned to a variable of type 'String?'
         • lib/core/networking/services.dart:135:21 • invalid_assignment
-error • The argument type 'dynamic' can't be assigned to the parameter type 'String'
-        • lib/features/dynamic_form/application/dynamic_form.dart:131,147,148,149
-        • argument_type_not_assignable
 ```
 
 These are genuine holes: `services.dart` is decoding JSON into `dynamic` and

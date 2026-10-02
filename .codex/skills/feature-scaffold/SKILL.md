@@ -1,6 +1,6 @@
 ---
 name: feature-scaffold
-description: "Scaffold a new Project Tweety page-backed feature across data and presentation, adding domain only for stated mobile-owned policy. Use for whole-feature creation outside lib/features and packages/design_system."
+description: "Scaffold a new Project Tweety page-backed feature across data and presentation, adding domain only for stated mobile-owned policy. Use for whole-feature creation outside packages/design_system."
 ---
 
 # Feature Scaffold
@@ -31,7 +31,7 @@ Apply user request, applicable `AGENTS.md`, the selected layer's `_template`,
 then one nearest implementation for gaps. Read selected-layer guidance. Use the tool for
 supported no-domain baselines; inspect templates only for unsupported work.
 
-Reject targets under `lib/features/` or `packages/design_system`. List targets;
+Reject targets under `packages/design_system`. List targets;
 stop on existing paths unless an update was explicitly requested.
 
 **Gate:** Proceed only with complete inputs, authoritative sources, scoped targets, and no unapproved overwrite.
