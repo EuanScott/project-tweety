@@ -59,7 +59,7 @@ visible, not editable, and not synced.
 
 ## Modal presentation
 
-Vocabulary for `AppModal` (`lib/presentation/widgets/app_modal.dart`) and how
+Vocabulary for `AppModal` (`lib/presentation/widgets/app_modal.widget.dart`) and how
 it presents content over the rest of the app.
 
 ### Modal variant
@@ -96,7 +96,7 @@ decision is made.
 ### Resolving action
 
 A **resolving action** is a caller-supplied control inside a modal's `child`
-(e.g. `webview_modal.dart`'s Cancel/Confirm row) that both closes the modal
+(e.g. `webview_modal.widget.dart`'s Cancel/Confirm row) that both closes the modal
 and commits its outcome. The `blocking` variant requires every call site to
 provide one instead of getting a close affordance, per
 `docs/research/modal_close_button_hci_guidelines.md`.

@@ -2,7 +2,7 @@ import 'dart:ui' show DisplayFeature, DisplayFeatureState, DisplayFeatureType;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:project_tweety/presentation/widgets/split_pane_layout.dart';
+import 'package:project_tweety/presentation/widgets/split_pane_layout.widget.dart';
 
 void main() {
   group('SplitPaneLayout', () {

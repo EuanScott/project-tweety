@@ -6,11 +6,11 @@ This folder owns the app-specific side of navigation. Reusable mechanics live in
 
 App-owned in `lib/presentation/navigation`:
 
-- route names and paths in `routes.dart`
+- route names and paths in `app_routes.constants.dart`
 - the `AppTab` enum
-- localized tab labels and icons in `tabs/app_tab_config.dart`
-- page builders and nested route trees in `router.dart`
-- feature-facing helpers in `navigation_extensions.dart`
+- localized tab labels and icons in `tabs/app_tab_configs.constants.dart`
+- page builders and nested route trees in `app.router.dart`
+- feature-facing helpers in `navigation.extension.dart`
 - analytics tracker and navigator observers in `analytics/`
 
 Package-owned in `packages/navigation`:
@@ -26,7 +26,7 @@ The package must not import app pages, app localization, app route constants, or
 
 ## How Routing Works
 
-`router.dart` is the composition point:
+`app.router.dart` is the composition point:
 
 1. The app creates analytics wiring.
 2. The app defines `NavigationBranch<AppTab>` values with `GoRoute` trees and page builders.
@@ -45,7 +45,7 @@ Android and iOS link registration is not configured yet.
 
 ## Route Guards
 
-Route guards live in `router.dart` on the `GoRoute` definitions. Pages should
+Route guards live in `app.router.dart` on the `GoRoute` definitions. Pages should
 not decide whether they are allowed to render. The router decides whether a
 location can be displayed before the guarded page is built.
 
@@ -85,8 +85,8 @@ Feature pages should still decide their own content layout. For example, the Car
 ## Adding a Nested Route
 
 1. Add the route name/path to `AppRoutes`.
-2. Add the `GoRoute` as a child route under the correct branch in `router.dart`.
-3. Add a helper to `navigation_extensions.dart` if feature code needs to open it.
+2. Add the `GoRoute` as a child route under the correct branch in `app.router.dart`.
+3. Add a helper to `navigation.extension.dart` if feature code needs to open it.
 4. Use the helper from the page instead of hard-coding route names.
 
 Example shape:
@@ -109,8 +109,8 @@ GoRoute(
 ## Adding a Top-Level Tab
 
 1. Add a value to `AppTab`.
-2. Add a `NavigationTabConfig<AppTab>` to `tabs/app_tab_config.dart`.
-3. Add a matching `NavigationBranch<AppTab>` to `router.dart`.
+2. Add a `NavigationTabConfig<AppTab>` to `tabs/app_tab_configs.constants.dart`.
+3. Add a matching `NavigationBranch<AppTab>` to `app.router.dart`.
 4. Keep `AppTab`, `appTabConfigs`, and branch order aligned.
 5. Add or update navigation widget coverage for tab rendering and branch switching.
 
@@ -132,7 +132,7 @@ Use this for UI-local actions such as scrolling to the top or focusing a search 
 
 ## Analytics
 
-Analytics is intentionally still app-owned. `router.dart` creates the current tracker/observers and passes callbacks into package APIs:
+Analytics is intentionally still app-owned. `app.router.dart` creates the current tracker/observers and passes callbacks into package APIs:
 
 ```dart
 onTabRouteSelected: analyticsTracker?.trackScreenName,

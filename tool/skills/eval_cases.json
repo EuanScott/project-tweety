@@ -334,7 +334,7 @@
         {
           "id": "existing_target",
           "kind": "git_diff_contains",
-          "value": "lib/presentation/widgets/page_scaffold.dart"
+          "value": "lib/presentation/widgets/page_scaffold.widget.dart"
         },
         {
           "id": "no_successor",
@@ -384,13 +384,13 @@
       "skill": "update-widget",
       "category": "positive_routing",
       "tier": "high_risk",
-      "prompt": "$update-widget Update lib/presentation/widgets/page_scaffold.dart additively: allow an optional body semantic label while preserving current output when omitted. Specify the behavior with a failing widget test before implementation.",
+      "prompt": "$update-widget Update lib/presentation/widgets/page_scaffold.widget.dart additively: allow an optional body semantic label while preserving current output when omitted. Specify the behavior with a failing widget test before implementation.",
       "invariants": [
         { "id": "exit", "kind": "exit_code", "value": 0 },
         {
           "id": "target_changed",
           "kind": "git_diff_contains",
-          "value": "lib/presentation/widgets/page_scaffold.dart"
+          "value": "lib/presentation/widgets/page_scaffold.widget.dart"
         },
         {
           "id": "test_changed",
@@ -441,7 +441,7 @@
         {
           "id": "target_changed",
           "kind": "git_diff_contains",
-          "value": "lib/presentation/widgets/page_scaffold.dart"
+          "value": "lib/presentation/widgets/page_scaffold.widget.dart"
         },
         {
           "id": "controlled_api",

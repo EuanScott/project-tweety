@@ -6,12 +6,12 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
-import '../../extensions/modal_extension.dart';
-import '../../widgets/app_modal.dart';
-import '../../widgets/webview_modal.dart';
-import 'bloc/home_bloc.dart';
+import '../../extensions/modal.extension.dart';
+import '../../widgets/app_modal.widget.dart';
+import '../../widgets/webview_modal.widget.dart';
+import 'bloc/home.bloc.dart';
 
 part 'widgets/home_primary_actions.widget.dart';
 

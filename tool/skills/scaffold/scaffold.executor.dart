@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'scaffold.models.dart';
+import 'scaffold.model.dart';
 
 /// Applies rendered scaffold manifests to a supplied repository root.
 ///

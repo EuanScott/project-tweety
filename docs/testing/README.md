@@ -17,7 +17,7 @@ Flutter tooling rather than by convention.
 | `test_driver/` | The host machine, in a **separate process**, alongside the running app | `flutter drive --driver=…` | none — a plain Dart program |
 
 `integration_test/` must sit outside `test/` because a bare `flutter test` globs
-everything under `test/` and runs it on the host VM. `cards_sqlite_smoke_test.dart`
+everything under `test/` and runs it on the host VM. `cards_sqlite_smoke.flow_test.dart`
 needs a real device and real platform channels; inside `test/` it would be
 collected by every CI run and fail.
 
@@ -69,7 +69,7 @@ Plain `<name>_test.dart` is fine where no role applies.
 | Real SQLite on a real device, or persistence across a process relaunch | `testWidgets` with the integration binding | `integration_test/` |
 
 Note that a test named `*_integration_test.dart` under `test/` is not a device
-test — `test/core/storage/app_database_migration_integration_test.dart` runs on
+test — `test/core/storage/app_database_migration.flow_test.dart` runs on
 the host through `sqflite_common_ffi`.
 
 ## Dependency injection
@@ -143,13 +143,13 @@ flutter test
 One file:
 
 ```sh
-flutter test test/presentation/pages/cards/cards_editor_test.dart
+flutter test test/presentation/pages/cards/cards_editor.widget_test.dart
 ```
 
 One test by name:
 
 ```sh
-flutter test test/presentation/navigation/app_shell_test.dart \
+flutter test test/presentation/navigation/app_shell.flow_test.dart \
   --plain-name "explains denied settings deep links"
 ```
 
@@ -163,7 +163,7 @@ flutter test --coverage
 On a device, which CI does not do:
 
 ```sh
-flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>
+flutter test integration_test/cards_sqlite_smoke.flow_test.dart -d <device-id>
 ```
 
 Through the driver, for web:
@@ -172,7 +172,7 @@ Through the driver, for web:
 chromedriver --port=4444
 flutter drive \
   --driver=test_driver/integration_test.dart \
-  --target=integration_test/cards_sqlite_smoke_test.dart \
+  --target=integration_test/cards_sqlite_smoke.flow_test.dart \
   -d chrome
 ```
 

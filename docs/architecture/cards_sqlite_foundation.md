@@ -78,7 +78,7 @@ Android and iOS are supported for this iteration. Web and desktop database facto
 Run the checked-in smoke on a clean Android emulator or iOS Simulator:
 
 ```sh
-flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>
+flutter test integration_test/cards_sqlite_smoke.flow_test.dart -d <device-id>
 ```
 
 The first phase uses production DI to create, edit, acknowledge, edit again, and delete a stable
@@ -98,14 +98,14 @@ requires the hidden tombstone to still exist, acknowledges it, and removes the t
 adb uninstall dev.euanscott.projecttweety
 flutter drive \
   --driver=test_driver/integration_test.dart \
-  --target=integration_test/cards_sqlite_smoke_test.dart \
+  --target=integration_test/cards_sqlite_smoke.flow_test.dart \
   -d <device-id> \
   --dart-define=PRESERVE_SQLITE_SMOKE_TOMBSTONE=true \
   --keep-app-running
 adb -s <device-id> shell am force-stop dev.euanscott.projecttweety
 flutter build apk \
   --debug \
-  --target=integration_test/cards_sqlite_smoke_test.dart \
+  --target=integration_test/cards_sqlite_smoke.flow_test.dart \
   --dart-define=EXPECT_EXISTING_SQLITE_SMOKE_CARD=true
 adb -s <device-id> install -r build/app/outputs/flutter-apk/app-debug.apk
 adb -s <device-id> shell monkey -p dev.euanscott.projecttweety 1
@@ -117,7 +117,7 @@ adb -s <device-id> shell monkey -p dev.euanscott.projecttweety 1
 xcrun simctl uninstall <device-id> dev.euanscott.projecttweety
 flutter drive \
   --driver=test_driver/integration_test.dart \
-  --target=integration_test/cards_sqlite_smoke_test.dart \
+  --target=integration_test/cards_sqlite_smoke.flow_test.dart \
   -d <device-id> \
   --dart-define=PRESERVE_SQLITE_SMOKE_TOMBSTONE=true \
   --keep-app-running
@@ -126,7 +126,7 @@ flutter build ios \
   --simulator \
   --debug \
   --no-codesign \
-  --target=integration_test/cards_sqlite_smoke_test.dart \
+  --target=integration_test/cards_sqlite_smoke.flow_test.dart \
   --dart-define=EXPECT_EXISTING_SQLITE_SMOKE_CARD=true
 xcrun simctl install <device-id> build/ios/iphonesimulator/Runner.app
 xcrun simctl launch <device-id> dev.euanscott.projecttweety

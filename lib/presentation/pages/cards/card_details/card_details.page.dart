@@ -9,10 +9,10 @@ import 'package:project_tweety/data/repositories/card/cards.repository.dart'
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     show CardDraft, CardDraftField;
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
+import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/pages/cards/bloc/cards.bloc.dart';
-import 'package:project_tweety/presentation/pages/cards/draft_discard_guard.dart';
-import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
+import 'package:project_tweety/presentation/pages/cards/draft_discard_guard.widget.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 part 'widgets/card_details_body.widget.dart';
 part 'widgets/card_details_editor.widget.dart';

@@ -11,13 +11,13 @@ import 'package:project_tweety/data/repositories/card/cards.repository.dart'
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     show CardDraft, CardDraftField;
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/navigation/navigation_extensions.dart';
-import 'package:project_tweety/presentation/navigation/tabs/app_tab.dart';
-import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
+import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
+import 'package:project_tweety/presentation/navigation/tabs/app_tab.model.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 import 'bloc/cards.bloc.dart';
 import 'card_details/card_details.page.dart';
-import 'draft_discard_guard.dart';
+import 'draft_discard_guard.widget.dart';
 
 part 'widgets/cards_editor.widget.dart';
 part 'widgets/cards_empty.widget.dart';

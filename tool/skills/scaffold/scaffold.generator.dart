@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:dart_style/dart_style.dart';
 
-import '../../templates/feature_template_paths.dart';
-import 'scaffold.models.dart';
+import '../../templates/feature_template_paths.constants.dart';
+import 'scaffold.model.dart';
 
 /// Builds deterministic source manifests from this repository's `_template`.
 final class ScaffoldGenerator {

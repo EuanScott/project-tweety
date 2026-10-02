@@ -2,7 +2,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 import 'bloc/_template.bloc.dart';
 

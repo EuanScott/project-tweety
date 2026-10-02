@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
-import 'codex.events.dart';
+import 'codex_events.model.dart';
 import 'eval.comparator.dart';
 import 'eval.manifest.dart';
 import 'eval_invariant.evaluator.dart';

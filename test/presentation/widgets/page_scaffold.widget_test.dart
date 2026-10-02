@@ -4,7 +4,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:design_system/design_system.dart';
-import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 void main() {
   group('PageScaffold', () {

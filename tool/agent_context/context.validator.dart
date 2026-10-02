@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
-import '../templates/feature_template_paths.dart';
+import '../templates/feature_template_paths.constants.dart';
 
 const _sourceMapPath = 'docs/source_map.md';
 

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'scaffold.dart';
+import 'scaffold.executor.dart';
+import 'scaffold.generator.dart';
+import 'scaffold.model.dart';
 
 /// Command-line adapter for deterministic Project Tweety scaffolds.
 final class ScaffoldCli {

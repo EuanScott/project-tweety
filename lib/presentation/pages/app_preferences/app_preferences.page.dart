@@ -7,9 +7,9 @@ import 'package:project_tweety/core/platform/system_text_settings.service.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
     as app_preferences_entity;
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/widgets/page_scaffold.dart';
+import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
-import 'app_language_options.dart';
+import 'app_language_options.constants.dart';
 import 'cubit/app_preferences.cubit.dart';
 
 part 'widgets/app_preferences_content.widget.dart';

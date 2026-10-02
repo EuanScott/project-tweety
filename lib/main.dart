@@ -4,12 +4,12 @@ import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:project_tweety/core/analytics/analytics_facade.dart';
+import 'package:project_tweety/core/analytics/analytics.facade.dart';
 import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
     show AppPreferencesThemeMode;
-import 'package:project_tweety/presentation/navigation/routes.dart';
-import 'package:project_tweety/presentation/navigation/router.dart';
+import 'package:project_tweety/presentation/navigation/app_routes.constants.dart';
+import 'package:project_tweety/presentation/navigation/app.router.dart';
 import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_preferences.cubit.dart';
 
 import 'l10n/app_localizations.dart';

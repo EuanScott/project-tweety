@@ -422,15 +422,15 @@ Navigation uses **`go_router`** with a custom **`navigation`** package for tab-b
 
 ```
 lib/presentation/navigation/
-├── router.dart           # Main router configuration
-├── routes.dart          # Route paths and names
-├── route_access_policy.dart  # Route guard policies
-├── tabs/                # Tab configuration
-│   ├── app_tab.dart
-│   └── app_tab_config.dart
-└── analytics/          # Navigation analytics
-    ├── navigation_analytics_observer.dart
-    └── navigation_analytics_tracker.dart
+├── app.router.dart              # Main router configuration
+├── app_routes.constants.dart    # Route paths and names
+├── route_access.policy.dart     # Route guard policies
+├── tabs/                        # Tab configuration
+│   ├── app_tab.model.dart
+│   └── app_tab_configs.constants.dart
+└── analytics/                   # Navigation analytics
+    ├── navigation_analytics.observer.dart
+    └── navigation_analytics_tracker.service.dart
 ```
 
 ### Router Configuration
@@ -533,7 +533,7 @@ The database includes synchronization support even though Firestore sync is not 
 ### Testing
 
 - Native process-relaunch smoke test verifies persistence across actual Android/iOS process restart
-- Run with: `flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>`
+- Run with: `flutter test integration_test/cards_sqlite_smoke.flow_test.dart -d <device-id>`
 
 ---
 
@@ -555,7 +555,7 @@ class FeatureFlagService {
 
 ### Keys
 
-Defined in `lib/core/feature_flags/feature_flag_keys.dart`:
+Defined in `lib/core/feature_flags/feature_flag_keys.constants.dart`:
 
 ```dart
 class FeatureFlagKeys {

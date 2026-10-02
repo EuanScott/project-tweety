@@ -12,7 +12,7 @@ nearest `AGENTS.md`; for feature details, prefer the linked focused guide.
 
 ## Route, render, and reuse UI
 
-- [App navigation](../lib/presentation/navigation/router.dart) owns routes, page builders, access decisions, localization, and analytics wiring.
+- [App navigation](../lib/presentation/navigation/app.router.dart) owns routes, page builders, access decisions, localization, and analytics wiring.
 - [Navigation guide](../lib/presentation/navigation/README.md) explains the split with the reusable [navigation package](../packages/navigation/README.md).
 - [Design system](../packages/design_system/README.md) owns adaptive UI primitives, themes, and brand tokens; pages and shared widgets consume its public package API.
 - [Localization sources](../lib/l10n/) are ARB files; generated localization Dart remains derived output.

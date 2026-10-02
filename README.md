@@ -47,7 +47,7 @@ build. The rationale is [ADR-0010](docs/decisions/0010-pre-commit-analysis-and-c
 Native Android and iOS coverage remains an explicit device/simulator check:
 
 ```sh
-flutter test integration_test/cards_sqlite_smoke_test.dart -d <device-id>
+flutter test integration_test/cards_sqlite_smoke.flow_test.dart -d <device-id>
 ```
 
 See [the testing guide](docs/testing/README.md) for what belongs in `test/`,
