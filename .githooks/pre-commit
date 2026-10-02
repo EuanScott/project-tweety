@@ -1,11 +1,12 @@
 #!/bin/sh
 set -e
 
-echo "Validating agent context, skills, and ADRs..."
+echo "Validating agent context, skills, ADRs, and file names..."
 
 dart run tool/agent_context/validate.dart
 dart run tool/skills/validate.dart
 dart run tool/decisions/adr.dart check
+dart run tool/naming/naming.dart check
 
 # Paths mirror analyzer.exclude in analysis_options.yaml.
 staged=$(git diff --cached --name-only --diff-filter=ACMR -- '*.dart' \

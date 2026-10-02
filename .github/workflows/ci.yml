@@ -67,11 +67,12 @@ jobs:
       - name: Generate localization output
         run: flutter gen-l10n
 
-      - name: Validate agent context, skills, and ADRs
+      - name: Validate agent context, skills, ADRs, and file names
         run: |
           dart run tool/agent_context/validate.dart
           dart run tool/skills/validate.dart
           dart run tool/decisions/adr.dart check
+          dart run tool/naming/naming.dart check
 
       - name: Analyze
         run: flutter analyze --no-fatal-infos --no-pub
