@@ -1,8 +1,9 @@
 # ADR-0011: Dart file role vocabulary
 
-Status: accepted
+Status: superseded
 Date: 2026-10-02
 Decision maker: Euan Scott
+Superseded by: [ADR-0012](0012-dart-file-roles-with-di-modules.md)
 
 ## Context
 

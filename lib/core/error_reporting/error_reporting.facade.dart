@@ -49,12 +49,3 @@ class ErrorReportingFacade {
     );
   }
 }
-
-@module
-abstract class ErrorReportingModule {
-  @lazySingleton
-  Iterable<ErrorReportingService> errorReportingServices(
-    @Named('crashlytics') ErrorReportingService crashlytics,
-    @Named('coralogix') ErrorReportingService coralogix,
-  ) => <ErrorReportingService>[crashlytics, coralogix];
-}

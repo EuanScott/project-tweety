@@ -68,7 +68,7 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
 - Every hand-written Dart file in `lib/`, `test/`, `integration_test/` and
   `tool/` has a role from this closed list. `packages/` keep plain pub-style
   names. The rationale and the meaning of each role are in
-  [ADR-0011](docs/decisions/0011-dart-file-role-vocabulary.md).
+  [ADR-0012](docs/decisions/0012-dart-file-roles-with-di-modules.md).
   `tool/naming/naming.validator.dart` reads the roles between the markers
   below, so this list is the single source.
 <!-- naming-roles:start -->
@@ -76,9 +76,10 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
     `.entity`, `.dto`, `.repository`, `.repository_impl`, `.datasource`,
     `.usecase`
   - Support roles: `.service`, `.storage`, `.generator`, `.facade`,
-    `.observer`, `.policy`, `.extension`, `.router`, `.constants`, `.model`
-  - Tooling roles, `tool/` only: `.validator`, `.cli`, `.executor`,
-    `.evaluator`, `.comparator`, `.manifest`
+    `.module`, `.observer`, `.policy`, `.extension`, `.router`,
+    `.constants`, `.model`
+  - Tooling roles, `tool/` and `test/tool/` only: `.validator`, `.cli`,
+    `.executor`, `.evaluator`, `.comparator`, `.manifest`
   - Test role, before `_test` only: `.flow`
 <!-- naming-roles:end -->
 - `.model` is a plain value type or enum. Use `.entity` in `lib/domain` and

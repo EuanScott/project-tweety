@@ -39,11 +39,3 @@ class AnalyticsFacade(final Iterable<AnalyticsService> _services) {
     }
   }
 }
-
-@module
-abstract class AnalyticsModule {
-  @lazySingleton
-  Iterable<AnalyticsService> analyticsServices(
-    AnalyticsService firebaseAnalytics,
-  ) => <AnalyticsService>[firebaseAnalytics];
-}
