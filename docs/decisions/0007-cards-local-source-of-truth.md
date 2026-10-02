@@ -1,6 +1,6 @@
 # ADR-0007: Local SQLite remains the source of truth for Cards
 
-Status: proposed
+Status: accepted
 Date: 2026-09-09
 
 ## Context

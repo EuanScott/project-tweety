@@ -1,6 +1,6 @@
 # ADR-0008: Cards are owned by the signed-in Account
 
-Status: proposed
+Status: accepted
 Date: 2026-09-09
 Decision maker: Euan Scott
 
@@ -12,8 +12,8 @@ database creation. Introducing Google sign-in as a hard launch gate forces the
 question of who a Card belongs to, and what happens to the Cards already sitting on a
 device the first time someone signs in.
 
-The forces are fixed by decisions already made on
-[the map](https://github.com/EuanScott/project-tweety/issues/21):
+The forces are fixed by decisions already made while planning Google sign-in and
+per-Account Card sync to Firestore:
 
 - [ADR-0007](0007-cards-local-source-of-truth.md) puts truth in SQLite. Firestore is a
   driven replica, written by a person-initiated, push-only, best-effort sync.

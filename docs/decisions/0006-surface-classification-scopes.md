@@ -1,6 +1,6 @@
 # ADR-0006: Window and region surface classification are separate decisions
 
-Status: proposed
+Status: accepted
 Date: 2026-09-04
 Decision maker: Euan Scott
 

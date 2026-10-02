@@ -30,6 +30,11 @@ Date: YYYY-MM-DD
 lines. Supersession values use links such as
 `[ADR-0001](0001-short-title.md)`.
 
+An ADR stands on its own. Do not link to GitHub issues, pull requests, or the
+project board. Those links tie a durable record to a planning tool that changes.
+When a decision comes from earlier planning, describe that source in one short
+sentence instead. Links to other ADRs and to files in this repository are fine.
+
 `proposed` records are editable and ready for review. A human reviewer changes
 a proposal to `accepted` or `rejected`; accepted and rejected decision bodies
 are then immutable. A later accepted ADR may supersede an older one by adding
@@ -48,15 +53,15 @@ dart run tool/decisions/adr.dart generate-index
 <!-- adr-index:start -->
 | ID | Title | Status |
 |----|-------|--------|
-| [0001](0001-record-architecture-decisions.md) | Record architecture decisions | proposed |
-| [0002](0002-test-layer-conventions.md) | Test layer conventions | proposed |
+| [0001](0001-record-architecture-decisions.md) | Record architecture decisions | accepted |
+| [0002](0002-test-layer-conventions.md) | Test layer conventions | accepted |
 | [0003](0003-pre-commit-validator-enforcement.md) | Pre-commit validator enforcement | superseded → [0010](0010-pre-commit-analysis-and-ci-enforcement.md) |
-| [0004](0004-value-type-conventions.md) | Value type conventions | proposed |
-| [0005](0005-design-system-example-app-location.md) | design_system example app lives inside the package | proposed |
-| [0006](0006-surface-classification-scopes.md) | Window and region surface classification are separate decisions | proposed |
-| [0007](0007-cards-local-source-of-truth.md) | Local SQLite remains the source of truth for Cards | proposed |
-| [0008](0008-cards-are-owned-by-the-signed-in-account.md) | Cards are owned by the signed-in Account | proposed |
-| [0009](0009-conventional-commit-driven-versioning.md) | Conventional-commit-driven versioning | proposed |
+| [0004](0004-value-type-conventions.md) | Value type conventions | accepted |
+| [0005](0005-design-system-example-app-location.md) | design_system example app lives inside the package | accepted |
+| [0006](0006-surface-classification-scopes.md) | Window and region surface classification are separate decisions | accepted |
+| [0007](0007-cards-local-source-of-truth.md) | Local SQLite remains the source of truth for Cards | accepted |
+| [0008](0008-cards-are-owned-by-the-signed-in-account.md) | Cards are owned by the signed-in Account | accepted |
+| [0009](0009-conventional-commit-driven-versioning.md) | Conventional-commit-driven versioning | accepted |
 | [0010](0010-pre-commit-analysis-and-ci-enforcement.md) | Pre-commit analysis and CI enforcement | accepted |
 | [0011](0011-dart-file-role-vocabulary.md) | Dart file role vocabulary | superseded → [0012](0012-dart-file-roles-with-di-modules.md) |
 | [0012](0012-dart-file-roles-with-di-modules.md) | Dart file roles, with dependency-injection modules | accepted |

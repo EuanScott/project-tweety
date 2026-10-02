@@ -1,6 +1,6 @@
 # ADR-0002: Test layer conventions
 
-Status: proposed
+Status: accepted
 Date: 2026-08-07
 Decision maker: Euan Scott
 

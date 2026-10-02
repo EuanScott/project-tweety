@@ -1,6 +1,6 @@
 # ADR-0009: Conventional-commit-driven versioning
 
-Status: proposed
+Status: accepted
 Date: 2026-09-11
 Decision maker: Euan Scott
 

@@ -11,6 +11,8 @@ Date: YYYY-MM-DD
 
 What situation led to this decision? State facts, constraints, and forces
 neutrally.
+Describe any earlier planning in one sentence. Do not link to GitHub issues,
+pull requests, or the project board.
 
 ## Decision
 

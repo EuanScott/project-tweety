@@ -1,6 +1,6 @@
 # ADR-0004: Value type conventions
 
-Status: proposed
+Status: accepted
 Date: 2026-08-07
 Decision maker: Euan Scott
 

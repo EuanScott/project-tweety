@@ -1,6 +1,6 @@
 # ADR-0005: design_system example app lives inside the package
 
-Status: proposed
+Status: accepted
 Date: 2026-08-28
 Decision maker: Euan Scott
 

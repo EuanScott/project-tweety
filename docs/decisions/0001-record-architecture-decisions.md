@@ -1,6 +1,6 @@
 # ADR-0001: Record architecture decisions
 
-Status: proposed
+Status: accepted
 Date: 2026-07-17
 Decision maker: Euan Scott
 
