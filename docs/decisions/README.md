@@ -58,4 +58,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0008](0008-cards-are-owned-by-the-signed-in-account.md) | Cards are owned by the signed-in Account | proposed |
 | [0009](0009-conventional-commit-driven-versioning.md) | Conventional-commit-driven versioning | proposed |
 | [0010](0010-pre-commit-analysis-and-ci-enforcement.md) | Pre-commit analysis and CI enforcement | accepted |
+| [0011](0011-dart-file-role-vocabulary.md) | Dart file role vocabulary | accepted |
 <!-- adr-index:end -->

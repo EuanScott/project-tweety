@@ -65,22 +65,32 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
 
 - Standardize filenames on `feature_or_entity.role.dart`.
 - Use `_` inside the business name and `.` before the technical role.
-- Preferred role suffixes are:
-  - `.page.dart`
-  - `.widget.dart`
-  - `.bloc.dart`
-  - `.event.dart`
-  - `.state.dart`
-  - `.entity.dart`
-  - `.dto.dart`
-  - `.repository.dart`
-  - `.repository_impl.dart`
-  - `.datasource.dart`
-  - `.usecase.dart`
+- Every hand-written Dart file in `lib/`, `test/`, `integration_test/` and
+  `tool/` has a role from this closed list. `packages/` keep plain pub-style
+  names. The rationale and the meaning of each role are in
+  [ADR-0011](docs/decisions/0011-dart-file-role-vocabulary.md).
+  - Layer roles: `.page`, `.widget`, `.bloc`, `.cubit`, `.event`, `.state`,
+    `.entity`, `.dto`, `.repository`, `.repository_impl`, `.datasource`,
+    `.usecase`
+  - Support roles: `.service`, `.storage`, `.generator`, `.facade`,
+    `.observer`, `.policy`, `.extension`, `.router`, `.constants`, `.model`
+  - Tooling roles, `tool/` only: `.validator`, `.cli`, `.executor`,
+    `.evaluator`, `.comparator`, `.manifest`
+  - Test role, before `_test` only: `.flow`
+- `.model` is a plain value type or enum. Use `.entity` in `lib/domain` and
+  `.dto` in `lib/data` instead.
+- A file has exactly one role. Split a file that fits two roles.
+- These files need no role:
+  - Generated output: `*.g.dart`, `*.freezed.dart`, `*.config.dart` and
+    `lib/l10n/app_localizations*.dart`.
+  - Non-test files that declare a top-level `main`.
+  - `lib/dart_init.dart` and `lib/core/di/dependency_injection.dart`.
+  - Everything under `test/support/`.
 - Test files always end `_test.dart`, singular. The Dart runner globs exactly
-  that, so a file named `_tests.dart` is silently never collected. Combine the
-  role suffix with it where a role applies: `cards.bloc_test.dart`,
-  `app_modal.widget_test.dart`.
+  that, so a file named `_tests.dart` is silently never collected. A test of
+  one file mirrors that file's name: `cards.bloc_test.dart`,
+  `app_modal.widget_test.dart`. A test that drives several units uses the
+  `flow` role: `cards_navigation.flow_test.dart`.
 
 ### Value Types & Comments
 
