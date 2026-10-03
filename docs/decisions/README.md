@@ -65,4 +65,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0010](0010-pre-commit-analysis-and-ci-enforcement.md) | Pre-commit analysis and CI enforcement | accepted |
 | [0011](0011-dart-file-role-vocabulary.md) | Dart file role vocabulary | superseded → [0012](0012-dart-file-roles-with-di-modules.md) |
 | [0012](0012-dart-file-roles-with-di-modules.md) | Dart file roles, with dependency-injection modules | accepted |
+| [0013](0013-firebase-config-committed-with-restricted-keys.md) | Firebase config is committed, and its API keys are restricted to the app's identity | accepted |
 <!-- adr-index:end -->
