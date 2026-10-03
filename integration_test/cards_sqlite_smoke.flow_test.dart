@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:project_tweety/core/storage/app_database.storage.dart';
 import 'package:project_tweety/dart_init.dart';
+import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
 import 'package:project_tweety/data/datasources/card/cards.datasource.dart';
 import 'package:project_tweety/data/dtos/card/card.dto.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart';
@@ -171,6 +172,9 @@ Future<void> _verifyProcessRelaunch(WidgetTester tester) async {
 }
 
 Future<void> _verifyListAndDetailFlow(WidgetTester tester, Card card) async {
+  // The launch gate keeps a signed-out person on sign-in; this smoke test is
+  // about Cards, so it signs in through the app's own identity source first.
+  await GetIt.I<AuthRepository>().signInWithGoogle();
   await tester.pumpWidget(const MyApp(initialLocation: AppRoutes.cardsPath));
   await tester.pumpAndSettle();
 

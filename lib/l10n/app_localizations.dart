@@ -513,6 +513,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get appPreferencesRetry;
+
+  /// Subtitle under the app name on the compact sign-in page
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to keep your Cards and back them up.'**
+  String get signInCompactSubtitle;
+
+  /// Subtitle over the illustration on the split sign-in page
+  ///
+  /// In en, this message translates to:
+  /// **'Your Cards, on this device and backed up when you choose.'**
+  String get signInSceneSubtitle;
+
+  /// Heading above the sign-in button on the split sign-in page
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get signInSplitTitle;
+
+  /// Subtitle under the heading on the split sign-in page
+  ///
+  /// In en, this message translates to:
+  /// **'Use your Google Account to continue.'**
+  String get signInSplitSubtitle;
+
+  /// Label of the Google sign-in button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get signInGoogleButton;
+
+  /// Label of the Google sign-in button while a sign-in attempt is in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in…'**
+  String get signInGoogleButtonInProgress;
+
+  /// Title of the message shown when a sign-in attempt fails
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in didn\'t work'**
+  String get signInErrorTitle;
+
+  /// Body of the sign-in failure message when the network failed
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection and try again.'**
+  String get signInErrorNetwork;
+
+  /// Body of the sign-in failure message for any failure other than the network
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get signInErrorOther;
+
+  /// Footnote under the sign-in button
+  ///
+  /// In en, this message translates to:
+  /// **'Your Cards stay on this device until you sync them.'**
+  String get signInFootnote;
+
+  /// Screen reader description of the sign-in illustration
+  ///
+  /// In en, this message translates to:
+  /// **'Dash, a blue bird in a green hoodie, wading in teal water and holding up a card.'**
+  String get signInSceneDescription;
 }
 
 class _AppLocalizationsDelegate

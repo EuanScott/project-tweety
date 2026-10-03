@@ -232,4 +232,41 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get appPreferencesRetry => 'נסה שוב';
+
+  @override
+  String get signInCompactSubtitle =>
+      'התחבר כדי לשמור את הכרטיסים שלך ולגבות אותם.';
+
+  @override
+  String get signInSceneSubtitle =>
+      'הכרטיסים שלך, במכשיר הזה ומגובים מתי שתבחר.';
+
+  @override
+  String get signInSplitTitle => 'כניסה';
+
+  @override
+  String get signInSplitSubtitle => 'השתמש בחשבון Google שלך כדי להמשיך.';
+
+  @override
+  String get signInGoogleButton => 'כניסה באמצעות Google';
+
+  @override
+  String get signInGoogleButtonInProgress => 'מתחבר…';
+
+  @override
+  String get signInErrorTitle => 'הכניסה לא הצליחה';
+
+  @override
+  String get signInErrorNetwork => 'בדוק את החיבור שלך ונסה שוב.';
+
+  @override
+  String get signInErrorOther => 'משהו השתבש. נסה שוב.';
+
+  @override
+  String get signInFootnote =>
+      'הכרטיסים שלך נשארים במכשיר הזה עד שתסנכרן אותם.';
+
+  @override
+  String get signInSceneDescription =>
+      'דאש, ציפור כחולה בקפוצ\'ון ירוק, משכשך במים בצבע טורקיז ומחזיק כרטיס.';
 }

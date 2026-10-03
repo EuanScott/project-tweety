@@ -57,6 +57,13 @@ permanent for the life of the Card and is not something a person can see or
 change in the app. A Card whose owner is not the signed-in Account is not
 visible, not editable, and not synced.
 
+## Adoption
+
+**Adoption** is the one-time event where the first Account to use Cards on a
+device becomes the owner of every Card already there. An adopted Card counts as
+never synced, so the next sync pushes it.
+_Avoid_: claiming, migration.
+
 ## Profile
 
 A **Profile** is the display details of an Account — name, email, and photo.

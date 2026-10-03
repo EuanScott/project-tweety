@@ -217,5 +217,49 @@
   "appPreferencesRetry": "Retry",
   "@appPreferencesRetry": {
     "description": "Retry button label for app preferences loading"
+  },
+  "signInCompactSubtitle": "Sign in to keep your Cards and back them up.",
+  "@signInCompactSubtitle": {
+    "description": "Subtitle under the app name on the compact sign-in page"
+  },
+  "signInSceneSubtitle": "Your Cards, on this device and backed up when you choose.",
+  "@signInSceneSubtitle": {
+    "description": "Subtitle over the illustration on the split sign-in page"
+  },
+  "signInSplitTitle": "Sign in",
+  "@signInSplitTitle": {
+    "description": "Heading above the sign-in button on the split sign-in page"
+  },
+  "signInSplitSubtitle": "Use your Google Account to continue.",
+  "@signInSplitSubtitle": {
+    "description": "Subtitle under the heading on the split sign-in page"
+  },
+  "signInGoogleButton": "Sign in with Google",
+  "@signInGoogleButton": {
+    "description": "Label of the Google sign-in button"
+  },
+  "signInGoogleButtonInProgress": "Signing in…",
+  "@signInGoogleButtonInProgress": {
+    "description": "Label of the Google sign-in button while a sign-in attempt is in progress"
+  },
+  "signInErrorTitle": "Sign-in didn't work",
+  "@signInErrorTitle": {
+    "description": "Title of the message shown when a sign-in attempt fails"
+  },
+  "signInErrorNetwork": "Check your connection and try again.",
+  "@signInErrorNetwork": {
+    "description": "Body of the sign-in failure message when the network failed"
+  },
+  "signInErrorOther": "Something went wrong. Please try again.",
+  "@signInErrorOther": {
+    "description": "Body of the sign-in failure message for any failure other than the network"
+  },
+  "signInFootnote": "Your Cards stay on this device until you sync them.",
+  "@signInFootnote": {
+    "description": "Footnote under the sign-in button"
+  },
+  "signInSceneDescription": "Dash, a blue bird in a green hoodie, wading in teal water and holding up a card.",
+  "@signInSceneDescription": {
+    "description": "Screen reader description of the sign-in illustration"
   }
 }

@@ -237,4 +237,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appPreferencesRetry => 'Retry';
+
+  @override
+  String get signInCompactSubtitle =>
+      'Sign in to keep your Cards and back them up.';
+
+  @override
+  String get signInSceneSubtitle =>
+      'Your Cards, on this device and backed up when you choose.';
+
+  @override
+  String get signInSplitTitle => 'Sign in';
+
+  @override
+  String get signInSplitSubtitle => 'Use your Google Account to continue.';
+
+  @override
+  String get signInGoogleButton => 'Sign in with Google';
+
+  @override
+  String get signInGoogleButtonInProgress => 'Signing in…';
+
+  @override
+  String get signInErrorTitle => 'Sign-in didn\'t work';
+
+  @override
+  String get signInErrorNetwork => 'Check your connection and try again.';
+
+  @override
+  String get signInErrorOther => 'Something went wrong. Please try again.';
+
+  @override
+  String get signInFootnote =>
+      'Your Cards stay on this device until you sync them.';
+
+  @override
+  String get signInSceneDescription =>
+      'Dash, a blue bird in a green hoodie, wading in teal water and holding up a card.';
 }

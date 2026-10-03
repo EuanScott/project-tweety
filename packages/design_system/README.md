@@ -28,6 +28,7 @@ copying code.
 - `DesignSystemTheme.dark(...)`
 - `DesignBrand`
 - `DesignBrands`
+- `AppGoogleSignInButton`, the official "Sign in with Google" button
 
 ## Usage
 
@@ -72,14 +73,36 @@ Current bundled brands:
 ## Adding a new brand
 
 1. Create a new `DesignBrand` in `lib/src/theme/design_brands.dart`
-2. Supply the required brand tokens
+2. Supply the required brand tokens. `primary`, `onPrimary`, `secondary` and
+   `onSecondary` each have a light and a dark value, so each theme can pass
+   contrast. Give the same value to both when a brand needs no change.
+   `onError` is its own token, because a dark `onPrimary` can fail contrast on
+   the error red. `errorContainer` and `onErrorContainer` colour inline error
+   messages in each theme.
 3. Pass that brand into `DesignSystemTheme.light(...)` and `DesignSystemTheme.dark(...)`
+
+## Branded controls
+
+A branded control looks the same on Material and Cupertino, because a third
+party owns its look. `AppGoogleSignInButton` follows Google's branding
+guidelines: colours, Google Sans Medium 14/20, a 1 px border, and the side
+padding Google specifies for Android and for iOS. Only the press feedback
+follows the platform.
+
+The "G" mark in `assets/google/` comes unchanged from Google's sign-in asset
+kit (<https://developers.google.com/identity/branding-guidelines>). The kit
+draws the mark with effects that Flutter cannot render from SVG, so the asset
+is the kit's PNG renders at 1x to 4x. Its transparency is recovered by
+comparing the kit's light-tile and dark-tile renders of the same mark. Do not
+redraw or recolour it.
 
 ## Package structure
 
 ```text
 lib/
   design_system.dart
+  src/branded/
+    app_google_sign_in_button.dart
   src/theme/
     design_brand.dart
     design_brands.dart

@@ -64,6 +64,39 @@ void main() {
       );
     });
 
+    testWidgets(
+      'renders extra routes outside the tab shell and re-runs the redirect '
+      'when the refresh listenable notifies',
+      (tester) async {
+        final isGated = ValueNotifier(true);
+        addTearDown(isGated.dispose);
+
+        await _pumpRouter(
+          tester,
+          surfaceSize: const Size(500, 800),
+          routes: [_route('/gate')],
+          redirect: (context, state) {
+            final isOnGate = state.matchedLocation == '/gate';
+            if (isGated.value) {
+              return isOnGate ? null : '/gate';
+            }
+
+            return isOnGate ? '/settings' : null;
+          },
+          refreshListenable: isGated,
+        );
+
+        expect(find.text('/gate'), findsOneWidget);
+        expect(find.byType(NavigationBar), findsNothing);
+
+        isGated.value = false;
+        await tester.pumpAndSettle();
+
+        expect(find.text('/settings'), findsOneWidget);
+        expect(find.byType(NavigationBar), findsOneWidget);
+      },
+    );
+
     testWidgets('renders a bottom navigation bar at compact width', (
       tester,
     ) async {
@@ -250,6 +283,9 @@ Future<void> _pumpRouter(
   WidgetTester tester, {
   required Size surfaceSize,
   TargetPlatform platform = TargetPlatform.android,
+  List<RouteBase> routes = const [],
+  GoRouterRedirect? redirect,
+  Listenable? refreshListenable,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -270,6 +306,9 @@ Future<void> _pumpRouter(
       ),
     ],
     errorBuilder: _errorBuilder,
+    routes: routes,
+    redirect: redirect,
+    refreshListenable: refreshListenable,
   );
   addTearDown(router.dispose);
 

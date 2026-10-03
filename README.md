@@ -6,6 +6,19 @@
 A playground project to try out some ideas and work on some blockers that I face in my day job. I'm not really building
 anything to serve a purpose here.
 
+## What I'm building
+
+Cards that live on your device and back up to the cloud when you choose, behind a Google sign-in. Dash wades through a
+layered water scene that turns from day to night with the system theme.
+
+<p align="center">
+  <img src="docs/design/images/sign_in_light.png" alt="Sign-in screen in light mode: Dash wading in teal water under a daytime sky, above the Project Tweety title and a Sign in with Google button" width="300">
+  &nbsp;&nbsp;
+  <img src="docs/design/images/sign_in_dark.png" alt="Sign-in screen in dark mode: the same scene at night with a crescent moon and stars" width="300">
+</p>
+
+<p align="center"><sub>Sign-in screen design, light and dark. See the <a href="docs/design/visual_style.md">visual style guide</a>.</sub></p>
+
 ## Development Style
 
 Historically, I've always used [Git FLow](https://www.gitkraken.com/learn/git/git-flow), specifically at work. However,

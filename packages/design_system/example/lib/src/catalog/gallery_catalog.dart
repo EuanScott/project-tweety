@@ -1,5 +1,6 @@
 import '../showcases/app_button_showcase.dart';
 import '../showcases/app_confirmation_dialog_showcase.dart';
+import '../showcases/app_google_sign_in_button_showcase.dart';
 import '../showcases/app_icon_button_showcase.dart';
 import '../showcases/app_list_tile_showcase.dart';
 import '../showcases/app_loading_indicator_showcase.dart';
@@ -24,6 +25,12 @@ final List<GalleryEntry> galleryCatalog = [
     label: 'AppIconButton',
     category: .actions,
     showcaseBuilder: (context) => const AppIconButtonShowcase(),
+  ),
+  GalleryEntry(
+    id: 'app_google_sign_in_button',
+    label: 'AppGoogleSignInButton',
+    category: .actions,
+    showcaseBuilder: (context) => const AppGoogleSignInButtonShowcase(),
   ),
   GalleryEntry(
     id: 'app_text_field',

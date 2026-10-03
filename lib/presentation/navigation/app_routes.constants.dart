@@ -8,6 +8,9 @@ class AppRoutes {
   /// Entry location that redirects to [homePath].
   static const rootPath = '/';
 
+  /// Named route for the sign-in page, outside the tab shell.
+  static const signInName = 'signIn';
+
   /// Named route for the home tab root.
   static const homeName = 'home';
 
@@ -28,6 +31,13 @@ class AppRoutes {
 
   /// Named route for the display and language settings page.
   static const settingsAppPreferencesName = 'settingsAppPreferences';
+
+  /// Absolute path for the sign-in page.
+  static const signInPath = '/sign-in';
+
+  /// Query parameter on [signInPath] that carries the location the person
+  /// asked for, so the gate can take them there after they sign in.
+  static const signInFromParameter = 'from';
 
   /// Absolute path for the home tab root.
   static const homePath = '/home';

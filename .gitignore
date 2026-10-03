@@ -53,3 +53,6 @@ coverage/
 
 # Agent worktrees
 .claude/worktrees/
+
+# flutter_gen output, regenerated from pubspec assets
+lib/gen/

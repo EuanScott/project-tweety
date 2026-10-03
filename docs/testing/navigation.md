@@ -85,6 +85,19 @@ verify router-level paths once Flutter receives a location.
 When platform links are added, extend this guide with concrete `adb shell am
 start` and `xcrun simctl openurl` commands for the chosen scheme or domain.
 
+## Launch Gate
+
+`test/presentation/navigation/sign_in_gate.flow_test.dart` drives `MyApp`
+through the gate: signed out at launch, a deep link carried through sign-in,
+Home after signing in from the root, and back to sign-in after signing out.
+`route_access.policy_test.dart` covers every row of the decision, including a
+carried location that is not an in-app path.
+
+The harness registers a signed-in `FakeAuthRepository`, so other `MyApp` tests
+start inside the app. Pass `session: const Session.signedOut()` to `pumpApp` to
+start at the gate, or register your own fake with `replaceAuthRepository` and
+call `emit` to change the Session mid-test.
+
 ## Guard Rule Of Thumb
 
 Redirect users to the route that helps them recover:

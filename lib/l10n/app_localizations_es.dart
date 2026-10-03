@@ -242,4 +242,42 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get appPreferencesRetry => 'Reintentar';
+
+  @override
+  String get signInCompactSubtitle =>
+      'Inicia sesión para conservar tus Tarjetas y hacer una copia de seguridad.';
+
+  @override
+  String get signInSceneSubtitle =>
+      'Tus Tarjetas, en este dispositivo y con copia de seguridad cuando tú decidas.';
+
+  @override
+  String get signInSplitTitle => 'Iniciar sesión';
+
+  @override
+  String get signInSplitSubtitle => 'Usa tu cuenta de Google para continuar.';
+
+  @override
+  String get signInGoogleButton => 'Iniciar sesión con Google';
+
+  @override
+  String get signInGoogleButtonInProgress => 'Iniciando sesión…';
+
+  @override
+  String get signInErrorTitle => 'No se pudo iniciar sesión';
+
+  @override
+  String get signInErrorNetwork =>
+      'Comprueba tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get signInErrorOther => 'Algo salió mal. Inténtalo de nuevo.';
+
+  @override
+  String get signInFootnote =>
+      'Tus Tarjetas se quedan en este dispositivo hasta que las sincronices.';
+
+  @override
+  String get signInSceneDescription =>
+      'Dash, un pájaro azul con una sudadera verde, vadeando en agua turquesa y sosteniendo una tarjeta.';
 }

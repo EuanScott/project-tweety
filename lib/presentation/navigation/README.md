@@ -43,6 +43,24 @@ as `/settings/app-preferences` and `/cards/:cardId` can be opened directly.
 Widget tests exercise this with `MyApp(initialLocation: ...)`. Platform-level
 Android and iOS link registration is not configured yet.
 
+## Launch Gate
+
+A person who is signed out cannot reach the app. The gate is the router's
+top-level redirect, not a widget above the router and not per-route guards:
+
+- `RouteAccessPolicy.sessionAccessDecision` decides, from the Session and the
+  requested location, whether to allow it or redirect.
+- Signed out, the gate sends every location to `/sign-in?from=<location>`.
+  Signed in, it sends `/sign-in` to the carried location, or Home when there
+  is none or it is not an in-app path.
+- `SessionNotifier` gives the redirect the current Session and re-runs it each
+  time the Session changes, through `refreshListenable`. `MyApp` owns it and
+  disposes it with the router.
+- `/sign-in` sits beside the tab shell, so it renders without tabs.
+
+The sign-in page never navigates. Signing in changes the Session, and the gate
+moves the person on.
+
 ## Route Guards
 
 Route guards live in `app.router.dart` on the `GoRoute` definitions. Pages should
@@ -65,7 +83,8 @@ When `CAN_ACCESS_SETTINGS` is `false`, these routes redirect to
 It is not the right destination for every guard failure. When a user can resolve
 the blocked condition, redirect them to the journey that resolves it instead:
 
-- signed out user: redirect to login and preserve the intended route
+- signed out user: redirect to sign-in and preserve the intended route (the
+  launch gate above does this)
 - incomplete profile: redirect to profile completion and preserve the intended route
 - missing role or entitlement: show access denied, request access, or upgrade flow
 - unknown auth state: show a loading/splash gate, then re-evaluate

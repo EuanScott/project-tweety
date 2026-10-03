@@ -15,6 +15,10 @@ source folder.
 - [Cards SQLite persistence](architecture/cards_sqlite_foundation.md)
 - [Cards context](CONTEXT.md)
 
+## Design
+
+- [Tweety visual style](design/visual_style.md)
+
 ## Decisions
 
 - [Architecture Decision Records](decisions/README.md)
@@ -23,6 +27,7 @@ source folder.
 
 - [SQLite cards app persistence](plans/cards_sqlite_data_layer.md)
 - [Complete Cards SQLite integration](plans/cards_sqlite_end_to_end_integration.md)
+- [Sign-in page and launch gate](plans/sign_in_implementation.md)
 
 ## Research
 

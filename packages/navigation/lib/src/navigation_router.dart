@@ -6,6 +6,10 @@ import 'package:navigation/src/navigation_shell.dart';
 import 'package:navigation/src/navigation_tab_config.dart';
 
 /// Creates a configured tab-shell [GoRouter].
+///
+/// [routes] sit beside the tab shell, so they render without tabs. [redirect]
+/// is the router's top-level redirect, and [refreshListenable] re-runs it
+/// whenever it notifies.
 GoRouter createNavigationRouter<TTab extends Object>({
   required String initialLocation,
   required String rootPath,
@@ -18,6 +22,9 @@ GoRouter createNavigationRouter<TTab extends Object>({
   String? shellRestorationScopeId,
   List<NavigatorObserver>? observers,
   ValueChanged<String>? onTabRouteSelected,
+  List<RouteBase> routes = const [],
+  GoRouterRedirect? redirect,
+  Listenable? refreshListenable,
 }) {
   _validateRouterConfig(tabs: tabs, branches: branches);
 
@@ -33,9 +40,12 @@ GoRouter createNavigationRouter<TTab extends Object>({
     initialLocation: initialLocation,
     restorationScopeId: restorationScopeId,
     observers: observers,
+    redirect: redirect,
+    refreshListenable: refreshListenable,
     errorBuilder: (context, state) => errorBuilder(context, state.error),
     routes: [
       GoRoute(path: rootPath, redirect: (context, state) => rootRedirectPath),
+      ...routes,
       StatefulShellRoute.indexedStack(
         restorationScopeId: shellRestorationScopeId,
         builder: (context, state, navigationShell) {

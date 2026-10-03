@@ -67,6 +67,20 @@ createNavigationRouter<AppTab>(
 );
 ```
 
+Routes that must render without tabs, such as a sign-in page, go in `routes`.
+They sit beside the tab shell. A top-level `redirect` decides where each
+location may go, and `refreshListenable` re-runs that redirect when the app's
+state changes. The package does not know what the state means:
+
+```dart
+createNavigationRouter<AppTab>(
+  // ...
+  routes: [signInRoute],
+  redirect: (context, state) => accessPolicy.decide(state.uri),
+  refreshListenable: sessionListenable,
+);
+```
+
 ## Adaptive Shell
 
 `NavigationShell<TTab>` uses the width available to the shell:

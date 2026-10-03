@@ -92,8 +92,9 @@ than open-coding the reset cycle.
 
 - `app_harness.dart` — `useAppHarness()` registers the `setUp`/`tearDown` pair
   (in-memory shared preferences, the system-text-settings channel stub, a real
-  DI container with a working cards fake). `pumpApp(tester, …)` renders `MyApp`
-  at a chosen surface size, locale, platform, and brightness.
+  DI container with a working cards fake, a signed-in auth fake, and a tilt
+  fake). `pumpApp(tester, …)` renders `MyApp` at a chosen surface size, locale,
+  platform, brightness, and Session.
   `currentRoutePath(tester)` reads the active `go_router` location.
 - `fake_cards_repository.dart` — one configurable `FakeCardsRepository` backed by
   a mutable list. Pass `readError`, `createError`, `updateError`, or
@@ -103,6 +104,14 @@ than open-coding the reset cycle.
   failure, for tests asserting that details derive from the loaded collection.
   `FakeCardsRepository.gated()` leaves writes pending until the test completes
   them, for asserting in-flight state.
+- `fake_auth_repository.dart` — `FakeAuthRepository`, signed in by default
+  so `MyApp` tests pass the launch gate. Set `signInResult` to choose what
+  sign-in returns, pass a `Completer` as `pendingSignIn` to hold an attempt
+  open, and call `emit` to change the Session mid-test. `pumpApp(session: …)`
+  sets the Session of the registered fake before the app starts.
+- `fake_device_tilt_service.dart` — `FakeDeviceTiltService`, so the sign-in
+  scene never reaches the device sensors. Call `tilt` to move the scene, and
+  read `isListening` to check that the sensors would be on.
 - `fake_app_preferences_repository.dart` — `FakeAppPreferencesRepository`, which
   records every save in `savedPreferences`.
 - `in_memory_shared_preferences_async_platform.dart` — the platform fake behind

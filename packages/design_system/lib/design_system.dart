@@ -17,6 +17,7 @@ export 'src/adaptive/app_refresh_indicator.dart';
 export 'src/adaptive/app_segmented_control.dart';
 export 'src/adaptive/app_switch.dart';
 export 'src/adaptive/app_text_field.dart';
+export 'src/branded/app_google_sign_in_button.dart';
 export 'src/theme/components/design_system_bottom_sheet_theme.dart';
 export 'src/theme/design_brand.dart';
 export 'src/theme/design_brands.dart';

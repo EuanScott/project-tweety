@@ -6,11 +6,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_tweety/core/di/dependency_injection.dart';
+import 'package:project_tweety/core/platform/device_tilt.service.dart';
+import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
+import 'package:project_tweety/data/repositories/auth/session.model.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart';
 import 'package:project_tweety/main.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
+import 'fake_auth_repository.dart';
 import 'fake_cards_repository.dart';
+import 'fake_device_tilt_service.dart';
 import 'in_memory_shared_preferences_async_platform.dart';
 
 const systemTextSettingsChannel = MethodChannel(
@@ -22,6 +27,9 @@ const systemTextSettingsChannel = MethodChannel(
 /// Installs in-memory shared preferences, stubs the system text settings
 /// channel, builds a real DI container, and swaps in a working
 /// [FakeCardsRepository] so tests that do not care about cards still render.
+/// It also swaps in a signed-in [FakeAuthRepository], so the launch gate lets
+/// tests into the app, and a [FakeDeviceTiltService], so the sign-in scene
+/// never reaches the sensors.
 ///
 /// Call once at the top of a `group`.
 void useAppHarness() {
@@ -40,6 +48,10 @@ void useAppHarness() {
     await configureCoreDependencies();
     await GetIt.I.unregister<CardsRepository>();
     GetIt.I.registerLazySingleton<CardsRepository>(FakeCardsRepository.new);
+    await GetIt.I.unregister<AuthRepository>();
+    GetIt.I.registerSingleton<AuthRepository>(FakeAuthRepository());
+    await GetIt.I.unregister<DeviceTiltService>();
+    GetIt.I.registerSingleton<DeviceTiltService>(FakeDeviceTiltService());
   });
 
   tearDown(() async {
@@ -52,22 +64,31 @@ void useAppHarness() {
 /// Pumps the whole app at [surfaceSize].
 ///
 /// [padding] and [displayFeatures] describe the device the app is running on:
-/// safe-area insets and any fold or hinge. Both reach layout code that
+/// safe-area insets and any fold or hinge. [disableAnimations] is the system
+/// Reduce Motion setting. Both reach layout code that
 /// classifies the surface, so adaptive behaviour can be driven from here rather
 /// than only at the widget level.
+///
+/// [session] sets the Session of the registered [FakeAuthRepository] before
+/// the app starts; leave it null to keep the fake's own Session.
 Future<void> pumpApp(
   WidgetTester tester, {
   Size surfaceSize = const Size(400, 800),
   String? initialLocation,
   bool canAccessSettings = true,
+  Session? session,
   Brightness platformBrightness = Brightness.light,
   EdgeInsets padding = EdgeInsets.zero,
   List<DisplayFeature> displayFeatures = const [],
+  bool disableAnimations = false,
   TargetPlatform? platform,
   bool settle = true,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
+  if (session != null) {
+    (GetIt.I<AuthRepository>() as FakeAuthRepository).session = session;
+  }
 
   await tester.pumpWidget(
     MediaQuery(
@@ -76,6 +97,7 @@ Future<void> pumpApp(
         platformBrightness: platformBrightness,
         padding: padding,
         displayFeatures: displayFeatures,
+        disableAnimations: disableAnimations,
       ),
       child: MyApp(
         initialLocation: initialLocation,

@@ -11,6 +11,7 @@ import 'package:project_tweety/presentation/navigation/analytics/navigation_anal
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/navigation/route_access.policy.dart';
+import 'package:project_tweety/presentation/navigation/session_notifier.service.dart';
 import 'package:project_tweety/presentation/navigation/app_routes.constants.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.model.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab_configs.constants.dart';
@@ -20,13 +21,19 @@ import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
 import 'package:project_tweety/presentation/pages/cards/bloc/cards.bloc.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
+import 'package:project_tweety/presentation/pages/sign_in/sign_in.page.dart';
 
 /// Creates the app's configured [GoRouter].
 ///
 /// App bootstrap owns this object so the router survives theme and locale
 /// rebuilds. [initialLocation] is exposed for deep-link widget tests, while
 /// [analyticsFacade] is optional so the router can be tested without analytics.
+///
+/// [session] drives the launch gate: a top-level redirect that keeps signed-out
+/// people on sign-in, re-run each time the Session changes. The caller owns
+/// [session] and disposes it with the router.
 GoRouter createRouter({
+  required SessionNotifier session,
   String initialLocation = AppRoutes.rootPath,
   AnalyticsFacade? analyticsFacade,
   bool canAccessSettings = true,
@@ -43,6 +50,21 @@ GoRouter createRouter({
     rootPath: AppRoutes.rootPath,
     rootRedirectPath: AppRoutes.homePath,
     tabs: appTabConfigs,
+    routes: [
+      GoRoute(
+        path: AppRoutes.signInPath,
+        name: AppRoutes.signInName,
+        pageBuilder: (context, state) => _platformPage(
+          state,
+          const SignInPage(),
+          Theme.of(context).platform,
+        ),
+      ),
+    ],
+    redirect: (context, state) => routeAccessPolicy
+        .sessionAccessDecision(session: session.session, location: state.uri)
+        .redirectPath,
+    refreshListenable: session,
     branches: [
       NavigationBranch<AppTab>(
         tab: AppTab.home,
@@ -157,9 +179,19 @@ Page<void> _cardsPage(BuildContext context, GoRouterState state, Widget child) {
     );
   }
 
-  return switch (Theme.of(context).platform) {
-    TargetPlatform.iOS ||
-    TargetPlatform.macOS => CupertinoPage<void>(key: state.pageKey, child: child),
+  return _platformPage(state, child, Theme.of(context).platform);
+}
+
+Page<void> _platformPage(
+  GoRouterState state,
+  Widget child,
+  TargetPlatform platform,
+) {
+  return switch (platform) {
+    TargetPlatform.iOS || TargetPlatform.macOS => CupertinoPage<void>(
+      key: state.pageKey,
+      child: child,
+    ),
     _ => MaterialPage<void>(key: state.pageKey, child: child),
   };
 }

@@ -67,5 +67,16 @@
   "appPreferencesSystemTextDescription": "Usa la configuración del dispositivo para opciones como el tamaño del texto y el texto en negrita.",
   "appPreferencesSystemTextButton": "Abrir configuración",
   "appPreferencesSystemTextOpenFailed": "No se pudo abrir la configuración en este dispositivo.",
-  "appPreferencesRetry": "Reintentar"
+  "appPreferencesRetry": "Reintentar",
+  "signInCompactSubtitle": "Inicia sesión para conservar tus Tarjetas y hacer una copia de seguridad.",
+  "signInSceneSubtitle": "Tus Tarjetas, en este dispositivo y con copia de seguridad cuando tú decidas.",
+  "signInSplitTitle": "Iniciar sesión",
+  "signInSplitSubtitle": "Usa tu cuenta de Google para continuar.",
+  "signInGoogleButton": "Iniciar sesión con Google",
+  "signInGoogleButtonInProgress": "Iniciando sesión…",
+  "signInErrorTitle": "No se pudo iniciar sesión",
+  "signInErrorNetwork": "Comprueba tu conexión e inténtalo de nuevo.",
+  "signInErrorOther": "Algo salió mal. Inténtalo de nuevo.",
+  "signInFootnote": "Tus Tarjetas se quedan en este dispositivo hasta que las sincronices.",
+  "signInSceneDescription": "Dash, un pájaro azul con una sudadera verde, vadeando en agua turquesa y sosteniendo una tarjeta."
 }

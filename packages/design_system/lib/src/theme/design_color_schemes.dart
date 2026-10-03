@@ -9,12 +9,14 @@ class DesignColorSchemes {
   /// Builds the light-mode color scheme for a given [brand].
   static ColorScheme light(DesignBrand brand) {
     return ColorScheme.light(
-      primary: brand.primary,
-      onPrimary: brand.onPrimary,
-      secondary: brand.secondary,
-      onSecondary: brand.onSecondary,
+      primary: brand.primaryLight,
+      onPrimary: brand.onPrimaryLight,
+      secondary: brand.secondaryLight,
+      onSecondary: brand.onSecondaryLight,
       error: brand.error,
-      onError: brand.onPrimary,
+      onError: brand.onError,
+      errorContainer: brand.errorContainerLight,
+      onErrorContainer: brand.onErrorContainerLight,
       surface: brand.surfaceLight,
       onSurface: brand.onSurfaceLight,
       surfaceContainerHighest: brand.surfaceVariantLight,
@@ -26,12 +28,14 @@ class DesignColorSchemes {
   /// Builds the dark-mode color scheme for a given [brand].
   static ColorScheme dark(DesignBrand brand) {
     return ColorScheme.dark(
-      primary: brand.primary,
-      onPrimary: brand.onPrimary,
-      secondary: brand.secondary,
-      onSecondary: brand.onSecondary,
+      primary: brand.primaryDark,
+      onPrimary: brand.onPrimaryDark,
+      secondary: brand.secondaryDark,
+      onSecondary: brand.onSecondaryDark,
       error: brand.error,
-      onError: brand.onPrimary,
+      onError: brand.onError,
+      errorContainer: brand.errorContainerDark,
+      onErrorContainer: brand.onErrorContainerDark,
       surface: brand.surfaceVariantDark,
       onSurface: brand.onSurfaceDark,
       surfaceContainerHighest: brand.surfaceDark,

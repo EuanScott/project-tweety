@@ -67,5 +67,16 @@
   "appPreferencesSystemTextDescription": "השתמש בהגדרות המכשיר עבור אפשרויות כמו גודל טקסט וטקסט מודגש.",
   "appPreferencesSystemTextButton": "פתח הגדרות",
   "appPreferencesSystemTextOpenFailed": "לא ניתן לפתוח את ההגדרות במכשיר הזה.",
-  "appPreferencesRetry": "נסה שוב"
+  "appPreferencesRetry": "נסה שוב",
+  "signInCompactSubtitle": "התחבר כדי לשמור את הכרטיסים שלך ולגבות אותם.",
+  "signInSceneSubtitle": "הכרטיסים שלך, במכשיר הזה ומגובים מתי שתבחר.",
+  "signInSplitTitle": "כניסה",
+  "signInSplitSubtitle": "השתמש בחשבון Google שלך כדי להמשיך.",
+  "signInGoogleButton": "כניסה באמצעות Google",
+  "signInGoogleButtonInProgress": "מתחבר…",
+  "signInErrorTitle": "הכניסה לא הצליחה",
+  "signInErrorNetwork": "בדוק את החיבור שלך ונסה שוב.",
+  "signInErrorOther": "משהו השתבש. נסה שוב.",
+  "signInFootnote": "הכרטיסים שלך נשארים במכשיר הזה עד שתסנכרן אותם.",
+  "signInSceneDescription": "דאש, ציפור כחולה בקפוצ'ון ירוק, משכשך במים בצבע טורקיז ומחזיק כרטיס."
 }
