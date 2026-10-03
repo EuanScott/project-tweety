@@ -57,6 +57,25 @@ permanent for the life of the Card and is not something a person can see or
 change in the app. A Card whose owner is not the signed-in Account is not
 visible, not editable, and not synced.
 
+## Profile
+
+A **Profile** is the display details of an Account — name, email, and photo.
+It is read-only in this app.
+_Avoid_: account details, user info.
+
+## Session
+
+A **Session** is the fact that an Account is signed in on this device now. A
+Session persists across app restarts until sign-out.
+_Avoid_: login, auth state.
+
+## Sign-in attempt
+
+A **sign-in attempt** is one press of the sign-in button, from start until it
+succeeds, is cancelled, or fails. A cancelled or failed sign-in attempt does
+not change the Session.
+_Avoid_: login flow.
+
 ## Modal presentation
 
 Vocabulary for `AppModal` (`lib/presentation/widgets/app_modal.widget.dart`) and how
