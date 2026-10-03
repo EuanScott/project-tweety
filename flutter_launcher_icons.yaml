@@ -1,0 +1,17 @@
+# App icon: the sign-in water scene without Dash. Sources in assets/brand/.
+# Regenerate: dart pub global run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/brand/icon_day.png"
+
+  android: "launcher_icon"
+  min_sdk_android: 21
+  # Two layers so the launcher's own parallax moves the sun over the water.
+  adaptive_icon_background: "assets/brand/icon_adaptive_background.png"
+  adaptive_icon_foreground: "assets/brand/icon_adaptive_foreground.png"
+  # Android 13+ themed icon.
+  adaptive_icon_monochrome: "assets/brand/icon_monochrome.png"
+
+  ios: true
+  remove_alpha_ios: true
+  # iOS 18+ dark appearance: the night scene.
+  image_path_ios_dark_transparent: "assets/brand/icon_night.png"

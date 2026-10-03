@@ -1,0 +1,17 @@
+# Splash screen: the water scene in a circle on the sky colour. Sources in assets/brand/.
+# Regenerate: dart run flutter_native_splash:create
+flutter_native_splash:
+  color: "#E3F2F3"
+  color_dark: "#0D2A30"
+  image: assets/brand/splash_day.png
+  image_dark: assets/brand/splash_night.png
+
+  android_12:
+    image: assets/brand/splash_android12_day.png
+    image_dark: assets/brand/splash_android12_night.png
+    color: "#E3F2F3"
+    color_dark: "#0D2A30"
+
+  android: true
+  ios: true
+  web: false
