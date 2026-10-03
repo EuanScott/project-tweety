@@ -1,0 +1,30 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "project-tweety",
+          "appId": "1:524769488861:android:9cf6bff4a4c3700be7d034",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "project-tweety",
+          "appId": "1:524769488861:ios:f6c14fff94ffc68ee7d034",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/core/firebase/firebase_options.constants.dart": {
+          "projectId": "project-tweety",
+          "configurations": {
+            "android": "1:524769488861:android:9cf6bff4a4c3700be7d034",
+            "ios": "1:524769488861:ios:f6c14fff94ffc68ee7d034"
+          }
+        }
+      }
+    }
+  }
+}

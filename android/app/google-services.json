@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "524769488861",
+    "project_id": "project-tweety",
+    "storage_bucket": "project-tweety.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524769488861:android:9cf6bff4a4c3700be7d034",
+        "android_client_info": {
+          "package_name": "dev.euanscott.projecttweety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524769488861-32ok4s0navpbgdhrtlbug4krrt541lqr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.euanscott.projecttweety",
+            "certificate_hash": "2209df56494b5b28ca464e9ec9cc0e099ae10d01"
+          }
+        },
+        {
+          "client_id": "524769488861-22u533irr77k01vc28ip6h4qfi1hoe4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH4XtisAf1gSBO3rOwHiA93_WzcY2C_xU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524769488861-22u533irr77k01vc28ip6h4qfi1hoe4v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "524769488861-fv4e73m5f9r0n7046vejo0aeropm5ek7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.euanscott.projecttweety"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

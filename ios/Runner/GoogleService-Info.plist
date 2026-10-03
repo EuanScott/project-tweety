@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>524769488861-fv4e73m5f9r0n7046vejo0aeropm5ek7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.524769488861-fv4e73m5f9r0n7046vejo0aeropm5ek7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>524769488861-32ok4s0navpbgdhrtlbug4krrt541lqr.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAR1xCxJOLChyPBmTjbsh9c4n6d6cU9K2M</string>
+	<key>GCM_SENDER_ID</key>
+	<string>524769488861</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>dev.euanscott.projecttweety</string>
+	<key>PROJECT_ID</key>
+	<string>project-tweety</string>
+	<key>STORAGE_BUCKET</key>
+	<string>project-tweety.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:524769488861:ios:f6c14fff94ffc68ee7d034</string>
+</dict>
+</plist>
