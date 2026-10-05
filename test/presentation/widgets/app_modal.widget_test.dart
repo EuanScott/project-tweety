@@ -19,6 +19,17 @@ Future<void> _handlePopRouteAndFinishTransition(WidgetTester tester) async {
   await tester.pump(_modalTransitionDuration);
 }
 
+/// An iPad Pro 12.9" portrait surface, in logical pixels.
+const _tabletSize = Size(1024, 1366);
+
+/// Resizes the real test surface, not only the [MediaQuery], so layout runs
+/// at tablet size.
+void _useTabletSurface(WidgetTester tester) {
+  tester.view.physicalSize = _tabletSize;
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
+}
+
 void main() {
   group('AppModal', () {
     group('.page', () {
@@ -887,6 +898,34 @@ void main() {
       const expandedSize = Size(900, 1200);
 
       group('material', () {
+        testWidgets('is centred and capped at windowedMaxWidth on a tablet', (
+          tester,
+        ) async {
+          _useTabletSurface(tester);
+          await tester.pumpWidget(
+            const _TestApp(
+              mediaQuerySize: _tabletSize,
+              home: _ModalLauncher(variant: _ModalVariant.page),
+            ),
+          );
+
+          await tester.tap(find.text('open-modal'));
+          await tester.pumpAndSettle();
+
+          final window = tester.getRect(
+            find
+                .descendant(
+                  of: find.byType(Dialog),
+                  matching: find.byType(Material),
+                )
+                .first,
+          );
+
+          expect(window.center.dx, moreOrLessEquals(_tabletSize.width / 2));
+          expect(window.center.dy, moreOrLessEquals(_tabletSize.height / 2));
+          expect(window.width, AppModal.windowedMaxWidth);
+        });
+
         testWidgets('renders a Dialog instead of a BottomSheet', (
           tester,
         ) async {
@@ -1120,6 +1159,35 @@ void main() {
       });
 
       group('cupertino', () {
+        testWidgets('is centred and capped at windowedMaxWidth on a tablet', (
+          tester,
+        ) async {
+          _useTabletSurface(tester);
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              mediaQuerySize: _tabletSize,
+              home: _ModalLauncher(variant: _ModalVariant.page),
+            ),
+          );
+
+          await tester.tap(find.text('open-modal'));
+          await tester.pumpAndSettle();
+
+          final window = tester.getRect(
+            find
+                .ancestor(
+                  of: find.text('modal-child'),
+                  matching: find.byType(ClipRRect),
+                )
+                .first,
+          );
+
+          expect(window.center.dx, moreOrLessEquals(_tabletSize.width / 2));
+          expect(window.center.dy, moreOrLessEquals(_tabletSize.height / 2));
+          expect(window.width, AppModal.windowedMaxWidth);
+        });
+
         testWidgets('caps width at windowedMaxWidth on a wide surface', (
           tester,
         ) async {

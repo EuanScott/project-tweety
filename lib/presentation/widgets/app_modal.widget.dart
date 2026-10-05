@@ -33,6 +33,15 @@ class AppModal {
   /// this presentation.
   static const double windowedMaxWidth = 600;
 
+  /// The minimum gap between the windowed Cupertino presentation and the
+  /// screen edges, added on top of any keyboard inset. Matches Material's
+  /// default `Dialog.insetPadding`, so both design languages float the window
+  /// the same distance from the edges.
+  static const EdgeInsets _windowedInsetPadding = EdgeInsets.symmetric(
+    horizontal: 40,
+    vertical: 24,
+  );
+
   /// Shows the standard app bottom-sheet modal.
   ///
   /// [context] is used to resolve the [Navigator] and [Theme].
@@ -445,7 +454,16 @@ class AppModal {
           ),
         );
 
-        return PopScope(canPop: canPop, child: dialog);
+        // The dialog route forces its child to fill the screen. Material's
+        // Dialog centres and insets itself; this Cupertino path must do the
+        // same, or the width cap is ignored and the content pins top-left.
+        return PopScope(
+          canPop: canPop,
+          child: Padding(
+            padding: MediaQuery.viewInsetsOf(context) + _windowedInsetPadding,
+            child: Center(child: dialog),
+          ),
+        );
       },
     );
   }
