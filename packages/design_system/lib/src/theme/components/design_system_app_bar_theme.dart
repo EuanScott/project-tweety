@@ -5,24 +5,9 @@ import 'design_system_text_theme.dart';
 class DesignSystemAppBarTheme {
   new _();
 
-  static AppBarTheme light(ColorScheme colorScheme) {
-    final textTheme = DesignSystemTextTheme.build(colorScheme);
-
-    return AppBarTheme(
-      backgroundColor: colorScheme.primary,
-      centerTitle: false,
-      elevation: 2,
-      foregroundColor: colorScheme.onPrimary,
-      titleTextStyle: textTheme.headlineSmall?.copyWith(
-        color: colorScheme.onPrimary,
-      ),
-      toolbarTextStyle: textTheme.labelLarge?.copyWith(
-        color: colorScheme.onPrimary,
-      ),
-    );
-  }
-
-  static AppBarTheme dark(ColorScheme colorScheme) {
+  /// A neutral app bar. The bold `primary` title is a deliberate brand
+  /// choice, not the platform default.
+  static AppBarTheme build(ColorScheme colorScheme) {
     final textTheme = DesignSystemTextTheme.build(colorScheme);
 
     return AppBarTheme(
@@ -31,7 +16,7 @@ class DesignSystemAppBarTheme {
       elevation: 2,
       foregroundColor: colorScheme.onSurface,
       titleTextStyle: textTheme.headlineSmall?.copyWith(
-        color: colorScheme.onSurface,
+        color: colorScheme.primary,
       ),
       toolbarTextStyle: textTheme.labelLarge?.copyWith(
         color: colorScheme.onSurface,

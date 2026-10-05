@@ -12,7 +12,7 @@ copying code.
 - shared color and surface tokens
 - shared typography
 - shared component theme configuration
-- shared brand definitions such as B2C and B2B
+- shared brand definitions
 
 ## What does not live here
 
@@ -61,14 +61,15 @@ The package is built around a shared theme structure with brand-specific tokens.
 
 That means:
 
-- B2C and B2B can use the same theme logic
+- several brands can use the same theme logic
 - only brand values need to differ
 - apps stay visually aligned while still being distinguishable
 
 Current bundled brands:
 
 - `DesignBrands.tweetyB2c`
-- `DesignBrands.tweetyB2b`
+
+`DesignBrands.all` lists every bundled brand.
 
 ## Adding a new brand
 
@@ -79,7 +80,8 @@ Current bundled brands:
    `onError` is its own token, because a dark `onPrimary` can fail contrast on
    the error red. `errorContainer` and `onErrorContainer` colour inline error
    messages in each theme.
-3. Pass that brand into `DesignSystemTheme.light(...)` and `DesignSystemTheme.dark(...)`
+3. Add it to `DesignBrands.all`, so the contrast tests cover it.
+4. Pass that brand into `DesignSystemTheme.light(...)` and `DesignSystemTheme.dark(...)`
 
 ## Branded controls
 

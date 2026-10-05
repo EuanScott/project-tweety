@@ -3,8 +3,8 @@ import 'package:material_ui/material_ui.dart';
 /// Brand-level design tokens used to build a shared application theme.
 ///
 /// A [DesignBrand] contains the values that are expected to differ between
-/// applications or product variants, such as B2C and B2B, while the overall
-/// theme structure remains the same.
+/// applications or product variants, while the overall theme structure
+/// remains the same.
 class const DesignBrand({
   required final String name,
   required final Color primaryLight,
@@ -39,13 +39,5 @@ class const DesignBrand({
   /// A raised area on a sheet, such as a card. It must read as lifted off
   /// [surfaceVariantDark], the dark sheet colour.
   required final Color surfaceContainerDark,
-  required final Color navigationSurfaceLight,
-  required final Color onNavigationSurfaceLight,
-  required final Color navigationSelectedLight,
-  required final Color onNavigationSelectedLight,
-  required final Color navigationSurfaceDark,
-  required final Color onNavigationSurfaceDark,
-  required final Color navigationSelectedDark,
-  required final Color onNavigationSelectedDark,
   required final Color outline,
 });

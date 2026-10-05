@@ -5,26 +5,24 @@ import 'design_system_text_theme.dart';
 class DesignSystemNavigationRailTheme {
   new _();
 
-  static NavigationRailThemeData build(
-    ColorScheme colorScheme, {
-    required Color backgroundColor,
-    required Color onBackgroundColor,
-    required Color indicatorColor,
-    required Color onIndicatorColor,
-  }) {
-    final labelStyle = DesignSystemTextTheme.build(colorScheme).labelMedium;
+  static NavigationRailThemeData build(ColorScheme colorScheme) {
+    final labelStyle =
+        DesignSystemTextTheme.build(colorScheme).labelMedium ??
+        const TextStyle();
 
     return NavigationRailThemeData(
-      backgroundColor: backgroundColor,
+      backgroundColor: colorScheme.surfaceContainerHigh,
       elevation: 3,
-      indicatorColor: indicatorColor,
-      selectedIconTheme: IconThemeData(color: onIndicatorColor),
-      unselectedIconTheme: IconThemeData(color: onBackgroundColor),
-      selectedLabelTextStyle: (labelStyle ?? const TextStyle()).copyWith(
-        color: onIndicatorColor,
+      indicatorColor: colorScheme.primaryContainer,
+      indicatorShape: const StadiumBorder(),
+      selectedIconTheme: IconThemeData(color: colorScheme.onPrimaryContainer),
+      unselectedIconTheme: IconThemeData(color: colorScheme.onSurfaceVariant),
+      selectedLabelTextStyle: labelStyle.copyWith(
+        color: colorScheme.onSurface,
+        fontWeight: FontWeight.w700,
       ),
-      unselectedLabelTextStyle: (labelStyle ?? const TextStyle()).copyWith(
-        color: onBackgroundColor,
+      unselectedLabelTextStyle: labelStyle.copyWith(
+        color: colorScheme.onSurface,
       ),
     );
   }

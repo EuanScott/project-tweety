@@ -5,33 +5,28 @@ import 'design_system_text_theme.dart';
 class DesignSystemNavigationDrawerTheme {
   new _();
 
-  static NavigationDrawerThemeData build(
-    ColorScheme colorScheme, {
-    required Color backgroundColor,
-    required Color onBackgroundColor,
-    required Color indicatorColor,
-    required Color onIndicatorColor,
-  }) {
-    final labelStyle = DesignSystemTextTheme.build(colorScheme).labelLarge;
+  static NavigationDrawerThemeData build(ColorScheme colorScheme) {
+    final labelStyle =
+        DesignSystemTextTheme.build(colorScheme).labelLarge ??
+        const TextStyle();
 
     return NavigationDrawerThemeData(
-      backgroundColor: backgroundColor,
+      backgroundColor: colorScheme.surfaceContainerHigh,
       elevation: 3,
-      indicatorColor: indicatorColor,
-      indicatorShape: RoundedRectangleBorder(
-        borderRadius: .circular(8),
-      ),
+      indicatorColor: colorScheme.primaryContainer,
+      indicatorShape: const StadiumBorder(),
       labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((states) {
-        final color = states.contains(WidgetState.selected)
-            ? onIndicatorColor
-            : onBackgroundColor;
-
-        return (labelStyle ?? const TextStyle()).copyWith(color: color);
+        return states.contains(WidgetState.selected)
+            ? labelStyle.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              )
+            : labelStyle.copyWith(color: colorScheme.onSurfaceVariant);
       }),
       iconTheme: WidgetStateProperty.resolveWith<IconThemeData?>((states) {
         final color = states.contains(WidgetState.selected)
-            ? onIndicatorColor
-            : onBackgroundColor;
+            ? colorScheme.onPrimaryContainer
+            : colorScheme.onSurfaceVariant;
 
         return IconThemeData(color: color);
       }),

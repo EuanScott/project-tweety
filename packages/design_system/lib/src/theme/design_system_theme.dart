@@ -30,7 +30,7 @@ class DesignSystemTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: brand.surfaceLight,
       dividerColor: colorScheme.primary,
-      appBarTheme: DesignSystemAppBarTheme.light(colorScheme),
+      appBarTheme: DesignSystemAppBarTheme.build(colorScheme),
       bottomSheetTheme: DesignSystemBottomSheetTheme.light(colorScheme),
       cardTheme: DesignSystemCardTheme.build(colorScheme),
       extensions: [DesignStatusColors.fromBrand(brand)],
@@ -40,18 +40,8 @@ class DesignSystemTheme {
       navigationBarTheme: DesignSystemNavigationBarTheme.build(colorScheme),
       navigationDrawerTheme: DesignSystemNavigationDrawerTheme.build(
         colorScheme,
-        backgroundColor: brand.navigationSurfaceLight,
-        onBackgroundColor: brand.onNavigationSurfaceLight,
-        indicatorColor: brand.navigationSelectedLight,
-        onIndicatorColor: brand.onNavigationSelectedLight,
       ),
-      navigationRailTheme: DesignSystemNavigationRailTheme.build(
-        colorScheme,
-        backgroundColor: brand.navigationSurfaceLight,
-        onBackgroundColor: brand.onNavigationSurfaceLight,
-        indicatorColor: brand.navigationSelectedLight,
-        onIndicatorColor: brand.onNavigationSelectedLight,
-      ),
+      navigationRailTheme: DesignSystemNavigationRailTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );
   }
@@ -65,7 +55,7 @@ class DesignSystemTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: brand.surfaceDark,
       dividerColor: colorScheme.surface,
-      appBarTheme: DesignSystemAppBarTheme.dark(colorScheme),
+      appBarTheme: DesignSystemAppBarTheme.build(colorScheme),
       bottomSheetTheme: DesignSystemBottomSheetTheme.dark(colorScheme),
       cardTheme: DesignSystemCardTheme.build(colorScheme),
       extensions: [DesignStatusColors.fromBrand(brand)],
@@ -75,18 +65,8 @@ class DesignSystemTheme {
       navigationBarTheme: DesignSystemNavigationBarTheme.build(colorScheme),
       navigationDrawerTheme: DesignSystemNavigationDrawerTheme.build(
         colorScheme,
-        backgroundColor: brand.navigationSurfaceDark,
-        onBackgroundColor: brand.onNavigationSurfaceDark,
-        indicatorColor: brand.navigationSelectedDark,
-        onIndicatorColor: brand.onNavigationSelectedDark,
       ),
-      navigationRailTheme: DesignSystemNavigationRailTheme.build(
-        colorScheme,
-        backgroundColor: brand.navigationSurfaceDark,
-        onBackgroundColor: brand.onNavigationSurfaceDark,
-        indicatorColor: brand.navigationSelectedDark,
-        onIndicatorColor: brand.onNavigationSelectedDark,
-      ),
+      navigationRailTheme: DesignSystemNavigationRailTheme.build(colorScheme),
       textTheme: DesignSystemTextTheme.build(colorScheme),
     );
   }

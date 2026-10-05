@@ -168,6 +168,36 @@ and not on top of it.
 - On small phones, if content overflows, the scene becomes a scrolling hero and the main action stays pinned at the
   bottom.
 
+### Navigation
+
+- Navigation surfaces are neutral in every theme colour. Only the selected item
+  carries the brand colour. See
+  [ADR-0014](../decisions/0014-neutral-navigation-surfaces.md).
+- Android: the bar, rail and drawer share one surface (the page darkened 4% in
+  light, the raised surface in dark). The selected item has a soft `primary`
+  pill. Labels are neutral; the selected label is bold.
+- iOS: the tab bar uses the system bar colours. The sidebar marks the selected
+  row with a 6% `primary` tint and `primary` text, with no checkmark.
+- Titles stay bold and in `primary`. This is a brand choice, not the native look.
+
+iOS chooses by the window's shortest side:
+
+| Shortest side | iOS |
+|---|---|
+| Under 600 | Tab bar |
+| 600 or more | Sidebar (304 px, collapses to 72 px) |
+
+Android chooses by the window's width:
+
+| Width | Android |
+|---|---|
+| Under 600 | Navigation bar |
+| 600 to 1199 | Rail, labels shown |
+| 1200 or more | Drawer (304 px, collapses to a rail without labels) |
+
+An iPhone keeps the tab bar in landscape. Android uses width, so a phone in
+landscape gets the rail.
+
 ## 8. Motion
 
 - **Depth motion.** Scene layers move by depth: far layers barely, near layers most.

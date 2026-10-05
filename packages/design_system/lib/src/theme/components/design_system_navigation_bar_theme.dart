@@ -9,22 +9,26 @@ class DesignSystemNavigationBarTheme {
     final labelStyle = DesignSystemTextTheme.build(colorScheme).labelMedium;
 
     return NavigationBarThemeData(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colorScheme.surfaceContainerHigh,
       elevation: 3,
-      indicatorColor: colorScheme.primary,
+      indicatorColor: colorScheme.primaryContainer,
+      indicatorShape: const StadiumBorder(),
       iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
         final color = states.contains(WidgetState.selected)
-            ? colorScheme.onPrimary
-            : colorScheme.primary;
+            ? colorScheme.onPrimaryContainer
+            : colorScheme.onSurfaceVariant;
 
         return IconThemeData(color: color);
       }),
       labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
-        final color = states.contains(WidgetState.selected)
-            ? colorScheme.primary
-            : colorScheme.primary;
+        final style = labelStyle ?? const TextStyle();
 
-        return (labelStyle ?? const TextStyle()).copyWith(color: color);
+        return states.contains(WidgetState.selected)
+            ? style.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w700,
+              )
+            : style.copyWith(color: colorScheme.onSurfaceVariant);
       }),
     );
   }

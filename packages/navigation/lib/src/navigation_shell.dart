@@ -7,6 +7,10 @@ import 'package:navigation/src/tab_reselect/tab_reselect_scope.dart';
 
 const String _sideNavigationToggleTooltip = 'Toggle side navigation';
 
+/// The opacity of the `primary` tint behind the selected sidebar row. It is
+/// kept low so that `primary` text on the tint stays readable.
+const double _sidebarSelectionTintOpacity = 0.06;
+
 /// Bottom-navigation shell for top-level tab routes.
 ///
 /// The shell renders the active [StatefulNavigationShell] branch and preserves
@@ -32,6 +36,7 @@ class const NavigationShell<TTab extends Object>({
 class _NavigationShellState<TTab extends Object>
     extends State<NavigationShell<TTab>> {
   static const double _mediumWidthBreakpoint = 600;
+  static const double _expandedShortestSideBreakpoint = 600;
   static const double _drawerWidthBreakpoint = 1200;
   static const double _expandedSideNavigationWidth = 304;
   static const double _collapsedSideNavigationWidth = 72;
@@ -46,16 +51,15 @@ class _NavigationShellState<TTab extends Object>
       controller: _tabReselectController,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final useRail = constraints.maxWidth >= _mediumWidthBreakpoint;
-          final useDrawer = constraints.maxWidth >= _drawerWidthBreakpoint;
           final useCupertinoNavigation = Theme.of(context).platform == .iOS;
+          // An iPhone keeps the tab bar in landscape: iOS chooses side
+          // navigation by the window's shortest side, Android by width.
+          final useRail = useCupertinoNavigation
+              ? MediaQuery.sizeOf(context).shortestSide >=
+                    _expandedShortestSideBreakpoint
+              : constraints.maxWidth >= _mediumWidthBreakpoint;
+          final useDrawer = constraints.maxWidth >= _drawerWidthBreakpoint;
           final useCupertinoTabBar = useCupertinoNavigation && !useRail;
-          final content = _NavigationContentTheme(
-            useSideNavigation: useRail,
-            useDrawer: useDrawer && !useCupertinoNavigation,
-            child: widget.navigationShell,
-          );
-
           return Scaffold(
             body: Row(
               children: [
@@ -95,7 +99,7 @@ class _NavigationShellState<TTab extends Object>
                         )
                         .toList(growable: false),
                   ),
-                Expanded(child: content),
+                Expanded(child: widget.navigationShell),
               ],
             ),
             bottomNavigationBar: useRail
@@ -281,7 +285,9 @@ class const _CupertinoSideNavigation<TTab extends Object>({
                 DecoratedBox(
                   decoration: BoxDecoration(
                     color: indexedTab.$1 == selectedIndex
-                        ? theme.primaryColor.withAlpha(31)
+                        ? theme.primaryColor.withValues(
+                            alpha: _sidebarSelectionTintOpacity,
+                          )
                         : null,
                     borderRadius: .circular(10),
                   ),
@@ -300,12 +306,6 @@ class const _CupertinoSideNavigation<TTab extends Object>({
                             : CupertinoColors.label.resolveFrom(context),
                       ),
                     ),
-                    trailing: indexedTab.$1 == selectedIndex
-                        ? Icon(
-                            CupertinoIcons.check_mark,
-                            color: theme.primaryColor,
-                          )
-                        : null,
                     onTap: () => onDestinationSelected(indexedTab.$1),
                   ),
                 ),
@@ -336,7 +336,11 @@ class const _CollapsedCupertinoSideNavigationItem({
         onPressed: onTap,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: isSelected ? theme.primaryColor.withAlpha(31) : null,
+            color: isSelected
+                ? theme.primaryColor.withValues(
+                    alpha: _sidebarSelectionTintOpacity,
+                  )
+                : null,
             borderRadius: .circular(10),
           ),
           child: SizedBox.square(
@@ -351,79 +355,5 @@ class const _CollapsedCupertinoSideNavigationItem({
         ),
       ),
     );
-  }
-}
-
-class const _NavigationContentTheme({
-  required final bool useSideNavigation,
-  required final bool useDrawer,
-  required final Widget child,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    if (!useSideNavigation) {
-      return child;
-    }
-
-    final theme = Theme.of(context);
-    final appBarTheme = theme.appBarTheme;
-    final foregroundColor =
-        _sideNavigationForegroundColor(context, useDrawer: useDrawer) ??
-        appBarTheme.foregroundColor ??
-        theme.colorScheme.onSurface;
-    final backgroundColor =
-        _sideNavigationBackgroundColor(context, useDrawer: useDrawer) ??
-        appBarTheme.backgroundColor ??
-        theme.colorScheme.surface;
-
-    return Theme(
-      data: theme.copyWith(
-        appBarTheme: appBarTheme.copyWith(
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          iconTheme:
-              appBarTheme.iconTheme?.copyWith(color: foregroundColor) ??
-              IconThemeData(color: foregroundColor),
-          actionsIconTheme:
-              appBarTheme.actionsIconTheme?.copyWith(color: foregroundColor) ??
-              IconThemeData(color: foregroundColor),
-          titleTextStyle: appBarTheme.titleTextStyle?.copyWith(
-            color: foregroundColor,
-          ),
-          toolbarTextStyle: appBarTheme.toolbarTextStyle?.copyWith(
-            color: foregroundColor,
-          ),
-        ),
-      ),
-      child: child,
-    );
-  }
-
-  Color? _sideNavigationBackgroundColor(
-    BuildContext context, {
-    required bool useDrawer,
-  }) {
-    if (useDrawer) {
-      return NavigationDrawerTheme.of(context).backgroundColor;
-    }
-
-    return NavigationRailTheme.of(context).backgroundColor;
-  }
-
-  Color? _sideNavigationForegroundColor(
-    BuildContext context, {
-    required bool useDrawer,
-  }) {
-    if (useDrawer) {
-      final drawerTheme = NavigationDrawerTheme.of(context);
-
-      return drawerTheme.iconTheme?.resolve(const <WidgetState>{})?.color ??
-          drawerTheme.labelTextStyle?.resolve(const <WidgetState>{})?.color;
-    }
-
-    final railTheme = NavigationRailTheme.of(context);
-
-    return railTheme.unselectedIconTheme?.color ??
-        railTheme.unselectedLabelTextStyle?.color;
   }
 }

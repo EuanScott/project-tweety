@@ -27,7 +27,7 @@ void main() {
     });
 
     test('onError stays white in both themes', () {
-      for (final brand in [DesignBrands.tweetyB2c, DesignBrands.tweetyB2b]) {
+      for (final brand in DesignBrands.all) {
         expect(
           DesignSystemTheme.light(brand: brand).colorScheme.onError,
           const Color(0xFFFFFFFF),
@@ -51,20 +51,6 @@ void main() {
       expect(light.onErrorContainer, const Color(0xFFD32F2F));
       expect(dark.errorContainer, const Color(0xFF2C2C2C));
       expect(dark.onErrorContainer, const Color(0xFFFFFFFF));
-    });
-
-    test('the B2B brand keeps one colour for light and dark', () {
-      final light = DesignSystemTheme.light(
-        brand: DesignBrands.tweetyB2b,
-      ).colorScheme;
-      final dark = DesignSystemTheme.dark(
-        brand: DesignBrands.tweetyB2b,
-      ).colorScheme;
-
-      expect(light.primary, const Color(0xFF1F3C88));
-      expect(dark.primary, const Color(0xFF1F3C88));
-      expect(light.secondary, const Color(0xFF2D9CDB));
-      expect(dark.secondary, const Color(0xFF2D9CDB));
     });
 
     test('raised containers sit above the sheet in both themes', () {

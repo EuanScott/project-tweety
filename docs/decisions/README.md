@@ -66,4 +66,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0011](0011-dart-file-role-vocabulary.md) | Dart file role vocabulary | superseded → [0012](0012-dart-file-roles-with-di-modules.md) |
 | [0012](0012-dart-file-roles-with-di-modules.md) | Dart file roles, with dependency-injection modules | accepted |
 | [0013](0013-firebase-config-committed-with-restricted-keys.md) | Firebase config is committed, and its API keys are restricted to the app's identity | accepted |
+| [0014](0014-neutral-navigation-surfaces.md) | Navigation uses neutral surfaces; only the selected item carries the brand colour | accepted |
 <!-- adr-index:end -->

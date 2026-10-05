@@ -6,8 +6,8 @@ import 'package:navigation/navigation.dart';
 
 enum _TestTab { home, settings }
 
-const _compactAppBarBackground = Color(0xFFAA0000);
-const _compactAppBarForeground = Color(0xFFFFFFFF);
+const _appBarBackground = Color(0xFFAA0000);
+const _appBarForeground = Color(0xFFFFFFFF);
 const _railSurface = Color(0xFFE5F5F4);
 const _railForeground = Color(0xFF0F5D5D);
 const _drawerSurface = Color(0xFFEAF1FF);
@@ -122,6 +122,42 @@ void main() {
       expect(find.byType(NavigationDrawer), findsNothing);
     });
 
+    testWidgets('keeps the Cupertino tab bar on an iPhone in landscape', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(844, 390),
+      );
+
+      expect(find.byType(CupertinoTabBar), findsOneWidget);
+      expect(find.byType(CupertinoListTile), findsNothing);
+      expect(find.byTooltip(_sideNavigationToggleTooltip), findsNothing);
+    });
+
+    testWidgets('renders Cupertino side navigation on an iPad in landscape', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(1194, 834),
+      );
+
+      expect(find.byType(CupertinoListTile), findsNWidgets(2));
+      expect(find.byType(CupertinoTabBar), findsNothing);
+    });
+
+    testWidgets('renders a navigation rail on an Android phone in landscape', (
+      tester,
+    ) async {
+      await _pumpRouter(tester, surfaceSize: const Size(844, 390));
+
+      expect(find.byType(NavigationRail), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+    });
+
     testWidgets('renders an unextended navigation rail at medium width', (
       tester,
     ) async {
@@ -148,6 +184,19 @@ void main() {
       expect(find.byType(NavigationRail), findsNothing);
       expect(find.byType(NavigationDrawer), findsNothing);
       expect(find.byType(CupertinoTabBar), findsNothing);
+    });
+
+    testWidgets('shows the selected sidebar row without a checkmark', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(700, 800),
+      );
+
+      expect(find.byType(CupertinoListTile), findsNWidgets(2));
+      expect(find.byIcon(CupertinoIcons.check_mark), findsNothing);
     });
 
     testWidgets('can collapse and expand Cupertino side navigation', (
@@ -236,46 +285,21 @@ void main() {
       expect(find.byType(CupertinoTabBar), findsNothing);
     });
 
-    testWidgets('keeps the app bar theme unchanged at compact width', (
-      tester,
-    ) async {
-      await _pumpRouter(tester, surfaceSize: const Size(500, 800));
+    for (final width in [500.0, 700.0, 1200.0]) {
+      testWidgets('keeps the app bar theme unchanged at width $width', (
+        tester,
+      ) async {
+        await _pumpRouter(tester, surfaceSize: Size(width, 800));
 
-      final appBarTheme = Theme.of(
-        tester.element(find.byKey(_homeThemeProbeKey)),
-      ).appBarTheme;
+        final appBarTheme = Theme.of(
+          tester.element(find.byKey(_homeThemeProbeKey)),
+        ).appBarTheme;
 
-      expect(appBarTheme.backgroundColor, _compactAppBarBackground);
-      expect(appBarTheme.foregroundColor, _compactAppBarForeground);
-    });
-
-    testWidgets('uses rail colors for app bars at medium width', (
-      tester,
-    ) async {
-      await _pumpRouter(tester, surfaceSize: const Size(700, 800));
-
-      final appBarTheme = Theme.of(
-        tester.element(find.byKey(_homeThemeProbeKey)),
-      ).appBarTheme;
-
-      expect(appBarTheme.backgroundColor, _railSurface);
-      expect(appBarTheme.foregroundColor, _railForeground);
-      expect(appBarTheme.titleTextStyle?.color, _railForeground);
-    });
-
-    testWidgets('uses drawer colors for app bars at tablet width', (
-      tester,
-    ) async {
-      await _pumpRouter(tester, surfaceSize: const Size(1200, 800));
-
-      final appBarTheme = Theme.of(
-        tester.element(find.byKey(_homeThemeProbeKey)),
-      ).appBarTheme;
-
-      expect(appBarTheme.backgroundColor, _drawerSurface);
-      expect(appBarTheme.foregroundColor, _drawerForeground);
-      expect(appBarTheme.titleTextStyle?.color, _drawerForeground);
-    });
+        expect(appBarTheme.backgroundColor, _appBarBackground);
+        expect(appBarTheme.foregroundColor, _appBarForeground);
+        expect(appBarTheme.titleTextStyle?.color, _appBarForeground);
+      });
+    }
   });
 }
 
@@ -287,8 +311,10 @@ Future<void> _pumpRouter(
   GoRouterRedirect? redirect,
   Listenable? refreshListenable,
 }) async {
-  await tester.binding.setSurfaceSize(surfaceSize);
-  addTearDown(() => tester.binding.setSurfaceSize(null));
+  tester.view
+    ..physicalSize = surfaceSize
+    ..devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
 
   final router = createNavigationRouter<_TestTab>(
     initialLocation: '/home',
@@ -322,9 +348,9 @@ ThemeData _themeData(TargetPlatform platform) {
   return ThemeData(
     platform: platform,
     appBarTheme: const AppBarTheme(
-      backgroundColor: _compactAppBarBackground,
-      foregroundColor: _compactAppBarForeground,
-      titleTextStyle: TextStyle(color: _compactAppBarForeground),
+      backgroundColor: _appBarBackground,
+      foregroundColor: _appBarForeground,
+      titleTextStyle: TextStyle(color: _appBarForeground),
     ),
     navigationRailTheme: const NavigationRailThemeData(
       backgroundColor: _railSurface,
