@@ -11,6 +11,7 @@ import 'components/design_system_text_theme.dart';
 import 'design_brand.dart';
 import 'design_brands.dart';
 import 'design_color_schemes.dart';
+import 'extensions/design_status_colors.dart';
 
 /// Builds the shared Material theme for consuming applications.
 ///
@@ -32,6 +33,7 @@ class DesignSystemTheme {
       appBarTheme: DesignSystemAppBarTheme.light(colorScheme),
       bottomSheetTheme: DesignSystemBottomSheetTheme.light(colorScheme),
       cardTheme: DesignSystemCardTheme.build(colorScheme),
+      extensions: [DesignStatusColors.fromBrand(brand)],
       elevatedButtonTheme: DesignSystemButtonTheme.elevated(colorScheme),
       outlinedButtonTheme: DesignSystemButtonTheme.outlined(colorScheme),
       textButtonTheme: DesignSystemButtonTheme.text(colorScheme),
@@ -66,6 +68,7 @@ class DesignSystemTheme {
       appBarTheme: DesignSystemAppBarTheme.dark(colorScheme),
       bottomSheetTheme: DesignSystemBottomSheetTheme.dark(colorScheme),
       cardTheme: DesignSystemCardTheme.build(colorScheme),
+      extensions: [DesignStatusColors.fromBrand(brand)],
       elevatedButtonTheme: DesignSystemButtonTheme.elevated(colorScheme),
       outlinedButtonTheme: DesignSystemButtonTheme.outlined(colorScheme),
       textButtonTheme: DesignSystemButtonTheme.text(colorScheme),

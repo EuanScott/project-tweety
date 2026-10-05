@@ -11,7 +11,7 @@ class _SignInSplit extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final ink = _ScenePalette.of(context).ink;
+    final ink = ScenePalette.of(context).ink;
     final isRtl = Directionality.of(context) == TextDirection.rtl;
     final hinge = DisplayMetrics.verticalDisplayFeatureFor(
       MediaQuery.of(context),

@@ -245,6 +245,48 @@ void main() {
 
       expect(pressed, isTrue);
     });
+
+    for (final (platform, targetSize) in const [
+      (TargetPlatform.android, 48.0),
+      (TargetPlatform.iOS, 44.0),
+    ]) {
+      testWidgets('custom shows a widget in a ${targetSize.toInt()} px '
+          'target on ${platform.name}', (tester) async {
+        final semantics = tester.ensureSemantics();
+        const avatarKey = Key('avatar');
+        var pressed = false;
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(platform: platform),
+            home: Center(
+              child: AppIconButton.custom(
+                onPressed: () => pressed = true,
+                semanticLabel: 'Account',
+                child: const SizedBox.square(key: avatarKey, dimension: 32),
+              ),
+            ),
+          ),
+        );
+
+        expect(find.byKey(avatarKey), findsOneWidget);
+        expect(
+          tester.getSize(find.byType(AppIconButton)),
+          Size.square(targetSize),
+        );
+        expect(
+          platform == TargetPlatform.iOS
+              ? find.bySemanticsLabel('Account')
+              : find.byTooltip('Account'),
+          findsOneWidget,
+        );
+
+        await tester.tap(find.byKey(avatarKey));
+
+        expect(pressed, isTrue);
+        semantics.dispose();
+      });
+    }
   });
 
   group('showAppConfirmationDialog', () {

@@ -579,6 +579,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dash, a blue bird in a green hoodie, wading in teal water and holding up a card.'**
   String get signInSceneDescription;
+
+  /// Title of the account modal
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountTitle;
+
+  /// Screen reader label of the toolbar button that opens the account modal
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountAvatarLabel;
+
+  /// Screen reader label of the profile photo
+  ///
+  /// In en, this message translates to:
+  /// **'Profile photo'**
+  String get accountPhotoLabel;
+
+  /// Screen reader label of the circle shown when there is no profile photo
+  ///
+  /// In en, this message translates to:
+  /// **'No profile photo'**
+  String get accountNoPhotoLabel;
+
+  /// Account modal heading when the Profile has no name and no email
+  ///
+  /// In en, this message translates to:
+  /// **'Your Account'**
+  String get accountFallbackHeading;
+
+  /// Shown in place of the phone number when the Profile has none
+  ///
+  /// In en, this message translates to:
+  /// **'No phone number on this Account'**
+  String get accountNoPhone;
+
+  /// Label of the email row in the account details
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get accountEmailLabel;
+
+  /// Email row value when the email is verified
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get accountEmailVerified;
+
+  /// Email row value when the email is not verified
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified'**
+  String get accountEmailNotVerified;
+
+  /// Email row value when the Profile has no email
+  ///
+  /// In en, this message translates to:
+  /// **'No email on this Account'**
+  String get accountNoEmail;
+
+  /// Label of the row that names the sign-in provider
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in with'**
+  String get accountSignedInWithLabel;
+
+  /// Name of the Google sign-in provider
+  ///
+  /// In en, this message translates to:
+  /// **'Google'**
+  String get accountProviderGoogle;
+
+  /// Label of the sign-out button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get accountSignOut;
+
+  /// Label of the sign-out button while signing out
+  ///
+  /// In en, this message translates to:
+  /// **'Signing out…'**
+  String get accountSigningOut;
+
+  /// Footnote under the sign-out button
+  ///
+  /// In en, this message translates to:
+  /// **'Your Cards stay on this device when you sign out.'**
+  String get accountSignOutFootnote;
+
+  /// Title of the sign-out confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out?'**
+  String get accountSignOutConfirmTitle;
+
+  /// Body of the sign-out confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Your Cards stay on this device. Sign in again to see them.'**
+  String get accountSignOutConfirmBody;
+
+  /// Cancel action of the sign-out confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get accountSignOutConfirmCancel;
+
+  /// Confirm action of the sign-out confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get accountSignOutConfirmAction;
 }
 
 class _AppLocalizationsDelegate

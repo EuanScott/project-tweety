@@ -66,8 +66,9 @@ _Avoid_: claiming, migration.
 
 ## Profile
 
-A **Profile** is the display details of an Account — name, email, and photo.
-It is read-only in this app.
+A **Profile** is the display details of an Account: name, email, whether the
+email is verified, photo, and phone number. Any of them can be missing. It is
+read-only in this app.
 _Avoid_: account details, user info.
 
 ## Session

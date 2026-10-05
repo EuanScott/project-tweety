@@ -28,9 +28,17 @@ class const DesignBrand({
   required final Color surfaceLight,
   required final Color surfaceVariantLight,
   required final Color onSurfaceLight,
+
+  /// A raised area on a sheet, such as a card. It must read as lifted off
+  /// [surfaceLight].
+  required final Color surfaceContainerLight,
   required final Color surfaceDark,
   required final Color surfaceVariantDark,
   required final Color onSurfaceDark,
+
+  /// A raised area on a sheet, such as a card. It must read as lifted off
+  /// [surfaceVariantDark], the dark sheet colour.
+  required final Color surfaceContainerDark,
   required final Color navigationSurfaceLight,
   required final Color onNavigationSurfaceLight,
   required final Color navigationSelectedLight,

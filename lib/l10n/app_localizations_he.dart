@@ -269,4 +269,63 @@ class AppLocalizationsHe extends AppLocalizations {
   @override
   String get signInSceneDescription =>
       'דאש, ציפור כחולה בקפוצ\'ון ירוק, משכשך במים בצבע טורקיז ומחזיק כרטיס.';
+
+  @override
+  String get accountTitle => 'חשבון';
+
+  @override
+  String get accountAvatarLabel => 'חשבון';
+
+  @override
+  String get accountPhotoLabel => 'תמונת פרופיל';
+
+  @override
+  String get accountNoPhotoLabel => 'אין תמונת פרופיל';
+
+  @override
+  String get accountFallbackHeading => 'החשבון שלך';
+
+  @override
+  String get accountNoPhone => 'אין מספר טלפון בחשבון הזה';
+
+  @override
+  String get accountEmailLabel => 'אימייל';
+
+  @override
+  String get accountEmailVerified => 'מאומת';
+
+  @override
+  String get accountEmailNotVerified => 'לא מאומת';
+
+  @override
+  String get accountNoEmail => 'אין אימייל בחשבון הזה';
+
+  @override
+  String get accountSignedInWithLabel => 'מחובר באמצעות';
+
+  @override
+  String get accountProviderGoogle => 'Google';
+
+  @override
+  String get accountSignOut => 'התנתק';
+
+  @override
+  String get accountSigningOut => 'מתנתק…';
+
+  @override
+  String get accountSignOutFootnote =>
+      'הכרטיסים שלך נשארים במכשיר הזה כשאתה מתנתק.';
+
+  @override
+  String get accountSignOutConfirmTitle => 'להתנתק?';
+
+  @override
+  String get accountSignOutConfirmBody =>
+      'הכרטיסים שלך נשארים במכשיר הזה. התחבר שוב כדי לראות אותם.';
+
+  @override
+  String get accountSignOutConfirmCancel => 'ביטול';
+
+  @override
+  String get accountSignOutConfirmAction => 'התנתק';
 }

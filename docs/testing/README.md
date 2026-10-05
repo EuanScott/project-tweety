@@ -105,11 +105,14 @@ than open-coding the reset cycle.
   `FakeCardsRepository.gated()` leaves writes pending until the test completes
   them, for asserting in-flight state.
 - `fake_auth_repository.dart` — `FakeAuthRepository`, signed in by default
-  so `MyApp` tests pass the launch gate. Set `signInResult` to choose what
-  sign-in returns, pass a `Completer` as `pendingSignIn` to hold an attempt
-  open, and call `emit` to change the Session mid-test. `pumpApp(session: …)`
-  sets the Session of the registered fake before the app starts.
-- `fake_device_tilt_service.dart` — `FakeDeviceTiltService`, so the sign-in
+  so `MyApp` tests pass the launch gate. Pass `profile` to set the Profile of
+  the signed-in Session. Set `signInResult` to choose what sign-in returns,
+  pass a `Completer` as `pendingSignIn` to hold an attempt open, and call
+  `emit` to change the Session mid-test. `signOutRequestCount` counts
+  sign-outs; pass a `Completer` as `pendingSignOut` to hold one open, or set
+  `signOutError` to make it throw. `pumpApp(session: …)` sets the Session of
+  the registered fake before the app starts.
+- `fake_device_tilt_service.dart` — `FakeDeviceTiltService`, so the water
   scene never reaches the device sensors. Call `tilt` to move the scene, and
   read `isListening` to check that the sensors would be on.
 - `fake_app_preferences_repository.dart` — `FakeAppPreferencesRepository`, which

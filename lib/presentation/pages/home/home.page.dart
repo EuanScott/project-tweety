@@ -5,25 +5,33 @@ import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:project_tweety/data/repositories/auth/profile.model.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 import '../../extensions/modal.extension.dart';
+import '../../widgets/account/account.cubit.dart';
+import '../../widgets/account/account_avatar.widget.dart';
+import '../../widgets/account/account_modal.widget.dart';
 import '../../widgets/app_modal.widget.dart';
 import '../../widgets/webview_modal.widget.dart';
 import 'bloc/home.bloc.dart';
 
 part 'widgets/home_primary_actions.widget.dart';
+part 'widgets/home_showcase.widget.dart';
 
 class Home extends StatelessWidget {
   const new({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return BlocProvider(
-      create: (_) => GetIt.I<HomeBloc>()..add(const HomeStarted()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => GetIt.I<HomeBloc>()..add(const HomeStarted()),
+        ),
+        BlocProvider(create: (_) => GetIt.I<AccountCubit>()),
+      ],
       child: BlocListener<HomeBloc, HomeState>(
         listenWhen: (previous, current) =>
             previous.lastAction != current.lastAction && current.hasLastAction,
@@ -34,121 +42,33 @@ class Home extends StatelessWidget {
             log('Home action pressed: $action');
           }
         },
-        child: PageScaffold(
-          title: l10n.homeTab,
-          titleBehavior: PageTitleBehavior.large,
-          body: const _HomeView(),
-        ),
+        child: const _HomeView(),
       ),
     );
   }
 }
 
+/// The Home tab: the page chrome with the account action, over the showcase.
 class _HomeView extends StatelessWidget {
   const new();
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
-    return ListView(
-      padding: const .symmetric(vertical: 16),
-      children: [
-        // TODO: Better usecase widgets for things like buttons so that the robots doesn't invent anything
-        // TODO: Maybe make list of implemented widgets to view, rather than everything on this page (UI library vibes)
-        const _PrimaryActions(),
-        const SizedBox(height: 16),
-        AppButton.primary(
-          onPressed: () {
-            context.read<HomeBloc>().add(
-              const HomeActionPressed(HomeAction.primary),
-            );
-          },
-          child: const Text('Button'),
+    return PageScaffold(
+      title: l10n.homeTab,
+      titleBehavior: PageTitleBehavior.large,
+      trailingAction: ToolBarAction.avatar(
+        avatar: BlocSelector<AccountCubit, AccountState, Profile>(
+          selector: (state) => state.profile,
+          builder: (context, profile) =>
+              AccountAvatar(profile: profile, size: 32),
         ),
-        const SizedBox(height: 16),
-        AppButton.secondary(
-          onPressed: () {
-            context.read<HomeBloc>().add(
-              const HomeActionPressed(HomeAction.secondary),
-            );
-          },
-          child: const Text('Button'),
-        ),
-        const SizedBox(height: 16),
-        AppButton.text(
-          onPressed: () {
-            context.read<HomeBloc>().add(
-              const HomeActionPressed(HomeAction.back),
-            );
-          },
-          child: const Text('Back'),
-        ),
-        const SizedBox(height: 32),
-        Text('Modals', style: theme.textTheme.headlineSmall),
-        AppButton.text(
-          onPressed: () {
-            unawaited(
-              context.showAppModal(
-                const Center(child: Text('Modal content')),
-              ),
-            );
-          },
-          child: const Text('Context Modal'),
-        ),
-        AppButton.text(
-          onPressed: () {
-            unawaited(
-              AppModal.page<bool>(
-                context: context,
-                child: const Center(child: Text('Modal content')),
-              ),
-            );
-          },
-          child: const Text('Page Modal'),
-        ),
-        AppButton.text(
-          onPressed: () {
-            unawaited(
-              AppModal.blocking<bool>(
-                context: context,
-                child: Center(
-                  child: Builder(
-                    builder: (modalContext) => AppButton.text(
-                      onPressed: () => Navigator.of(modalContext).pop(true),
-                      child: const Text('Close Modal'),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-          child: const Text('Blocking Modal'),
-        ),
-        AppButton.text(
-          onPressed: () async {
-            await AppModal.compact<bool>(
-              context: context,
-              maxHeightFactor: 0.35,
-              child: const Center(child: Text('Modal content')),
-            );
-          },
-          child: const Text('Compact Modal'),
-        ),
-        AppButton.text(
-          onPressed: () async {
-            final result = await WebviewModal.show(
-              context,
-              'https://euanscott.github.io/tester.html',
-            );
-
-            if (result != null) {
-              log('User result: $result');
-            }
-          },
-          child: const Text('Blocking Modal'),
-        ),
-      ],
+        tooltip: l10n.accountAvatarLabel,
+        onPressed: () => unawaited(showAccountModal(context)),
+      ),
+      body: const _HomeShowcase(),
     );
   }
 }

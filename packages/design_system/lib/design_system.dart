@@ -22,4 +22,5 @@ export 'src/theme/components/design_system_bottom_sheet_theme.dart';
 export 'src/theme/design_brand.dart';
 export 'src/theme/design_brands.dart';
 export 'src/theme/design_system_theme.dart';
+export 'src/theme/extensions/design_status_colors.dart';
 export 'src/theme/extensions/text_theme_extensions.dart';

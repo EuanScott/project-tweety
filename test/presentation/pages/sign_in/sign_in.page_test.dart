@@ -9,6 +9,7 @@ import 'package:project_tweety/core/platform/device_tilt.service.dart';
 import 'package:project_tweety/data/repositories/auth/session.model.dart';
 import 'package:project_tweety/data/repositories/auth/sign_in_result.model.dart';
 import 'package:project_tweety/presentation/pages/sign_in/sign_in.page.dart';
+import 'package:project_tweety/presentation/widgets/water_scene/water_scene.widget.dart';
 
 import '../../../support/app_harness.dart';
 import '../../../support/fake_auth_repository.dart';
@@ -240,7 +241,7 @@ void main() {
 
   group('SignInPage scene', () {
     Offset layerTopLeft(WidgetTester tester, String layer) =>
-        tester.getTopLeft(find.byKey(SignInPage.sceneLayerKey(layer)));
+        tester.getTopLeft(find.byKey(WaterScene.layerKey(layer)));
 
     testWidgets('builds in light and dark', (tester) async {
       await pumpPage(tester);

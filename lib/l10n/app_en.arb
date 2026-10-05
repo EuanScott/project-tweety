@@ -261,5 +261,81 @@
   "signInSceneDescription": "Dash, a blue bird in a green hoodie, wading in teal water and holding up a card.",
   "@signInSceneDescription": {
     "description": "Screen reader description of the sign-in illustration"
+  },
+  "accountTitle": "Account",
+  "@accountTitle": {
+    "description": "Title of the account modal"
+  },
+  "accountAvatarLabel": "Account",
+  "@accountAvatarLabel": {
+    "description": "Screen reader label of the toolbar button that opens the account modal"
+  },
+  "accountPhotoLabel": "Profile photo",
+  "@accountPhotoLabel": {
+    "description": "Screen reader label of the profile photo"
+  },
+  "accountNoPhotoLabel": "No profile photo",
+  "@accountNoPhotoLabel": {
+    "description": "Screen reader label of the circle shown when there is no profile photo"
+  },
+  "accountFallbackHeading": "Your Account",
+  "@accountFallbackHeading": {
+    "description": "Account modal heading when the Profile has no name and no email"
+  },
+  "accountNoPhone": "No phone number on this Account",
+  "@accountNoPhone": {
+    "description": "Shown in place of the phone number when the Profile has none"
+  },
+  "accountEmailLabel": "Email",
+  "@accountEmailLabel": {
+    "description": "Label of the email row in the account details"
+  },
+  "accountEmailVerified": "Verified",
+  "@accountEmailVerified": {
+    "description": "Email row value when the email is verified"
+  },
+  "accountEmailNotVerified": "Not verified",
+  "@accountEmailNotVerified": {
+    "description": "Email row value when the email is not verified"
+  },
+  "accountNoEmail": "No email on this Account",
+  "@accountNoEmail": {
+    "description": "Email row value when the Profile has no email"
+  },
+  "accountSignedInWithLabel": "Signed in with",
+  "@accountSignedInWithLabel": {
+    "description": "Label of the row that names the sign-in provider"
+  },
+  "accountProviderGoogle": "Google",
+  "@accountProviderGoogle": {
+    "description": "Name of the Google sign-in provider"
+  },
+  "accountSignOut": "Sign out",
+  "@accountSignOut": {
+    "description": "Label of the sign-out button"
+  },
+  "accountSigningOut": "Signing out…",
+  "@accountSigningOut": {
+    "description": "Label of the sign-out button while signing out"
+  },
+  "accountSignOutFootnote": "Your Cards stay on this device when you sign out.",
+  "@accountSignOutFootnote": {
+    "description": "Footnote under the sign-out button"
+  },
+  "accountSignOutConfirmTitle": "Sign out?",
+  "@accountSignOutConfirmTitle": {
+    "description": "Title of the sign-out confirmation dialog"
+  },
+  "accountSignOutConfirmBody": "Your Cards stay on this device. Sign in again to see them.",
+  "@accountSignOutConfirmBody": {
+    "description": "Body of the sign-out confirmation dialog"
+  },
+  "accountSignOutConfirmCancel": "Cancel",
+  "@accountSignOutConfirmCancel": {
+    "description": "Cancel action of the sign-out confirmation dialog"
+  },
+  "accountSignOutConfirmAction": "Sign out",
+  "@accountSignOutConfirmAction": {
+    "description": "Confirm action of the sign-out confirmation dialog"
   }
 }

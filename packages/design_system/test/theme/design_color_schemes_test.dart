@@ -66,5 +66,33 @@ void main() {
       expect(light.secondary, const Color(0xFF2D9CDB));
       expect(dark.secondary, const Color(0xFF2D9CDB));
     });
+
+    test('raised containers sit above the sheet in both themes', () {
+      expect(
+        DesignSystemTheme.light(
+          brand: DesignBrands.tweetyB2c,
+        ).colorScheme.surfaceContainer,
+        const Color(0xFFFFFFFF),
+      );
+      expect(
+        DesignSystemTheme.dark(
+          brand: DesignBrands.tweetyB2c,
+        ).colorScheme.surfaceContainer,
+        const Color(0xFF383838),
+      );
+    });
+
+    test('the status colours reach the theme', () {
+      for (final theme in [
+        DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
+        DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
+      ]) {
+        final status = DesignStatusColors.of(theme);
+
+        expect(status.success, const Color(0xFF388E3C));
+        expect(status.warning, const Color(0xFFFFA000));
+        expect(status.info, const Color(0xFF1976D2));
+      }
+    });
   });
 }

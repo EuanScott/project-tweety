@@ -93,6 +93,38 @@ void main() {
       expect(pressed, isTrue);
     });
 
+    for (final platform in const [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets('renders and triggers an avatar action on ${platform.name}', (
+        tester,
+      ) async {
+        const avatarKey = Key('avatar');
+        var pressed = false;
+
+        await _pumpScaffold(
+          tester,
+          platform: platform,
+          surfaceSize: const Size(400, 800),
+          scaffold: PageScaffold(
+            title: 'Test',
+            body: const Text('Primary'),
+            trailingAction: ToolBarAction.avatar(
+              avatar: const SizedBox.square(key: avatarKey, dimension: 32),
+              tooltip: 'Account',
+              onPressed: () => pressed = true,
+            ),
+          ),
+        );
+
+        expect(find.byType(AppIconButton), findsOneWidget);
+        expect(find.byKey(avatarKey), findsOneWidget);
+
+        await tester.tap(find.byKey(avatarKey));
+        await tester.pumpAndSettle();
+
+        expect(pressed, isTrue);
+      });
+    }
+
     testWidgets('renders Material page chrome on Android', (tester) async {
       await _pumpScaffold(
         tester,

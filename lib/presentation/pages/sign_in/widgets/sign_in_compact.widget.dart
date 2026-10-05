@@ -74,7 +74,7 @@ class _SignInCompact extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 height: _blockFadeHeight,
-                child: _SceneFade(
+                child: SceneFade(
                   background: background,
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

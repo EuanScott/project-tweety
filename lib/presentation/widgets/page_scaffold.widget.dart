@@ -131,18 +131,23 @@ class const PageScaffold({
   /// same [ToolBarAction], same [AppIconButton], per the shared contract on
   /// [ToolBarAction].
   Widget? get _cupertinoTrailingAction => _actionButton(trailingAction);
+}
 
-  static Widget? _actionButton(ToolBarAction? action) {
-    if (action == null) {
-      return null;
-    }
-
-    return AppIconButton(
-      icon: action.icon,
+/// Renders [action] as an [AppIconButton] on either platform.
+Widget? _actionButton(ToolBarAction? action) {
+  return switch (action) {
+    null => null,
+    ToolBarIconAction(:final icon) => AppIconButton(
+      icon: icon,
       onPressed: action.onPressed,
       semanticLabel: action.tooltip,
-    );
-  }
+    ),
+    ToolBarAvatarAction(:final avatar) => AppIconButton.custom(
+      onPressed: action.onPressed,
+      semanticLabel: action.tooltip,
+      child: avatar,
+    ),
+  };
 }
 
 /// The Material counterpart of [PageScaffold]'s Cupertino navigation
@@ -159,23 +164,9 @@ class const _MaterialToolBar({
   @override
   AppBar build(BuildContext context) {
     return AppBar(
-      leading: leadingAction != null
-          ? AppIconButton(
-              icon: leadingAction!.icon,
-              onPressed: leadingAction!.onPressed,
-              semanticLabel: leadingAction!.tooltip,
-            )
-          : null,
+      leading: _actionButton(leadingAction),
       title: Text(title),
-      actions: trailingAction != null
-          ? [
-              AppIconButton(
-                icon: trailingAction!.icon,
-                onPressed: trailingAction!.onPressed,
-                semanticLabel: trailingAction!.tooltip,
-              ),
-            ]
-          : const [],
+      actions: [?_actionButton(trailingAction)],
     );
   }
 }

@@ -9,4 +9,8 @@ abstract class AuthRepository {
   Stream<Session> get sessionChanges;
 
   Future<SignInResult> signInWithGoogle();
+
+  /// Ends the Session. After it completes, [session] is `SignedOut` and
+  /// [sessionChanges] has emitted it.
+  Future<void> signOut();
 }

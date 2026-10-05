@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/data/repositories/auth/local_auth.repository_impl.dart';
+import 'package:project_tweety/data/repositories/auth/profile.model.dart';
 import 'package:project_tweety/data/repositories/auth/session.model.dart';
 import 'package:project_tweety/data/repositories/auth/sign_in_result.model.dart';
 
@@ -11,7 +12,8 @@ void main() {
       expect(repository.session, const Session.signedOut());
     });
 
-    test('signing in emits SignedIn and returns SignInSucceeded', () async {
+    test('signing in emits SignedIn with an empty Profile and returns '
+        'SignInSucceeded', () async {
       final repository = LocalAuthRepository();
       final emitted = <Session>[];
       final subscription = repository.sessionChanges.listen(emitted.add);
@@ -21,8 +23,22 @@ void main() {
       await pumpEventQueue();
 
       expect(result, const SignInResult.succeeded());
-      expect(repository.session, const Session.signedIn());
-      expect(emitted, [const Session.signedIn()]);
+      expect(repository.session, const Session.signedIn(Profile()));
+      expect(emitted, [const Session.signedIn(Profile())]);
+    });
+
+    test('signing out emits SignedOut', () async {
+      final repository = LocalAuthRepository();
+      await repository.signInWithGoogle();
+      final emitted = <Session>[];
+      final subscription = repository.sessionChanges.listen(emitted.add);
+      addTearDown(subscription.cancel);
+
+      await repository.signOut();
+      await pumpEventQueue();
+
+      expect(repository.session, const Session.signedOut());
+      expect(emitted, [const Session.signedOut()]);
     });
   });
 }

@@ -1,32 +1,32 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:project_tweety/presentation/pages/sign_in/cubit/sign_in_tilt.cubit.dart';
+import 'package:project_tweety/presentation/widgets/water_scene/scene_tilt.cubit.dart';
 
-import '../../../../support/fake_device_tilt_service.dart';
+import '../../../support/fake_device_tilt_service.dart';
 
 void main() {
   late FakeDeviceTiltService tilt;
 
   setUp(() => tilt = FakeDeviceTiltService());
 
-  void allowMotion(SignInTiltCubit cubit) => cubit.sceneConditionsChanged(
+  void allowMotion(SceneTiltCubit cubit) => cubit.sceneConditionsChanged(
     isAppResumed: true,
     isOnScreen: true,
     reduceMotion: false,
   );
 
-  group('SignInTiltCubit', () {
+  group('SceneTiltCubit', () {
     test('starts at rest with the sensors off', () {
-      final cubit = SignInTiltCubit(tilt);
+      final cubit = SceneTiltCubit(tilt);
       addTearDown(cubit.close);
 
       expect(cubit.state, Offset.zero);
       expect(tilt.isListening, isFalse);
     });
 
-    blocTest<SignInTiltCubit, Offset>(
+    blocTest<SceneTiltCubit, Offset>(
       'follows the device tilt while the scene may move',
-      build: () => SignInTiltCubit(tilt),
+      build: () => SceneTiltCubit(tilt),
       act: (cubit) {
         allowMotion(cubit);
         expect(tilt.isListening, isTrue);
@@ -40,9 +40,9 @@ void main() {
       ('the scene leaves the screen', true, false, false),
       ('Reduce Motion is on', true, true, true),
     ]) {
-      blocTest<SignInTiltCubit, Offset>(
+      blocTest<SceneTiltCubit, Offset>(
         'stops the sensors and rests when $reason',
-        build: () => SignInTiltCubit(tilt),
+        build: () => SceneTiltCubit(tilt),
         act: (cubit) {
           allowMotion(cubit);
           tilt.tilt(const Offset(1, 0));
@@ -57,9 +57,9 @@ void main() {
       );
     }
 
-    blocTest<SignInTiltCubit, Offset>(
+    blocTest<SceneTiltCubit, Offset>(
       'listens again when the scene may move again',
-      build: () => SignInTiltCubit(tilt),
+      build: () => SceneTiltCubit(tilt),
       act: (cubit) {
         allowMotion(cubit);
         cubit.sceneConditionsChanged(
@@ -73,7 +73,7 @@ void main() {
     );
 
     test('closing stops the sensors', () async {
-      final cubit = SignInTiltCubit(tilt);
+      final cubit = SceneTiltCubit(tilt);
       allowMotion(cubit);
 
       await cubit.close();

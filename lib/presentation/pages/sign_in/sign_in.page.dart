@@ -7,9 +7,9 @@ import 'package:get_it/get_it.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:project_tweety/data/repositories/auth/sign_in_result.model.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:project_tweety/presentation/widgets/water_scene/water_scene.widget.dart';
 
 import 'cubit/sign_in.cubit.dart';
-import 'cubit/sign_in_tilt.cubit.dart';
 
 part 'widgets/sign_in_block.widget.dart';
 part 'widgets/sign_in_compact.widget.dart';
@@ -39,17 +39,12 @@ class SignInPage extends StatelessWidget {
   @visibleForTesting
   static const ValueKey<String> errorKey = ValueKey('sign-in-error');
 
-  /// One of `sky`, `far`, `mid`, `back`, `dash` or `front`.
-  @visibleForTesting
-  static ValueKey<String> sceneLayerKey(String layer) =>
-      ValueKey('sign-in-layer-$layer');
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => GetIt.I<SignInCubit>()),
-        BlocProvider(create: (_) => GetIt.I<SignInTiltCubit>()),
+        BlocProvider(create: (_) => GetIt.I<SceneTiltCubit>()),
       ],
       child: const PaneLayoutScope(child: _SignInView()),
     );

@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'profile.model.dart';
+
 part 'session.model.freezed.dart';
 
 /// Whether a person is signed in on this device.
@@ -9,5 +11,5 @@ part 'session.model.freezed.dart';
 sealed class Session with _$Session {
   const factory signedOut() = SignedOut;
 
-  const factory signedIn() = SignedIn;
+  const factory signedIn(Profile profile) = SignedIn;
 }

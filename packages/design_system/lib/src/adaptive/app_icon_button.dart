@@ -9,18 +9,35 @@ import 'app_design_platform.dart';
 /// Feature code should use this widget when it needs a compact, unlabelled
 /// action control (e.g. a close affordance) and should not care whether the
 /// current surface is Material or Cupertino.
-class const AppIconButton({
-  /// The icon to show.
-  required final IconData icon,
+class AppIconButton extends StatelessWidget {
+  /// Shows [icon].
+  const new({
+    required IconData this.icon,
+    required this.onPressed,
+    this.semanticLabel,
+    super.key,
+  }) : child = null;
+
+  /// Shows [child], for example an avatar, in the same touch target as an
+  /// icon: 48 px on Material and 44 px on Cupertino. [semanticLabel] replaces
+  /// any semantics inside [child].
+  const new custom({
+    required Widget this.child,
+    required this.onPressed,
+    this.semanticLabel,
+    super.key,
+  }) : icon = null;
+
+  final IconData? icon;
+  final Widget? child;
 
   /// Called when the button is tapped.
-  required final VoidCallback onPressed,
+  final VoidCallback onPressed;
 
   /// Accessibility label announced by screen readers, and shown as a
   /// tooltip on Material.
-  final String? semanticLabel,
-  super.key,
-}) extends StatelessWidget {
+  final String? semanticLabel;
+
   @override
   Widget build(BuildContext context) {
     if (AppDesignPlatform.of(context).isCupertino) {
@@ -31,18 +48,28 @@ class const AppIconButton({
   }
 
   Widget _buildMaterial(BuildContext context) {
+    final child = this.child;
+
     return IconButton(
-      icon: Icon(icon),
+      icon: child == null ? Icon(icon) : ExcludeSemantics(child: child),
       onPressed: onPressed,
       tooltip: semanticLabel,
     );
   }
 
   Widget _buildCupertino(BuildContext context) {
+    final child = this.child;
+
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: onPressed,
-      child: Icon(icon, semanticLabel: semanticLabel),
+      child: child == null
+          ? Icon(icon, semanticLabel: semanticLabel)
+          : Semantics(
+              label: semanticLabel,
+              excludeSemantics: true,
+              child: child,
+            ),
     );
   }
 }

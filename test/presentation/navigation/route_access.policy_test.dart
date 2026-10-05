@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:project_tweety/data/repositories/auth/profile.model.dart';
 import 'package:project_tweety/data/repositories/auth/session.model.dart';
 import 'package:project_tweety/presentation/navigation/app_routes.constants.dart';
 import 'package:project_tweety/presentation/navigation/route_access.policy.dart';
@@ -25,7 +26,7 @@ void main() {
   group('RouteAccessPolicy.sessionAccessDecision', () {
     const policy = RouteAccessPolicy(canAccessSettings: true);
     const signedOut = Session.signedOut();
-    const signedIn = Session.signedIn();
+    const signedIn = Session.signedIn(Profile());
 
     String? decide(Session session, String location) {
       return policy

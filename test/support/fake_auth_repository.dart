@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
+import 'package:project_tweety/data/repositories/auth/profile.model.dart';
 import 'package:project_tweety/data/repositories/auth/session.model.dart';
 import 'package:project_tweety/data/repositories/auth/sign_in_result.model.dart';
 
@@ -10,18 +11,27 @@ import 'package:project_tweety/data/repositories/auth/sign_in_result.model.dart'
 ///
 /// [signInResult] is what [signInWithGoogle] returns; a success also signs the
 /// fake in. Pass a [Completer] through [pendingSignIn] to hold the attempt open
-/// so a test can assert the in-progress state. [emit] changes the Session
-/// mid-test, for example to sign out.
+/// so a test can assert the in-progress state. [profile] is the Profile a
+/// signed-in Session carries. [signOut] signs the fake out and counts the
+/// call; pass a [Completer] through [pendingSignOut] to hold it open, or set
+/// [signOutError] to make it throw. [emit] changes the Session mid-test.
 class FakeAuthRepository implements AuthRepository {
   new({
-    this.session = const Session.signedIn(),
+    this.profile = const Profile(),
+    Session? session,
     this.signInResult = const SignInResult.succeeded(),
     this.pendingSignIn,
-  });
+    this.pendingSignOut,
+    this.signOutError,
+  }) : session = session ?? Session.signedIn(profile);
 
+  final Profile profile;
   SignInResult signInResult;
   Completer<void>? pendingSignIn;
+  Completer<void>? pendingSignOut;
+  Exception? signOutError;
   int signInRequestCount = 0;
+  int signOutRequestCount = 0;
 
   final _sessionChanges = StreamController<Session>.broadcast();
 
@@ -37,10 +47,22 @@ class FakeAuthRepository implements AuthRepository {
     await pendingSignIn?.future;
 
     if (signInResult case SignInSucceeded()) {
-      emit(const Session.signedIn());
+      emit(Session.signedIn(profile));
     }
 
     return signInResult;
+  }
+
+  @override
+  Future<void> signOut() async {
+    signOutRequestCount++;
+    await pendingSignOut?.future;
+
+    if (signOutError case final error?) {
+      throw error;
+    }
+
+    emit(const Session.signedOut());
   }
 
   void emit(Session session) {

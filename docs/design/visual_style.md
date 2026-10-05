@@ -41,6 +41,7 @@ sign-in work puts them there.
 | `onSecondary` | `#FFFFFF`    | `#2E0A25` | Text on secondary                                          |
 | `background`  | `#F4F6F7`    | `#121212` | Page background                                            |
 | `surface`     | `#F4F6F7`    | `#2C2C2C` | Sheets, dialogs, raised areas                              |
+| `surfaceContainer` | `#FFFFFF` | `#383838` | Cards and other areas raised on a sheet                |
 | `onSurface`   | black at 87% | `#FFFFFF` | Body text                                                  |
 | `error`       | `#D32F2F`    | `#D32F2F` | Errors and destructive actions only                        |
 | `onError`     | `#FFFFFF`    | `#FFFFFF` | Text on error                                              |

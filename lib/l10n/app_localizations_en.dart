@@ -274,4 +274,63 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get signInSceneDescription =>
       'Dash, a blue bird in a green hoodie, wading in teal water and holding up a card.';
+
+  @override
+  String get accountTitle => 'Account';
+
+  @override
+  String get accountAvatarLabel => 'Account';
+
+  @override
+  String get accountPhotoLabel => 'Profile photo';
+
+  @override
+  String get accountNoPhotoLabel => 'No profile photo';
+
+  @override
+  String get accountFallbackHeading => 'Your Account';
+
+  @override
+  String get accountNoPhone => 'No phone number on this Account';
+
+  @override
+  String get accountEmailLabel => 'Email';
+
+  @override
+  String get accountEmailVerified => 'Verified';
+
+  @override
+  String get accountEmailNotVerified => 'Not verified';
+
+  @override
+  String get accountNoEmail => 'No email on this Account';
+
+  @override
+  String get accountSignedInWithLabel => 'Signed in with';
+
+  @override
+  String get accountProviderGoogle => 'Google';
+
+  @override
+  String get accountSignOut => 'Sign out';
+
+  @override
+  String get accountSigningOut => 'Signing out…';
+
+  @override
+  String get accountSignOutFootnote =>
+      'Your Cards stay on this device when you sign out.';
+
+  @override
+  String get accountSignOutConfirmTitle => 'Sign out?';
+
+  @override
+  String get accountSignOutConfirmBody =>
+      'Your Cards stay on this device. Sign in again to see them.';
+
+  @override
+  String get accountSignOutConfirmCancel => 'Cancel';
+
+  @override
+  String get accountSignOutConfirmAction => 'Sign out';
 }

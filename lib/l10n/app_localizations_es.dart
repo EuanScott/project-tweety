@@ -280,4 +280,63 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get signInSceneDescription =>
       'Dash, un pájaro azul con una sudadera verde, vadeando en agua turquesa y sosteniendo una tarjeta.';
+
+  @override
+  String get accountTitle => 'Cuenta';
+
+  @override
+  String get accountAvatarLabel => 'Cuenta';
+
+  @override
+  String get accountPhotoLabel => 'Foto de perfil';
+
+  @override
+  String get accountNoPhotoLabel => 'Sin foto de perfil';
+
+  @override
+  String get accountFallbackHeading => 'Tu Cuenta';
+
+  @override
+  String get accountNoPhone => 'No hay número de teléfono en esta Cuenta';
+
+  @override
+  String get accountEmailLabel => 'Correo electrónico';
+
+  @override
+  String get accountEmailVerified => 'Verificado';
+
+  @override
+  String get accountEmailNotVerified => 'Sin verificar';
+
+  @override
+  String get accountNoEmail => 'No hay correo electrónico en esta Cuenta';
+
+  @override
+  String get accountSignedInWithLabel => 'Sesión iniciada con';
+
+  @override
+  String get accountProviderGoogle => 'Google';
+
+  @override
+  String get accountSignOut => 'Cerrar sesión';
+
+  @override
+  String get accountSigningOut => 'Cerrando sesión…';
+
+  @override
+  String get accountSignOutFootnote =>
+      'Tus Tarjetas se quedan en este dispositivo cuando cierras sesión.';
+
+  @override
+  String get accountSignOutConfirmTitle => '¿Cerrar sesión?';
+
+  @override
+  String get accountSignOutConfirmBody =>
+      'Tus Tarjetas se quedan en este dispositivo. Vuelve a iniciar sesión para verlas.';
+
+  @override
+  String get accountSignOutConfirmCancel => 'Cancelar';
+
+  @override
+  String get accountSignOutConfirmAction => 'Cerrar sesión';
 }

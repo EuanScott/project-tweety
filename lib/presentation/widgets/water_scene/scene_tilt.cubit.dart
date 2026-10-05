@@ -5,13 +5,13 @@ import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/core/platform/device_tilt.service.dart';
 
-/// The sign-in scene's tilt, from -1 to 1 on each axis.
+/// The water scene's tilt, from -1 to 1 on each axis.
 ///
 /// The scene reports where it stands; this decides when the sensors run.
 /// They run only while the app is in the foreground, the scene is on screen,
 /// and Reduce Motion is off. Otherwise the tilt rests at zero.
 @injectable
-class SignInTiltCubit extends Cubit<Offset> {
+class SceneTiltCubit extends Cubit<Offset> {
   new(this._deviceTilt) : super(Offset.zero);
 
   final DeviceTiltService _deviceTilt;
