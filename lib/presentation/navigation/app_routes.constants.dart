@@ -51,15 +51,20 @@ class AppRoutes {
   /// Card id path parameter used by [cardsDetailPath].
   static const cardsDetailIdParameter = 'cardId';
 
-  /// Absolute path for creating a card under Cards.
+  /// Relative child path for creating a card under [cardsPath].
   ///
-  /// Card creation and card details are siblings of [cardsPath] rather than
-  /// children of it, so a location under Cards resolves to a single page. The
-  /// caller decides whether that page is pushed onto the list or replaces it.
-  static const cardsNewPath = '$cardsPath/new';
+  /// Card creation and card details are children of [cardsPath], so a compact
+  /// region always stacks them on the list and can swipe back to it.
+  static const cardsNewChildPath = 'new';
+
+  /// Absolute path for creating a card under Cards.
+  static const cardsNewPath = '$cardsPath/$cardsNewChildPath';
+
+  /// Relative child path for card details under [cardsPath].
+  static const cardsDetailChildPath = ':$cardsDetailIdParameter';
 
   /// Absolute path for card details under Cards.
-  static const cardsDetailPath = '$cardsPath/:$cardsDetailIdParameter';
+  static const cardsDetailPath = '$cardsPath/$cardsDetailChildPath';
 
   /// Absolute path prefix for directly opening card details.
   static const cardsDetailFullPathPrefix = '$cardsPath/';

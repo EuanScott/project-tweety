@@ -104,7 +104,7 @@ Feature pages should still decide their own content layout. For example, the Car
 ## Adding a Nested Route
 
 1. Add the route name/path to `AppRoutes`.
-2. Add the `GoRoute` as a child route under the correct branch in `app.router.dart`.
+2. Add the `GoRoute` as a child route under the correct branch in `app.router.dart`. Build its page with `pageBuilder` and `platformPage`; the router rejects `builder`.
 3. Add a helper to `navigation.extension.dart` if feature code needs to open it.
 4. Use the helper from the page instead of hard-coding route names.
 
@@ -114,12 +114,14 @@ Example shape:
 GoRoute(
   path: AppRoutes.settingsPath,
   name: AppRoutes.settingsName,
-  builder: (context, state) => const Settings(),
+  pageBuilder: (context, state) =>
+      platformPage(context, state, const Settings()),
   routes: [
     GoRoute(
       path: AppRoutes.settingsAppPreferencesPath,
       name: AppRoutes.settingsAppPreferencesName,
-      builder: (context, state) => const AppPreferencesPage(),
+      pageBuilder: (context, state) =>
+      platformPage(context, state, const AppPreferencesPage()),
     ),
   ],
 )

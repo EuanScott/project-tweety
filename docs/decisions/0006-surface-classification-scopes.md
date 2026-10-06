@@ -66,13 +66,9 @@ The scope is published in the cards `ShellRoute` rather than in
 navigation package has no `design_system` dependency. A second feature wanting
 split panes is the trigger to promote it into the shell.
 
-Stack depth now follows the region mode, so `/cards/:id` and `/cards/new` are
-siblings of `/cards` rather than children. A compact region pushes onto that
-route; a split region replaces it. Two costs follow: a cold deep link in a
-compact region has no page to pop, so `CardDetailsPage` supplies its own back
-action when `canPop()` is false; and a page pushed while compact must be
-flattened when the region becomes split, which `Cards` does from
-`didChangeDependencies`.
+Cards stack depth is decided in
+[ADR-0015](0015-native-pages-for-every-route.md): Cards routes are nested and
+the stack follows the URL in both regions.
 
 Re-evaluate if a second feature needs split panes, or if a page needs a
 breakpoint other than the region default.
@@ -83,6 +79,6 @@ breakpoint other than the region default.
 rule including the safe-area subtraction.
 `test/presentation/pages/cards/split_pane_drift_app_test.dart` drives the whole
 app with horizontal insets across the band where the two old measurements
-disagreed. `test/presentation/pages/cards/cards_navigation_test.dart` covers
+disagreed. `test/presentation/pages/cards/cards_navigation.flow_test.dart` covers
 stack depth in both regions, the cold deep link, and the compact-to-split
 transition.

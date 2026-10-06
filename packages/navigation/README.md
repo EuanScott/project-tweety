@@ -40,7 +40,8 @@ final router = createNavigationRouter<AppTab>(
         GoRoute(
           path: AppRoutes.homePath,
           name: AppRoutes.homeName,
-          builder: (context, state) => const Home(),
+          pageBuilder: (context, state) =>
+      platformPage(context, state, const Home()),
         ),
       ],
     ),
@@ -109,6 +110,16 @@ const appTabConfigs = [
 
 `labelBuilder` receives `BuildContext` so the app can resolve localization without exposing localization types to the package.
 
+## Pages
+
+Every `GoRoute` must use `pageBuilder` with `platformPage`. iOS and macOS get a
+`CupertinoPage`, which slides in and closes with the edge swipe. Other
+platforms get a `MaterialPage`. `createNavigationRouter` throws an
+`ArgumentError` for a `GoRoute` that uses `builder`: go_router cannot detect the
+`material_ui` app, so a `builder` route gets a page with no transition and no
+back gesture. The router shows the `errorBuilder` widget on the same platform
+page. See [ADR-0015](../../docs/decisions/0015-native-pages-for-every-route.md).
+
 ## Branches
 
 Each `NavigationBranch<TTab>` must match one tab config. The router factory validates empty tabs, mismatched counts, duplicates, missing branches, and unknown branches.
@@ -122,12 +133,14 @@ NavigationBranch<AppTab>(
     GoRoute(
       path: AppRoutes.settingsPath,
       name: AppRoutes.settingsName,
-      builder: (context, state) => const Settings(),
+      pageBuilder: (context, state) =>
+      platformPage(context, state, const Settings()),
       routes: [
         GoRoute(
           path: AppRoutes.settingsAppPreferencesPath,
           name: AppRoutes.settingsAppPreferencesName,
-          builder: (context, state) => const AppPreferencesPage(),
+          pageBuilder: (context, state) =>
+      platformPage(context, state, const AppPreferencesPage()),
         ),
       ],
     ),

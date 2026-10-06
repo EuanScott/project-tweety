@@ -54,11 +54,8 @@ GoRouter createRouter({
       GoRoute(
         path: AppRoutes.signInPath,
         name: AppRoutes.signInName,
-        pageBuilder: (context, state) => _platformPage(
-          state,
-          const SignInPage(),
-          Theme.of(context).platform,
-        ),
+        pageBuilder: (context, state) =>
+            platformPage(context, state, const SignInPage()),
       ),
     ],
     redirect: (context, state) => routeAccessPolicy
@@ -74,12 +71,14 @@ GoRouter createRouter({
           GoRoute(
             path: AppRoutes.homePath,
             name: AppRoutes.homeName,
-            builder: (context, state) => const Home(),
+            pageBuilder: (context, state) =>
+                platformPage(context, state, const Home()),
           ),
           GoRoute(
             path: AppRoutes.accessDeniedPath,
             name: AppRoutes.accessDeniedName,
-            builder: (context, state) => const AccessDeniedPage(),
+            pageBuilder: (context, state) =>
+                platformPage(context, state, const AccessDeniedPage()),
           ),
         ],
       ),
@@ -102,28 +101,37 @@ GoRouter createRouter({
               GoRoute(
                 path: AppRoutes.cardsPath,
                 name: AppRoutes.cardsName,
-                pageBuilder: (context, state) =>
-                    _cardsPage(context, state, const Cards()),
-              ),
-              GoRoute(
-                path: AppRoutes.cardsNewPath,
-                name: AppRoutes.cardsNewName,
-                pageBuilder: (context, state) =>
-                    _cardsPage(context, state, const Cards(isCreating: true)),
-              ),
-              GoRoute(
-                path: AppRoutes.cardsDetailPath,
-                name: AppRoutes.cardsDetailName,
-                pageBuilder: (context, state) {
-                  final cardId =
-                      state.pathParameters[AppRoutes.cardsDetailIdParameter]!;
+                pageBuilder: (context, state) => _cardsPage(
+                  context,
+                  state,
+                  const Cards(),
+                  isCovered: state.fullPath != AppRoutes.cardsPath,
+                ),
+                routes: [
+                  GoRoute(
+                    path: AppRoutes.cardsNewChildPath,
+                    name: AppRoutes.cardsNewName,
+                    pageBuilder: (context, state) => _cardsPage(
+                      context,
+                      state,
+                      const Cards(isCreating: true),
+                    ),
+                  ),
+                  GoRoute(
+                    path: AppRoutes.cardsDetailChildPath,
+                    name: AppRoutes.cardsDetailName,
+                    pageBuilder: (context, state) {
+                      final cardId = state
+                          .pathParameters[AppRoutes.cardsDetailIdParameter]!;
 
-                  return _cardsPage(
-                    context,
-                    state,
-                    Cards(selectedCardId: cardId),
-                  );
-                },
+                      return _cardsPage(
+                        context,
+                        state,
+                        Cards(selectedCardId: cardId),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -139,14 +147,16 @@ GoRouter createRouter({
             name: AppRoutes.settingsName,
             redirect: (context, state) =>
                 _settingsAccessRedirect(policy: routeAccessPolicy),
-            builder: (context, state) => const Settings(),
+            pageBuilder: (context, state) =>
+                platformPage(context, state, const Settings()),
             routes: [
               GoRoute(
                 path: AppRoutes.settingsAppPreferencesPath,
                 name: AppRoutes.settingsAppPreferencesName,
                 redirect: (context, state) =>
                     _settingsAccessRedirect(policy: routeAccessPolicy),
-                builder: (context, state) => const AppPreferencesPage(),
+                pageBuilder: (context, state) =>
+                    platformPage(context, state, const AppPreferencesPage()),
               ),
             ],
           ),
@@ -161,39 +171,38 @@ GoRouter createRouter({
   );
 }
 
-/// The Cards locations resolve to one page while the region shows both panes.
+/// Builds the page for a Cards location.
 ///
-/// Moving between the list, a card, and the editor changes what the panes hold,
-/// not which page is on screen. Giving them a shared key keeps the same page
-/// mounted, so the list keeps its scroll position and nothing animates over a
-/// layout that never changed. A compact region genuinely stacks pages, so there
-/// each location keeps its own key and its own transition.
-Page<void> _cardsPage(BuildContext context, GoRouterState state, Widget child) {
-  final isSplit = PaneLayoutScope.of(context) == PaneLayoutMode.split;
-  final isStacked = GoRouter.of(context).canPop();
+/// A compact region stacks a native page per location, so a card or the editor
+/// always sits on the list and swipes back to it.
+///
+/// A split region shows the list and the selection side by side on one page.
+/// The topmost location owns that page under a shared key, so it stays mounted
+/// as the selection changes: the list keeps its scroll position and nothing
+/// animates over a layout that never changed. The list location is [isCovered]
+/// by a selection there and is never visible, so it builds nothing.
+Page<void> _cardsPage(
+  BuildContext context,
+  GoRouterState state,
+  Widget child, {
+  bool isCovered = false,
+}) {
+  if (PaneLayoutScope.of(context) != PaneLayoutMode.split) {
+    return platformPage(context, state, child);
+  }
 
-  if (isSplit && !isStacked) {
+  if (isCovered) {
     return NoTransitionPage<void>(
-      key: const ValueKey('cards-panes'),
-      child: child,
+      key: state.pageKey,
+      child: const SizedBox.shrink(),
     );
   }
 
-  return _platformPage(state, child, Theme.of(context).platform);
-}
-
-Page<void> _platformPage(
-  GoRouterState state,
-  Widget child,
-  TargetPlatform platform,
-) {
-  return switch (platform) {
-    TargetPlatform.iOS || TargetPlatform.macOS => CupertinoPage<void>(
-      key: state.pageKey,
-      child: child,
-    ),
-    _ => MaterialPage<void>(key: state.pageKey, child: child),
-  };
+  return NoTransitionPage<void>(
+    key: const ValueKey('cards-panes'),
+    name: state.name,
+    child: child,
+  );
 }
 
 String? _settingsAccessRedirect({required RouteAccessPolicy policy}) {

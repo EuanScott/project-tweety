@@ -18,20 +18,8 @@ extension AppNavigation on BuildContext {
     return pushNamed<T>(AppRoutes.settingsAppPreferencesName);
   }
 
-  /// Pushes a card details page inside Cards.
-  Future<T?> openCardDetails<T extends Object?>(String cardId) {
-    return pushNamed<T>(
-      AppRoutes.cardsDetailName,
-      pathParameters: {AppRoutes.cardsDetailIdParameter: cardId},
-    );
-  }
-
-  /// Pushes the card creation editor inside Cards.
-  Future<T?> openNewCard<T extends Object?>() {
-    return pushNamed<T>(AppRoutes.cardsNewName);
-  }
-
-  /// Replaces the current cards location with a card details route.
+  /// Shows a card's details inside Cards, stacked on the list in a compact
+  /// region.
   void goCardDetails(String cardId) {
     goNamed(
       AppRoutes.cardsDetailName,
@@ -39,7 +27,8 @@ extension AppNavigation on BuildContext {
     );
   }
 
-  /// Replaces the current Cards location with the card creation editor.
+  /// Shows the card creation editor inside Cards, stacked on the list in a
+  /// compact region.
   void goNewCard() {
     goNamed(AppRoutes.cardsNewName);
   }

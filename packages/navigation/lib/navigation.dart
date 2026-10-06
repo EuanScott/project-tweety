@@ -6,6 +6,7 @@ library;
 
 export 'src/navigation_branch.dart';
 export 'src/navigation_navigator_keys.dart';
+export 'src/navigation_page.dart';
 export 'src/navigation_route_error_page.dart';
 export 'src/navigation_router.dart';
 export 'src/navigation_shell.dart';

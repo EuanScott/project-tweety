@@ -30,16 +30,19 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
     final l10n = AppLocalizations.of(context)!;
 
     return PopScope(
-      canPop: false,
+      canPop: !context.select((CardsBloc bloc) => bloc.state.isDraftDirty),
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) {
-          unawaited(
-            CardsDraftDiscardGuard.discardThen(
-              context,
-              () => context.read<CardsBloc>().add(const CardsEditCancelled()),
-            ),
-          );
+        if (didPop) {
+          context.read<CardsBloc>().add(const CardsDraftDiscarded());
+          return;
         }
+
+        unawaited(
+          CardsDraftDiscardGuard.discardThen(
+            context,
+            () => context.read<CardsBloc>().add(const CardsEditCancelled()),
+          ),
+        );
       },
       child: BlocBuilder<CardsBloc, CardsState>(
         builder: (context, state) {

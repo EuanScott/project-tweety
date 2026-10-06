@@ -33,10 +33,15 @@ class const PageScaffold({
   /// The optional typed leading action rendered in the shared app bar.
   ///
   /// Supply this only when the platform's automatic back affordance is wrong or
-  /// absent — a page reached by a cold deep link has no route to pop, so it has
-  /// no automatic back button. See [ToolBarAction] for the shared
-  /// cross-platform contract.
+  /// absent. See [ToolBarAction] for the shared cross-platform contract.
   final ToolBarAction? leadingAction,
+
+  /// Whether the app bar adds the platform's back affordance when a route sits
+  /// below this page.
+  ///
+  /// Turn this off for a page that is the root of what the person sees even
+  /// though the navigator keeps a hidden route below it.
+  final bool impliesBackAction = true,
 
   /// The optional typed trailing action rendered in the shared app bar. See
   /// [ToolBarAction] for the shared cross-platform contract.
@@ -84,6 +89,7 @@ class const PageScaffold({
                 CupertinoSliverNavigationBar(
                   backgroundColor: cupertinoBackgroundColor,
                   leading: _cupertinoLeadingAction,
+                  automaticallyImplyLeading: impliesBackAction,
                   largeTitle: Text(title),
                   trailing: _cupertinoTrailingAction,
                 ),
@@ -106,6 +112,7 @@ class const PageScaffold({
         navigationBar: CupertinoNavigationBar(
           backgroundColor: cupertinoBackgroundColor,
           leading: _cupertinoLeadingAction,
+          automaticallyImplyLeading: impliesBackAction,
           middle: Text(title),
           trailing: _cupertinoTrailingAction,
         ),
@@ -117,6 +124,7 @@ class const PageScaffold({
       appBar: _MaterialToolBar(
         title: title,
         leadingAction: leadingAction,
+        impliesBackAction: impliesBackAction,
         trailingAction: trailingAction,
       ),
       body: SafeArea(child: _PageScaffoldBody(scaffold: this)),
@@ -155,6 +163,7 @@ Widget? _actionButton(ToolBarAction? action) {
 /// is the single public page-header abstraction for both platforms.
 class const _MaterialToolBar({
   required final String title,
+  required final bool impliesBackAction,
   final ToolBarAction? leadingAction,
   final ToolBarAction? trailingAction,
 }) extends StatelessWidget implements PreferredSizeWidget {
@@ -165,6 +174,7 @@ class const _MaterialToolBar({
   AppBar build(BuildContext context) {
     return AppBar(
       leading: _actionButton(leadingAction),
+      automaticallyImplyLeading: impliesBackAction,
       title: Text(title),
       actions: [?_actionButton(trailingAction)],
     );

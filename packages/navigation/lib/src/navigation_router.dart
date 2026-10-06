@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navigation/src/navigation_branch.dart';
 import 'package:navigation/src/navigation_navigator_keys.dart';
+import 'package:navigation/src/navigation_page.dart';
 import 'package:navigation/src/navigation_shell.dart';
 import 'package:navigation/src/navigation_tab_config.dart';
 
@@ -27,6 +28,10 @@ GoRouter createNavigationRouter<TTab extends Object>({
   Listenable? refreshListenable,
 }) {
   _validateRouterConfig(tabs: tabs, branches: branches);
+  _validatePageBuilders([
+    ...routes,
+    for (final branch in branches) ...branch.routes,
+  ]);
 
   final navigationKeys = NavigationNavigatorKeys<TTab>(
     tabs.map((tab) => tab.tab),
@@ -42,7 +47,8 @@ GoRouter createNavigationRouter<TTab extends Object>({
     observers: observers,
     redirect: redirect,
     refreshListenable: refreshListenable,
-    errorBuilder: (context, state) => errorBuilder(context, state.error),
+    errorPageBuilder: (context, state) =>
+        platformPage(context, state, errorBuilder(context, state.error)),
     routes: [
       GoRoute(path: rootPath, redirect: (context, state) => rootRedirectPath),
       ...routes,
@@ -114,5 +120,23 @@ void _validateRouterConfig<TTab extends Object>({
       'branches',
       'Branches include unknown tabs: $unknownBranches',
     );
+  }
+}
+
+/// Rejects any [GoRoute] that leaves the page type to go_router.
+///
+/// See [platformPage] for why a `builder` route loses its transition and
+/// back gesture in this app.
+void _validatePageBuilders(List<RouteBase> routes) {
+  for (final route in routes) {
+    if (route is GoRoute && route.builder != null) {
+      throw ArgumentError.value(
+        route.path,
+        'routes',
+        'GoRoute must use pageBuilder with platformPage, not builder',
+      );
+    }
+
+    _validatePageBuilders(route.routes);
   }
 }

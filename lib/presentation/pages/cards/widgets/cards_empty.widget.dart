@@ -27,17 +27,6 @@ class const _CardsEmpty() extends StatelessWidget {
   }
 
   void _createCard(BuildContext context) {
-    final isSplit = PaneLayoutScope.of(context) == PaneLayoutMode.split;
-
-    unawaited(
-      CardsDraftDiscardGuard.discardThen(context, () {
-        if (isSplit) {
-          context.goNewCard();
-          return;
-        }
-
-        unawaited(context.openNewCard());
-      }),
-    );
+    unawaited(CardsDraftDiscardGuard.discardThen(context, context.goNewCard));
   }
 }

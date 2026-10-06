@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +15,7 @@ const _railForeground = Color(0xFF0F5D5D);
 const _drawerSurface = Color(0xFFEAF1FF);
 const _drawerForeground = Color(0xFF1F3C88);
 const _homeThemeProbeKey = ValueKey('home-theme-probe');
+const _errorProbeKey = ValueKey<String>('error-probe');
 const _sideNavigationToggleTooltip = 'Toggle side navigation';
 
 void main() {
@@ -64,6 +67,55 @@ void main() {
       );
     });
 
+    final builderRoute = GoRoute(
+      path: 'builder',
+      builder: (_, _) => const SizedBox.shrink(),
+    );
+    for (final (label, branchRoutes, extraRoutes) in [
+      (
+        'a branch child route',
+        [_route('/settings', routes: [builderRoute])],
+        <RouteBase>[],
+      ),
+      (
+        'a route inside a ShellRoute',
+        [
+          ShellRoute(
+            builder: (_, _, child) => child,
+            routes: [_route('/settings', routes: [builderRoute])],
+          ),
+        ],
+        <RouteBase>[],
+      ),
+      (
+        'a route outside the tab shell',
+        [_route('/settings')],
+        <RouteBase>[
+          GoRoute(path: '/gate', builder: (_, _) => const SizedBox.shrink()),
+        ],
+      ),
+    ]) {
+      test('throws when $label uses builder instead of pageBuilder', () {
+        expect(
+          () => createNavigationRouter<_TestTab>(
+            initialLocation: '/',
+            rootPath: '/',
+            rootRedirectPath: '/settings',
+            tabs: [_tabConfig(_TestTab.settings, '/settings', 'settings')],
+            branches: [
+              NavigationBranch<_TestTab>(
+                tab: _TestTab.settings,
+                routes: branchRoutes,
+              ),
+            ],
+            routes: extraRoutes,
+            errorBuilder: _errorBuilder,
+          ),
+          throwsArgumentError,
+        );
+      });
+    }
+
     testWidgets(
       'renders extra routes outside the tab shell and re-runs the redirect '
       'when the refresh listenable notifies',
@@ -96,6 +148,66 @@ void main() {
         expect(find.byType(NavigationBar), findsOneWidget);
       },
     );
+
+    for (final (platform, routeType) in [
+      (TargetPlatform.iOS, CupertinoPageRoute<void>),
+      (TargetPlatform.android, MaterialPageRoute<void>),
+    ]) {
+      testWidgets('pushes a $platform page that slides in and swipes back', (
+        tester,
+      ) async {
+        await _pumpRouter(
+          tester,
+          surfaceSize: const Size(500, 800),
+          platform: platform,
+          initialLocation: '/settings',
+          settingsChildren: [_route('detail')],
+        );
+
+        unawaited(GoRouter.of(tester.element(find.text('/settings'))).push(
+          '/settings/detail',
+        ));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+
+        final route = ModalRoute.of(tester.element(find.text('detail')))!;
+        expect(route.animation!.isAnimating, isTrue);
+        expect(
+          route,
+          platform == TargetPlatform.iOS
+              ? isA<CupertinoRouteTransitionMixin<void>>()
+              : isA<MaterialRouteTransitionMixin<void>>(),
+          reason: '$routeType',
+        );
+
+        await tester.pumpAndSettle();
+        if (platform != TargetPlatform.iOS) {
+          return;
+        }
+
+        await tester.dragFrom(const Offset(5, 400), const Offset(400, 0));
+        await tester.pumpAndSettle();
+
+        expect(find.text('detail'), findsNothing);
+        expect(find.text('/settings'), findsOneWidget);
+      });
+    }
+
+    testWidgets('shows an unknown location on the native iOS page', (
+      tester,
+    ) async {
+      await _pumpRouter(
+        tester,
+        surfaceSize: const Size(500, 800),
+        platform: TargetPlatform.iOS,
+        initialLocation: '/nowhere',
+      );
+
+      expect(
+        ModalRoute.of(tester.element(find.byKey(_errorProbeKey))),
+        isA<CupertinoRouteTransitionMixin<void>>(),
+      );
+    });
 
     testWidgets('renders a bottom navigation bar at compact width', (
       tester,
@@ -307,6 +419,8 @@ Future<void> _pumpRouter(
   WidgetTester tester, {
   required Size surfaceSize,
   TargetPlatform platform = TargetPlatform.android,
+  String initialLocation = '/home',
+  List<RouteBase> settingsChildren = const [],
   List<RouteBase> routes = const [],
   GoRouterRedirect? redirect,
   Listenable? refreshListenable,
@@ -317,7 +431,7 @@ Future<void> _pumpRouter(
   addTearDown(tester.view.reset);
 
   final router = createNavigationRouter<_TestTab>(
-    initialLocation: '/home',
+    initialLocation: initialLocation,
     rootPath: '/',
     rootRedirectPath: '/home',
     tabs: [
@@ -328,7 +442,7 @@ Future<void> _pumpRouter(
       NavigationBranch<_TestTab>(tab: _TestTab.home, routes: [_route('/home')]),
       NavigationBranch<_TestTab>(
         tab: _TestTab.settings,
-        routes: [_route('/settings')],
+        routes: [_route('/settings', routes: settingsChildren)],
       ),
     ],
     errorBuilder: _errorBuilder,
@@ -383,18 +497,23 @@ NavigationTabConfig<_TestTab> _tabConfig(
   );
 }
 
-GoRoute _route(String path) {
+GoRoute _route(String path, {List<RouteBase> routes = const []}) {
   return GoRoute(
     path: path,
-    builder: (_, _) => Scaffold(
-      appBar: AppBar(title: Text(path)),
-      body: SizedBox(key: path == '/home' ? _homeThemeProbeKey : null),
+    routes: routes,
+    pageBuilder: (context, state) => platformPage(
+      context,
+      state,
+      Scaffold(
+        appBar: AppBar(title: Text(path)),
+        body: SizedBox(key: path == '/home' ? _homeThemeProbeKey : null),
+      ),
     ),
   );
 }
 
 Widget _errorBuilder(BuildContext context, Exception? error) {
-  return const SizedBox.shrink();
+  return const SizedBox.shrink(key: _errorProbeKey);
 }
 
 double _sideNavigationWidth(WidgetTester tester) {
