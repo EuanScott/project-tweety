@@ -507,7 +507,9 @@ class AppModal {
     final content = isCupertino
         ? Material(
             type: MaterialType.transparency,
-            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             child: child,
           )
         : child;

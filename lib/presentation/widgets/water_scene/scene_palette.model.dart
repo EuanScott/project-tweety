@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 enum ScenePalette {
   day(
     sky: Color(0xFFE3F2F3),
-    sun: Color(0xFFFFFFFF),
+    sun: Color(0xFFFFD45C),
     cloud: Color(0xFFFFFFFF),
     bird: Color(0xFF7FB3BA),
     farHills: Color(0xFFC6E4E7),

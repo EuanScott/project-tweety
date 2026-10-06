@@ -33,6 +33,7 @@ void main() {
     Locale? locale,
     Brightness brightness = Brightness.light,
     bool disableAnimations = false,
+    EdgeInsets padding = EdgeInsets.zero,
     List<DisplayFeature> displayFeatures = const [],
   }) async {
     if (locale != null) {
@@ -48,6 +49,7 @@ void main() {
       surfaceSize: size,
       platformBrightness: brightness,
       disableAnimations: disableAnimations,
+      padding: padding,
       displayFeatures: displayFeatures,
     );
   }
@@ -175,9 +177,24 @@ void main() {
       );
     });
 
-    testWidgets('a vertical fold splits the panes on the hinge', (
-      tester,
-    ) async {
+    for (final (width, formStart) in const [
+      (600.0, 300.0),
+      (744.0, 384.0),
+      (1194.0, 657.0),
+    ]) {
+      testWidgets('a ${width.toInt()} px tablet starts the form at '
+          '${formStart.toInt()} px', (tester) async {
+        await pumpPage(tester, size: Size(width, 834));
+
+        expect(
+          tester.getRect(find.byKey(SignInPage.formPaneKey)).left,
+          formStart,
+        );
+      });
+    }
+
+    testWidgets('a vertical fold keeps the heading and the form off the '
+        'hinge', (tester) async {
       await pumpPage(
         tester,
         size: const Size(882, 800),
@@ -191,12 +208,48 @@ void main() {
       );
 
       expect(find.byKey(SignInPage.splitLayoutKey), findsOneWidget);
-      expect(tester.getRect(find.byKey(SignInPage.scenePaneKey)).left, 0);
-      expect(tester.getRect(find.byKey(SignInPage.scenePaneKey)).width, 430);
+      expect(tester.getRect(find.byKey(SignInPage.scenePaneKey)).right, 430);
       expect(
-        tester.getRect(find.byKey(SignInPage.formPaneKey)).left,
-        450,
+        tester.getRect(find.text('Project Tweety')).right,
+        lessThanOrEqualTo(430),
       );
+      expect(tester.getRect(find.byType(WaterScene)).right, greaterThan(450));
+      expect(tester.getRect(find.byKey(SignInPage.formPaneKey)).left, 485);
+    });
+
+    List<DisplayFeature> hingeAt(double left, double right) => [
+      DisplayFeature(
+        bounds: Rect.fromLTRB(left, 0, right, 800),
+        type: DisplayFeatureType.hinge,
+        state: DisplayFeatureState.postureFlat,
+      ),
+    ];
+
+    testWidgets('a hinge past the 55% point splits the panes on the hinge', (
+      tester,
+    ) async {
+      await pumpPage(
+        tester,
+        size: const Size(882, 800),
+        displayFeatures: hingeAt(480, 500),
+      );
+
+      expect(tester.getRect(find.byKey(SignInPage.scenePaneKey)).right, 480);
+      expect(tester.getRect(find.byKey(SignInPage.formPaneKey)).left, 500);
+    });
+
+    testWidgets('right-to-left keeps the heading and the form off the hinge', (
+      tester,
+    ) async {
+      await pumpPage(
+        tester,
+        size: const Size(882, 800),
+        locale: const Locale('he'),
+        displayFeatures: hingeAt(430, 450),
+      );
+
+      expect(tester.getRect(find.byKey(SignInPage.scenePaneKey)).left, 450);
+      expect(tester.getRect(find.byKey(SignInPage.formPaneKey)).right, 397);
     });
 
     testWidgets('right-to-left puts the scene pane on the right', (
@@ -211,8 +264,8 @@ void main() {
       final scene = tester.getRect(find.byKey(SignInPage.scenePaneKey));
       final form = tester.getRect(find.byKey(SignInPage.formPaneKey));
       expect(scene.right, 1194);
-      expect(scene.left, 597);
-      expect(form.right, lessThanOrEqualTo(597));
+      expect(scene.left, 537);
+      expect(form.right, lessThanOrEqualTo(537));
     });
 
     testWidgets('a small phone scrolls the scene but keeps the button on '
@@ -265,6 +318,39 @@ void main() {
         findsOneWidget,
       );
       semantics.dispose();
+    });
+
+    testWidgets('on a phone, starts below the status bar', (tester) async {
+      await pumpPage(tester, padding: const EdgeInsets.only(top: 59));
+
+      expect(tester.getTopLeft(find.byKey(SignInPage.scenePaneKey)).dy, 59);
+    });
+
+    testWidgets('on a phone, the status bar strip follows a theme change', (
+      tester,
+    ) async {
+      Finder strip(Color color) => find.descendant(
+        of: find.byKey(SignInPage.compactLayoutKey),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is ColoredBox && widget.color == color,
+        ),
+      );
+      const statusBar = EdgeInsets.only(top: 59);
+
+      await pumpPage(tester, padding: statusBar);
+      expect(strip(ScenePalette.day.sky), findsOneWidget);
+
+      await pumpPage(tester, padding: statusBar, brightness: Brightness.dark);
+      expect(strip(ScenePalette.night.sky), findsOneWidget);
+    });
+
+    testWidgets('on a phone, takes 60% of the height below the status bar', (
+      tester,
+    ) async {
+      await pumpPage(tester, padding: const EdgeInsets.only(top: 59));
+
+      final scene = tester.getRect(find.byKey(SignInPage.scenePaneKey));
+      expect(scene.height, closeTo(0.6 * (844 - 59), 1));
     });
 
     testWidgets('tilt moves near layers further than far layers', (

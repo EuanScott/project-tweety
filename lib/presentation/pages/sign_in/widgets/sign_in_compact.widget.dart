@@ -1,7 +1,8 @@
 part of '../sign_in.page.dart';
 
 /// Phones and the folded cover screen: the scene band on top, then the copy,
-/// with the sign-in block pinned to the bottom.
+/// with the sign-in block pinned to the bottom. Below the status bar, the scene
+/// and its fade take 60% of the height and the content takes the rest.
 ///
 /// When the content does not fit, the scene scrolls away while the sign-in
 /// block stays reachable. When it fits, nothing scrolls.
@@ -16,8 +17,10 @@ class _SignInCompact extends StatelessWidget {
     final theme = Theme.of(context);
     final screen = MediaQuery.sizeOf(context);
     final sidePadding = screen.width < 360 ? 20.0 : 24.0;
-    final sceneHeight = (0.42 * screen.height).roundToDouble();
-    final fadeHeight = (0.10 * screen.height).roundToDouble();
+    final topInset = MediaQuery.paddingOf(context).top;
+    final usableHeight = screen.height - topInset;
+    final sceneHeight = (0.50 * usableHeight).roundToDouble();
+    final fadeHeight = (0.10 * usableHeight).roundToDouble();
     final background = theme.scaffoldBackgroundColor;
 
     return Column(
@@ -30,6 +33,7 @@ class _SignInCompact extends StatelessWidget {
                   SliverPersistentHeader(
                     delegate: _SignInSceneHeaderDelegate(
                       width: screen.width,
+                      topInset: topInset,
                       sceneHeight: sceneHeight,
                       fadeHeight: fadeHeight,
                     ),
@@ -97,32 +101,66 @@ class _SignInCompact extends StatelessWidget {
 
 /// Hands the scroll offset to the scene so each layer can move at its own
 /// speed while the band scrolls away.
+///
+/// The scene starts below the status bar. Sky colour fills behind the status
+/// bar and behind the scene, so no gap shows above the scene or where a
+/// slower layer lags while the band scrolls.
 class const _SignInSceneHeaderDelegate({
   required final double width,
+  required final double topInset,
   required final double sceneHeight,
   required final double fadeHeight,
 }) extends SliverPersistentHeaderDelegate {
   @override
-  double get minExtent => sceneHeight + fadeHeight;
+  double get minExtent => topInset + sceneHeight + fadeHeight;
 
   @override
-  double get maxExtent => sceneHeight + fadeHeight;
+  double get maxExtent => topInset + sceneHeight + fadeHeight;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlaps) {
-    return _SignInScene(
-      key: SignInPage.scenePaneKey,
-      compositionSize: Size(width, sceneHeight),
-      fadeExtent: fadeHeight,
-      fadeAxis: Axis.vertical,
-      isSplit: false,
-      scrollOffset: shrinkOffset,
+    return Stack(
+      children: [
+        Positioned(
+          left: 0,
+          right: 0,
+          top: 0,
+          height: topInset + sceneHeight,
+          child: const _SkyFill(),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          top: topInset,
+          child: _SignInScene(
+            key: SignInPage.scenePaneKey,
+            compositionSize: Size(width, sceneHeight),
+            fadeExtent: fadeHeight,
+            fadeAxis: Axis.vertical,
+            isSplit: false,
+            scrollOffset: shrinkOffset,
+          ),
+        ),
+      ],
     );
   }
 
   @override
   bool shouldRebuild(_SignInSceneHeaderDelegate oldDelegate) =>
       oldDelegate.width != width ||
+      oldDelegate.topInset != topInset ||
       oldDelegate.sceneHeight != sceneHeight ||
       oldDelegate.fadeHeight != fadeHeight;
+}
+
+/// Sky colour behind the status bar and the scene.
+///
+/// It reads the palette in its own build. A theme change does not rebuild the
+/// header delegate's content when the page rebuilds in the same frame, so a
+/// colour read in the delegate's build would stay at the old theme.
+class const _SkyFill() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(color: ScenePalette.of(context).sky);
+  }
 }

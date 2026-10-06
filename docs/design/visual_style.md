@@ -61,7 +61,7 @@ them for controls or text, except the scene ink.
 | Element                       | Day       | Night     |
 |-------------------------------|-----------|-----------|
 | Sky                           | `#E3F2F3` | `#0D2A30` |
-| Sun or moon                   | `#FFFFFF` | `#E7F5F5` |
+| Sun or moon                   | `#FFD45C` | `#E7F5F5` |
 | Clouds                        | `#FFFFFF` | `#1A3F46` |
 | Birds                         | `#7FB3BA` | `#4F7F86` |
 | Far hills                     | `#C6E4E7` | `#143840` |
@@ -145,7 +145,9 @@ and not on top of it.
 
 ### Rules
 
-- **Flat shapes, no gradients** inside the scene. The only gradient is the fade at its edge.
+- **Flat shapes, no gradients** inside the scene. The fade at its edge is four wavy bands of the background colour, each
+  more solid than the one before and with a soft, blurred edge, so it follows the water.
+- **The day sun is yellow**, so it reads as the sun and not as a third cloud against the pale sky.
 - **The scene is never cut into.** It fades **out into blank space** past its edge: below it on phones, toward the
   content side on tablets. The composed scene itself stays at full strength.
 - **Text over the scene** goes only on open sky, in scene ink. Keep the sun, clouds and birds clear of it.
@@ -159,11 +161,15 @@ and not on top of it.
 
 | Surface | When                                                             | Layout                                                                                              |
 |---------|------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| Compact | Phones and the folded cover screen (portrait only)               | One column. Scene band on top (about 42% of the height on sign-in), its fade below it, then content |
+| Compact | Phones and the folded cover screen (portrait only)               | One column. Scene band on top, its fade below it, then content                                      |
 | Split   | Tablets (both orientations), any screen split by a vertical fold | Two panes. Scene fills the start pane and fades into the end pane; content sits in the end pane     |
 
-- On a foldable, the split sits exactly on the hinge. Never place content across the hinge. The scene's fade may cross
-  it.
+- On sign-in in the compact layout, the scene starts below the status bar, and sky colour fills behind the status bar.
+  Below the status bar, the scene and its fade take 60% of the height and the content takes 40%.
+- On sign-in in the split layout, the scene takes 55% of the width. It never takes less than half, and it never leaves
+  the content pane less than 360 px wide.
+- On a foldable, never place content across the hinge. The scene and its fade may cross it. Text over the scene ends
+  before the hinge, and the content pane starts after it.
 - **Right-to-left (Hebrew):** mirror the whole layout. The scene pane is on the start side (the right).
 - On small phones, if content overflows, the scene becomes a scrolling hero and the main action stays pinned at the
   bottom.

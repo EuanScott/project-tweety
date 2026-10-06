@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
@@ -121,6 +122,41 @@ class _SceneGeometry {
   Rect? get headingArea => keepsSkyClear
       ? Rect.fromLTWH(40, 56, math.min(width - 80, 420), 130)
       : null;
+
+  /// The soft-edged wavy bands of [background] that fade the scene out over
+  /// [extent] past its edge, nearest band first. They and their blur stay
+  /// inside the fade, so the scene keeps its full strength and the last band
+  /// is solid by the fade's far edge.
+  _WavesPainter fadePainter(Axis axis, double extent, Color background) {
+    final isVertical = axis == Axis.vertical;
+    final start = isVertical ? height : width;
+    final across = isVertical ? width : height;
+    final amplitude = 0.08 * extent;
+    final blur = 0.06 * extent;
+    // A wave reaches up to 1.35 × its amplitude from its line, and a blur is
+    // visible up to about 3 sigma past its edge.
+    final reach = 1.35 * amplitude + 3 * blur;
+    final top = start + reach;
+    final span = extent - 2 * reach;
+
+    // A sideways fade is laid out as if it ran down, then painted transposed.
+    return _WavesPainter(
+      transposed: !isVertical,
+      fills: [
+        for (final (i, band) in _fadeBands.indexed)
+          _WaveFill(
+            wave: _Wave(
+              y: top + span * i / (_fadeBands.length - 1),
+              amplitude: amplitude,
+              wavelength: band.wavelength * across,
+              phase: band.phase,
+            ),
+            color: background.withValues(alpha: band.alpha),
+            blur: blur,
+          ),
+      ],
+    );
+  }
 }
 
 /// The layered water scene: sky, hills, water, and an optional [subject]
@@ -128,7 +164,8 @@ class _SceneGeometry {
 ///
 /// The composition box is [compositionSize]. The scene runs on past it by
 /// [fadeExtent] along [fadeAxis] (down, or toward the end edge) and fades to
-/// [fadeColor] there, which defaults to the page background.
+/// [fadeColor] there, which defaults to the page background. The fade is
+/// soft-edged wavy bands, like the water.
 ///
 /// Pass a [tilt] cubit to let each layer move on its own with device tilt and
 /// with [scrollOffset]; Reduce Motion stops both. Without one the scene is
@@ -339,30 +376,13 @@ class _WaterSceneState extends State<WaterScene> {
                 ),
               ),
             ),
-            if (isVertical)
-              Positioned(
-                left: 0,
-                right: 0,
-                top: composition.height,
-                height: widget.fadeExtent,
-                child: SceneFade(
-                  background: background,
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              )
-            else
-              PositionedDirectional(
-                start: composition.width,
-                top: 0,
-                bottom: 0,
-                width: widget.fadeExtent,
-                child: SceneFade(
-                  background: background,
-                  begin: AlignmentDirectional.centerStart,
-                  end: AlignmentDirectional.centerEnd,
-                ),
+            painted(
+              geometry.fadePainter(
+                widget.fadeAxis,
+                widget.fadeExtent,
+                background,
               ),
+            ),
           ],
         ),
       ),
@@ -403,6 +423,16 @@ class _WaterSceneState extends State<WaterScene> {
     ];
   }
 }
+
+/// The fade's bands, top to bottom. Each band fills down to the bottom, so the
+/// opacities stack to 35%, 65%, 87% and then 100% — the same steps as
+/// [SceneFade].
+const List<({double wavelength, double phase, double alpha})> _fadeBands = [
+  (wavelength: 0.45, phase: 0.6, alpha: 0.35),
+  (wavelength: 0.33, phase: 2.2, alpha: 0.30 / 0.65),
+  (wavelength: 0.40, phase: 1.1, alpha: 0.22 / 0.35),
+  (wavelength: 0.28, phase: 2.9, alpha: 1),
+];
 
 /// Fades into [background] with eased stops, so a scene or a scrolled
 /// edge blends into what sits behind it.
@@ -607,21 +637,47 @@ class const _BarRow({
   required final List<_Bar> bars,
 });
 
-/// One wave filled down to the bottom, with the bars that sit on it.
+/// One wave filled down to the bottom, with the bars that sit on it. A [blur]
+/// above zero softens the wave's edge.
 class const _WaveFill({
   required final _Wave wave,
   required final Color color,
   final _BarRow? bars,
+  final double blur = 0,
 });
 
 /// One or more wave fills, back to front. Each wave's bars sit on that wave,
 /// under the next one.
-class const _WavesPainter({required final List<_WaveFill> fills})
-    extends CustomPainter {
+///
+/// When [transposed], x and y swap, so waves that run across the width run
+/// down the height instead and fill toward the end edge.
+class const _WavesPainter({
+  required final List<_WaveFill> fills,
+  final bool transposed = false,
+}) extends CustomPainter {
   static const _step = 4.0;
+
+  static final Float64List _transpose = Float64List.fromList(const [
+    0, 1, 0, 0, //
+    1, 0, 0, 0, //
+    0, 0, 1, 0, //
+    0, 0, 0, 1, //
+  ]);
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (transposed) {
+      canvas
+        ..save()
+        ..transform(_transpose);
+      _paintFills(canvas, size.flipped);
+      canvas.restore();
+    } else {
+      _paintFills(canvas, size);
+    }
+  }
+
+  void _paintFills(Canvas canvas, Size size) {
     final bottom = size.height + _sceneBleed;
     final right = size.width + _sceneBleed;
 
@@ -637,7 +693,14 @@ class const _WavesPainter({required final List<_WaveFill> fills})
         ..lineTo(right, wave.yAt(right))
         ..lineTo(right, bottom)
         ..close();
-      canvas.drawPath(path, Paint()..color = fill.color);
+      canvas.drawPath(
+        path,
+        Paint()
+          ..color = fill.color
+          ..maskFilter = fill.blur > 0
+              ? MaskFilter.blur(BlurStyle.normal, fill.blur)
+              : null,
+      );
 
       final bars = fill.bars;
       if (bars != null) {
@@ -662,13 +725,15 @@ class const _WavesPainter({required final List<_WaveFill> fills})
 
   @override
   bool shouldRepaint(_WavesPainter oldDelegate) {
-    if (oldDelegate.fills.length != fills.length) {
+    if (oldDelegate.transposed != transposed ||
+        oldDelegate.fills.length != fills.length) {
       return true;
     }
     for (var i = 0; i < fills.length; i++) {
       final previous = oldDelegate.fills[i];
       final current = fills[i];
       if (previous.color != current.color ||
+          previous.blur != current.blur ||
           previous.bars?.color != current.bars?.color ||
           previous.wave.y != current.wave.y ||
           previous.wave.amplitude != current.wave.amplitude ||

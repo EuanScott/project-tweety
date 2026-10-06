@@ -1,11 +1,48 @@
 part of '../sign_in.page.dart';
 
 /// Tablets and open foldables: the scene fills the start pane and the sign-in
-/// form sits in the end pane. On a foldable the split sits on the hinge.
+/// form sits in the end pane.
+///
+/// The scene takes 55% of the width, but never leaves the form pane less than
+/// [_formMinWidth] and never takes less than half. On a foldable the scene
+/// may cross the hinge; the heading and the form never do.
 class _SignInSplit extends StatelessWidget {
   const new({super.key});
 
   static const _formMaxWidth = 400.0;
+  static const _formMinWidth = 360.0;
+
+  /// Where the scene, the heading and the form pane sit, measured from the
+  /// start edge.
+  static ({double sceneWidth, double headingEnd, double formPaneStart}) _panes({
+    required double width,
+    required Rect? hinge,
+    required bool isRtl,
+  }) {
+    final split = math.max(
+      width / 2,
+      math.min((0.55 * width).roundToDouble(), width - _formMinWidth),
+    );
+    final hingeSpan = switch (hinge) {
+      null => null,
+      final hinge when isRtl => (width - hinge.right, width - hinge.left),
+      final hinge => (hinge.left, hinge.right),
+    };
+
+    return switch (hingeSpan) {
+      null => (sceneWidth: split, headingEnd: split, formPaneStart: split),
+      (final start, final end) when split >= end => (
+        sceneWidth: split,
+        headingEnd: start,
+        formPaneStart: split,
+      ),
+      (final start, final end) => (
+        sceneWidth: start,
+        headingEnd: start,
+        formPaneStart: end,
+      ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +58,11 @@ class _SignInSplit extends StatelessWidget {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
-        final (scenePaneWidth, formPaneStart) = switch (hinge) {
-          null => (width / 2, width / 2),
-          final hinge when isRtl => (width - hinge.right, width - hinge.left),
-          final hinge => (hinge.left, hinge.right),
-        };
+        final (:sceneWidth, :headingEnd, :formPaneStart) = _panes(
+          width: width,
+          hinge: hinge,
+          isRtl: isRtl,
+        );
         final fadeWidth = math.min<double>(96, (0.08 * width).roundToDouble());
 
         return Stack(
@@ -33,10 +70,10 @@ class _SignInSplit extends StatelessWidget {
             PositionedDirectional(
               start: 0,
               top: 0,
-              width: scenePaneWidth + fadeWidth,
+              width: sceneWidth + fadeWidth,
               height: height,
               child: _SignInScene(
-                compositionSize: Size(scenePaneWidth, height),
+                compositionSize: Size(sceneWidth, height),
                 fadeExtent: fadeWidth,
                 fadeAxis: Axis.horizontal,
                 isSplit: true,
@@ -46,7 +83,7 @@ class _SignInSplit extends StatelessWidget {
               key: SignInPage.scenePaneKey,
               start: 0,
               top: 0,
-              width: scenePaneWidth,
+              width: headingEnd,
               height: height,
               child: Padding(
                 padding: const EdgeInsetsDirectional.only(
