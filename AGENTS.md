@@ -7,6 +7,7 @@
 
 ## Tech Stack
 - Flutter `3.47.0` with Dart `3.13.0`, pinned exactly in every `pubspec.yaml` (app, `packages/design_system`, `packages/navigation`)
+- Minimum iOS version is `17.0`. Minimum Android version is API level `34` (Android 14). These values are in `ios/Runner.xcodeproj/project.pbxproj`, `ios/Podfile`, `android/app/build.gradle` and `flutter_launcher_icons.yaml`. Keep them the same.
 - State management and DI packages include `bloc`, `flutter_bloc`, `get_it`, and `injectable`
 - Code generation is used for DI and Flutter-generated assets/localization
 

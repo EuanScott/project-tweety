@@ -4,7 +4,7 @@ flutter_launcher_icons:
   image_path: "assets/brand/icon_day.png"
 
   android: "launcher_icon"
-  min_sdk_android: 21
+  min_sdk_android: 34
   # Two layers so the launcher's own parallax moves the sun over the water.
   adaptive_icon_background: "assets/brand/icon_adaptive_background.png"
   adaptive_icon_foreground: "assets/brand/icon_adaptive_foreground.png"
