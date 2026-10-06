@@ -56,6 +56,8 @@ enum ScenePalette {
   final Color sky;
   final Color sun;
   final Color cloud;
+
+  /// Birds paint by day only; the night value is unused.
   final Color bird;
   final Color farHills;
   final Color midHills;

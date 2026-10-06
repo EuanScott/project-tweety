@@ -508,7 +508,9 @@ class const _SkyPainter({
     _paintSunOrMoon(canvas);
     _paintCloud(canvas, centreX: 0.20 * w, top: 0.14 * h, width: 0.26 * w);
     _paintCloud(canvas, centreX: 0.55 * w, top: 0.24 * h, width: 0.18 * w);
-    _paintBirds(canvas);
+    if (!palette.isNight) {
+      _paintBirds(canvas);
+    }
   }
 
   void _paintStars(Canvas canvas) {
