@@ -36,6 +36,10 @@ class AppButton extends StatelessWidget {
     super.key,
   }) : _variant = .destructive;
 
+  /// A 6% primary tint: the strongest that keeps primary text at 4.5:1 on it
+  /// in every theme colour.
+  static const int _secondaryTintAlpha = 15;
+
   final VoidCallback? onPressed;
   final Widget child;
   final _AppButtonVariant _variant;
@@ -103,7 +107,7 @@ class AppButton extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: primaryColor.withAlpha(31),
+        color: primaryColor.withAlpha(_secondaryTintAlpha),
         borderRadius: .circular(12),
       ),
       child: button,

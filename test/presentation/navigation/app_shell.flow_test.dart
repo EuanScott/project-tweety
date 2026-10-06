@@ -231,7 +231,8 @@ void main() {
         expect(
           resetCardsList.controller!.offset,
           greaterThan(0),
-          reason: 'clearing the selection keeps the list where the reader '
+          reason:
+              'clearing the selection keeps the list where the reader '
               'left it; a second tap on the active tab scrolls to the top',
         );
 

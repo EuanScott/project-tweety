@@ -16,6 +16,7 @@ class const AppPreferencesRepositoryImpl(
 
     return AppPreferences(
       themeMode: _mapThemeMode(appPreferences.themeMode),
+      themeColour: _mapThemeColour(appPreferences.themeColour),
       languageCode: appPreferences.languageCode,
     );
   }
@@ -25,6 +26,7 @@ class const AppPreferencesRepositoryImpl(
     return _localDataSource.writeAppPreferences(
       storage.AppPreferences(
         themeMode: _mapStorageThemeMode(appPreferences.themeMode),
+        themeColour: _mapStorageThemeColour(appPreferences.themeColour),
         languageCode: appPreferences.languageCode,
       ),
     );
@@ -50,5 +52,33 @@ class const AppPreferencesRepositoryImpl(
       case AppPreferencesThemeMode.dark:
         return ThemeMode.dark;
     }
+  }
+
+  AppPreferencesThemeColour _mapThemeColour(
+    storage.StoredThemeColour themeColour,
+  ) {
+    return switch (themeColour) {
+      .fjord => .fjord,
+      .fynbos => .fynbos,
+      .kalahari => .kalahari,
+      .lyng => .lyng,
+      .whin => .whin,
+      .douro => .douro,
+      .cuillin => .cuillin,
+    };
+  }
+
+  storage.StoredThemeColour _mapStorageThemeColour(
+    AppPreferencesThemeColour themeColour,
+  ) {
+    return switch (themeColour) {
+      .fjord => .fjord,
+      .fynbos => .fynbos,
+      .kalahari => .kalahari,
+      .lyng => .lyng,
+      .whin => .whin,
+      .douro => .douro,
+      .cuillin => .cuillin,
+    };
   }
 }

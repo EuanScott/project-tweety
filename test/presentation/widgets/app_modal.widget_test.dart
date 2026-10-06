@@ -551,7 +551,10 @@ void main() {
                   .first,
             );
 
-            expect(defaultTextStyle.style.color, isNot(const Color(0xD0FF0000)));
+            expect(
+              defaultTextStyle.style.color,
+              isNot(const Color(0xD0FF0000)),
+            );
           },
         );
       });
@@ -1023,20 +1026,23 @@ void main() {
           },
         );
 
-        testWidgets('shows a close button on .page when showCloseButton is true', (
-          tester,
-        ) async {
-          await tester.pumpWidget(
-            const _TestApp(
-              mediaQuerySize: expandedSize,
-              home: _ModalLauncher(variant: _ModalVariant.page),
-            ),
-          );
+        testWidgets(
+          'shows a close button on .page when showCloseButton is true',
+          (
+            tester,
+          ) async {
+            await tester.pumpWidget(
+              const _TestApp(
+                mediaQuerySize: expandedSize,
+                home: _ModalLauncher(variant: _ModalVariant.page),
+              ),
+            );
 
-          await _tapAndFinishTransition(tester, find.text('open-modal'));
+            await _tapAndFinishTransition(tester, find.text('open-modal'));
 
-          expect(find.byIcon(Icons.close), findsOneWidget);
-        });
+            expect(find.byIcon(Icons.close), findsOneWidget);
+          },
+        );
 
         testWidgets('hides the close button when showCloseButton is false', (
           tester,

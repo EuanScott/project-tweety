@@ -13,6 +13,12 @@ class const AppListTile({
   final Widget? subtitle,
   final Widget? trailing,
   final VoidCallback? onTap,
+
+  /// Whether tapping the row opens another app, such as the device settings.
+  ///
+  /// Material platforms then show an open-in-new icon in `primary` when no
+  /// [trailing] is given. Cupertino platforms keep the chevron.
+  final bool opensOtherApp = false,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -29,11 +35,22 @@ class const AppListTile({
     }
 
     return ListTile(
-      contentPadding: .zero,
+      // An AppListSection sets its own row padding through the theme.
+      contentPadding: ListTileTheme.of(context).contentPadding ?? .zero,
       title: title,
       subtitle: subtitle,
-      trailing: trailing,
+      trailing: trailing ?? (opensOtherApp ? const _OpensOtherAppIcon() : null),
       onTap: onTap,
+    );
+  }
+}
+
+class const _OpensOtherAppIcon() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.open_in_new,
+      color: Theme.of(context).colorScheme.primary,
     );
   }
 }

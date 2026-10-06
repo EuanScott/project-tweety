@@ -47,10 +47,10 @@ import 'package:design_system/design_system.dart';
 
 MaterialApp(
   theme: DesignSystemTheme.light(
-    brand: DesignBrands.tweetyB2c,
+    brand: DesignBrands.fjord,
   ),
   darkTheme: DesignSystemTheme.dark(
-    brand: DesignBrands.tweetyB2c,
+    brand: DesignBrands.fjord,
   ),
 )
 ```
@@ -65,11 +65,19 @@ That means:
 - only brand values need to differ
 - apps stay visually aligned while still being distinguishable
 
-Current bundled brands:
+Current bundled brands, one per theme colour:
 
-- `DesignBrands.tweetyB2c`
+- `DesignBrands.fjord` (the default)
+- `DesignBrands.fynbos`
+- `DesignBrands.kalahari`
+- `DesignBrands.lyng`
+- `DesignBrands.whin`
+- `DesignBrands.douro`
+- `DesignBrands.cuillin`
 
-`DesignBrands.all` lists every bundled brand.
+`DesignBrands.all` lists every bundled brand. Its order means nothing.
+Status colours, error colours, the outline and the text on surfaces are the
+same in every preset.
 
 ## Adding a new brand
 

@@ -155,7 +155,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get appPreferencesTitle => 'תצוגה ושפה';
 
   @override
-  String get appPreferencesThemeLabel => 'ערכת נושא';
+  String get appPreferencesThemeLabel => 'מראה';
 
   @override
   String get appPreferencesThemeSystem => 'מערכת';
@@ -167,24 +167,82 @@ class AppLocalizationsHe extends AppLocalizations {
   String get appPreferencesThemeDark => 'כהה';
 
   @override
-  String appPreferencesThemeSystemSelected(Object theme) {
-    return 'מערכת ($theme)';
-  }
-
-  @override
-  String appPreferencesThemeApplied(Object theme) {
-    return 'מוחל כעת: $theme';
-  }
-
-  @override
-  String appPreferencesThemeDeviceSetting(Object theme) {
-    return 'הגדרת המכשיר: $theme';
-  }
-
-  @override
   String appPreferencesThemeFollowingSystem(Object theme) {
-    return 'בהתאם להגדרת המכשיר: $theme';
+    return 'בהתאם להגדרת המכשיר: $theme.';
   }
+
+  @override
+  String get appPreferencesThemeColourLabel => 'צבע ערכת הנושא';
+
+  @override
+  String get themeColourFjord => 'פיורד';
+
+  @override
+  String get themeColourFjordColours => 'טורקיז עם שזיף';
+
+  @override
+  String get themeColourFjordDescription =>
+      'מים בגוון טורקיז ודמדומים בצבע שזיף מהפיורדים של נורווגיה. רגוע וצלול, כמו בוקר שקט על המים.';
+
+  @override
+  String get themeColourFynbos => 'פינבוס';
+
+  @override
+  String get themeColourFynbosColours => 'זית עם ורוד פרוטאה';
+
+  @override
+  String get themeColourFynbosDescription =>
+      'ירוק זית וורוד פרוטאה מהצמחייה הפראית של הכף. רענן, ירוק ומלא פריחה.';
+
+  @override
+  String get themeColourKalahari => 'קלהרי';
+
+  @override
+  String get themeColourKalahariColours => 'אדום אוקר עם כחול שמי מדבר';
+
+  @override
+  String get themeColourKalahariDescription =>
+      'דיונות באדום אוקר תחת שמי מדבר כחולים ורחבים. חם וארצי, מהחולות הגדולים של דרום אפריקה.';
+
+  @override
+  String get themeColourLyng => 'אברש';
+
+  @override
+  String get themeColourLyngColours => 'אברש עם זהב פטל צפוני';
+
+  @override
+  String get themeColourLyngDescription =>
+      'אברש סגול וזהב פטל צפוני מגבעות נורווגיה. רך ושקט, כמו סוף הקיץ בערבה.';
+
+  @override
+  String get themeColourWhin => 'אולקס';
+
+  @override
+  String get themeColourWhinColours => 'זהב אולקס עם כחול צפחה';
+
+  @override
+  String get themeColourWhinDescription =>
+      'זהב האולקס מגבעות סקוטלנד, שפורח כמעט כל השנה. שמשי ומואר, גם ביום אפור.';
+
+  @override
+  String get themeColourDouro => 'דורו';
+
+  @override
+  String get themeColourDouroColours => 'יין פורט עם כחול אריחים';
+
+  @override
+  String get themeColourDouroDescription =>
+      'אדום יין פורט ואריחים כחולים מעמק הדורו שבפורטוגל. עשיר וחם, כמו אור ערב על טרסות הכרמים.';
+
+  @override
+  String get themeColourCuillin => 'קולין';
+
+  @override
+  String get themeColourCuillinColours => 'שחור הרים עם כחול מפרץ ים';
+
+  @override
+  String get themeColourCuillinDescription =>
+      'סלע שחור וערפל אפור מהרי האי סקיי. שקט וממוקד, עם נגיעה של כחול מפרץ ים.';
 
   @override
   String get appPreferencesLanguageLabel => 'שפה';
@@ -193,38 +251,22 @@ class AppLocalizationsHe extends AppLocalizations {
   String get appPreferencesLanguageSystem => 'ברירת המחדל של המערכת';
 
   @override
-  String appPreferencesLanguageApplied(Object language) {
-    return 'מוחל כעת: $language';
-  }
-
-  @override
   String appPreferencesLanguageFollowingSystem(Object language) {
-    return 'בהתאם להגדרת המכשיר: $language';
+    return 'בהתאם להגדרת המכשיר: $language.';
   }
 
   @override
-  String get appPreferencesDirectionLabel => 'כיוון פריסה';
+  String get appPreferencesDirectionFooter => 'כיוון הטקסט נקבע לפי השפה.';
 
   @override
-  String get appPreferencesDirectionLtr => 'LTR';
+  String get appPreferencesTextDisplayHeader => 'טקסט ותצוגה';
 
   @override
-  String get appPreferencesDirectionRtl => 'RTL';
+  String get appPreferencesTextSizeRow => 'גודל טקסט וטקסט מודגש';
 
   @override
-  String appPreferencesDirectionDescription(Object direction) {
-    return 'בהתאם לשפת האפליקציה הפעילה: $direction';
-  }
-
-  @override
-  String get appPreferencesSystemTextTitle => 'הגדרות תצוגה וטקסט';
-
-  @override
-  String get appPreferencesSystemTextDescription =>
-      'השתמש בהגדרות המכשיר עבור אפשרויות כמו גודל טקסט וטקסט מודגש.';
-
-  @override
-  String get appPreferencesSystemTextButton => 'פתח הגדרות';
+  String get appPreferencesTextSizeFooter =>
+      'שינוי גודל הגופן והטקסט המודגש בהגדרות המכשיר.';
 
   @override
   String get appPreferencesSystemTextOpenFailed =>

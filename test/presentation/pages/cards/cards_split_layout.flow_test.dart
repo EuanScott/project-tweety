@@ -46,9 +46,10 @@ void main() {
       final shape = card.shape as RoundedRectangleBorder?;
 
       expect(
-        shape?.side.color ?? Theme.of(
-          tester.element(find.byType(Card).first),
-        ).cardTheme.shape,
+        shape?.side.color ??
+            Theme.of(
+              tester.element(find.byType(Card).first),
+            ).cardTheme.shape,
         isNot(Colors.transparent),
       );
     });

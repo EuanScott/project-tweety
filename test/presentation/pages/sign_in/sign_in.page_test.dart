@@ -338,10 +338,10 @@ void main() {
       const statusBar = EdgeInsets.only(top: 59);
 
       await pumpPage(tester, padding: statusBar);
-      expect(strip(ScenePalette.day.sky), findsOneWidget);
+      expect(strip(ScenePalette.fjordDay.sky), findsOneWidget);
 
       await pumpPage(tester, padding: statusBar, brightness: Brightness.dark);
-      expect(strip(ScenePalette.night.sky), findsOneWidget);
+      expect(strip(ScenePalette.fjordNight.sky), findsOneWidget);
     });
 
     testWidgets('on a phone, takes 60% of the height below the status bar', (

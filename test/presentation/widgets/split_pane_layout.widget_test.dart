@@ -53,19 +53,22 @@ void main() {
       );
     });
 
-    testWidgets('draws a divider between the panes, inset from top and bottom', (
-      tester,
-    ) async {
-      await _pumpLayout(tester, size: const Size(900, 600));
+    testWidgets(
+      'draws a divider between the panes, inset from top and bottom',
+      (
+        tester,
+      ) async {
+        await _pumpLayout(tester, size: const Size(900, 600));
 
-      final divider = find.byType(VerticalDivider);
+        final divider = find.byType(VerticalDivider);
 
-      expect(divider, findsOneWidget);
-      expect(
-        tester.getSize(divider).height,
-        tester.getSize(find.byKey(_primaryKey)).height * 0.9,
-      );
-    });
+        expect(divider, findsOneWidget);
+        expect(
+          tester.getSize(divider).height,
+          tester.getSize(find.byKey(_primaryKey)).height * 0.9,
+        );
+      },
+    );
 
     testWidgets('draws the divider beside a hinge too', (tester) async {
       await _pumpLayout(
@@ -109,7 +112,8 @@ void main() {
       expect(
         tester.getSize(find.byKey(_primaryKey)).width,
         isNot(232),
-        reason: 'the first frame must use the plain split, not a hinge '
+        reason:
+            'the first frame must use the plain split, not a hinge '
             'position derived from an unmeasured screen offset',
       );
 

@@ -160,7 +160,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appPreferencesTitle => 'Display and language';
 
   @override
-  String get appPreferencesThemeLabel => 'Theme';
+  String get appPreferencesThemeLabel => 'Appearance';
 
   @override
   String get appPreferencesThemeSystem => 'System';
@@ -172,24 +172,82 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appPreferencesThemeDark => 'Dark';
 
   @override
-  String appPreferencesThemeSystemSelected(Object theme) {
-    return 'System ($theme)';
-  }
-
-  @override
-  String appPreferencesThemeApplied(Object theme) {
-    return 'Currently applied: $theme';
-  }
-
-  @override
-  String appPreferencesThemeDeviceSetting(Object theme) {
-    return 'Device setting: $theme';
-  }
-
-  @override
   String appPreferencesThemeFollowingSystem(Object theme) {
-    return 'Following device setting: $theme';
+    return 'Following device setting: $theme.';
   }
+
+  @override
+  String get appPreferencesThemeColourLabel => 'Theme colour';
+
+  @override
+  String get themeColourFjord => 'Fjord';
+
+  @override
+  String get themeColourFjordColours => 'Teal with plum';
+
+  @override
+  String get themeColourFjordDescription =>
+      'Teal water and plum dusk from Norway\'s deep sea inlets. Calm and clear, like a still morning on the water.';
+
+  @override
+  String get themeColourFynbos => 'Fynbos';
+
+  @override
+  String get themeColourFynbosColours => 'Olive with protea pink';
+
+  @override
+  String get themeColourFynbosDescription =>
+      'Olive green and protea pink from the wild shrubland of the Cape. Fresh, green and full of bloom.';
+
+  @override
+  String get themeColourKalahari => 'Kalahari';
+
+  @override
+  String get themeColourKalahariColours => 'Red ochre with desert-sky blue';
+
+  @override
+  String get themeColourKalahariDescription =>
+      'Red ochre dunes under a wide blue desert sky. Warm and earthy, from the great sands of southern Africa.';
+
+  @override
+  String get themeColourLyng => 'Lyng';
+
+  @override
+  String get themeColourLyngColours => 'Heather with cloudberry gold';
+
+  @override
+  String get themeColourLyngDescription =>
+      'Purple heather and cloudberry gold from the Norwegian hills. Soft and quiet, like late summer on the moor.';
+
+  @override
+  String get themeColourWhin => 'Whin';
+
+  @override
+  String get themeColourWhinColours => 'Gorse gold with slate blue';
+
+  @override
+  String get themeColourWhinDescription =>
+      'Gorse gold from the Scottish hills, where the whin flowers almost all year. Sunny and bright, even on a grey day.';
+
+  @override
+  String get themeColourDouro => 'Douro';
+
+  @override
+  String get themeColourDouroColours => 'Port wine with tile blue';
+
+  @override
+  String get themeColourDouroDescription =>
+      'Port-wine red and blue tiles from Portugal\'s Douro Valley. Rich and warm, like evening light on the vineyard terraces.';
+
+  @override
+  String get themeColourCuillin => 'Cuillin';
+
+  @override
+  String get themeColourCuillinColours => 'Mountain black with sea-loch blue';
+
+  @override
+  String get themeColourCuillinDescription =>
+      'Black rock and grey mist from the mountains of Skye. Quiet and focused, with a touch of sea-loch blue.';
 
   @override
   String get appPreferencesLanguageLabel => 'Language';
@@ -198,38 +256,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appPreferencesLanguageSystem => 'System default';
 
   @override
-  String appPreferencesLanguageApplied(Object language) {
-    return 'Currently applied: $language';
-  }
-
-  @override
   String appPreferencesLanguageFollowingSystem(Object language) {
-    return 'Following device setting: $language';
+    return 'Following device setting: $language.';
   }
 
   @override
-  String get appPreferencesDirectionLabel => 'Layout direction';
+  String get appPreferencesDirectionFooter =>
+      'Text direction follows the language.';
 
   @override
-  String get appPreferencesDirectionLtr => 'LTR';
+  String get appPreferencesTextDisplayHeader => 'Text and display';
 
   @override
-  String get appPreferencesDirectionRtl => 'RTL';
+  String get appPreferencesTextSizeRow => 'Text size and bold text';
 
   @override
-  String appPreferencesDirectionDescription(Object direction) {
-    return 'Following active app language: $direction';
-  }
-
-  @override
-  String get appPreferencesSystemTextTitle => 'Display and text settings';
-
-  @override
-  String get appPreferencesSystemTextDescription =>
-      'Use your device settings for options like font size and bold text.';
-
-  @override
-  String get appPreferencesSystemTextButton => 'Open settings';
+  String get appPreferencesTextSizeFooter =>
+      'Change font size and bold text in your device settings.';
 
   @override
   String get appPreferencesSystemTextOpenFailed =>

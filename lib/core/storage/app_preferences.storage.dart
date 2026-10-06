@@ -13,10 +13,13 @@ part 'app_preferences.storage.freezed.dart';
 // * ensureDefaultsExist() writes defaults eagerly, which is fine for preferences but not a good default for a generic cache service.
 // * There are two different AppPreferences models, one in core storage and one in domain, which works but adds naming friction.
 
+enum StoredThemeColour { fjord, fynbos, kalahari, lyng, whin, douro, cuillin }
+
 @freezed
 abstract class AppPreferences with _$AppPreferences {
   const factory({
     @Default(ThemeMode.system) ThemeMode themeMode,
+    @Default(StoredThemeColour.fjord) StoredThemeColour themeColour,
     String? languageCode,
   }) = _AppPreferences;
 
@@ -25,6 +28,7 @@ abstract class AppPreferences with _$AppPreferences {
   Map<String, Object?> toJson() {
     return <String, Object?>{
       'themeMode': themeMode.name,
+      'themeColour': themeColour.name,
       'languageCode': languageCode,
     }..removeWhere((_, value) => value == null);
   }
@@ -44,6 +48,7 @@ abstract class AppPreferences with _$AppPreferences {
   static AppPreferences _fromJson(Map<String, dynamic> json) {
     return AppPreferences(
       themeMode: _themeModeFromName(json['themeMode']) ?? .system,
+      themeColour: _themeColourFromName(json['themeColour']) ?? .fjord,
       languageCode: json['languageCode'] as String?,
     );
   }
@@ -55,6 +60,10 @@ abstract class AppPreferences with _$AppPreferences {
       'dark' => .dark,
       _ => null,
     };
+  }
+
+  static StoredThemeColour? _themeColourFromName(Object? value) {
+    return StoredThemeColour.values.asNameMap()[value];
   }
 }
 

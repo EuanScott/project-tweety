@@ -57,6 +57,19 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
     await _persistAppPreferences(updatedAppPreferences);
   }
 
+  Future<void> updateThemeColour(AppPreferencesThemeColour themeColour) async {
+    final currentAppPreferences = state.effectiveAppPreferences;
+    if (currentAppPreferences.themeColour == themeColour) {
+      return;
+    }
+
+    final updatedAppPreferences = currentAppPreferences.copyWith(
+      themeColour: themeColour,
+    );
+
+    await _persistAppPreferences(updatedAppPreferences);
+  }
+
   Future<void> updateLanguageCode(String? languageCode) async {
     final currentAppPreferences = state.effectiveAppPreferences;
     if (currentAppPreferences.languageCode == languageCode) {

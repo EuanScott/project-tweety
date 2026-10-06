@@ -113,9 +113,9 @@
   "@appPreferencesTitle": {
     "description": "Title for the display and language page"
   },
-  "appPreferencesThemeLabel": "Theme",
+  "appPreferencesThemeLabel": "Appearance",
   "@appPreferencesThemeLabel": {
-    "description": "Label for the theme selector"
+    "description": "Header for the appearance section, which holds the theme mode and theme colour"
   },
   "appPreferencesThemeSystem": "System",
   "@appPreferencesThemeSystem": {
@@ -129,33 +129,100 @@
   "@appPreferencesThemeDark": {
     "description": "Label for the dark theme option"
   },
-  "appPreferencesThemeSystemSelected": "System ({theme})",
-  "@appPreferencesThemeSystemSelected": {
-    "description": "Selected label for the system theme option",
-    "placeholders": {
-      "theme": {}
-    }
-  },
-  "appPreferencesThemeApplied": "Currently applied: {theme}",
-  "@appPreferencesThemeApplied": {
-    "description": "Helper text for an explicitly selected theme",
-    "placeholders": {
-      "theme": {}
-    }
-  },
-  "appPreferencesThemeDeviceSetting": "Device setting: {theme}",
-  "@appPreferencesThemeDeviceSetting": {
-    "description": "Helper text showing the current device/system theme setting",
-    "placeholders": {
-      "theme": {}
-    }
-  },
-  "appPreferencesThemeFollowingSystem": "Following device setting: {theme}",
+  "appPreferencesThemeFollowingSystem": "Following device setting: {theme}.",
   "@appPreferencesThemeFollowingSystem": {
     "description": "Helper text when theme follows the system setting",
     "placeholders": {
       "theme": {}
     }
+  },
+  "appPreferencesThemeColourLabel": "Theme colour",
+  "@appPreferencesThemeColourLabel": {
+    "description": "Title line above the theme colour swatches"
+  },
+  "themeColourFjord": "Fjord",
+  "@themeColourFjord": {
+    "description": "Name of the Fjord theme colour"
+  },
+  "themeColourFjordColours": "Teal with plum",
+  "@themeColourFjordColours": {
+    "description": "The two colours of the Fjord theme colour, shown after its name"
+  },
+  "themeColourFjordDescription": "Teal water and plum dusk from Norway's deep sea inlets. Calm and clear, like a still morning on the water.",
+  "@themeColourFjordDescription": {
+    "description": "Description of the Fjord theme colour, shown under the swatches"
+  },
+  "themeColourFynbos": "Fynbos",
+  "@themeColourFynbos": {
+    "description": "Name of the Fynbos theme colour"
+  },
+  "themeColourFynbosColours": "Olive with protea pink",
+  "@themeColourFynbosColours": {
+    "description": "The two colours of the Fynbos theme colour, shown after its name"
+  },
+  "themeColourFynbosDescription": "Olive green and protea pink from the wild shrubland of the Cape. Fresh, green and full of bloom.",
+  "@themeColourFynbosDescription": {
+    "description": "Description of the Fynbos theme colour, shown under the swatches"
+  },
+  "themeColourKalahari": "Kalahari",
+  "@themeColourKalahari": {
+    "description": "Name of the Kalahari theme colour"
+  },
+  "themeColourKalahariColours": "Red ochre with desert-sky blue",
+  "@themeColourKalahariColours": {
+    "description": "The two colours of the Kalahari theme colour, shown after its name"
+  },
+  "themeColourKalahariDescription": "Red ochre dunes under a wide blue desert sky. Warm and earthy, from the great sands of southern Africa.",
+  "@themeColourKalahariDescription": {
+    "description": "Description of the Kalahari theme colour, shown under the swatches"
+  },
+  "themeColourLyng": "Lyng",
+  "@themeColourLyng": {
+    "description": "Name of the Lyng theme colour"
+  },
+  "themeColourLyngColours": "Heather with cloudberry gold",
+  "@themeColourLyngColours": {
+    "description": "The two colours of the Lyng theme colour, shown after its name"
+  },
+  "themeColourLyngDescription": "Purple heather and cloudberry gold from the Norwegian hills. Soft and quiet, like late summer on the moor.",
+  "@themeColourLyngDescription": {
+    "description": "Description of the Lyng theme colour, shown under the swatches"
+  },
+  "themeColourWhin": "Whin",
+  "@themeColourWhin": {
+    "description": "Name of the Whin theme colour"
+  },
+  "themeColourWhinColours": "Gorse gold with slate blue",
+  "@themeColourWhinColours": {
+    "description": "The two colours of the Whin theme colour, shown after its name"
+  },
+  "themeColourWhinDescription": "Gorse gold from the Scottish hills, where the whin flowers almost all year. Sunny and bright, even on a grey day.",
+  "@themeColourWhinDescription": {
+    "description": "Description of the Whin theme colour, shown under the swatches"
+  },
+  "themeColourDouro": "Douro",
+  "@themeColourDouro": {
+    "description": "Name of the Douro theme colour"
+  },
+  "themeColourDouroColours": "Port wine with tile blue",
+  "@themeColourDouroColours": {
+    "description": "The two colours of the Douro theme colour, shown after its name"
+  },
+  "themeColourDouroDescription": "Port-wine red and blue tiles from Portugal's Douro Valley. Rich and warm, like evening light on the vineyard terraces.",
+  "@themeColourDouroDescription": {
+    "description": "Description of the Douro theme colour, shown under the swatches"
+  },
+  "themeColourCuillin": "Cuillin",
+  "@themeColourCuillin": {
+    "description": "Name of the Cuillin theme colour"
+  },
+  "themeColourCuillinColours": "Mountain black with sea-loch blue",
+  "@themeColourCuillinColours": {
+    "description": "The two colours of the Cuillin theme colour, shown after its name"
+  },
+  "themeColourCuillinDescription": "Black rock and grey mist from the mountains of Skye. Quiet and focused, with a touch of sea-loch blue.",
+  "@themeColourCuillinDescription": {
+    "description": "Description of the Cuillin theme colour, shown under the swatches"
   },
   "appPreferencesLanguageLabel": "Language",
   "@appPreferencesLanguageLabel": {
@@ -165,50 +232,28 @@
   "@appPreferencesLanguageSystem": {
     "description": "Label for the system language option"
   },
-  "appPreferencesLanguageApplied": "Currently applied: {language}",
-  "@appPreferencesLanguageApplied": {
-    "description": "Helper text for an explicitly selected language",
-    "placeholders": {
-      "language": {}
-    }
-  },
-  "appPreferencesLanguageFollowingSystem": "Following device setting: {language}",
+  "appPreferencesLanguageFollowingSystem": "Following device setting: {language}.",
   "@appPreferencesLanguageFollowingSystem": {
     "description": "Helper text when language follows the system setting",
     "placeholders": {
       "language": {}
     }
   },
-  "appPreferencesDirectionLabel": "Layout direction",
-  "@appPreferencesDirectionLabel": {
-    "description": "Label for the current layout direction"
+  "appPreferencesDirectionFooter": "Text direction follows the language.",
+  "@appPreferencesDirectionFooter": {
+    "description": "Text under the language section"
   },
-  "appPreferencesDirectionLtr": "LTR",
-  "@appPreferencesDirectionLtr": {
-    "description": "Short label for left-to-right layout"
+  "appPreferencesTextDisplayHeader": "Text and display",
+  "@appPreferencesTextDisplayHeader": {
+    "description": "Header for the text and display section"
   },
-  "appPreferencesDirectionRtl": "RTL",
-  "@appPreferencesDirectionRtl": {
-    "description": "Short label for right-to-left layout"
+  "appPreferencesTextSizeRow": "Text size and bold text",
+  "@appPreferencesTextSizeRow": {
+    "description": "Row that opens the device text size and bold text settings"
   },
-  "appPreferencesDirectionDescription": "Following active app language: {direction}",
-  "@appPreferencesDirectionDescription": {
-    "description": "Helper text for the current layout direction",
-    "placeholders": {
-      "direction": {}
-    }
-  },
-  "appPreferencesSystemTextTitle": "Display and text settings",
-  "@appPreferencesSystemTextTitle": {
-    "description": "Title for the display and text settings section"
-  },
-  "appPreferencesSystemTextDescription": "Use your device settings for options like font size and bold text.",
-  "@appPreferencesSystemTextDescription": {
-    "description": "Description for the display and text settings section"
-  },
-  "appPreferencesSystemTextButton": "Open settings",
-  "@appPreferencesSystemTextButton": {
-    "description": "Button label to open device settings"
+  "appPreferencesTextSizeFooter": "Change font size and bold text in your device settings.",
+  "@appPreferencesTextSizeFooter": {
+    "description": "Text under the text and display section"
   },
   "appPreferencesSystemTextOpenFailed": "Unable to open settings on this device.",
   "@appPreferencesSystemTextOpenFailed": {

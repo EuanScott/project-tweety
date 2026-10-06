@@ -36,7 +36,10 @@ void main() {
 
         await tester.tap(find.text('Edit card'));
         await tester.pumpAndSettle();
-        await tester.enterText(find.byType(AppTextField).first, 'Updated title');
+        await tester.enterText(
+          find.byType(AppTextField).first,
+          'Updated title',
+        );
         await tester.tap(find.text('Cards'));
         await tester.pumpAndSettle();
 

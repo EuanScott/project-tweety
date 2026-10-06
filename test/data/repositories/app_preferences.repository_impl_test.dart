@@ -51,5 +51,27 @@ void main() {
       expect(appPreferences.languageCode, 'es');
       expect(appPreferences.themeMode, AppPreferencesThemeMode.dark);
     });
+
+    for (final themeColour in AppPreferencesThemeColour.values) {
+      test('maps the ${themeColour.name} theme colour both ways', () async {
+        final storageDriver = storage.AppPreferencesStorage();
+        final repository = AppPreferencesRepositoryImpl(
+          AppPreferencesLocalDataSource(storageDriver),
+        );
+
+        await repository.saveAppPreferences(
+          AppPreferences(themeColour: themeColour),
+        );
+
+        expect(
+          (await storageDriver.readPreferences()).themeColour.name,
+          themeColour.name,
+        );
+        expect(
+          (await repository.getAppPreferences()).themeColour,
+          themeColour,
+        );
+      });
+    }
   });
 }

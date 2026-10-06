@@ -68,4 +68,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0013](0013-firebase-config-committed-with-restricted-keys.md) | Firebase config is committed, and its API keys are restricted to the app's identity | accepted |
 | [0014](0014-neutral-navigation-surfaces.md) | Navigation uses neutral surfaces; only the selected item carries the brand colour | accepted |
 | [0015](0015-native-pages-for-every-route.md) | Every route builds a native platform page, and Cards stacks follow the URL | accepted |
+| [0016](0016-theme-colours-are-complete-brand-presets.md) | Theme colours are complete brand presets named after places and plants | accepted |
 <!-- adr-index:end -->

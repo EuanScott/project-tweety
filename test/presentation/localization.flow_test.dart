@@ -46,7 +46,7 @@ void main() {
       await tester.tap(find.text('Display and language'));
       await tester.pumpAndSettle();
 
-      await tester.tap(languageDropdownFinder());
+      await tester.tap(languageRowFinder());
       await tester.pumpAndSettle();
       await tester.tap(find.text('עברית').last);
       await tester.pumpAndSettle();
@@ -78,7 +78,7 @@ void main() {
         await tester.tap(find.text('Display and language'));
         await tester.pumpAndSettle();
 
-        await tester.tap(languageDropdownFinder());
+        await tester.tap(languageRowFinder());
         await tester.pumpAndSettle();
         await tester.tap(find.text('System default').last);
         await tester.pumpAndSettle();
@@ -107,12 +107,12 @@ void main() {
       await tester.tap(find.text('Display and language'));
       await tester.pumpAndSettle();
 
-      await tester.tap(languageDropdownFinder());
+      await tester.tap(languageRowFinder());
       await tester.pumpAndSettle();
       await tester.tap(find.text('Español').last);
       await tester.pumpAndSettle();
 
-      expect(find.text('Tema'), findsOneWidget);
+      expect(find.text('Apariencia'), findsOneWidget);
       expect(find.text('Pantalla e idioma'), findsOneWidget);
     });
   });

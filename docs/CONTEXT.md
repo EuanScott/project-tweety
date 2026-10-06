@@ -84,6 +84,16 @@ succeeds, is cancelled, or fails. A cancelled or failed sign-in attempt does
 not change the Session.
 _Avoid_: login flow.
 
+## Theme colour
+
+A **theme colour** is the palette a person chooses for the app. It sets the
+primary and secondary colours, the surfaces and the colours of the water
+scene. It is separate from light and dark mode: each theme colour has a day
+version and a night version. The seven theme colours are Fjord (the default),
+Fynbos, Kalahari, Lyng, Whin, Douro and Cuillin. Each is named after a place
+or a plant ([ADR-0016](decisions/0016-theme-colours-are-complete-brand-presets.md)).
+_Avoid_: theme (that is light or dark mode), accent, brand.
+
 ## Modal presentation
 
 Vocabulary for `AppModal` (`lib/presentation/widgets/app_modal.widget.dart`) and how

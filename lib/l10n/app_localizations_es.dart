@@ -165,7 +165,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPreferencesTitle => 'Pantalla e idioma';
 
   @override
-  String get appPreferencesThemeLabel => 'Tema';
+  String get appPreferencesThemeLabel => 'Apariencia';
 
   @override
   String get appPreferencesThemeSystem => 'Sistema';
@@ -177,24 +177,84 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPreferencesThemeDark => 'Oscuro';
 
   @override
-  String appPreferencesThemeSystemSelected(Object theme) {
-    return 'Sistema ($theme)';
-  }
-
-  @override
-  String appPreferencesThemeApplied(Object theme) {
-    return 'Aplicado actualmente: $theme';
-  }
-
-  @override
-  String appPreferencesThemeDeviceSetting(Object theme) {
-    return 'Configuración del dispositivo: $theme';
-  }
-
-  @override
   String appPreferencesThemeFollowingSystem(Object theme) {
-    return 'Siguiendo la configuración del dispositivo: $theme';
+    return 'Siguiendo la configuración del dispositivo: $theme.';
   }
+
+  @override
+  String get appPreferencesThemeColourLabel => 'Color del tema';
+
+  @override
+  String get themeColourFjord => 'Fiordo';
+
+  @override
+  String get themeColourFjordColours => 'Turquesa con ciruela';
+
+  @override
+  String get themeColourFjordDescription =>
+      'Agua turquesa y atardecer ciruela de los fiordos de Noruega. Tranquilo y claro, como una mañana en calma sobre el agua.';
+
+  @override
+  String get themeColourFynbos => 'Fynbos';
+
+  @override
+  String get themeColourFynbosColours => 'Oliva con rosa protea';
+
+  @override
+  String get themeColourFynbosDescription =>
+      'Verde oliva y rosa protea del matorral silvestre del Cabo. Fresco, verde y lleno de flores.';
+
+  @override
+  String get themeColourKalahari => 'Kalahari';
+
+  @override
+  String get themeColourKalahariColours =>
+      'Ocre rojo con azul cielo del desierto';
+
+  @override
+  String get themeColourKalahariDescription =>
+      'Dunas de ocre rojo bajo un amplio cielo azul del desierto. Cálido y terroso, de las grandes arenas del sur de África.';
+
+  @override
+  String get themeColourLyng => 'Brezo';
+
+  @override
+  String get themeColourLyngColours => 'Brezo con oro de camemoro';
+
+  @override
+  String get themeColourLyngDescription =>
+      'Brezo morado y oro de camemoro de las colinas noruegas. Suave y sereno, como el final del verano en el páramo.';
+
+  @override
+  String get themeColourWhin => 'Tojo';
+
+  @override
+  String get themeColourWhinColours => 'Oro de tojo con azul pizarra';
+
+  @override
+  String get themeColourWhinDescription =>
+      'El oro del tojo de las colinas escocesas, que florece casi todo el año. Soleado y luminoso, incluso en un día gris.';
+
+  @override
+  String get themeColourDouro => 'Duero';
+
+  @override
+  String get themeColourDouroColours => 'Vino de Oporto con azul azulejo';
+
+  @override
+  String get themeColourDouroDescription =>
+      'Rojo vino de Oporto y azulejos azules del valle del Duero, en Portugal. Intenso y cálido, como la luz del atardecer en las terrazas de viñedos.';
+
+  @override
+  String get themeColourCuillin => 'Cuillin';
+
+  @override
+  String get themeColourCuillinColours =>
+      'Negro de montaña con azul de lago marino';
+
+  @override
+  String get themeColourCuillinDescription =>
+      'Roca negra y niebla gris de las montañas de Skye. Sereno y concentrado, con un toque azul de lago marino.';
 
   @override
   String get appPreferencesLanguageLabel => 'Idioma';
@@ -203,38 +263,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPreferencesLanguageSystem => 'Predeterminado del sistema';
 
   @override
-  String appPreferencesLanguageApplied(Object language) {
-    return 'Aplicado actualmente: $language';
-  }
-
-  @override
   String appPreferencesLanguageFollowingSystem(Object language) {
-    return 'Siguiendo la configuración del dispositivo: $language';
+    return 'Siguiendo la configuración del dispositivo: $language.';
   }
 
   @override
-  String get appPreferencesDirectionLabel => 'Dirección de la interfaz';
+  String get appPreferencesDirectionFooter =>
+      'La dirección del texto sigue al idioma.';
 
   @override
-  String get appPreferencesDirectionLtr => 'LTR';
+  String get appPreferencesTextDisplayHeader => 'Texto y pantalla';
 
   @override
-  String get appPreferencesDirectionRtl => 'RTL';
+  String get appPreferencesTextSizeRow => 'Tamaño del texto y negrita';
 
   @override
-  String appPreferencesDirectionDescription(Object direction) {
-    return 'Siguiendo el idioma activo de la aplicación: $direction';
-  }
-
-  @override
-  String get appPreferencesSystemTextTitle => 'Ajustes de pantalla y texto';
-
-  @override
-  String get appPreferencesSystemTextDescription =>
-      'Usa la configuración del dispositivo para opciones como el tamaño del texto y el texto en negrita.';
-
-  @override
-  String get appPreferencesSystemTextButton => 'Abrir configuración';
+  String get appPreferencesTextSizeFooter =>
+      'Cambia el tamaño de letra y la negrita en los ajustes del dispositivo.';
 
   @override
   String get appPreferencesSystemTextOpenFailed =>

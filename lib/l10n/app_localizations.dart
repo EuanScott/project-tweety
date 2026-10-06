@@ -388,10 +388,10 @@ abstract class AppLocalizations {
   /// **'Display and language'**
   String get appPreferencesTitle;
 
-  /// Label for the theme selector
+  /// Header for the appearance section, which holds the theme mode and theme colour
   ///
   /// In en, this message translates to:
-  /// **'Theme'**
+  /// **'Appearance'**
   String get appPreferencesThemeLabel;
 
   /// Label for the system theme option
@@ -412,29 +412,143 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get appPreferencesThemeDark;
 
-  /// Selected label for the system theme option
-  ///
-  /// In en, this message translates to:
-  /// **'System ({theme})'**
-  String appPreferencesThemeSystemSelected(Object theme);
-
-  /// Helper text for an explicitly selected theme
-  ///
-  /// In en, this message translates to:
-  /// **'Currently applied: {theme}'**
-  String appPreferencesThemeApplied(Object theme);
-
-  /// Helper text showing the current device/system theme setting
-  ///
-  /// In en, this message translates to:
-  /// **'Device setting: {theme}'**
-  String appPreferencesThemeDeviceSetting(Object theme);
-
   /// Helper text when theme follows the system setting
   ///
   /// In en, this message translates to:
-  /// **'Following device setting: {theme}'**
+  /// **'Following device setting: {theme}.'**
   String appPreferencesThemeFollowingSystem(Object theme);
+
+  /// Title line above the theme colour swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Theme colour'**
+  String get appPreferencesThemeColourLabel;
+
+  /// Name of the Fjord theme colour
+  ///
+  /// In en, this message translates to:
+  /// **'Fjord'**
+  String get themeColourFjord;
+
+  /// The two colours of the Fjord theme colour, shown after its name
+  ///
+  /// In en, this message translates to:
+  /// **'Teal with plum'**
+  String get themeColourFjordColours;
+
+  /// Description of the Fjord theme colour, shown under the swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Teal water and plum dusk from Norway\'s deep sea inlets. Calm and clear, like a still morning on the water.'**
+  String get themeColourFjordDescription;
+
+  /// Name of the Fynbos theme colour
+  ///
+  /// In en, this message translates to:
+  /// **'Fynbos'**
+  String get themeColourFynbos;
+
+  /// The two colours of the Fynbos theme colour, shown after its name
+  ///
+  /// In en, this message translates to:
+  /// **'Olive with protea pink'**
+  String get themeColourFynbosColours;
+
+  /// Description of the Fynbos theme colour, shown under the swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Olive green and protea pink from the wild shrubland of the Cape. Fresh, green and full of bloom.'**
+  String get themeColourFynbosDescription;
+
+  /// Name of the Kalahari theme colour
+  ///
+  /// In en, this message translates to:
+  /// **'Kalahari'**
+  String get themeColourKalahari;
+
+  /// The two colours of the Kalahari theme colour, shown after its name
+  ///
+  /// In en, this message translates to:
+  /// **'Red ochre with desert-sky blue'**
+  String get themeColourKalahariColours;
+
+  /// Description of the Kalahari theme colour, shown under the swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Red ochre dunes under a wide blue desert sky. Warm and earthy, from the great sands of southern Africa.'**
+  String get themeColourKalahariDescription;
+
+  /// Name of the Lyng theme colour
+  ///
+  /// In en, this message translates to:
+  /// **'Lyng'**
+  String get themeColourLyng;
+
+  /// The two colours of the Lyng theme colour, shown after its name
+  ///
+  /// In en, this message translates to:
+  /// **'Heather with cloudberry gold'**
+  String get themeColourLyngColours;
+
+  /// Description of the Lyng theme colour, shown under the swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Purple heather and cloudberry gold from the Norwegian hills. Soft and quiet, like late summer on the moor.'**
+  String get themeColourLyngDescription;
+
+  /// Name of the Whin theme colour
+  ///
+  /// In en, this message translates to:
+  /// **'Whin'**
+  String get themeColourWhin;
+
+  /// The two colours of the Whin theme colour, shown after its name
+  ///
+  /// In en, this message translates to:
+  /// **'Gorse gold with slate blue'**
+  String get themeColourWhinColours;
+
+  /// Description of the Whin theme colour, shown under the swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Gorse gold from the Scottish hills, where the whin flowers almost all year. Sunny and bright, even on a grey day.'**
+  String get themeColourWhinDescription;
+
+  /// Name of the Douro theme colour
+  ///
+  /// In en, this message translates to:
+  /// **'Douro'**
+  String get themeColourDouro;
+
+  /// The two colours of the Douro theme colour, shown after its name
+  ///
+  /// In en, this message translates to:
+  /// **'Port wine with tile blue'**
+  String get themeColourDouroColours;
+
+  /// Description of the Douro theme colour, shown under the swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Port-wine red and blue tiles from Portugal\'s Douro Valley. Rich and warm, like evening light on the vineyard terraces.'**
+  String get themeColourDouroDescription;
+
+  /// Name of the Cuillin theme colour
+  ///
+  /// In en, this message translates to:
+  /// **'Cuillin'**
+  String get themeColourCuillin;
+
+  /// The two colours of the Cuillin theme colour, shown after its name
+  ///
+  /// In en, this message translates to:
+  /// **'Mountain black with sea-loch blue'**
+  String get themeColourCuillinColours;
+
+  /// Description of the Cuillin theme colour, shown under the swatches
+  ///
+  /// In en, this message translates to:
+  /// **'Black rock and grey mist from the mountains of Skye. Quiet and focused, with a touch of sea-loch blue.'**
+  String get themeColourCuillinDescription;
 
   /// Label for the language selector
   ///
@@ -448,59 +562,35 @@ abstract class AppLocalizations {
   /// **'System default'**
   String get appPreferencesLanguageSystem;
 
-  /// Helper text for an explicitly selected language
-  ///
-  /// In en, this message translates to:
-  /// **'Currently applied: {language}'**
-  String appPreferencesLanguageApplied(Object language);
-
   /// Helper text when language follows the system setting
   ///
   /// In en, this message translates to:
-  /// **'Following device setting: {language}'**
+  /// **'Following device setting: {language}.'**
   String appPreferencesLanguageFollowingSystem(Object language);
 
-  /// Label for the current layout direction
+  /// Text under the language section
   ///
   /// In en, this message translates to:
-  /// **'Layout direction'**
-  String get appPreferencesDirectionLabel;
+  /// **'Text direction follows the language.'**
+  String get appPreferencesDirectionFooter;
 
-  /// Short label for left-to-right layout
+  /// Header for the text and display section
   ///
   /// In en, this message translates to:
-  /// **'LTR'**
-  String get appPreferencesDirectionLtr;
+  /// **'Text and display'**
+  String get appPreferencesTextDisplayHeader;
 
-  /// Short label for right-to-left layout
+  /// Row that opens the device text size and bold text settings
   ///
   /// In en, this message translates to:
-  /// **'RTL'**
-  String get appPreferencesDirectionRtl;
+  /// **'Text size and bold text'**
+  String get appPreferencesTextSizeRow;
 
-  /// Helper text for the current layout direction
+  /// Text under the text and display section
   ///
   /// In en, this message translates to:
-  /// **'Following active app language: {direction}'**
-  String appPreferencesDirectionDescription(Object direction);
-
-  /// Title for the display and text settings section
-  ///
-  /// In en, this message translates to:
-  /// **'Display and text settings'**
-  String get appPreferencesSystemTextTitle;
-
-  /// Description for the display and text settings section
-  ///
-  /// In en, this message translates to:
-  /// **'Use your device settings for options like font size and bold text.'**
-  String get appPreferencesSystemTextDescription;
-
-  /// Button label to open device settings
-  ///
-  /// In en, this message translates to:
-  /// **'Open settings'**
-  String get appPreferencesSystemTextButton;
+  /// **'Change font size and bold text in your device settings.'**
+  String get appPreferencesTextSizeFooter;
 
   /// Error message shown when device settings cannot be opened
   ///

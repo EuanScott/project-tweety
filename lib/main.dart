@@ -9,10 +9,12 @@ import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
 import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
     show AppPreferencesThemeMode;
+import 'package:project_tweety/presentation/extensions/app_preferences_theme_colour.extension.dart';
 import 'package:project_tweety/presentation/navigation/app_routes.constants.dart';
 import 'package:project_tweety/presentation/navigation/app.router.dart';
 import 'package:project_tweety/presentation/navigation/session_notifier.service.dart';
 import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_preferences.cubit.dart';
+import 'package:project_tweety/presentation/widgets/water_scene/scene_palette.model.dart';
 
 import 'l10n/app_localizations.dart';
 
@@ -67,13 +69,12 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  ThemeData _themeData(ThemeData themeData) {
-    final platform = widget.platform;
-    if (platform == null) {
-      return themeData;
-    }
-
-    return themeData.copyWith(platform: platform);
+  ThemeData _themeData(ThemeData themeData, ScenePalette scenePalette) {
+    // copyWith replaces the extension list, so keep the design system's own.
+    return themeData.copyWith(
+      platform: widget.platform,
+      extensions: [...themeData.extensions.values, scenePalette],
+    );
   }
 
   Locale? _locale(String? languageCode) {
@@ -105,15 +106,19 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, state) {
           final appPreferences = state.effectiveAppPreferences;
+          final themeColour = appPreferences.themeColour;
+          final brand = themeColour.brand;
 
           return MaterialApp.router(
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.appTitle,
             theme: _themeData(
-              DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
+              DesignSystemTheme.light(brand: brand),
+              ScenePalette.forThemeColour(themeColour, .light),
             ),
             darkTheme: _themeData(
-              DesignSystemTheme.dark(brand: DesignBrands.tweetyB2c),
+              DesignSystemTheme.dark(brand: brand),
+              ScenePalette.forThemeColour(themeColour, .dark),
             ),
             themeMode: _themeMode(appPreferences.themeMode),
             locale: _locale(appPreferences.languageCode),

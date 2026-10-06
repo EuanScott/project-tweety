@@ -15,7 +15,7 @@ class const GalleryApp({super.key}) extends StatelessWidget {
       // gallery backlog. No darkTheme/themeMode is configured, so this is
       // the only theme MaterialApp ever resolves, regardless of the host's
       // system theme mode.
-      theme: DesignSystemTheme.light(brand: DesignBrands.tweetyB2c),
+      theme: DesignSystemTheme.light(brand: DesignBrands.fjord),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

@@ -1,5 +1,6 @@
 import 'dart:ui' show DisplayFeature;
 
+import 'package:design_system/design_system.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -120,11 +121,7 @@ Future<void> openAppPreferences(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Finder languageDropdownFinder() {
-  return find.byWidgetPredicate(
-    (widget) => widget is DropdownButtonFormField<String?>,
-  );
-}
+Finder languageRowFinder() => find.byType(AppSelectionRow<String?>);
 
 String currentRoutePath(WidgetTester tester) {
   final routeOwner = find.byType(NavigationRail).evaluate().isNotEmpty

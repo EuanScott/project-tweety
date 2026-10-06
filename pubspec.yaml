@@ -2,7 +2,7 @@ name: project_tweety
 description: "A playground app to try out ideas that we aren't implementing at work or I would like to implement at work."
 publish_to: 'none'
 
-version: 0.21.4
+version: 0.21.5
 
 environment:
   sdk: 3.13.0

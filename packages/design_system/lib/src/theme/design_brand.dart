@@ -24,7 +24,6 @@ class const DesignBrand({
   required final Color onErrorContainerDark,
   required final Color success,
   required final Color warning,
-  required final Color info,
   required final Color surfaceLight,
   required final Color surfaceVariantLight,
   required final Color onSurfaceLight,

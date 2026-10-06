@@ -148,7 +148,7 @@ void main() {
         ),
       );
 
-      final expectedTint = primary.withAlpha(31);
+      final expectedTint = primary.withAlpha(15);
       final hasExpectedTint = tester
           .widgetList<DecoratedBox>(
             find.ancestor(

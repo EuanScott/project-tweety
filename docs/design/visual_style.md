@@ -16,8 +16,8 @@ Both Claude Design links are private to the repository owner.
 
 ## 1. Character
 
-- **Calm water, one teal.** The app's identity is a teal brand colour and a quiet water landscape. Screens feel open and
-  unhurried.
+- **Calm water, one chosen colour.** The app's identity is a quiet water landscape in the person's theme colour (Fjord
+  teal by default). Screens feel open and unhurried.
 - **Native on each platform.** One brand, two design languages. Controls are Material on Android and Cupertino on iOS,
   through the `design_system` primitives.
 - **Day and night.** Light mode is a day scene. Dark mode is the same scene at night. Dark mode is never just "light
@@ -28,16 +28,31 @@ Both Claude Design links are private to the repository owner.
 
 ## 2. Colour
 
-### Brand and surfaces (design system)
+### Theme colours (design system)
 
-The primary and secondary values are new. They are not yet in code; the
-sign-in work puts them there.
+A person chooses one of seven theme colours. Each is a complete `DesignBrand`
+preset, with its own light and dark values
+([ADR-0016](../decisions/0016-theme-colours-are-complete-brand-presets.md)).
+The source of truth for every value is
+`packages/design_system/lib/src/theme/design_brands.dart`.
+
+| Theme colour        | Primary (light / dark)  | Secondary (light / dark) |
+|---------------------|-------------------------|--------------------------|
+| Fjord (default)     | `#0E7474` / `#1BA6A6`   | `#8E3B76` / `#D68FC2`    |
+| Fynbos              | `#56691C` / `#B5C96A`   | `#A3365F` / `#F2A3BF`    |
+| Kalahari            | `#A8441F` / `#F39A74`   | `#2F5F8A` / `#9CC3EE`    |
+| Lyng                | `#77449A` / `#D2A6EF`   | `#8A6100` / `#F2C14E`    |
+| Whin                | `#7A5C00` / `#F2C230`   | `#3D5A80` / `#A9C1E6`    |
+| Douro               | `#8C1D3A` / `#F0A3B5`   | `#2F5E9E` / `#A7C4EF`    |
+| Cuillin             | `#1F2326` / `#E6E8EA`   | `#3F7A8C` / `#8CC4D4`    |
+
+The roles are the same in every theme colour. Fjord's values are shown:
 
 | Token         | Light        | Dark      | Use                                                        |
 |---------------|--------------|-----------|------------------------------------------------------------|
 | `primary`     | `#0E7474`    | `#1BA6A6` | Main action, headings, titles, Cupertino accent            |
 | `onPrimary`   | `#FFFFFF`    | `#002020` | Text and icons on primary                                  |
-| `secondary`   | `#8E3B76`    | `#D68FC2` | Plum accent. Use sparingly: small marks, never large areas |
+| `secondary`   | `#8E3B76`    | `#D68FC2` | Accent. Use sparingly: small marks, never large areas      |
 | `onSecondary` | `#FFFFFF`    | `#2E0A25` | Text on secondary                                          |
 | `background`  | `#F4F6F7`    | `#121212` | Page background                                            |
 | `surface`     | `#F4F6F7`    | `#2C2C2C` | Sheets, dialogs, raised areas                              |
@@ -46,10 +61,15 @@ sign-in work puts them there.
 | `error`       | `#D32F2F`    | `#D32F2F` | Errors and destructive actions only                        |
 | `onError`     | `#FFFFFF`    | `#FFFFFF` | Text on error                                              |
 
+These stay the same in every theme colour: `onSurface`, `surfaceContainer`,
+`outline`, the error colours, and the status colours `success` (`#388E3C`) and
+`warning` (`#FFA000`).
+
 Rules:
 
 - One primary action per screen.
-- `error`, `success`, `warning` and `info` mean state only. Never decorate with them.
+- `error`, `success` and `warning` mean state only. Never decorate with them. They do not change with the
+  theme colour.
 - In dark mode, `error` red is too dark for text on the page (3.7:1). Show error text in `onSurface` and mark it with a
   red icon instead.
 
@@ -57,6 +77,11 @@ Rules:
 
 These colours belong to the water scene, not to the design system. Do not use
 them for controls or text, except the scene ink.
+
+Each theme colour has its own day and night scene palette, in
+`lib/presentation/widgets/water_scene/scene_palette.model.dart`. The day sun is
+`#FFD45C` in every palette. In each day palette, closest water equals the light
+`primary`. Fjord's values are shown:
 
 | Element                       | Day       | Night     |
 |-------------------------------|-----------|-----------|
@@ -79,7 +104,8 @@ layers are deeper and more saturated. Keep that order if you add or change a lay
 ### Contrast
 
 Every text pair must reach 4.5:1 (3:1 for text 24 px and larger). Check each
-new pair in both themes. The values above already pass.
+new pair in both themes. The contrast test in
+`packages/design_system/test/theme/design_brands_test.dart` checks every theme colour.
 
 ## 3. Typography
 
@@ -114,7 +140,9 @@ primitive to `packages/design_system` before using a raw Material or Cupertino c
 - **Buttons:** `AppButton.primary`, `.secondary`, `.text`, `.destructive`.
 - **Loading:** `AppLoadingIndicator`, inside the control that is busy, with a short label such as "Signing in…". Disable
   the control while it works.
-- **Lists and settings rows:** `AppListTile`, `AppSwitch`.
+- **Lists and settings rows:** `AppListSection` groups rows under a header, with footer text for sentences.
+  Inside it: `AppListTile`, `AppSwitch`, `AppSelectionRow` (a value that opens a selection list), and
+  `AppListSectionContent` for custom content such as `AppSegmentedControl` or `AppSwatchPicker`.
 - **Confirmation:** `AppConfirmationDialog`, for actions the person should think about once.
 - **Message block** (from sign-in):
     - Padding 12 × 16 px, radius 12 px.

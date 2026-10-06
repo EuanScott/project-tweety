@@ -23,7 +23,7 @@ class const GalleryNav({
   @override
   Widget build(BuildContext context) {
     final navTheme = DesignSystemTheme.light(
-      brand: DesignBrands.tweetyB2c,
+      brand: DesignBrands.fjord,
     ).copyWith(platform: TargetPlatform.android);
 
     return Theme(

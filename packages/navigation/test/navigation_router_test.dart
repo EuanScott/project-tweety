@@ -74,7 +74,9 @@ void main() {
     for (final (label, branchRoutes, extraRoutes) in [
       (
         'a branch child route',
-        [_route('/settings', routes: [builderRoute])],
+        [
+          _route('/settings', routes: [builderRoute]),
+        ],
         <RouteBase>[],
       ),
       (
@@ -82,7 +84,9 @@ void main() {
         [
           ShellRoute(
             builder: (_, _, child) => child,
-            routes: [_route('/settings', routes: [builderRoute])],
+            routes: [
+              _route('/settings', routes: [builderRoute]),
+            ],
           ),
         ],
         <RouteBase>[],
@@ -164,9 +168,11 @@ void main() {
           settingsChildren: [_route('detail')],
         );
 
-        unawaited(GoRouter.of(tester.element(find.text('/settings'))).push(
-          '/settings/detail',
-        ));
+        unawaited(
+          GoRouter.of(tester.element(find.text('/settings'))).push(
+            '/settings/detail',
+          ),
+        );
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 100));
 

@@ -7,31 +7,24 @@ import '../design_brand.dart';
 /// They mean state only: use them to mark a status, for example on an icon,
 /// and never to decorate.
 class DesignStatusColors extends ThemeExtension<DesignStatusColors> {
-  const new({
-    required this.success,
-    required this.warning,
-    required this.info,
-  });
+  const new({required this.success, required this.warning});
 
   new fromBrand(DesignBrand brand)
     : success = brand.success,
-      warning = brand.warning,
-      info = brand.info;
+      warning = brand.warning;
 
   final Color success;
   final Color warning;
-  final Color info;
 
   /// The status colours of [theme]. Every design-system theme registers them.
   static DesignStatusColors of(ThemeData theme) =>
       theme.extension<DesignStatusColors>()!;
 
   @override
-  DesignStatusColors copyWith({Color? success, Color? warning, Color? info}) {
+  DesignStatusColors copyWith({Color? success, Color? warning}) {
     return DesignStatusColors(
       success: success ?? this.success,
       warning: warning ?? this.warning,
-      info: info ?? this.info,
     );
   }
 
@@ -44,7 +37,6 @@ class DesignStatusColors extends ThemeExtension<DesignStatusColors> {
     return DesignStatusColors(
       success: Color.lerp(success, other.success, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
-      info: Color.lerp(info, other.info, t)!,
     );
   }
 }

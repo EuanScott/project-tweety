@@ -22,7 +22,7 @@ class DesignSystemTheme {
   new _();
 
   /// Builds the light theme for a given [brand].
-  static ThemeData light({DesignBrand brand = DesignBrands.tweetyB2c}) {
+  static ThemeData light({DesignBrand brand = DesignBrands.fjord}) {
     final colorScheme = DesignColorSchemes.light(brand);
 
     return ThemeData(
@@ -47,7 +47,7 @@ class DesignSystemTheme {
   }
 
   /// Builds the dark theme for a given [brand].
-  static ThemeData dark({DesignBrand brand = DesignBrands.tweetyB2c}) {
+  static ThemeData dark({DesignBrand brand = DesignBrands.fjord}) {
     final colorScheme = DesignColorSchemes.dark(brand);
 
     return ThemeData(
