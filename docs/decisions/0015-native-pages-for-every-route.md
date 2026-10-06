@@ -40,8 +40,11 @@ the URL.
 
 ## Consequences
 
-- iOS and macOS pages slide in and close with the edge swipe. Other platforms
-  get the Material page transition.
+- iOS and macOS pages slide in and close with the edge swipe. Android pages
+  use the predictive back transition, and the Android manifest sets
+  `enableOnBackInvokedCallback` so that the back gesture previews the page
+  underneath from Android 14. Other platforms get the Material page
+  transition.
 - A route that uses `builder` fails when the router is created, so tests catch
   it.
 - In a split region the list location builds an empty page under the single
@@ -61,7 +64,8 @@ feature needs split panes.
 
 `packages/navigation/test/navigation_router_test.dart` covers the page type,
 the edge swipe, the error page, and the rejection of `builder` routes.
-`test/presentation/navigation/settings_navigation.flow_test.dart` and
+`test/presentation/navigation/settings_navigation.flow_test.dart`,
+`test/presentation/navigation/android_navigation.flow_test.dart` and
 `test/presentation/pages/cards/cards_back_stack.flow_test.dart` drive the whole
 app on iOS. `test/presentation/pages/cards/cards_navigation.flow_test.dart`
 covers the single visible page in a split region.
