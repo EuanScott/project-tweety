@@ -1,4 +1,5 @@
-# App icon: the sign-in water scene without Dash. Sources in assets/brand/.
+# App icon: the sign-in water scene without Dash, in neutral colours with a
+# gold sun. One icon for every theme colour (ADR-0017). Sources in assets/brand/.
 # Regenerate: dart pub global run flutter_launcher_icons
 flutter_launcher_icons:
   image_path: "assets/brand/icon_day.png"

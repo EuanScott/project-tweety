@@ -69,4 +69,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0014](0014-neutral-navigation-surfaces.md) | Navigation uses neutral surfaces; only the selected item carries the brand colour | accepted |
 | [0015](0015-native-pages-for-every-route.md) | Every route builds a native platform page, and Cards stacks follow the URL | accepted |
 | [0016](0016-theme-colours-are-complete-brand-presets.md) | Theme colours are complete brand presets named after places and plants | accepted |
+| [0017](0017-neutral-app-icon-and-splash.md) | App icon and splash screen are neutral across theme colours | proposed |
 <!-- adr-index:end -->
