@@ -69,7 +69,6 @@ class AccountModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = context.select((AccountCubit cubit) => cubit.state.profile);
-    final colorScheme = Theme.of(context).colorScheme;
     final isCupertino = AppDesignPlatform.of(context).isCupertino;
     // Each band is as tall as the design's; on the Material sheet that height
     // includes the drag handle.
@@ -85,38 +84,41 @@ class AccountModal extends StatelessWidget {
         final width = constraints.maxWidth;
         final gutter = width < 360 ? 20.0 : 24.0;
 
-        return ColoredBox(
-          color: colorScheme.surface,
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.minHeight),
-              child: IntrinsicHeight(
-                child: Column(
-                  crossAxisAlignment: .stretch,
-                  children: [
-                    _AccountHeader(
-                      profile: profile,
-                      width: width,
-                      bandHeight: bandHeight,
-                    ),
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: .symmetric(horizontal: gutter),
-                      child: _AccountIdentity(profile: profile),
-                    ),
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: .symmetric(horizontal: gutter),
-                      child: _AccountDetails(profile: profile),
-                    ),
-                    const SizedBox(height: 32),
-                    const Spacer(),
-                    Padding(
-                      padding: .fromLTRB(gutter, 0, gutter, 24 + bottomInset),
-                      child: const _AccountSignOut(),
-                    ),
-                  ],
-                ),
+        // Both sheets hand the content a loose height, so the sheet's own
+        // height is the maximum. The window sizes to its content.
+        final minHeight = isWindowed
+            ? constraints.minHeight
+            : constraints.maxHeight;
+
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: minHeight),
+            child: IntrinsicHeight(
+              child: Column(
+                crossAxisAlignment: .stretch,
+                children: [
+                  _AccountHeader(
+                    profile: profile,
+                    width: width,
+                    bandHeight: bandHeight,
+                  ),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: .symmetric(horizontal: gutter),
+                    child: _AccountIdentity(profile: profile),
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: .symmetric(horizontal: gutter),
+                    child: _AccountDetails(profile: profile),
+                  ),
+                  const SizedBox(height: 32),
+                  const Spacer(),
+                  Padding(
+                    padding: .fromLTRB(gutter, 0, gutter, 24 + bottomInset),
+                    child: const _AccountSignOut(),
+                  ),
+                ],
               ),
             ),
           ),

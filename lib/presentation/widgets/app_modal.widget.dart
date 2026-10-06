@@ -293,6 +293,7 @@ class AppModal {
       enableDrag: enableDrag,
       isScrollControlled: isScrollControlled,
       isDismissible: isDismissible,
+      backgroundColor: _background(context),
       shape: RoundedRectangleBorder(borderRadius: borderRadius),
       showDragHandle: showDragHandle,
       useSafeArea: useSafeArea,
@@ -344,7 +345,7 @@ class AppModal {
         final sheet = ClipRRect(
           borderRadius: resolvedRadius,
           child: Container(
-            color: CupertinoColors.systemBackground.resolveFrom(context),
+            color: _background(context),
             constraints: _buildConstraints(
               context: context,
               maxHeightFactor: maxHeightFactor,
@@ -393,6 +394,7 @@ class AppModal {
         );
 
         return Dialog(
+          backgroundColor: _background(builderContext),
           shape: RoundedRectangleBorder(borderRadius: windowedRadius),
           clipBehavior: Clip.antiAlias,
           child: ConstrainedBox(
@@ -444,7 +446,7 @@ class AppModal {
         final dialog = ClipRRect(
           borderRadius: windowedRadius,
           child: Container(
-            color: CupertinoColors.systemBackground.resolveFrom(context),
+            color: _background(context),
             constraints: _buildWindowedConstraints(
               context: context,
               maxHeightFactor: maxHeightFactor,
@@ -467,6 +469,11 @@ class AppModal {
       },
     );
   }
+
+  /// The one background every presentation paints, so modal content can rely
+  /// on it instead of painting its own.
+  static Color _background(BuildContext context) =>
+      Theme.of(context).colorScheme.surface;
 
   /// Derives an all-corner radius for the windowed presentation from
   /// [borderRadius], instead of adding a second radius parameter to every

@@ -1329,6 +1329,86 @@ void main() {
       });
     });
   });
+
+  group('AppModal background', () {
+    Color surfaceOf(WidgetTester tester) =>
+        Theme.of(tester.element(find.text('modal-child'))).colorScheme.surface;
+
+    Color? cupertinoBackground(WidgetTester tester) => tester
+        .widget<Container>(
+          find.ancestor(
+            of: find.text('modal-child'),
+            matching: find.byType(Container),
+          ),
+        )
+        .color;
+
+    testWidgets('paints the Material sheet in the theme surface', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const _TestApp(home: _ModalLauncher(variant: _ModalVariant.page)),
+      );
+
+      await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+      expect(
+        tester.widget<BottomSheet>(find.byType(BottomSheet)).backgroundColor,
+        surfaceOf(tester),
+      );
+    });
+
+    testWidgets('paints the Cupertino sheet in the theme surface', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const _TestApp(
+          platform: TargetPlatform.iOS,
+          home: _ModalLauncher(variant: _ModalVariant.page),
+        ),
+      );
+
+      await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+      expect(cupertinoBackground(tester), surfaceOf(tester));
+    });
+
+    testWidgets('paints the Material window in the theme surface', (
+      tester,
+    ) async {
+      _useTabletSurface(tester);
+      await tester.pumpWidget(
+        const _TestApp(
+          mediaQuerySize: _tabletSize,
+          home: _ModalLauncher(variant: _ModalVariant.page),
+        ),
+      );
+
+      await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+      expect(
+        tester.widget<Dialog>(find.byType(Dialog)).backgroundColor,
+        surfaceOf(tester),
+      );
+    });
+
+    testWidgets('paints the Cupertino window in the theme surface', (
+      tester,
+    ) async {
+      _useTabletSurface(tester);
+      await tester.pumpWidget(
+        const _TestApp(
+          platform: TargetPlatform.iOS,
+          mediaQuerySize: _tabletSize,
+          home: _ModalLauncher(variant: _ModalVariant.page),
+        ),
+      );
+
+      await _tapAndFinishTransition(tester, find.text('open-modal'));
+
+      expect(cupertinoBackground(tester), surfaceOf(tester));
+    });
+  });
 }
 
 enum _ModalVariant { page, compact, blocking }

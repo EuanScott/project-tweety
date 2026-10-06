@@ -27,6 +27,7 @@ void main() {
     phoneNumber: phone,
   );
 
+  const signOutFootnote = 'Your Cards stay on this device when you sign out.';
   late FakeAuthRepository repository;
 
   Future<void> openModal(
@@ -332,6 +333,21 @@ void main() {
         lessThan(avatarBefore.dy),
       );
     });
+
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets('on $platform the sign-out sits at the bottom of the sheet', (
+        tester,
+      ) async {
+        const phoneHeight = 844.0;
+        const signOutBottomGap = 24.0;
+        await openModal(tester, complete, platform: platform);
+
+        expect(
+          tester.getBottomLeft(find.text(signOutFootnote)).dy,
+          moreOrLessEquals(phoneHeight - signOutBottomGap, epsilon: 1),
+        );
+      });
+    }
 
     testWidgets('the avatar is 96 px in the modal', (tester) async {
       await openModal(tester, complete);
