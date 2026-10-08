@@ -1,7 +1,8 @@
 name: Scorecard
 
-# Publishes the OpenSSF Scorecard result behind the README badge. Publishing
-# requires read-all at the top level and only the steps below.
+# Publishes the OpenSSF Scorecard result behind the README badge. The Scorecard
+# API rejects a published result if the workflow has top-level write permissions
+# or runs steps other than those below.
 
 on:
   branch_protection_rule:
