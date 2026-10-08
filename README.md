@@ -146,7 +146,8 @@ Two checks score low on purpose:
 This project has one maintainer, who pushes directly to `main` (see [Development Style](#development-style)). A pull
 request with no second reviewer adds work but no review. The project accepts the lower score.
 
-To report a vulnerability, see [SECURITY.md](SECURITY.md).
+The rationale is [ADR-0018](docs/decisions/0018-supply-chain-security-checks-in-ci.md). To report a vulnerability, see
+[SECURITY.md](SECURITY.md).
 
 ## Project Docs
 
