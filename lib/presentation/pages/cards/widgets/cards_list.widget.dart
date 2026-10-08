@@ -71,7 +71,11 @@ class _CardsListState extends State<_CardsList> {
         physics: const AlwaysScrollableScrollPhysics(
           parent: BouncingScrollPhysics(),
         ),
-        padding: _CardsList._listPadding,
+        padding: _CardsList._listPadding.copyWith(
+          bottom:
+              _CardsList._listPadding.bottom +
+              AppPrimaryActionPane.bottomClearanceOf(context),
+        ),
         itemCount: widget.items.length,
         itemBuilder: (context, index) {
           final item = widget.items[index];

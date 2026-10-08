@@ -47,8 +47,17 @@ class const PageScaffold({
   /// [ToolBarAction] for the shared cross-platform contract.
   final ToolBarAction? trailingAction,
 
-  /// The optional floating action button for the page.
-  final Widget? floatingActionButton,
+  /// The optional main action of the page, such as creating an item.
+  ///
+  /// Cupertino shows it in the navigation bar, in place of [trailingAction].
+  /// Material shows it as a floating action button over [body], so on wider
+  /// layouts it stays with the pane it acts on. Use it or [trailingAction],
+  /// not both: Cupertino has room for only one of them.
+  final ToolBarIconAction? primaryAction,
+
+  /// Whether [primaryAction] is shown. Hide it, rather than removing it, while
+  /// it does not apply, so the content under it keeps its place.
+  final bool showsPrimaryAction = true,
 
   /// How the page title should be presented.
   ///
@@ -128,7 +137,6 @@ class const PageScaffold({
         trailingAction: trailingAction,
       ),
       body: SafeArea(child: _PageScaffoldBody(scaffold: this)),
-      floatingActionButton: floatingActionButton,
     );
   }
 
@@ -138,7 +146,9 @@ class const PageScaffold({
   /// The Cupertino counterpart of [_MaterialToolBar]'s trailing action —
   /// same [ToolBarAction], same [AppIconButton], per the shared contract on
   /// [ToolBarAction].
-  Widget? get _cupertinoTrailingAction => _actionButton(trailingAction);
+  Widget? get _cupertinoTrailingAction => _actionButton(
+    trailingAction ?? (showsPrimaryAction ? primaryAction : null),
+  );
 }
 
 /// Renders [action] as an [AppIconButton] on either platform.
@@ -188,20 +198,41 @@ class const _PageScaffoldBody({
   @override
   Widget build(BuildContext context) {
     final secondaryBody = scaffold.secondaryBody;
+    final primaryAction = scaffold.primaryAction;
+    final action = primaryAction == null
+        ? null
+        : AppFloatingActionButton(
+            icon: primaryAction.icon,
+            semanticLabel: primaryAction.tooltip,
+            onPressed: primaryAction.onPressed,
+          );
+    final padding = scaffold.bodyPadding.add(additionalPadding);
     final showSecondary =
         secondaryBody != null &&
         PaneLayoutScope.of(context) == PaneLayoutMode.split;
 
-    return Padding(
-      padding: scaffold.bodyPadding.add(additionalPadding),
-      child: showSecondary
-          ? SplitPaneLayout(
-              primary: scaffold.body,
-              secondary: secondaryBody,
-              primaryWidth: scaffold.primaryBodyWidth,
-              paneGap: scaffold.paneGap,
-            )
-          : scaffold.body,
+    if (showSecondary) {
+      return Padding(
+        padding: padding,
+        child: SplitPaneLayout(
+          primary: AppPrimaryActionPane(
+            action: action,
+            isActionVisible: scaffold.showsPrimaryAction,
+            child: scaffold.body,
+          ),
+          secondary: secondaryBody,
+          primaryWidth: scaffold.primaryBodyWidth,
+          paneGap: scaffold.paneGap,
+        ),
+      );
+    }
+
+    // On a single pane, the action measures its margin from the screen edge,
+    // not from inside the body padding.
+    return AppPrimaryActionPane(
+      action: action,
+      isActionVisible: scaffold.showsPrimaryAction,
+      child: Padding(padding: padding, child: scaffold.body),
     );
   }
 }

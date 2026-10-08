@@ -90,13 +90,12 @@ class _CardsState extends State<Cards> {
                 titleBehavior: isSplit
                     ? PageTitleBehavior.largeStatic
                     : PageTitleBehavior.large,
-                trailingAction: widget.isCreating
-                    ? null
-                    : ToolBarAction(
-                        icon: Icons.add,
-                        tooltip: l10n.cardCreateAction,
-                        onPressed: () => _createCard(context),
-                      ),
+                primaryAction: ToolBarIconAction(
+                  icon: Icons.add,
+                  tooltip: l10n.cardCreateAction,
+                  onPressed: () => _createCard(context),
+                ),
+                showsPrimaryAction: !widget.isCreating,
                 secondaryBody: widget.isCreating
                     ? const _CardEditor()
                     : selectedCardId == null
