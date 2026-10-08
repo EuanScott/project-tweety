@@ -16,6 +16,7 @@ class Settings extends StatelessWidget {
     return PageScaffold(
       title: l10n.settingsTab,
       titleBehavior: PageTitleBehavior.largeStatic,
+      bodyPadding: EdgeInsets.zero,
       body: const _SettingsView(),
     );
   }
@@ -30,15 +31,18 @@ class _SettingsView extends StatelessWidget {
 
     return ListView(
       physics: const NeverScrollableScrollPhysics(),
-      padding: const .all(16),
+      padding: EdgeInsets.zero,
       children: [
-        AppListTile(
-          title: Text(l10n.settingsAppPreferencesTitle),
-          subtitle: Text(l10n.settingsAppPreferencesSubtitle),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            unawaited(context.openAppPreferences());
-          },
+        AppListSection(
+          children: [
+            AppListTile(
+              title: Text(l10n.settingsAppPreferencesTitle),
+              subtitle: Text(l10n.settingsAppPreferencesSubtitle),
+              onTap: () {
+                unawaited(context.openAppPreferences());
+              },
+            ),
+          ],
         ),
       ],
     );
