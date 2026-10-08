@@ -1,0 +1,28 @@
+name: Security
+
+# Scans every lockfile OSV-Scanner recognises (pubspec.lock, Swift Package.resolved)
+# against the OSV vulnerability database. The weekly run catches vulnerabilities
+# published after the code last changed.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  osv-scanner:
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@a345acffa64b0eaede81a3d9aae6141214d9c8fc # v2.6.0
