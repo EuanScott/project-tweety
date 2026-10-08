@@ -13,6 +13,7 @@ export 'src/adaptive/pane_layout.dart';
 export 'src/adaptive/app_list_section.dart';
 export 'src/adaptive/app_list_tile.dart';
 export 'src/adaptive/app_loading_indicator.dart';
+export 'src/adaptive/app_page_intro.dart';
 export 'src/adaptive/app_picker_field.dart';
 export 'src/adaptive/app_refresh_indicator.dart';
 export 'src/adaptive/app_segmented_control.dart';

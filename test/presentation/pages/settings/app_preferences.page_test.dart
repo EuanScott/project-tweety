@@ -8,6 +8,8 @@ import 'package:project_tweety/presentation/navigation/app_routes.constants.dart
 import '../../../support/app_harness.dart';
 import '../../../support/fake_app_preferences_repository.dart';
 
+const _intro =
+    'Change the appearance, theme colour, language and text of the app.';
 const _fjordDescription =
     "Teal water and plum dusk from Norway's deep sea inlets. Calm and clear, "
     'like a still morning on the water.';
@@ -50,10 +52,10 @@ void main() {
 
       await tester.tap(find.text('Settings'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Display and language'));
+      await tester.tap(find.text('Personalisation'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Display and language'), findsOneWidget);
+      expect(find.text('Personalisation'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -95,21 +97,23 @@ void main() {
       );
     });
 
-    testWidgets('shows the device setting only while System is selected', (
-      tester,
-    ) async {
-      await _pumpPreferences(tester);
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets('titles the page Personalisation and shows the intro above '
+          'Appearance on ${platform.name}', (tester) async {
+        await _pumpPreferences(tester, platform: platform);
 
-      expect(find.text('Following device setting: Light.'), findsOneWidget);
+        final appearance = platform == TargetPlatform.iOS
+            ? 'APPEARANCE'
+            : 'Appearance';
 
-      await tester.tap(find.text('Light'));
-      await tester.pumpAndSettle();
-
-      expect(
-        find.textContaining('Following device setting: Light'),
-        findsNothing,
-      );
-    });
+        expect(find.text('Personalisation'), findsOneWidget);
+        expect(find.text(_intro), findsOneWidget);
+        expect(
+          tester.getBottomLeft(find.text(_intro)).dy,
+          lessThan(tester.getTopLeft(find.text(appearance)).dy),
+        );
+      });
+    }
 
     testWidgets('shows all seven theme colours with Fjord selected', (
       tester,
@@ -125,7 +129,8 @@ void main() {
       ]);
       expect(picker.value, AppPreferencesThemeColour.fjord);
       expect(find.text('Theme colour'), findsOneWidget);
-      expect(find.text('Fjord · Teal with plum'), findsOneWidget);
+      expect(find.textContaining(' · '), findsNothing);
+      expect(find.textContaining('Teal with plum'), findsNothing);
       expect(find.text(_fjordDescription), findsOneWidget);
     });
 
@@ -145,10 +150,6 @@ void main() {
       expect(
         Theme.of(tester.element(find.text('Kalahari'))).colorScheme.primary,
         const Color(0xFFA8441F),
-      );
-      expect(
-        find.text('Kalahari · Red ochre with desert-sky blue'),
-        findsOneWidget,
       );
       expect(find.text(_kalahariDescription), findsOneWidget);
       expect(find.text(_fjordDescription), findsNothing);

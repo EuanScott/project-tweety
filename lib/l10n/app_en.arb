@@ -101,17 +101,21 @@
   "@accessDeniedGoHome": {
     "description": "Button label to return home from the access denied page"
   },
-  "settingsAppPreferencesTitle": "Display and language",
+  "settingsAppPreferencesTitle": "Personalisation",
   "@settingsAppPreferencesTitle": {
-    "description": "Title for the display and language settings entry"
+    "description": "Title for the Settings row that opens the personalisation page"
   },
   "settingsAppPreferencesSubtitle": "Theme, language, and text settings",
   "@settingsAppPreferencesSubtitle": {
-    "description": "Subtitle for the display and language settings entry"
+    "description": "Subtitle for the Settings row that opens the personalisation page"
   },
-  "appPreferencesTitle": "Display and language",
+  "appPreferencesTitle": "Personalisation",
   "@appPreferencesTitle": {
-    "description": "Title for the display and language page"
+    "description": "Title for the personalisation page"
+  },
+  "appPreferencesIntro": "Change the appearance, theme colour, language and text of the app.",
+  "@appPreferencesIntro": {
+    "description": "One sentence at the top of the personalisation page that says what the page changes"
   },
   "appPreferencesThemeLabel": "Appearance",
   "@appPreferencesThemeLabel": {
@@ -129,13 +133,6 @@
   "@appPreferencesThemeDark": {
     "description": "Label for the dark theme option"
   },
-  "appPreferencesThemeFollowingSystem": "Following device setting: {theme}.",
-  "@appPreferencesThemeFollowingSystem": {
-    "description": "Helper text when theme follows the system setting",
-    "placeholders": {
-      "theme": {}
-    }
-  },
   "appPreferencesThemeColourLabel": "Theme colour",
   "@appPreferencesThemeColourLabel": {
     "description": "Title line above the theme colour swatches"
@@ -143,10 +140,6 @@
   "themeColourFjord": "Fjord",
   "@themeColourFjord": {
     "description": "Name of the Fjord theme colour"
-  },
-  "themeColourFjordColours": "Teal with plum",
-  "@themeColourFjordColours": {
-    "description": "The two colours of the Fjord theme colour, shown after its name"
   },
   "themeColourFjordDescription": "Teal water and plum dusk from Norway's deep sea inlets. Calm and clear, like a still morning on the water.",
   "@themeColourFjordDescription": {
@@ -156,10 +149,6 @@
   "@themeColourFynbos": {
     "description": "Name of the Fynbos theme colour"
   },
-  "themeColourFynbosColours": "Olive with protea pink",
-  "@themeColourFynbosColours": {
-    "description": "The two colours of the Fynbos theme colour, shown after its name"
-  },
   "themeColourFynbosDescription": "Olive green and protea pink from the wild shrubland of the Cape. Fresh, green and full of bloom.",
   "@themeColourFynbosDescription": {
     "description": "Description of the Fynbos theme colour, shown under the swatches"
@@ -167,10 +156,6 @@
   "themeColourKalahari": "Kalahari",
   "@themeColourKalahari": {
     "description": "Name of the Kalahari theme colour"
-  },
-  "themeColourKalahariColours": "Red ochre with desert-sky blue",
-  "@themeColourKalahariColours": {
-    "description": "The two colours of the Kalahari theme colour, shown after its name"
   },
   "themeColourKalahariDescription": "Red ochre dunes under a wide blue desert sky. Warm and earthy, from the great sands of southern Africa.",
   "@themeColourKalahariDescription": {
@@ -180,10 +165,6 @@
   "@themeColourLyng": {
     "description": "Name of the Lyng theme colour"
   },
-  "themeColourLyngColours": "Heather with cloudberry gold",
-  "@themeColourLyngColours": {
-    "description": "The two colours of the Lyng theme colour, shown after its name"
-  },
   "themeColourLyngDescription": "Purple heather and cloudberry gold from the Norwegian hills. Soft and quiet, like late summer on the moor.",
   "@themeColourLyngDescription": {
     "description": "Description of the Lyng theme colour, shown under the swatches"
@@ -191,10 +172,6 @@
   "themeColourWhin": "Whin",
   "@themeColourWhin": {
     "description": "Name of the Whin theme colour"
-  },
-  "themeColourWhinColours": "Gorse gold with slate blue",
-  "@themeColourWhinColours": {
-    "description": "The two colours of the Whin theme colour, shown after its name"
   },
   "themeColourWhinDescription": "Gorse gold from the Scottish hills, where the whin flowers almost all year. Sunny and bright, even on a grey day.",
   "@themeColourWhinDescription": {
@@ -204,10 +181,6 @@
   "@themeColourDouro": {
     "description": "Name of the Douro theme colour"
   },
-  "themeColourDouroColours": "Port wine with tile blue",
-  "@themeColourDouroColours": {
-    "description": "The two colours of the Douro theme colour, shown after its name"
-  },
   "themeColourDouroDescription": "Port-wine red and blue tiles from Portugal's Douro Valley. Rich and warm, like evening light on the vineyard terraces.",
   "@themeColourDouroDescription": {
     "description": "Description of the Douro theme colour, shown under the swatches"
@@ -215,10 +188,6 @@
   "themeColourCuillin": "Cuillin",
   "@themeColourCuillin": {
     "description": "Name of the Cuillin theme colour"
-  },
-  "themeColourCuillinColours": "Mountain black with sea-loch blue",
-  "@themeColourCuillinColours": {
-    "description": "The two colours of the Cuillin theme colour, shown after its name"
   },
   "themeColourCuillinDescription": "Black rock and grey mist from the mountains of Skye. Quiet and focused, with a touch of sea-loch blue.",
   "@themeColourCuillinDescription": {

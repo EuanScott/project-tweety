@@ -9,10 +9,6 @@ class const _AppPreferencesContent({
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final cubit = context.read<AppPreferencesCubit>();
-    final deviceThemeLabel = _themeModeLabel(
-      l10n,
-      _deviceThemeMode(MediaQuery.platformBrightnessOf(context)),
-    );
 
     return SingleChildScrollView(
       child: Center(
@@ -21,11 +17,9 @@ class const _AppPreferencesContent({
           child: Column(
             crossAxisAlignment: .stretch,
             children: [
+              AppPageIntro(description: l10n.appPreferencesIntro),
               AppListSection(
                 header: l10n.appPreferencesThemeLabel,
-                footer: appPreferences.themeMode == .system
-                    ? l10n.appPreferencesThemeFollowingSystem(deviceThemeLabel)
-                    : null,
                 children: [
                   AppListSectionContent(
                     child: SizedBox(
@@ -108,14 +102,6 @@ class const _AppPreferencesContent({
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(l10n.appPreferencesSystemTextOpenFailed)),
     );
-  }
-
-  app_preferences_entity.AppPreferencesThemeMode _deviceThemeMode(
-    Brightness platformBrightness,
-  ) {
-    return platformBrightness == Brightness.dark
-        ? app_preferences_entity.AppPreferencesThemeMode.dark
-        : app_preferences_entity.AppPreferencesThemeMode.light;
   }
 
   String _themeModeLabel(

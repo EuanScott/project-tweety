@@ -2,6 +2,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'app_design_platform.dart';
+import 'grouped_surface.dart';
 
 /// A titled group of settings rows that adapts between iOS and Android lists.
 ///
@@ -126,7 +127,7 @@ class const _CupertinoListSection({
             margin: .zero,
             backgroundColor: Colors.transparent,
             decoration: BoxDecoration(
-              color: _raisedColour(Theme.of(context)),
+              color: groupedRaisedColour(Theme.of(context)),
               borderRadius: const .all(.circular(_cardRadius)),
             ),
             hasLeading: false,
@@ -142,16 +143,6 @@ class const _CupertinoListSection({
         ],
       ),
     );
-  }
-
-  /// White in light mode. In dark mode the scheme's `surface` is the raised
-  /// colour, because the page itself uses the scaffold background.
-  Color _raisedColour(ThemeData theme) {
-    if (theme.brightness == .dark) {
-      return theme.colorScheme.surface;
-    }
-
-    return theme.colorScheme.surfaceContainer;
   }
 }
 

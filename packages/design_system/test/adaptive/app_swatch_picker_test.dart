@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 const _tolerance = 1e-6;
+const _primary = Color(0xFF0E7474);
 
 const _labels = [
   'Fjord',
@@ -20,8 +21,7 @@ final List<AppSwatchOption<String>> _options = [
     AppSwatchOption(
       value: label,
       label: label,
-      primary: const Color(0xFF0E7474),
-      secondary: const Color(0xFF8E3B76),
+      primary: _primary,
     ),
 ];
 
@@ -80,6 +80,29 @@ void main() {
 
       for (final label in _labels) {
         expect(find.text(label), findsOneWidget);
+      }
+    });
+
+    testWidgets('fills each swatch with its primary colour only', (
+      tester,
+    ) async {
+      await _pumpPicker(tester);
+
+      final swatches = tester.widgetList<Container>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration! as BoxDecoration).shape == BoxShape.circle &&
+              widget.constraints?.maxWidth == 40,
+        ),
+      );
+
+      expect(swatches, hasLength(_labels.length));
+      for (final swatch in swatches) {
+        final decoration = swatch.decoration! as BoxDecoration;
+        expect(decoration.color, _primary);
+        expect(decoration.gradient, isNull);
       }
     });
 

@@ -146,13 +146,17 @@ class AppLocalizationsHe extends AppLocalizations {
   String get accessDeniedGoHome => 'עבור לבית';
 
   @override
-  String get settingsAppPreferencesTitle => 'תצוגה ושפה';
+  String get settingsAppPreferencesTitle => 'התאמה אישית';
 
   @override
   String get settingsAppPreferencesSubtitle => 'ערכת נושא, שפה והגדרות טקסט';
 
   @override
-  String get appPreferencesTitle => 'תצוגה ושפה';
+  String get appPreferencesTitle => 'התאמה אישית';
+
+  @override
+  String get appPreferencesIntro =>
+      'שנה את המראה, צבע ערכת הנושא, השפה והטקסט של האפליקציה.';
 
   @override
   String get appPreferencesThemeLabel => 'מראה';
@@ -167,18 +171,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get appPreferencesThemeDark => 'כהה';
 
   @override
-  String appPreferencesThemeFollowingSystem(Object theme) {
-    return 'בהתאם להגדרת המכשיר: $theme.';
-  }
-
-  @override
   String get appPreferencesThemeColourLabel => 'צבע ערכת הנושא';
 
   @override
   String get themeColourFjord => 'פיורד';
-
-  @override
-  String get themeColourFjordColours => 'טורקיז עם שזיף';
 
   @override
   String get themeColourFjordDescription =>
@@ -188,17 +184,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get themeColourFynbos => 'פינבוס';
 
   @override
-  String get themeColourFynbosColours => 'זית עם ורוד פרוטאה';
-
-  @override
   String get themeColourFynbosDescription =>
       'ירוק זית וורוד פרוטאה מהצמחייה הפראית של הכף. רענן, ירוק ומלא פריחה.';
 
   @override
   String get themeColourKalahari => 'קלהרי';
-
-  @override
-  String get themeColourKalahariColours => 'אדום אוקר עם כחול שמי מדבר';
 
   @override
   String get themeColourKalahariDescription =>
@@ -208,17 +198,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get themeColourLyng => 'אברש';
 
   @override
-  String get themeColourLyngColours => 'אברש עם זהב פטל צפוני';
-
-  @override
   String get themeColourLyngDescription =>
       'אברש סגול וזהב פטל צפוני מגבעות נורווגיה. רך ושקט, כמו סוף הקיץ בערבה.';
 
   @override
   String get themeColourWhin => 'אולקס';
-
-  @override
-  String get themeColourWhinColours => 'זהב אולקס עם כחול צפחה';
 
   @override
   String get themeColourWhinDescription =>
@@ -228,17 +212,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get themeColourDouro => 'דורו';
 
   @override
-  String get themeColourDouroColours => 'יין פורט עם כחול אריחים';
-
-  @override
   String get themeColourDouroDescription =>
       'אדום יין פורט ואריחים כחולים מעמק הדורו שבפורטוגל. עשיר וחם, כמו אור ערב על טרסות הכרמים.';
 
   @override
   String get themeColourCuillin => 'קולין';
-
-  @override
-  String get themeColourCuillinColours => 'שחור הרים עם כחול מפרץ ים';
 
   @override
   String get themeColourCuillinDescription =>

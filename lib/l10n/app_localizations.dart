@@ -370,23 +370,29 @@ abstract class AppLocalizations {
   /// **'Go home'**
   String get accessDeniedGoHome;
 
-  /// Title for the display and language settings entry
+  /// Title for the Settings row that opens the personalisation page
   ///
   /// In en, this message translates to:
-  /// **'Display and language'**
+  /// **'Personalisation'**
   String get settingsAppPreferencesTitle;
 
-  /// Subtitle for the display and language settings entry
+  /// Subtitle for the Settings row that opens the personalisation page
   ///
   /// In en, this message translates to:
   /// **'Theme, language, and text settings'**
   String get settingsAppPreferencesSubtitle;
 
-  /// Title for the display and language page
+  /// Title for the personalisation page
   ///
   /// In en, this message translates to:
-  /// **'Display and language'**
+  /// **'Personalisation'**
   String get appPreferencesTitle;
+
+  /// One sentence at the top of the personalisation page that says what the page changes
+  ///
+  /// In en, this message translates to:
+  /// **'Change the appearance, theme colour, language and text of the app.'**
+  String get appPreferencesIntro;
 
   /// Header for the appearance section, which holds the theme mode and theme colour
   ///
@@ -412,12 +418,6 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get appPreferencesThemeDark;
 
-  /// Helper text when theme follows the system setting
-  ///
-  /// In en, this message translates to:
-  /// **'Following device setting: {theme}.'**
-  String appPreferencesThemeFollowingSystem(Object theme);
-
   /// Title line above the theme colour swatches
   ///
   /// In en, this message translates to:
@@ -429,12 +429,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fjord'**
   String get themeColourFjord;
-
-  /// The two colours of the Fjord theme colour, shown after its name
-  ///
-  /// In en, this message translates to:
-  /// **'Teal with plum'**
-  String get themeColourFjordColours;
 
   /// Description of the Fjord theme colour, shown under the swatches
   ///
@@ -448,12 +442,6 @@ abstract class AppLocalizations {
   /// **'Fynbos'**
   String get themeColourFynbos;
 
-  /// The two colours of the Fynbos theme colour, shown after its name
-  ///
-  /// In en, this message translates to:
-  /// **'Olive with protea pink'**
-  String get themeColourFynbosColours;
-
   /// Description of the Fynbos theme colour, shown under the swatches
   ///
   /// In en, this message translates to:
@@ -465,12 +453,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Kalahari'**
   String get themeColourKalahari;
-
-  /// The two colours of the Kalahari theme colour, shown after its name
-  ///
-  /// In en, this message translates to:
-  /// **'Red ochre with desert-sky blue'**
-  String get themeColourKalahariColours;
 
   /// Description of the Kalahari theme colour, shown under the swatches
   ///
@@ -484,12 +466,6 @@ abstract class AppLocalizations {
   /// **'Lyng'**
   String get themeColourLyng;
 
-  /// The two colours of the Lyng theme colour, shown after its name
-  ///
-  /// In en, this message translates to:
-  /// **'Heather with cloudberry gold'**
-  String get themeColourLyngColours;
-
   /// Description of the Lyng theme colour, shown under the swatches
   ///
   /// In en, this message translates to:
@@ -501,12 +477,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Whin'**
   String get themeColourWhin;
-
-  /// The two colours of the Whin theme colour, shown after its name
-  ///
-  /// In en, this message translates to:
-  /// **'Gorse gold with slate blue'**
-  String get themeColourWhinColours;
 
   /// Description of the Whin theme colour, shown under the swatches
   ///
@@ -520,12 +490,6 @@ abstract class AppLocalizations {
   /// **'Douro'**
   String get themeColourDouro;
 
-  /// The two colours of the Douro theme colour, shown after its name
-  ///
-  /// In en, this message translates to:
-  /// **'Port wine with tile blue'**
-  String get themeColourDouroColours;
-
   /// Description of the Douro theme colour, shown under the swatches
   ///
   /// In en, this message translates to:
@@ -537,12 +501,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cuillin'**
   String get themeColourCuillin;
-
-  /// The two colours of the Cuillin theme colour, shown after its name
-  ///
-  /// In en, this message translates to:
-  /// **'Mountain black with sea-loch blue'**
-  String get themeColourCuillinColours;
 
   /// Description of the Cuillin theme colour, shown under the swatches
   ///

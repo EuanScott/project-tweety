@@ -15,7 +15,7 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester, initialLocation: AppRoutes.settingsPath);
-      await tester.tap(find.text('Display and language'));
+      await tester.tap(find.text('Personalisation'));
       await tester.pumpAndSettle();
 
       final context = tester.element(find.byType(AppPreferencesPage));

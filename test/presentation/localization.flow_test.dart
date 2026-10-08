@@ -43,7 +43,7 @@ void main() {
 
       await tester.tap(find.text('Settings'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Display and language'));
+      await tester.tap(find.text('Personalisation'));
       await tester.pumpAndSettle();
 
       await tester.tap(languageRowFinder());
@@ -56,7 +56,7 @@ void main() {
         const Locale('he'),
       );
       expect(
-        Directionality.of(tester.element(find.text('תצוגה ושפה'))),
+        Directionality.of(tester.element(find.text('התאמה אישית'))),
         TextDirection.rtl,
       );
       expect(repository.savedPreferences.last.languageCode, 'he');
@@ -75,7 +75,7 @@ void main() {
 
         await tester.tap(find.text('Settings'));
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Display and language'));
+        await tester.tap(find.text('Personalisation'));
         await tester.pumpAndSettle();
 
         await tester.tap(languageRowFinder());
@@ -104,7 +104,7 @@ void main() {
 
       await tester.tap(find.text('Settings'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Display and language'));
+      await tester.tap(find.text('Personalisation'));
       await tester.pumpAndSettle();
 
       await tester.tap(languageRowFinder());
@@ -113,7 +113,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Apariencia'), findsOneWidget);
-      expect(find.text('Pantalla e idioma'), findsOneWidget);
+      expect(find.text('Personalización'), findsOneWidget);
     });
   });
 }

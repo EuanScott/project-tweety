@@ -150,14 +150,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accessDeniedGoHome => 'Go home';
 
   @override
-  String get settingsAppPreferencesTitle => 'Display and language';
+  String get settingsAppPreferencesTitle => 'Personalisation';
 
   @override
   String get settingsAppPreferencesSubtitle =>
       'Theme, language, and text settings';
 
   @override
-  String get appPreferencesTitle => 'Display and language';
+  String get appPreferencesTitle => 'Personalisation';
+
+  @override
+  String get appPreferencesIntro =>
+      'Change the appearance, theme colour, language and text of the app.';
 
   @override
   String get appPreferencesThemeLabel => 'Appearance';
@@ -172,18 +176,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appPreferencesThemeDark => 'Dark';
 
   @override
-  String appPreferencesThemeFollowingSystem(Object theme) {
-    return 'Following device setting: $theme.';
-  }
-
-  @override
   String get appPreferencesThemeColourLabel => 'Theme colour';
 
   @override
   String get themeColourFjord => 'Fjord';
-
-  @override
-  String get themeColourFjordColours => 'Teal with plum';
 
   @override
   String get themeColourFjordDescription =>
@@ -193,17 +189,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeColourFynbos => 'Fynbos';
 
   @override
-  String get themeColourFynbosColours => 'Olive with protea pink';
-
-  @override
   String get themeColourFynbosDescription =>
       'Olive green and protea pink from the wild shrubland of the Cape. Fresh, green and full of bloom.';
 
   @override
   String get themeColourKalahari => 'Kalahari';
-
-  @override
-  String get themeColourKalahariColours => 'Red ochre with desert-sky blue';
 
   @override
   String get themeColourKalahariDescription =>
@@ -213,17 +203,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeColourLyng => 'Lyng';
 
   @override
-  String get themeColourLyngColours => 'Heather with cloudberry gold';
-
-  @override
   String get themeColourLyngDescription =>
       'Purple heather and cloudberry gold from the Norwegian hills. Soft and quiet, like late summer on the moor.';
 
   @override
   String get themeColourWhin => 'Whin';
-
-  @override
-  String get themeColourWhinColours => 'Gorse gold with slate blue';
 
   @override
   String get themeColourWhinDescription =>
@@ -233,17 +217,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeColourDouro => 'Douro';
 
   @override
-  String get themeColourDouroColours => 'Port wine with tile blue';
-
-  @override
   String get themeColourDouroDescription =>
       'Port-wine red and blue tiles from Portugal\'s Douro Valley. Rich and warm, like evening light on the vineyard terraces.';
 
   @override
   String get themeColourCuillin => 'Cuillin';
-
-  @override
-  String get themeColourCuillinColours => 'Mountain black with sea-loch blue';
 
   @override
   String get themeColourCuillinDescription =>

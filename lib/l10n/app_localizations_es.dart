@@ -155,14 +155,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accessDeniedGoHome => 'Ir al inicio';
 
   @override
-  String get settingsAppPreferencesTitle => 'Pantalla e idioma';
+  String get settingsAppPreferencesTitle => 'Personalización';
 
   @override
   String get settingsAppPreferencesSubtitle =>
       'Tema, idioma y ajustes de texto';
 
   @override
-  String get appPreferencesTitle => 'Pantalla e idioma';
+  String get appPreferencesTitle => 'Personalización';
+
+  @override
+  String get appPreferencesIntro =>
+      'Cambia la apariencia, el color del tema, el idioma y el texto de la aplicación.';
 
   @override
   String get appPreferencesThemeLabel => 'Apariencia';
@@ -177,18 +181,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPreferencesThemeDark => 'Oscuro';
 
   @override
-  String appPreferencesThemeFollowingSystem(Object theme) {
-    return 'Siguiendo la configuración del dispositivo: $theme.';
-  }
-
-  @override
   String get appPreferencesThemeColourLabel => 'Color del tema';
 
   @override
   String get themeColourFjord => 'Fiordo';
-
-  @override
-  String get themeColourFjordColours => 'Turquesa con ciruela';
 
   @override
   String get themeColourFjordDescription =>
@@ -198,18 +194,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get themeColourFynbos => 'Fynbos';
 
   @override
-  String get themeColourFynbosColours => 'Oliva con rosa protea';
-
-  @override
   String get themeColourFynbosDescription =>
       'Verde oliva y rosa protea del matorral silvestre del Cabo. Fresco, verde y lleno de flores.';
 
   @override
   String get themeColourKalahari => 'Kalahari';
-
-  @override
-  String get themeColourKalahariColours =>
-      'Ocre rojo con azul cielo del desierto';
 
   @override
   String get themeColourKalahariDescription =>
@@ -219,17 +208,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get themeColourLyng => 'Brezo';
 
   @override
-  String get themeColourLyngColours => 'Brezo con oro de camemoro';
-
-  @override
   String get themeColourLyngDescription =>
       'Brezo morado y oro de camemoro de las colinas noruegas. Suave y sereno, como el final del verano en el páramo.';
 
   @override
   String get themeColourWhin => 'Tojo';
-
-  @override
-  String get themeColourWhinColours => 'Oro de tojo con azul pizarra';
 
   @override
   String get themeColourWhinDescription =>
@@ -239,18 +222,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get themeColourDouro => 'Duero';
 
   @override
-  String get themeColourDouroColours => 'Vino de Oporto con azul azulejo';
-
-  @override
   String get themeColourDouroDescription =>
       'Rojo vino de Oporto y azulejos azules del valle del Duero, en Portugal. Intenso y cálido, como la luz del atardecer en las terrazas de viñedos.';
 
   @override
   String get themeColourCuillin => 'Cuillin';
-
-  @override
-  String get themeColourCuillinColours =>
-      'Negro de montaña con azul de lago marino';
 
   @override
   String get themeColourCuillinDescription =>

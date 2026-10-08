@@ -12,18 +12,15 @@ class const AppSwatchOption<T>({
   /// name.
   required final String label,
 
-  /// The colour of the swatch's top-start half.
+  /// The colour of the swatch.
   required final Color primary,
-
-  /// The colour of the swatch's bottom-end half.
-  required final Color secondary,
 });
 
 /// A row of colour tiles with one selected.
 ///
-/// Each tile is a circle split diagonally between two colours, with its label
-/// under it. The selected tile has a ring, a tick and a bold label, so the
-/// choice never relies on colour alone.
+/// Each tile is a circle in one colour, with its label under it. The selected
+/// tile has a ring, a tick and a bold label, so the choice never relies on
+/// colour alone.
 ///
 /// The row scrolls only when the tiles do not fit the width it gets. When it
 /// scrolls, the last visible tile is cut in half to show there is more, the
@@ -223,17 +220,7 @@ class const _Swatch<T>({
             alignment: .center,
             decoration: BoxDecoration(
               shape: .circle,
-              gradient: LinearGradient(
-                begin: .topLeft,
-                end: .bottomRight,
-                colors: [
-                  option.primary,
-                  option.primary,
-                  option.secondary,
-                  option.secondary,
-                ],
-                stops: const [0, 0.5, 0.5, 1],
-              ),
+              color: option.primary,
             ),
             child: isSelected
                 ? Container(

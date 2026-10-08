@@ -15,7 +15,7 @@ void main() {
     ) async {
       await pumpApp(tester, initialLocation: AppRoutes.settingsPath);
 
-      await tester.tap(find.text('Display and language'));
+      await tester.tap(find.text('Personalisation'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 
@@ -37,7 +37,7 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester, initialLocation: AppRoutes.settingsPath);
-      await tester.tap(find.text('Display and language'));
+      await tester.tap(find.text('Personalisation'));
       await tester.pumpAndSettle();
 
       await tester.restartAndRestore();

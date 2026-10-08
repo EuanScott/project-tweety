@@ -127,7 +127,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Theme'), findsNothing);
-      expect(find.text('Display and language'), findsOneWidget);
+      expect(find.text('Personalisation'), findsOneWidget);
     });
 
     testWidgets('tapping active cards tab scrolls cards list to the top', (

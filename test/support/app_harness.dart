@@ -117,7 +117,7 @@ Future<void> pumpApp(
 Future<void> openAppPreferences(WidgetTester tester) async {
   await tester.tap(find.text('Settings'));
   await tester.pumpAndSettle();
-  await tester.tap(find.text('Display and language'));
+  await tester.tap(find.text('Personalisation'));
   await tester.pumpAndSettle();
 }
 
