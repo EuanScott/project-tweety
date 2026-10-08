@@ -2,6 +2,7 @@
 
 [![Version](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FEuanScott%2Fproject-tweety%2Fmain%2Fpubspec.yaml&query=%24.version&label=version&color=blue)](pubspec.yaml)
 [![CI](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/EuanScott/project-tweety/badge)](https://scorecard.dev/viewer/?uri=github.com/EuanScott/project-tweety)
 
 A playground project to try out some ideas and work on some blockers that I face in my day job. I'm not really building
 anything to serve a purpose here.
@@ -109,6 +110,43 @@ release step.
 The rationale, including why `pre-commit` and `commit-msg` cannot do this,
 is [ADR-0009](docs/decisions/0009-conventional-commit-driven-versioning.md). The mapping itself lives in
 `tool/hooks/bump_version.sh`.
+
+## Security
+
+### Vulnerability scanning
+
+The [Security workflow](.github/workflows/security.yml) runs [OSV-Scanner](https://google.github.io/osv-scanner/). It
+runs on every push to `main`, on every pull request, and every Monday. It compares each `pubspec.lock` and the iOS
+Swift package lockfiles with the Open Source Vulnerabilities ([OSV](https://osv.dev/)) database. The weekly run finds
+vulnerabilities that are published after the code last changed. Results go to the repository Security tab.
+
+The scan does not cover Android Gradle dependencies. OSV-Scanner reads only Gradle lockfiles, and the Android build has
+none.
+
+### Dependency updates
+
+[Dependabot](.github/dependabot.yml) proposes updates every week for pub (the app and both packages), Gradle and GitHub
+Actions. Dependabot waits 7 days after a version is published. A compromised release is usually found and removed in
+that time.
+
+Each workflow action is pinned to an exact commit, not to a version tag. A tag can be moved to different code; a commit
+cannot. Each workflow gives its GitHub token read access only, and adds write access only where a job needs it.
+
+### OpenSSF Scorecard
+
+The Open Source Security Foundation (OpenSSF) Scorecard badge grades how the project is run. It checks practices such
+as pinned dependencies, token permissions, a security policy and dependency updates. The expected score is about 6 to 7
+out of 10.
+
+Two checks score low on purpose:
+
+- **Code-Review** scores 0. It counts changes that a second person approved in a pull request.
+- **Branch-Protection** scores low. It wants `main` to require pull requests and reviews.
+
+This project has one maintainer, who pushes directly to `main` (see [Development Style](#development-style)). A pull
+request with no second reviewer adds work but no review. The project accepts the lower score.
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md).
 
 ## Project Docs
 
