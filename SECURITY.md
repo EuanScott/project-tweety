@@ -14,17 +14,23 @@ Report it privately through GitHub:
 2. Select **Report a vulnerability**.
 3. Describe the problem, the affected files or dependency, and the steps to reproduce it.
 
-Only the maintainer can read the report. You can discuss the fix with the maintainer in the same private advisory.
+Only the maintainer can read the report. You and the maintainer can discuss the fix in the same private advisory.
 
 ## What to expect
 
-This project has a single maintainer, who works on it in spare time. I aim to reply within 7 days. I will tell you if
-the report is accepted, and credit you in the advisory unless you ask me not to.
+This project has one maintainer, who works on it in spare time. The maintainer aims to reply within 7 days. The reply
+says whether the report is accepted. The advisory credits you, unless you ask for no credit.
 
 ## Scope
 
-In scope: the code in this repository, its dependencies, and its GitHub Actions workflows.
+In scope: the code in this repository, its dependencies and its GitHub Actions workflows.
 
-Out of scope: the Firebase client configuration in `android/app/google-services.json` and
-`ios/Runner/GoogleService-Info.plist`. Firebase client keys are public by design. Report them only if you can show
-that a key is usable outside this app.
+Out of scope: the Firebase API keys in these files:
+
+- `android/app/google-services.json`
+- `ios/Runner/GoogleService-Info.plist`
+- `lib/core/firebase/firebase_options.constants.dart`
+
+Firebase client keys are not secrets. Each key is restricted to this app's identity, as
+[ADR-0013](docs/decisions/0013-firebase-config-committed-with-restricted-keys.md) records. Report a key only if you can
+use it from outside this app.
