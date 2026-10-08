@@ -12,6 +12,7 @@ class AppButton extends StatelessWidget {
   const new primary({
     required this.onPressed,
     required this.child,
+    this.fillsWidth = true,
     super.key,
   }) : _variant = .primary;
 
@@ -19,6 +20,7 @@ class AppButton extends StatelessWidget {
   const new secondary({
     required this.onPressed,
     required this.child,
+    this.fillsWidth = true,
     super.key,
   }) : _variant = .secondary;
 
@@ -26,6 +28,7 @@ class AppButton extends StatelessWidget {
   const new text({
     required this.onPressed,
     required this.child,
+    this.fillsWidth = true,
     super.key,
   }) : _variant = .text;
 
@@ -33,6 +36,7 @@ class AppButton extends StatelessWidget {
   const new destructive({
     required this.onPressed,
     required this.child,
+    this.fillsWidth = true,
     super.key,
   }) : _variant = .destructive;
 
@@ -40,8 +44,19 @@ class AppButton extends StatelessWidget {
   /// in every theme colour.
   static const int _secondaryTintAlpha = 15;
 
+  /// Keeps the theme's 48-point tap height while sizing to the label.
+  static const ButtonStyle _labelWidthStyle = ButtonStyle(
+    minimumSize: WidgetStatePropertyAll(Size(0, 48)),
+  );
+
   final VoidCallback? onPressed;
   final Widget child;
+
+  /// Whether the button fills the width it is given, as the theme sets.
+  ///
+  /// Turn it off for a button beside other content in a row. Cupertino
+  /// buttons always size to their label, so only Material reads it.
+  final bool fillsWidth;
   final _AppButtonVariant _variant;
 
   @override
@@ -54,20 +69,22 @@ class AppButton extends StatelessWidget {
   }
 
   Widget _buildMaterial(BuildContext context) {
+    final style = fillsWidth ? null : _labelWidthStyle;
+
     switch (_variant) {
       case .primary:
-        return ElevatedButton(onPressed: onPressed, child: child);
+        return ElevatedButton(onPressed: onPressed, style: style, child: child);
       case .secondary:
-        return OutlinedButton(onPressed: onPressed, child: child);
+        return OutlinedButton(onPressed: onPressed, style: style, child: child);
       case .text:
-        return TextButton(onPressed: onPressed, child: child);
+        return TextButton(onPressed: onPressed, style: style, child: child);
       case .destructive:
         return ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.error,
             foregroundColor: Theme.of(context).colorScheme.onError,
-          ),
+          ).merge(style),
           child: child,
         );
     }

@@ -19,9 +19,16 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
     on<CardsDraftDiscarded>(_onDraftDiscarded);
     on<CardsEditSubmitted>(_onEditSubmitted);
     on<CardsDeleteSubmitted>(_onDeleteSubmitted);
+    on<CardsSyncChanged>(_onSyncChanged);
   }
 
   final CardsRepository _cardsRepository;
+
+  void _onSyncChanged(CardsSyncChanged event, Emitter<CardsState> emit) {
+    emit(
+      state.copyWith(sync: event.sync, unsyncedChanges: event.unsyncedChanges),
+    );
+  }
 
   void _onCreateStarted(CardsCreateStarted event, Emitter<CardsState> emit) {
     emit(

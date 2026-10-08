@@ -586,5 +586,33 @@ void main() {
         expect(unchangedEditRepository.updateRequestCount, 0);
       },
     );
+
+    test('starts with every Card synced and none marked', () {
+      final bloc = CardsBloc(FakeCardsRepository());
+      addTearDown(bloc.close);
+
+      expect(bloc.state.sync, const CardsSync.upToDate());
+      expect(bloc.state.unsyncedChanges, isEmpty);
+    });
+
+    blocTest<CardsBloc, CardsState>(
+      'replaces the sync status and the unsynced Card changes together',
+      build: () => CardsBloc(FakeCardsRepository(cards: const [card])),
+      seed: () => const CardsState(status: CardsStatus.success, items: [card]),
+      act: (bloc) => bloc.add(
+        const CardsSyncChanged(
+          CardsSync.pending(changeCount: 2),
+          unsyncedChanges: {'card-1': UnsyncedCardChange.updated},
+        ),
+      ),
+      expect: () => [
+        const CardsState(
+          status: CardsStatus.success,
+          items: [card],
+          sync: CardsSync.pending(changeCount: 2),
+          unsyncedChanges: {'card-1': UnsyncedCardChange.updated},
+        ),
+      ],
+    );
   });
 }

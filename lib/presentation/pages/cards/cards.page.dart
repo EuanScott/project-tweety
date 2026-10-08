@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:design_system/design_system.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:navigation/navigation.dart';
@@ -22,6 +23,7 @@ part 'widgets/cards_editor.widget.dart';
 part 'widgets/cards_empty.widget.dart';
 part 'widgets/cards_error.widget.dart';
 part 'widgets/cards_list.widget.dart';
+part 'widgets/cards_sync_row.widget.dart';
 
 // TODO: What about portrait tablet view mode?
 // TODO: Editing on dual screen isn't giving weird stack behaviour
@@ -142,29 +144,36 @@ class const _CardsView({
     // TODO: buildWhen and listenWhen for small dedicated UI tasks (snackbar or only conditional rebuilds required)
     return BlocBuilder<CardsBloc, CardsState>(
       builder: (context, state) {
-        if (state.isInitial || state.isLoading) {
-          return const Center(child: AppLoadingIndicator());
-        }
-
         if (state.isFailure) {
           return _CardsError(
             message: state.errorMessage ?? 'Something went wrong.',
           );
         }
 
-        if (!state.hasItems) {
-          return const _CardsEmpty();
-        }
-
         return _CardsList(
           key: listKey,
           items: state.items,
+          unsyncedChanges: state.unsyncedChanges,
           selectedCardId: selectedCardId,
           onCardSelected: onCardSelected,
           onRefresh: () => _refreshCards(context),
+          placeholder: _placeholderFor(state),
         );
       },
     );
+  }
+
+  /// What fills the page under the sync row when no Cards are showing.
+  Widget? _placeholderFor(CardsState state) {
+    if (state.hasItems) {
+      return null;
+    }
+
+    if (state.isInitial || state.isLoading) {
+      return const Center(child: AppLoadingIndicator());
+    }
+
+    return const _CardsEmpty();
   }
 
   Future<void> _refreshCards(BuildContext context) async {

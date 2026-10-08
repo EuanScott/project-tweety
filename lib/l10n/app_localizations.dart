@@ -741,6 +741,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out'**
   String get accountSignOutConfirmAction;
+
+  /// Sync row headline when no change waits to sync
+  ///
+  /// In en, this message translates to:
+  /// **'All Cards synced'**
+  String get cardsSyncUpToDateTitle;
+
+  /// Sync row sub-line naming when the last sync finished
+  ///
+  /// In en, this message translates to:
+  /// **'Last sync at {time}'**
+  String cardsSyncLastSynced(DateTime time);
+
+  /// Sync row headline when changes wait to sync; deletions count
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 change on this device only} other{{count} changes on this device only}}'**
+  String cardsSyncPendingTitle(int count);
+
+  /// Sync row sub-line when changes wait to sync
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Sync to save it to your Account} other{Sync to save them to your Account}}'**
+  String cardsSyncPendingSubtitle(int count);
+
+  /// Sync row headline while a sync runs
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing…'**
+  String get cardsSyncSyncingTitle;
+
+  /// Sync row progress while a sync runs
+  ///
+  /// In en, this message translates to:
+  /// **'{savedCount} of {changeCount} changes saved'**
+  String cardsSyncSyncingSubtitle(int savedCount, int changeCount);
+
+  /// Sync row headline after every change synced
+  ///
+  /// In en, this message translates to:
+  /// **'Synced just now'**
+  String get cardsSyncSyncedTitle;
+
+  /// Sync row sub-line after every change synced
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 change saved to your Account} other{{count} changes saved to your Account}}'**
+  String cardsSyncSyncedSubtitle(int count);
+
+  /// Sync row headline after only some changes synced
+  ///
+  /// In en, this message translates to:
+  /// **'{savedCount} of {changeCount} changes synced'**
+  String cardsSyncPartialTitle(int savedCount, int changeCount);
+
+  /// Sync row sub-line naming the changes the next sync retries
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 change will try again next sync} other{{count} changes will try again next sync}}'**
+  String cardsSyncPartialSubtitle(int count);
+
+  /// Sync row headline when a sync failed for lack of network
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline'**
+  String get cardsSyncOfflineTitle;
+
+  /// Sync row sub-line when a sync failed for lack of network
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 change is safe on this device. Sync when you\'re back online.} other{{count} changes are safe on this device. Sync when you\'re back online.}}'**
+  String cardsSyncOfflineSubtitle(int count);
+
+  /// Sync row headline when a sync failed for any reason other than the network
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t sync'**
+  String get cardsSyncFailedTitle;
+
+  /// Sync row sub-line when a sync failed for any other reason
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 change is safe on this device. Try again later.} other{{count} changes are safe on this device. Try again later.}}'**
+  String cardsSyncFailedSubtitle(int count);
+
+  /// Sync row headline after a sync with nothing to send
+  ///
+  /// In en, this message translates to:
+  /// **'Already up to date'**
+  String get cardsSyncAlreadyUpToDateTitle;
+
+  /// Sync row sub-line after a sync with nothing to send
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to sync'**
+  String get cardsSyncAlreadyUpToDateSubtitle;
+
+  /// Sync row headline while Cards missing from this device download
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Getting 1 Card from your Account…} other{Getting {count} Cards from your Account…}}'**
+  String cardsSyncDownloadingTitle(int count);
+
+  /// Sync row sub-line while Cards download
+  ///
+  /// In en, this message translates to:
+  /// **'You can keep working'**
+  String get cardsSyncDownloadingSubtitle;
+
+  /// Sync row headline after Cards downloaded
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 Card added from your Account} other{{count} Cards added from your Account}}'**
+  String cardsSyncDownloadedTitle(int count);
+
+  /// Sync row sub-line after Cards downloaded
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{It was made on another device} other{They were made on another device}}'**
+  String cardsSyncDownloadedSubtitle(int count);
+
+  /// Sync row button that starts a sync
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get cardsSyncAction;
+
+  /// Sync row button that starts a sync after a failure
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get cardsSyncRetryAction;
+
+  /// Disabled sync row button while a sync runs
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing'**
+  String get cardsSyncInProgressAction;
+
+  /// Marker on a Card created since the last sync
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get cardsUnsyncedCreated;
+
+  /// Marker on a Card edited since the last sync
+  ///
+  /// In en, this message translates to:
+  /// **'Edited'**
+  String get cardsUnsyncedUpdated;
 }
 
 class _AppLocalizationsDelegate

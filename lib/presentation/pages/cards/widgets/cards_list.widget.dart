@@ -1,13 +1,25 @@
 part of '../cards.page.dart';
 
+/// The one scroll view of the Cards page: the sync row, then the Cards, or
+/// [placeholder] filling the rest when there are none to show. Pull to
+/// refresh and the clearance under the primary action apply to all of it.
 class const _CardsList({
   required final List<card_model.Card> items,
+  required final Map<String, UnsyncedCardChange> unsyncedChanges,
   required final String? selectedCardId,
   required final ValueChanged<String> onCardSelected,
   required final Future<void> Function() onRefresh,
+  final Widget? placeholder,
   super.key,
 }) extends StatefulWidget {
   static const EdgeInsets _listPadding = .symmetric(vertical: 8);
+
+  /// Rows before the first Card: the sync row.
+  static const int _leadingRowCount = 1;
+
+  /// Half the gap between neighbouring Cards, shared with the sync row so
+  /// every gap in the list is the same.
+  static const EdgeInsets _cardMargin = .symmetric(vertical: 4);
 
   @override
   State<_CardsList> createState() => _CardsListState();
@@ -15,7 +27,6 @@ class const _CardsList({
 
 class _CardsListState extends State<_CardsList> {
   static const Duration _scrollDuration = Duration(milliseconds: 250);
-  static const double _selectedCardElevation = 6;
 
   /// A list row is a preview, not the content. Capping the lines keeps every
   /// row a predictable height so a long card cannot push the rest off screen.
@@ -36,6 +47,10 @@ class _CardsListState extends State<_CardsList> {
   /// having placed it.
   bool _isPlacingOffscreenCard = false;
   final Map<String, GlobalKey> _itemKeys = {};
+
+  /// Set while a pull to refresh runs. Its own spinner already says the
+  /// Cards are loading, so the placeholder steps aside.
+  bool _isRefreshing = false;
 
   @override
   void initState() {
@@ -63,63 +78,106 @@ class _CardsListState extends State<_CardsList> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scrollController = _scrollControllerFor(context);
+    final bottomClearance = AppPrimaryActionPane.bottomClearanceOf(context);
+    final placeholder = _isRefreshing ? null : widget.placeholder;
 
     return AppRefreshIndicator(
-      onRefresh: widget.onRefresh,
-      child: ListView.builder(
+      onRefresh: _refresh,
+      child: CustomScrollView(
         controller: scrollController,
         physics: const AlwaysScrollableScrollPhysics(
           parent: BouncingScrollPhysics(),
         ),
-        padding: _CardsList._listPadding.copyWith(
-          bottom:
-              _CardsList._listPadding.bottom +
-              AppPrimaryActionPane.bottomClearanceOf(context),
-        ),
-        itemCount: widget.items.length,
-        itemBuilder: (context, index) {
-          final item = widget.items[index];
-          final isSelected = item.id == widget.selectedCardId;
-
-          return Card(
-            key: _itemKeyFor(item.id),
-            margin: const .symmetric(vertical: 8),
-            shape: isSelected ? _selectedCardShape(theme) : null,
-            elevation: isSelected ? _selectedCardElevation : null,
-            clipBehavior: .antiAlias,
-            child: InkWell(
-              onTap: () => widget.onCardSelected(item.id),
+        slivers: [
+          SliverPadding(
+            padding: _CardsList._listPadding.copyWith(
+              bottom: placeholder == null
+                  ? _CardsList._listPadding.bottom + bottomClearance
+                  : 0,
+            ),
+            sliver: SliverList.builder(
+              itemCount: _CardsList._leadingRowCount + widget.items.length,
+              itemBuilder: (context, index) =>
+                  index < _CardsList._leadingRowCount
+                  ? const _CardsSyncRow()
+                  : _buildCard(
+                      widget.items[index - _CardsList._leadingRowCount],
+                      theme,
+                    ),
+            ),
+          ),
+          if (placeholder != null)
+            SliverFillRemaining(
+              hasScrollBody: false,
               child: Padding(
-                padding: const .all(16),
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Text(
+                padding: .only(bottom: bottomClearance),
+                child: placeholder,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _refresh() async {
+    setState(() => _isRefreshing = true);
+    try {
+      await widget.onRefresh();
+    } finally {
+      if (mounted) {
+        setState(() => _isRefreshing = false);
+      }
+    }
+  }
+
+  Widget _buildCard(card_model.Card item, ThemeData theme) {
+    final isSelected = item.id == widget.selectedCardId;
+    final unsyncedChange = widget.unsyncedChanges[item.id];
+
+    return Card(
+      key: _itemKeyFor(item.id),
+      margin: _CardsList._cardMargin,
+      shape: isSelected ? _selectedCardShape(theme) : null,
+      clipBehavior: .antiAlias,
+      child: InkWell(
+        onTap: () => widget.onCardSelected(item.id),
+        child: Padding(
+          padding: const .all(16),
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              Row(
+                spacing: 8,
+                children: [
+                  Flexible(
+                    child: Text(
                       item.title,
                       style: theme.textTheme.titleMedium,
                       maxLines: _titleMaxLines,
                       overflow: .ellipsis,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      item.description,
-                      style: theme.textTheme.bodyMedium,
-                      maxLines: _descriptionMaxLines,
-                      overflow: .ellipsis,
-                    ),
-                  ],
-                ),
+                  ),
+                  if (unsyncedChange != null)
+                    _UnsyncedMarker(change: unsyncedChange),
+                ],
               ),
-            ),
-          );
-        },
+              const SizedBox(height: 8),
+              Text(
+                item.description,
+                style: theme.textTheme.bodyMedium,
+                maxLines: _descriptionMaxLines,
+                overflow: .ellipsis,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  /// Only selection is expressed here. Colour, elevation, and the shadow that
-  /// lifts a card off the page come from the design system's card theme, so
-  /// cards look the same wherever they are used.
+  /// Only selection is expressed here, as an outline. Colour and shape come
+  /// from the design system's card theme, so cards look the same wherever
+  /// they are used.
   ShapeBorder _selectedCardShape(ThemeData theme) {
     return RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
@@ -186,9 +244,9 @@ class _CardsListState extends State<_CardsList> {
       return;
     }
 
-    final targetOffset = widget.items.length <= 1
-        ? position.minScrollExtent
-        : position.maxScrollExtent * selectedIndex / (widget.items.length - 1);
+    final rowIndex = _CardsList._leadingRowCount + selectedIndex;
+    final lastRowIndex = _CardsList._leadingRowCount + widget.items.length - 1;
+    final targetOffset = position.maxScrollExtent * rowIndex / lastRowIndex;
 
     position.jumpTo(
       targetOffset.clamp(position.minScrollExtent, position.maxScrollExtent),
@@ -244,5 +302,33 @@ class _CardsListState extends State<_CardsList> {
     }
 
     return _materialScrollController;
+  }
+}
+
+/// Marks a Card whose change has not reached the Account yet.
+class const _UnsyncedMarker({required final UnsyncedCardChange change})
+    extends StatelessWidget {
+  static const double _dotSize = 8;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final color = theme.colorScheme.secondary;
+
+    return Row(
+      mainAxisSize: .min,
+      spacing: 4,
+      children: [
+        Icon(Icons.circle, size: _dotSize, color: color),
+        Text(
+          switch (change) {
+            UnsyncedCardChange.created => l10n.cardsUnsyncedCreated,
+            UnsyncedCardChange.updated => l10n.cardsUnsyncedUpdated,
+          },
+          style: theme.textTheme.labelMedium?.copyWith(color: color),
+        ),
+      ],
+    );
   }
 }

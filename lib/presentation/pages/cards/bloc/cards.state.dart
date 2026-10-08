@@ -19,6 +19,46 @@ sealed class CardsDetail with _$CardsDetail {
   const factory failure(String errorMessage) = CardsDetailFailure;
 }
 
+/// What a sync would push for a Card that has not reached the Account yet.
+enum UnsyncedCardChange { created, updated }
+
+/// Where a sync, or a background download of Cards, stands.
+///
+/// Counts are changes, so a deleted Card waiting to sync is counted even
+/// though it has no row in the list.
+@freezed
+sealed class CardsSync with _$CardsSync {
+  const new _();
+
+  const factory upToDate({DateTime? lastSyncedAt}) = CardsSyncUpToDate;
+
+  const factory pending({required int changeCount}) = CardsSyncPending;
+
+  const factory syncing({required int savedCount, required int changeCount}) =
+      CardsSyncSyncing;
+
+  const factory synced({required int changeCount}) = CardsSyncSynced;
+
+  const factory partial({required int savedCount, required int changeCount}) =
+      CardsSyncPartial;
+
+  const factory offline({required int changeCount}) = CardsSyncOffline;
+
+  const factory failed({required int changeCount}) = CardsSyncFailed;
+
+  const factory alreadyUpToDate() = CardsSyncAlreadyUpToDate;
+
+  const factory downloading({required int cardCount}) = CardsSyncDownloading;
+
+  const factory downloaded({required int cardCount}) = CardsSyncDownloaded;
+
+  /// Whether a sync or a download is running, so a new sync cannot start.
+  bool get isBusy => switch (this) {
+    CardsSyncSyncing() || CardsSyncDownloading() => true,
+    _ => false,
+  };
+}
+
 @freezed
 abstract class CardsState with _$CardsState {
   const new _();
@@ -44,6 +84,9 @@ abstract class CardsState with _$CardsState {
     String? deletingCardId,
     String? deleteErrorCardId,
     String? deletedCardId,
+    @Default(CardsSync.upToDate()) CardsSync sync,
+    @Default(<String, UnsyncedCardChange>{})
+    Map<String, UnsyncedCardChange> unsyncedChanges,
   }) = _CardsState;
 
   bool get isInitial => status == CardsStatus.initial;

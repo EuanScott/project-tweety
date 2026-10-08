@@ -93,6 +93,32 @@ void main() {
   });
 
   group('AppButton', () {
+    testWidgets('sizes to its label beside other content when it does not '
+        'fill the width', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: DesignSystemTheme.light(),
+          home: const Scaffold(
+            body: Row(
+              children: [
+                Expanded(child: Text('Status')),
+                AppButton.primary(
+                  onPressed: _noop,
+                  fillsWidth: false,
+                  child: Text('Sync'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      final button = tester.getSize(find.byType(ElevatedButton));
+      expect(button.width, lessThan(200));
+      expect(button.height, 48);
+    });
+
     testWidgets('renders a Material button on Android', (tester) async {
       await tester.pumpWidget(
         MaterialApp(

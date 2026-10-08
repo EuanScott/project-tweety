@@ -354,4 +354,161 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountSignOutConfirmAction => 'Sign out';
+
+  @override
+  String get cardsSyncUpToDateTitle => 'All Cards synced';
+
+  @override
+  String cardsSyncLastSynced(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return 'Last sync at $timeString';
+  }
+
+  @override
+  String cardsSyncPendingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count changes on this device only',
+      one: '1 change on this device only',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncPendingSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Sync to save them to your Account',
+      one: 'Sync to save it to your Account',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncSyncingTitle => 'Syncing…';
+
+  @override
+  String cardsSyncSyncingSubtitle(int savedCount, int changeCount) {
+    return '$savedCount of $changeCount changes saved';
+  }
+
+  @override
+  String get cardsSyncSyncedTitle => 'Synced just now';
+
+  @override
+  String cardsSyncSyncedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count changes saved to your Account',
+      one: '1 change saved to your Account',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncPartialTitle(int savedCount, int changeCount) {
+    return '$savedCount of $changeCount changes synced';
+  }
+
+  @override
+  String cardsSyncPartialSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count changes will try again next sync',
+      one: '1 change will try again next sync',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncOfflineTitle => 'You\'re offline';
+
+  @override
+  String cardsSyncOfflineSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count changes are safe on this device. Sync when you\'re back online.',
+      one: '1 change is safe on this device. Sync when you\'re back online.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncFailedTitle => 'Couldn\'t sync';
+
+  @override
+  String cardsSyncFailedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count changes are safe on this device. Try again later.',
+      one: '1 change is safe on this device. Try again later.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncAlreadyUpToDateTitle => 'Already up to date';
+
+  @override
+  String get cardsSyncAlreadyUpToDateSubtitle => 'Nothing to sync';
+
+  @override
+  String cardsSyncDownloadingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Getting $count Cards from your Account…',
+      one: 'Getting 1 Card from your Account…',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncDownloadingSubtitle => 'You can keep working';
+
+  @override
+  String cardsSyncDownloadedTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Cards added from your Account',
+      one: '1 Card added from your Account',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncDownloadedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'They were made on another device',
+      one: 'It was made on another device',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncAction => 'Sync';
+
+  @override
+  String get cardsSyncRetryAction => 'Try again';
+
+  @override
+  String get cardsSyncInProgressAction => 'Syncing';
+
+  @override
+  String get cardsUnsyncedCreated => 'New';
+
+  @override
+  String get cardsUnsyncedUpdated => 'Edited';
 }

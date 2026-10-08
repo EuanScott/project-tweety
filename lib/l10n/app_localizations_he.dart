@@ -348,4 +348,160 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get accountSignOutConfirmAction => 'התנתק';
+
+  @override
+  String get cardsSyncUpToDateTitle => 'כל הכרטיסים מסונכרנים';
+
+  @override
+  String cardsSyncLastSynced(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return 'סנכרון אחרון ב-$timeString';
+  }
+
+  @override
+  String cardsSyncPendingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count שינויים רק במכשיר הזה',
+      one: 'שינוי אחד רק במכשיר הזה',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncPendingSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'סנכרן כדי לשמור אותם בחשבון שלך',
+      one: 'סנכרן כדי לשמור אותו בחשבון שלך',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncSyncingTitle => 'מסנכרן…';
+
+  @override
+  String cardsSyncSyncingSubtitle(int savedCount, int changeCount) {
+    return '$savedCount מתוך $changeCount שינויים נשמרו';
+  }
+
+  @override
+  String get cardsSyncSyncedTitle => 'סונכרן הרגע';
+
+  @override
+  String cardsSyncSyncedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count שינויים נשמרו בחשבון שלך',
+      one: 'שינוי אחד נשמר בחשבון שלך',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncPartialTitle(int savedCount, int changeCount) {
+    return '$savedCount מתוך $changeCount שינויים סונכרנו';
+  }
+
+  @override
+  String cardsSyncPartialSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count שינויים ינוסו שוב בסנכרון הבא',
+      one: 'שינוי אחד ינוסה שוב בסנכרון הבא',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncOfflineTitle => 'אין חיבור לרשת';
+
+  @override
+  String cardsSyncOfflineSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count שינויים שמורים בבטחה במכשיר הזה. סנכרן כשתחזור לרשת.',
+      one: 'שינוי אחד שמור בבטחה במכשיר הזה. סנכרן כשתחזור לרשת.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncFailedTitle => 'לא ניתן לסנכרן';
+
+  @override
+  String cardsSyncFailedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count שינויים שמורים בבטחה במכשיר הזה. נסה שוב מאוחר יותר.',
+      one: 'שינוי אחד שמור בבטחה במכשיר הזה. נסה שוב מאוחר יותר.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncAlreadyUpToDateTitle => 'הכול כבר מעודכן';
+
+  @override
+  String get cardsSyncAlreadyUpToDateSubtitle => 'אין מה לסנכרן';
+
+  @override
+  String cardsSyncDownloadingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'מוריד $count כרטיסים מהחשבון שלך…',
+      one: 'מוריד כרטיס אחד מהחשבון שלך…',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncDownloadingSubtitle => 'אפשר להמשיך לעבוד';
+
+  @override
+  String cardsSyncDownloadedTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count כרטיסים נוספו מהחשבון שלך',
+      one: 'כרטיס אחד נוסף מהחשבון שלך',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncDownloadedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'הם נוצרו במכשיר אחר',
+      one: 'הוא נוצר במכשיר אחר',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncAction => 'סנכרן';
+
+  @override
+  String get cardsSyncRetryAction => 'נסה שוב';
+
+  @override
+  String get cardsSyncInProgressAction => 'מסנכרן';
+
+  @override
+  String get cardsUnsyncedCreated => 'חדש';
+
+  @override
+  String get cardsUnsyncedUpdated => 'נערך';
 }

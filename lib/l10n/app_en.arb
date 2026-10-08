@@ -351,5 +351,172 @@
   "accountSignOutConfirmAction": "Sign out",
   "@accountSignOutConfirmAction": {
     "description": "Confirm action of the sign-out confirmation dialog"
+  },
+  "cardsSyncUpToDateTitle": "All Cards synced",
+  "@cardsSyncUpToDateTitle": {
+    "description": "Sync row headline when no change waits to sync"
+  },
+  "cardsSyncLastSynced": "Last sync at {time}",
+  "@cardsSyncLastSynced": {
+    "description": "Sync row sub-line naming when the last sync finished",
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "jm"
+      }
+    }
+  },
+  "cardsSyncPendingTitle": "{count, plural, =1{1 change on this device only} other{{count} changes on this device only}}",
+  "@cardsSyncPendingTitle": {
+    "description": "Sync row headline when changes wait to sync; deletions count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncPendingSubtitle": "{count, plural, =1{Sync to save it to your Account} other{Sync to save them to your Account}}",
+  "@cardsSyncPendingSubtitle": {
+    "description": "Sync row sub-line when changes wait to sync",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncSyncingTitle": "Syncing…",
+  "@cardsSyncSyncingTitle": {
+    "description": "Sync row headline while a sync runs"
+  },
+  "cardsSyncSyncingSubtitle": "{savedCount} of {changeCount} changes saved",
+  "@cardsSyncSyncingSubtitle": {
+    "description": "Sync row progress while a sync runs",
+    "placeholders": {
+      "savedCount": {
+        "type": "int"
+      },
+      "changeCount": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncSyncedTitle": "Synced just now",
+  "@cardsSyncSyncedTitle": {
+    "description": "Sync row headline after every change synced"
+  },
+  "cardsSyncSyncedSubtitle": "{count, plural, =1{1 change saved to your Account} other{{count} changes saved to your Account}}",
+  "@cardsSyncSyncedSubtitle": {
+    "description": "Sync row sub-line after every change synced",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncPartialTitle": "{savedCount} of {changeCount} changes synced",
+  "@cardsSyncPartialTitle": {
+    "description": "Sync row headline after only some changes synced",
+    "placeholders": {
+      "savedCount": {
+        "type": "int"
+      },
+      "changeCount": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncPartialSubtitle": "{count, plural, =1{1 change will try again next sync} other{{count} changes will try again next sync}}",
+  "@cardsSyncPartialSubtitle": {
+    "description": "Sync row sub-line naming the changes the next sync retries",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncOfflineTitle": "You're offline",
+  "@cardsSyncOfflineTitle": {
+    "description": "Sync row headline when a sync failed for lack of network"
+  },
+  "cardsSyncOfflineSubtitle": "{count, plural, =1{1 change is safe on this device. Sync when you're back online.} other{{count} changes are safe on this device. Sync when you're back online.}}",
+  "@cardsSyncOfflineSubtitle": {
+    "description": "Sync row sub-line when a sync failed for lack of network",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncFailedTitle": "Couldn't sync",
+  "@cardsSyncFailedTitle": {
+    "description": "Sync row headline when a sync failed for any reason other than the network"
+  },
+  "cardsSyncFailedSubtitle": "{count, plural, =1{1 change is safe on this device. Try again later.} other{{count} changes are safe on this device. Try again later.}}",
+  "@cardsSyncFailedSubtitle": {
+    "description": "Sync row sub-line when a sync failed for any other reason",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncAlreadyUpToDateTitle": "Already up to date",
+  "@cardsSyncAlreadyUpToDateTitle": {
+    "description": "Sync row headline after a sync with nothing to send"
+  },
+  "cardsSyncAlreadyUpToDateSubtitle": "Nothing to sync",
+  "@cardsSyncAlreadyUpToDateSubtitle": {
+    "description": "Sync row sub-line after a sync with nothing to send"
+  },
+  "cardsSyncDownloadingTitle": "{count, plural, =1{Getting 1 Card from your Account…} other{Getting {count} Cards from your Account…}}",
+  "@cardsSyncDownloadingTitle": {
+    "description": "Sync row headline while Cards missing from this device download",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncDownloadingSubtitle": "You can keep working",
+  "@cardsSyncDownloadingSubtitle": {
+    "description": "Sync row sub-line while Cards download"
+  },
+  "cardsSyncDownloadedTitle": "{count, plural, =1{1 Card added from your Account} other{{count} Cards added from your Account}}",
+  "@cardsSyncDownloadedTitle": {
+    "description": "Sync row headline after Cards downloaded",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncDownloadedSubtitle": "{count, plural, =1{It was made on another device} other{They were made on another device}}",
+  "@cardsSyncDownloadedSubtitle": {
+    "description": "Sync row sub-line after Cards downloaded",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsSyncAction": "Sync",
+  "@cardsSyncAction": {
+    "description": "Sync row button that starts a sync"
+  },
+  "cardsSyncRetryAction": "Try again",
+  "@cardsSyncRetryAction": {
+    "description": "Sync row button that starts a sync after a failure"
+  },
+  "cardsSyncInProgressAction": "Syncing",
+  "@cardsSyncInProgressAction": {
+    "description": "Disabled sync row button while a sync runs"
+  },
+  "cardsUnsyncedCreated": "New",
+  "@cardsUnsyncedCreated": {
+    "description": "Marker on a Card created since the last sync"
+  },
+  "cardsUnsyncedUpdated": "Edited",
+  "@cardsUnsyncedUpdated": {
+    "description": "Marker on a Card edited since the last sync"
   }
 }

@@ -360,4 +360,162 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get accountSignOutConfirmAction => 'Cerrar sesión';
+
+  @override
+  String get cardsSyncUpToDateTitle => 'Todas las Tarjetas sincronizadas';
+
+  @override
+  String cardsSyncLastSynced(DateTime time) {
+    final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
+    final String timeString = timeDateFormat.format(time);
+
+    return 'Última sincronización a las $timeString';
+  }
+
+  @override
+  String cardsSyncPendingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cambios solo en este dispositivo',
+      one: '1 cambio solo en este dispositivo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncPendingSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Sincroniza para guardarlos en tu Cuenta',
+      one: 'Sincroniza para guardarlo en tu Cuenta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncSyncingTitle => 'Sincronizando…';
+
+  @override
+  String cardsSyncSyncingSubtitle(int savedCount, int changeCount) {
+    return '$savedCount de $changeCount cambios guardados';
+  }
+
+  @override
+  String get cardsSyncSyncedTitle => 'Sincronizado ahora mismo';
+
+  @override
+  String cardsSyncSyncedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cambios guardados en tu Cuenta',
+      one: '1 cambio guardado en tu Cuenta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncPartialTitle(int savedCount, int changeCount) {
+    return '$savedCount de $changeCount cambios sincronizados';
+  }
+
+  @override
+  String cardsSyncPartialSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cambios se reintentarán en la próxima sincronización',
+      one: '1 cambio se reintentará en la próxima sincronización',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncOfflineTitle => 'Sin conexión';
+
+  @override
+  String cardsSyncOfflineSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count cambios están a salvo en este dispositivo. Sincroniza cuando vuelvas a tener conexión.',
+      one: '1 cambio está a salvo en este dispositivo. Sincroniza cuando vuelvas a tener conexión.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncFailedTitle => 'No se pudo sincronizar';
+
+  @override
+  String cardsSyncFailedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count cambios están a salvo en este dispositivo. Inténtalo más tarde.',
+      one: '1 cambio está a salvo en este dispositivo. Inténtalo más tarde.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncAlreadyUpToDateTitle => 'Ya está todo al día';
+
+  @override
+  String get cardsSyncAlreadyUpToDateSubtitle => 'Nada que sincronizar';
+
+  @override
+  String cardsSyncDownloadingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Obteniendo $count Tarjetas de tu Cuenta…',
+      one: 'Obteniendo 1 Tarjeta de tu Cuenta…',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncDownloadingSubtitle => 'Puedes seguir trabajando';
+
+  @override
+  String cardsSyncDownloadedTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Tarjetas añadidas desde tu Cuenta',
+      one: '1 Tarjeta añadida desde tu Cuenta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String cardsSyncDownloadedSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Se crearon en otro dispositivo',
+      one: 'Se creó en otro dispositivo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cardsSyncAction => 'Sincronizar';
+
+  @override
+  String get cardsSyncRetryAction => 'Reintentar';
+
+  @override
+  String get cardsSyncInProgressAction => 'Sincronizando';
+
+  @override
+  String get cardsUnsyncedCreated => 'Nueva';
+
+  @override
+  String get cardsUnsyncedUpdated => 'Editada';
 }

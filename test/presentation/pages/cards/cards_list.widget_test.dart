@@ -291,9 +291,9 @@ void main() {
         initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-10',
       );
 
-      final cardsList = tester.widget<ListView>(
+      final cardsList = tester.widget<CustomScrollView>(
         find.byWidgetPredicate(
-          (widget) => widget is ListView && widget.controller != null,
+          (widget) => widget is CustomScrollView && widget.controller != null,
         ),
       );
 
@@ -312,10 +312,10 @@ void main() {
           initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-10',
         );
 
-        final cardsList = tester.widget<ListView>(
-          find.byWidgetPredicate(
-            (widget) => widget is ListView && widget.controller != null,
-          ),
+        // byType matches the exact type, so it skips the page's
+        // NestedScrollView, whose inner view subclasses CustomScrollView.
+        final cardsList = tester.widget<CustomScrollView>(
+          find.byType(CustomScrollView),
         );
         final initialOffset = cardsList.controller!.offset;
 
@@ -420,7 +420,12 @@ void main() {
       await tester.pumpAndSettle();
 
       final cardTexts = find.descendant(
-        of: find.byType(Card).first,
+        of: find
+            .ancestor(
+              of: find.text(longCard.title),
+              matching: find.byType(Card),
+            )
+            .first,
         matching: find.byType(Text),
       );
 
@@ -442,7 +447,9 @@ void main() {
         initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
       );
 
-      final theme = Theme.of(tester.element(find.byType(ListView).first));
+      final theme = Theme.of(
+        tester.element(find.byType(CustomScrollView).first),
+      );
       final selectedCard = tester.widget<Card>(
         find.byWidgetPredicate((widget) {
           if (widget is! Card) return false;
@@ -466,7 +473,7 @@ void main() {
 
       // Start a refresh while already loading
       final initialCount = repository.collectionReadCount;
-      await tester.drag(find.byType(ListView), const Offset(0, 300));
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, 300));
       await tester.pumpAndSettle();
 
       expect(repository.collectionReadCount, initialCount + 1);

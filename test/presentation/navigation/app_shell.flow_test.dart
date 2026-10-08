@@ -139,7 +139,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final cardsList = find.byWidgetPredicate(
-        (widget) => widget is ListView && widget.controller != null,
+        (widget) => widget is CustomScrollView && widget.controller != null,
       );
 
       await tester.drag(cardsList, const Offset(0, -900));
@@ -164,9 +164,9 @@ void main() {
         expect(find.byType(CupertinoSliverNavigationBar), findsOneWidget);
         expect(find.byIcon(Icons.refresh), findsNothing);
 
-        final cardsList = find.byType(ListView).first;
-        final listView = tester.widget<ListView>(cardsList);
-        expect(listView.controller, isNotNull);
+        final cardsList = find.byType(CustomScrollView).first;
+        final scrollView = tester.widget<CustomScrollView>(cardsList);
+        expect(scrollView.controller, isNotNull);
       },
     );
 
@@ -179,7 +179,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final cardsList = find.byWidgetPredicate(
-          (widget) => widget is ListView && widget.controller != null,
+          (widget) => widget is CustomScrollView && widget.controller != null,
         );
 
         await tester.drag(cardsList, const Offset(0, -900));
@@ -205,14 +205,14 @@ void main() {
         await tester.pumpAndSettle();
 
         final cardsList = find.byWidgetPredicate(
-          (widget) => widget is ListView && widget.controller != null,
+          (widget) => widget is CustomScrollView && widget.controller != null,
         );
 
         await tester.drag(cardsList, const Offset(0, -900));
         await tester.pumpAndSettle();
 
         expect(
-          tester.widget<ListView>(cardsList).controller!.offset,
+          tester.widget<CustomScrollView>(cardsList).controller!.offset,
           greaterThan(0),
         );
         expect(find.text('card-1'), findsOneWidget);
@@ -220,9 +220,9 @@ void main() {
         await tester.tap(find.byIcon(Icons.grid_view_rounded));
         await tester.pumpAndSettle();
 
-        final resetCardsList = tester.widget<ListView>(
+        final resetCardsList = tester.widget<CustomScrollView>(
           find.byWidgetPredicate(
-            (widget) => widget is ListView && widget.controller != null,
+            (widget) => widget is CustomScrollView && widget.controller != null,
           ),
         );
 
@@ -241,9 +241,10 @@ void main() {
 
         expect(
           tester
-              .widget<ListView>(
+              .widget<CustomScrollView>(
                 find.byWidgetPredicate(
-                  (widget) => widget is ListView && widget.controller != null,
+                  (widget) =>
+                      widget is CustomScrollView && widget.controller != null,
                 ),
               )
               .controller!

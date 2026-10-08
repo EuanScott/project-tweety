@@ -19,4 +19,11 @@ sealed class CardsEvent with _$CardsEvent {
   const factory editSubmitted() = CardsEditSubmitted;
 
   const factory deleteSubmitted(String cardId) = CardsDeleteSubmitted;
+
+  /// Replaces where sync stands and which Cards carry an unsynced change.
+  const factory syncChanged(
+    CardsSync sync, {
+    @Default(<String, UnsyncedCardChange>{})
+    Map<String, UnsyncedCardChange> unsyncedChanges,
+  }) = CardsSyncChanged;
 }
