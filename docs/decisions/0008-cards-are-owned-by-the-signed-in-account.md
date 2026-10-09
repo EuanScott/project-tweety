@@ -19,6 +19,7 @@ per-Account Card sync to Firestore:
   driven replica, written by a person-initiated, push-only, best-effort sync.
 - **Restoring Cards from Firestore is out of scope.** There is no path back from the
   replica to the device in this phase. Any local deletion is therefore permanent.
+  *Superseded by the 2026-10-09 amendment below: a download now adds missing Cards.*
 - Single device, single Account signed in at a time. No multi-device conflict
   resolution.
 - No backend code. Firestore Security Rules are the only authorisation boundary.
@@ -154,3 +155,35 @@ since local deletion would stop being permanent.
 - `Card` in `lib/data/repositories/card/cards.repository.dart` has no owner field.
 - Firestore Security Rules authorise on the path segment, and no rule reads
   `resource.data` to establish ownership.
+
+## Amendment — 2026-10-09: the download
+
+Decided in [Decide: background download of Cards missing from the device](https://github.com/EuanScott/project-tweety/issues/42).
+
+Restore is no longer out of scope. It is now in scope in one narrow form, the
+**download**: a fetch that adds Cards missing from the device and changes nothing else.
+
+- The download runs each time the Session becomes signed in, after the first frame.
+  Startup does not wait for it.
+- It reads every document under `users/<uid>/cards` from the server and inserts them,
+  oldest `updatedAt` first, in one `INSERT OR IGNORE` transaction under the
+  datasource write lock. Any local row with the same id wins, tombstones included.
+- A downloaded row is `synced`, with `last_synced_at` set to now, `user_id` set to the
+  signed-in uid, and `title`, `description` and `updatedAt` taken from the document.
+- A sync and a download never run at the same time.
+- A failed download shows nothing. It goes to the error reporter and is retried on the
+  next start.
+
+**Sign-out still retains local rows.** The re-evaluation trigger above fired, and the
+answer is unchanged: when the same Account signs in again, its rows are already on the
+device, so the download adds nothing.
+
+**Accepted limits**, because conflict resolution stays out of scope:
+
+- An edit made on one device never reaches a Card the other device already holds.
+- A Card deleted on one device comes back if the other device edits it and syncs. The
+  first device then downloads it again.
+
+A local deletion stays permanent on its own device. A pending tombstone blocks the
+download, and a pushed delete removes the remote document. The second limit above is
+the only way a deleted Card comes back.
