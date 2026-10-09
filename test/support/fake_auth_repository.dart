@@ -42,6 +42,9 @@ class FakeAuthRepository implements AuthRepository {
   Stream<Session> get sessionChanges => _sessionChanges.stream;
 
   @override
+  Future<void> start() async {}
+
+  @override
   Future<SignInResult> signInWithGoogle() async {
     signInRequestCount++;
     await pendingSignIn?.future;

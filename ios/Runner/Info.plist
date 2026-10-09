@@ -20,6 +20,17 @@
 		<string>es</string>
 		<string>he</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.524769488861-fv4e73m5f9r0n7046vejo0aeropm5ek7</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleName</key>
 	<string>project_tweety</string>
 	<key>CFBundlePackageType</key>

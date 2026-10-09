@@ -43,6 +43,14 @@ happens because someone asked for it, not because a Card changed. A sync is
 best effort — reconciling only some of the pending changes leaves the rest
 dirty, and the next sync attempts them again.
 
+## Download
+
+A **download** is the automatic fetch that adds to the device every Card the
+external record holds but the device does not. It only adds: a Card the device
+already holds, including a tombstone, is never changed by a download. It runs
+without anyone asking, and a failed download is retried on the next one.
+_Avoid_: restore, pull, sync down.
+
 ## Account
 
 An **Account** is the Google identity a person signs in with, identified by a

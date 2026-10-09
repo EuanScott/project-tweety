@@ -6,14 +6,13 @@ import 'core/di/di_init.service.dart';
 import 'core/firebase/firebase_options.constants.dart';
 
 Future<void> dartInit() async {
-  // Configure DI
-  await configureCoreDependencies();
-
-  // Initialize Firebase pre-DI
-  // TODO: Move Firebase to post first frame startup
+   // Initialize Firebase pre-DI
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Configure DI
+  await configureCoreDependencies();
 
   // Initialize all app-level services via the di orchestrator
   final initializer = GetIt.instance<DiInitService>();
