@@ -28,9 +28,7 @@ class _CardEditorState extends State<_CardEditor> {
           return;
         }
 
-        unawaited(
-          CardsDraftDiscardGuard.discardThen(context, context.goCards),
-        );
+        unawaited(CardsDraftDiscardGuard.discardThen(context, context.goCards));
       },
       child: BlocBuilder<CardsBloc, CardsState>(
         builder: (context, state) {

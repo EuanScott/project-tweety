@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/core/storage/app_database.storage.dart';
 import 'package:project_tweety/core/storage/app_database_migrations.storage.dart';
+import 'package:project_tweety/data/datasources/card/cards_local.datasource.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+import '../../support/fake_session_holder.dart';
 
 void main() {
   group('AppDatabase migrations', () {
@@ -62,6 +65,7 @@ void main() {
           'updated_at': '',
           'last_synced_at': null,
           'deleted_at': null,
+          'user_id': null,
         });
       },
     );
@@ -106,61 +110,88 @@ void main() {
             'deleted_at',
           }),
         );
-        expect(snapshot.cards, <Map<String, Object?>>[existingCard]);
+        expect(snapshot.columns, contains('user_id'));
+        expect(snapshot.cards, <Map<String, Object?>>[
+          {...existingCard, 'user_id': null},
+        ]);
       },
     );
 
-    test('an empty v2 database receives sample cards exactly once', () async {
+    test('an empty v2 database stays empty', () async {
       await _createV2Database(databasePath);
 
-      final firstDatabase = openAppDatabase();
-      final firstCards = await firstDatabase.read((db) {
-        return db.query('cards', orderBy: 'id ASC');
-      });
+      final database = openAppDatabase();
+      final cards = await database.read((db) => db.query('cards'));
 
-      expect(firstCards, hasLength(10));
-      expect(firstCards.map((card) => card['id']).toSet(), <String>{
-        'card-1',
-        'card-2',
-        'card-3',
-        'card-4',
-        'card-5',
-        'card-6',
-        'card-7',
-        'card-8',
-        'card-9',
-        'card-10',
-      });
-
-      await firstDatabase.close();
-      openedDatabases.remove(firstDatabase);
-
-      final reopenedDatabase = openAppDatabase();
-      final cardsAfterReopen = await reopenedDatabase.read((db) {
-        return db.query('cards', orderBy: 'id ASC');
-      });
-
-      expect(cardsAfterReopen, firstCards);
+      expect(cards, isEmpty);
     });
 
-    test('deleted sample cards stay absent after reopening', () async {
-      await _createV2Database(databasePath);
+    test('opening a v3 database keeps every row unowned and its sync state '
+        'untouched', () async {
+      final existingCards = [
+        for (final status in ['synced', 'created', 'updated', 'deleted'])
+          <String, Object?>{
+            'id': '$status-card',
+            'title': 'A $status card',
+            'description': 'Created by schema version 3',
+            'sync_status': status,
+            'updated_at': '2026-07-01T12:00:00.000Z',
+            'last_synced_at': null,
+            'deleted_at': status == 'deleted'
+                ? '2026-07-02T12:00:00.000Z'
+                : null,
+          },
+      ];
+      await _createV3Database(databasePath, existingCards: existingCards);
 
-      final firstDatabase = openAppDatabase();
-      final seededCards = await firstDatabase.read((db) => db.query('cards'));
-      expect(seededCards, hasLength(10));
-
-      await firstDatabase.write((db) => db.delete('cards'));
-      await firstDatabase.close();
-      openedDatabases.remove(firstDatabase);
-
-      final reopenedDatabase = openAppDatabase();
-      final cardsAfterReopen = await reopenedDatabase.read((db) {
-        return db.query('cards');
+      final database = openAppDatabase();
+      final snapshot = await database.read((db) async {
+        final versionRows = await db.rawQuery('PRAGMA user_version');
+        final cards = await db.query('cards', orderBy: 'rowid ASC');
+        return (version: versionRows.single['user_version'], cards: cards);
       });
 
-      expect(cardsAfterReopen, isEmpty);
+      expect(snapshot.version, 4);
+      expect(snapshot.cards, [
+        for (final card in existingCards) {...card, 'user_id': null},
+      ]);
     });
+
+    test(
+      'the first signed-in Account adopts the rows of a migrated v3 database',
+      () async {
+        await _createV3Database(
+          databasePath,
+          existingCards: [
+            <String, Object?>{
+              'id': 'card-1',
+              'title': 'Card Title 1',
+              'description': 'Seeded by the old version 3',
+              'sync_status': 'synced',
+              'updated_at': '2026-07-01T12:00:00.000Z',
+              'last_synced_at': null,
+              'deleted_at': null,
+            },
+          ],
+        );
+
+        final database = openAppDatabase();
+        final cards = await CardsLocalDataSource(
+          database,
+          FakeSessionHolder('first-account'),
+        ).getCards();
+        final rows = await database.read((db) => db.query('cards'));
+
+        expect(cards.single.id, 'card-1');
+        expect(
+          rows.single,
+          allOf(
+            containsPair('user_id', 'first-account'),
+            containsPair('sync_status', 'created'),
+          ),
+        );
+      },
+    );
   });
 }
 
@@ -209,6 +240,25 @@ Future<void> _createV2Database(
         ''');
         if (existingCard != null) {
           await db.insert('cards', existingCard);
+        }
+      },
+    ),
+  );
+  await database.close();
+}
+
+Future<void> _createV3Database(
+  String databasePath, {
+  required List<Map<String, Object?>> existingCards,
+}) async {
+  final database = await databaseFactoryFfi.openDatabase(
+    databasePath,
+    options: OpenDatabaseOptions(
+      version: 3,
+      onCreate: (db, version) async {
+        await AppDatabaseMigrations.migrate(db, 0, version);
+        for (final card in existingCards) {
+          await db.insert('cards', card);
         }
       },
     ),

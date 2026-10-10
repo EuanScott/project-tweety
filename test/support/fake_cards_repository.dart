@@ -60,6 +60,24 @@ class FakeCardsRepository implements CardsRepository {
   final Object? updateError;
   final Object? deleteError;
 
+  /// What [getSyncSummary] returns. [syncCards] replaces it with
+  /// [summaryAfterSync] when that is set, as a real push would.
+  CardsSyncSummary syncSummary = const CardsSyncSummary();
+  CardsSyncSummary? summaryAfterSync;
+
+  /// What [syncCards] returns, after reporting no progress and then each of
+  /// [syncProgress] against its change count.
+  CardsSyncResult syncResult = const CardsSyncResult(
+    changeCount: 0,
+    savedCount: 0,
+  );
+  List<int> syncProgress = const [];
+  Object? syncError;
+
+  /// Holds [syncCards] open until completed, to assert in-flight state.
+  Completer<void>? pendingSync;
+  var syncRequestCount = 0;
+
   var collectionReadCount = 0;
   var detailReadCount = 0;
   var createRequestCount = 0;
@@ -187,6 +205,32 @@ class FakeCardsRepository implements CardsRepository {
   }
 
   void completeDelete() => _deleteCompleter.complete();
+
+  @override
+  Future<CardsSyncSummary> getSyncSummary() async => syncSummary;
+
+  @override
+  Future<CardsSyncResult> syncCards({
+    void Function(int savedCount, int changeCount)? onProgress,
+  }) async {
+    syncRequestCount += 1;
+    final changeCount = syncResult.changeCount;
+    if (changeCount > 0) {
+      onProgress?.call(0, changeCount);
+    }
+    await pendingSync?.future;
+
+    if (syncError case final error?) {
+      throw error;
+    }
+
+    for (final savedCount in syncProgress) {
+      onProgress?.call(savedCount, changeCount);
+    }
+    syncSummary = summaryAfterSync ?? syncSummary;
+
+    return syncResult;
+  }
 
   /// The ten cards the app ships with, shared by every test that needs a
   /// populated list.

@@ -80,7 +80,7 @@ Future<void> _exerciseCrudAndInternalReopen(WidgetTester tester) async {
   expect(createdAndEditedCard.title, 'Native persistence smoke edited');
   expect((await _unsyncedCard(dataSource)).syncStatus, CardSyncStatus.created);
 
-  await dataSource.markCardsSynced([_smokeCardId]);
+  await _acknowledgeSmokeCard(dataSource);
   expect(
     (await dataSource.getCardById(_smokeCardId))?.syncStatus,
     CardSyncStatus.synced,
@@ -131,7 +131,7 @@ Future<void> _exerciseCrudAndInternalReopen(WidgetTester tester) async {
   );
 
   if (!_preserveSmokeTombstone) {
-    await reopenedDataSource.markCardsSynced([_smokeCardId]);
+    await _acknowledgeSmokeCard(reopenedDataSource);
     expect(
       (await reopenedDataSource.getUnsyncedCards()).map((card) => card.id),
       isNot(contains(_smokeCardId)),
@@ -162,7 +162,7 @@ Future<void> _verifyProcessRelaunch(WidgetTester tester) async {
         .having((card) => card.deletedAt, 'deleted at', isNotNull),
   );
 
-  await dataSource.markCardsSynced([_smokeCardId]);
+  await _acknowledgeSmokeCard(dataSource);
   expect(
     (await dataSource.getUnsyncedCards()).map((card) => card.id),
     isNot(contains(_smokeCardId)),
@@ -203,7 +203,7 @@ Future<void> _removePreviousSmokeCard(
   if (await repository.getCardById(_smokeCardId) != null) {
     await repository.deleteCard(_smokeCardId);
   }
-  await dataSource.markCardsSynced([_smokeCardId]);
+  await _acknowledgeSmokeCard(dataSource);
 }
 
 Future<CardDto> _unsyncedCard(CardsDataSource dataSource) async {
@@ -224,4 +224,14 @@ Future<void> _showResult(WidgetTester tester, String message) async {
 class _SmokeCardIdGenerator implements CardIdGenerator {
   @override
   String generate() => _smokeCardId;
+}
+
+/// Marks the smoke Card synced as a confirmed push would, from its pending
+/// snapshot.
+Future<void> _acknowledgeSmokeCard(CardsDataSource dataSource) async {
+  final pending = await dataSource.getUnsyncedCards();
+  await dataSource.markCardsSynced([
+    for (final card in pending)
+      if (card.id == _smokeCardId) card,
+  ]);
 }

@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 abstract final class AppDatabaseMigrations {
-  static const latestVersion = 3;
+  static const latestVersion = 4;
   static const _syncedCardStatus = 'synced';
 
   static Future<void> migrate(
@@ -17,6 +17,8 @@ abstract final class AppDatabaseMigrations {
           await _addCardsSyncMetadataV2(db);
         case 3:
           await _seedSampleCardsV3(db);
+        case 4:
+          await _addCardsOwnerV4(db);
         default:
           throw StateError('Missing database migration for version $version');
       }
@@ -52,27 +54,12 @@ abstract final class AppDatabaseMigrations {
   // different contents. Exempted here only because nothing has shipped. Find
   // out what the real options are (backfill-safe no-ops, squashing a baseline
   // schema, version floors) before relying on this trick again.
-  static Future<void> _seedSampleCardsV3(DatabaseExecutor db) async {
-    final countRows = await db.rawQuery('SELECT COUNT(*) AS count FROM cards');
-    final count = countRows.single['count']! as int;
-    if (count > 0) {
-      return;
-    }
+  static Future<void> _seedSampleCardsV3(DatabaseExecutor db) async {}
 
-    final seedTimestamp = DateTime.now().toUtc().toIso8601String();
-    for (var index = 0; index < 10; index++) {
-      final cardNumber = index + 1;
-      await db.insert('cards', <String, Object?>{
-        'id': 'card-$cardNumber',
-        'title': 'Card Title $cardNumber',
-        'description':
-            'This is the body copy for card number $cardNumber. '
-            'You can replace this with whatever description you want.',
-        'sync_status': _syncedCardStatus,
-        'updated_at': seedTimestamp,
-        'last_synced_at': null,
-        'deleted_at': null,
-      });
-    }
+  // Nullable for good: tightening to NOT NULL needs a table rebuild in
+  // SQLite. Rows already on the device stay unowned until Adoption.
+  static Future<void> _addCardsOwnerV4(DatabaseExecutor db) async {
+    await db.execute('ALTER TABLE cards ADD COLUMN user_id TEXT');
+    await db.execute('CREATE INDEX cards_user_id ON cards(user_id)');
   }
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart';
@@ -20,6 +21,7 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
     on<CardsEditSubmitted>(_onEditSubmitted);
     on<CardsDeleteSubmitted>(_onDeleteSubmitted);
     on<CardsSyncChanged>(_onSyncChanged);
+    on<CardsSyncRequested>(_onSyncRequested, transformer: droppable());
   }
 
   final CardsRepository _cardsRepository;
@@ -63,6 +65,7 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
           errorMessage: null,
         ),
       );
+      await _refreshSync(emit);
     } catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(
@@ -222,6 +225,7 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
           updatedCardId: cardId,
         ),
       );
+      await _refreshSync(emit);
     } on InvalidCardDraftException catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(
@@ -287,6 +291,7 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
           createdCardId: card.id,
         ),
       );
+      await _refreshSync(emit);
     } on InvalidCardDraftException catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(
@@ -335,6 +340,7 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
           deletedCardId: event.cardId,
         ),
       );
+      await _refreshSync(emit);
     } catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(
@@ -346,4 +352,105 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
       );
     }
   }
+
+  Future<void> _onSyncRequested(
+    CardsSyncRequested event,
+    Emitter<CardsState> emit,
+  ) async {
+    if (state.sync.isBusy) {
+      return;
+    }
+
+    var changeCount = 0;
+    try {
+      final result = await _cardsRepository.syncCards(
+        onProgress: (savedCount, total) {
+          changeCount = total;
+          emit(
+            state.copyWith(
+              sync: CardsSync.syncing(
+                savedCount: savedCount,
+                changeCount: total,
+              ),
+            ),
+          );
+        },
+      );
+      final summary = await _cardsRepository.getSyncSummary();
+      final stillPending = summary.pendingChanges.length;
+      final outcome = _syncOutcome(result);
+      emit(
+        state.copyWith(
+          // Changes saved during the sync are still pending, so a full
+          // success would overstate what reached the Account.
+          sync: stillPending > 0 && outcome is CardsSyncSynced
+              ? CardsSync.pending(changeCount: stillPending)
+              : outcome,
+          unsyncedChanges: _unsyncedChanges(summary),
+        ),
+      );
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+      emit(state.copyWith(sync: CardsSync.failed(changeCount: changeCount)));
+    }
+  }
+
+  /// Re-reads what is pending after a change is saved. A running sync keeps
+  /// its progress; any other state becomes the pending count or the last
+  /// sync time.
+  Future<void> _refreshSync(Emitter<CardsState> emit) async {
+    final CardsSyncSummary summary;
+    try {
+      summary = await _cardsRepository.getSyncSummary();
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+      return;
+    }
+
+    final changeCount = summary.pendingChanges.length;
+    emit(
+      state.copyWith(
+        unsyncedChanges: _unsyncedChanges(summary),
+        sync: state.sync.isBusy
+            ? state.sync
+            : changeCount == 0
+            ? CardsSync.upToDate(lastSyncedAt: summary.lastSyncedAt)
+            : CardsSync.pending(changeCount: changeCount),
+      ),
+    );
+  }
+
+  static CardsSync _syncOutcome(CardsSyncResult result) {
+    final CardsSyncResult(:changeCount, :savedCount) = result;
+
+    if (changeCount == 0) {
+      return const CardsSync.alreadyUpToDate();
+    }
+    if (savedCount == changeCount) {
+      return CardsSync.synced(changeCount: changeCount);
+    }
+    if (savedCount > 0) {
+      return CardsSync.partial(
+        savedCount: savedCount,
+        changeCount: changeCount,
+      );
+    }
+
+    return result.onlyNetworkFailures
+        ? CardsSync.offline(changeCount: changeCount)
+        : CardsSync.failed(changeCount: changeCount);
+  }
+
+  /// A deleted Card has no row to mark, so only created and edited Cards
+  /// carry a marker.
+  static Map<String, UnsyncedCardChange> _unsyncedChanges(
+    CardsSyncSummary summary,
+  ) => {
+    for (final MapEntry(key: cardId, value: change)
+        in summary.pendingChanges.entries)
+      if (change == PendingCardChange.created)
+        cardId: UnsyncedCardChange.created
+      else if (change == PendingCardChange.updated)
+        cardId: UnsyncedCardChange.updated,
+  };
 }

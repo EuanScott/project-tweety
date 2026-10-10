@@ -265,9 +265,8 @@ class _CardsListState extends State<_CardsList> {
   /// scroll content the reader did not ask to lose.
   bool _isSettledInPlace(BuildContext cardContext) {
     final cardBox = cardContext.findRenderObject();
-    final viewportBox = Scrollable.maybeOf(
-      cardContext,
-    )?.context.findRenderObject();
+    final viewportBox = Scrollable.maybeOf(cardContext)?.context
+        .findRenderObject();
 
     if (cardBox is! RenderBox ||
         viewportBox is! RenderBox ||
@@ -321,13 +320,10 @@ class const _UnsyncedMarker({required final UnsyncedCardChange change})
       spacing: 4,
       children: [
         Icon(Icons.circle, size: _dotSize, color: color),
-        Text(
-          switch (change) {
-            UnsyncedCardChange.created => l10n.cardsUnsyncedCreated,
-            UnsyncedCardChange.updated => l10n.cardsUnsyncedUpdated,
-          },
-          style: theme.textTheme.labelMedium?.copyWith(color: color),
-        ),
+        Text(switch (change) {
+          UnsyncedCardChange.created => l10n.cardsUnsyncedCreated,
+          UnsyncedCardChange.updated => l10n.cardsUnsyncedUpdated,
+        }, style: theme.textTheme.labelMedium?.copyWith(color: color)),
       ],
     );
   }

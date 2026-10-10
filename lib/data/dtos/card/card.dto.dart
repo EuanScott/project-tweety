@@ -27,6 +27,7 @@ class const CardDto({
   final DateTime? updatedAt,
   final DateTime? lastSyncedAt,
   final DateTime? deletedAt,
+  final String? userId,
 }) {
   Map<String, Object?> toDatabaseRow() {
     return <String, Object?>{
@@ -37,6 +38,7 @@ class const CardDto({
       'updated_at': updatedAt?.toIso8601String() ?? '',
       'last_synced_at': lastSyncedAt?.toIso8601String(),
       'deleted_at': deletedAt?.toIso8601String(),
+      'user_id': userId,
     };
   }
 
@@ -49,6 +51,7 @@ class const CardDto({
       updatedAt: _dateTimeFromStorageValue(row['updated_at']),
       lastSyncedAt: _dateTimeFromStorageValue(row['last_synced_at']),
       deletedAt: _dateTimeFromStorageValue(row['deleted_at']),
+      userId: row['user_id'] as String?,
     );
   }
 

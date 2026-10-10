@@ -24,12 +24,14 @@ reconciliation.
 
 - schema version 1 creates card identity, title, and description
 - schema version 2 adds sync status and mutation timestamps
-- schema version 3 seeds the existing ten sample cards when the table is empty
+- schema version 3 once seeded ten sample cards; it is now a no-op, so a new database has no Cards
+- schema version 4 adds the owning Account (`user_id`, indexed); every query is scoped to the
+  signed-in Account, and its first operation adopts any unowned Cards as never synced
 - production dependency injection binds the local datasource
 - the mock datasource follows the same CRUD contract but is not production-registered
 - the cards repository exposes list, direct ID reads, create, update, and delete
-- the datasource contract exposes dirty reads and successful-upload acknowledgement for future sync
-- local changes are tracked as created, updated, or deleted for a later bulk upload
+- the datasource contract exposes dirty reads and acknowledgement of confirmed pushes
+- local changes are tracked as created, updated, or deleted until a sync pushes them
 - tombstones are hidden from normal reads and removed after a successful upload
 
 ## Cards UI and navigation
@@ -50,7 +52,12 @@ branch resets. It waits for the feature's decision before resetting and ignores
 additional reset requests while that decision is pending. Cards uses that guard
 alongside its back, cancel, add, and selection discard decisions.
 
-The bulk upload API, sync UI, and conflict policy remain deferred.
+Sync pushes every pending change to Firestore at `users/{uid}/cards/{cardId}` when the person presses
+Sync ([ADR-0007](../decisions/0007-cards-local-source-of-truth.md)). Each Card is one write, in
+parallel, with a 10-second timeout. Only writes the server confirmed are acknowledged, and a Card
+edited after its push snapshot stays pending. Firestore offline persistence is off, so SQLite holds
+the only pending queue. The owner-only rules live in `firestore.rules` and are deployed by hand. A
+conflict policy remains deferred.
 
 ## Lifecycle guarantees
 
@@ -66,8 +73,10 @@ The bulk upload API, sync UI, and conflict policy remain deferred.
 ## Upgrade behavior
 
 Version-1 foundation databases migrate in place. Existing rows are preserved, receive `synced`
-status, and are not reseeded. Version-2 databases preserve existing metadata, while an empty version-2
-database receives the sample cards once during the version-3 migration. Downgrades remain rejected.
+status, and are not reseeded. Version-2 databases preserve existing metadata. Version-3 databases gain a null `user_id`, and their
+rows stay unowned until the first signed-in Account adopts them
+([ADR-0008](../decisions/0008-cards-are-owned-by-the-signed-in-account.md)). No version seeds Cards.
+Downgrades remain rejected.
 
 ## Supported targets
 

@@ -14,88 +14,65 @@ class const _CardsSyncRow() extends StatelessWidget {
   /// large text never squeezes the words to nothing.
   static const double _buttonBesideMinWidth = 280;
 
-  /// One sample of every state, in the prototype's order, for the debug-only
-  /// long press. Each entry pairs a state with how many Cards it marks.
-  static const List<(CardsSync, int)> _debugSamples = [
-    (CardsSync.upToDate(), 0),
-    (CardsSync.pending(changeCount: 4), 3),
-    (CardsSync.syncing(savedCount: 2, changeCount: 4), 2),
-    (CardsSync.synced(changeCount: 4), 0),
-    (CardsSync.partial(savedCount: 3, changeCount: 4), 1),
-    (CardsSync.offline(changeCount: 4), 3),
-    (CardsSync.failed(changeCount: 4), 3),
-    (CardsSync.alreadyUpToDate(), 0),
-    (CardsSync.downloading(cardCount: 2), 0),
-    (CardsSync.downloaded(cardCount: 2), 0),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final sync = context.select((CardsBloc bloc) => bloc.state.sync);
-    final (:icon, :iconColor, :title, :subtitle) = _describe(
-      sync,
-      l10n,
-      theme,
-    );
+    final (:icon, :iconColor, :title, :subtitle) = _describe(sync, l10n, theme);
 
     return Card(
       margin: _CardsList._cardMargin,
-      child: GestureDetector(
-        behavior: .opaque,
-        onLongPress: kDebugMode ? () => _showNextDebugSample(context) : null,
-        child: Padding(
-          padding: _padding,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final status = Row(
-                spacing: 12,
-                children: [
-                  if (sync.isBusy)
-                    const SizedBox.square(
-                      dimension: _indicatorSize,
-                      child: AppLoadingIndicator(),
-                    )
-                  else
-                    Icon(icon, color: iconColor),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        Text(title, style: theme.textTheme.titleSmall),
-                        if (subtitle != null)
-                          Text(
-                            subtitle,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
+      child: Padding(
+        padding: _padding,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final status = Row(
+              spacing: 12,
+              children: [
+                if (sync.isBusy)
+                  const SizedBox.square(
+                    dimension: _indicatorSize,
+                    child: AppLoadingIndicator(),
+                  )
+                else
+                  Icon(icon, color: iconColor),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(title, style: theme.textTheme.titleSmall),
+                      if (subtitle != null)
+                        Text(
+                          subtitle,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
-                ],
-              );
+                ),
+              ],
+            );
 
-              if (constraints.maxWidth < _buttonBesideMinWidth) {
-                return Column(
-                  crossAxisAlignment: .end,
-                  children: [
-                    status,
-                    _SyncButton(sync: sync),
-                  ],
-                );
-              }
-
-              return Row(
-                spacing: 12,
+            if (constraints.maxWidth < _buttonBesideMinWidth) {
+              return Column(
+                crossAxisAlignment: .end,
                 children: [
-                  Expanded(child: status),
+                  status,
                   _SyncButton(sync: sync),
                 ],
               );
-            },
-          ),
+            }
+
+            return Row(
+              spacing: 12,
+              children: [
+                Expanded(child: status),
+                _SyncButton(sync: sync),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -177,30 +154,6 @@ class const _CardsSyncRow() extends StatelessWidget {
       ),
     };
   }
-
-  /// Steps to the next sample state and marks the first Cards in the list,
-  /// so every state can be seen before sync exists.
-  void _showNextDebugSample(BuildContext context) {
-    final bloc = context.read<CardsBloc>();
-    final current = _debugSamples.indexWhere(
-      (sample) => sample.$1.runtimeType == bloc.state.sync.runtimeType,
-    );
-    final (sync, markedCount) =
-        _debugSamples[(current + 1) % _debugSamples.length];
-    final markedCards = bloc.state.items.take(markedCount).indexed;
-
-    bloc.add(
-      CardsSyncChanged(
-        sync,
-        unsyncedChanges: {
-          for (final (index, card) in markedCards)
-            card.id: index == 0 && markedCount > 2
-                ? UnsyncedCardChange.created
-                : UnsyncedCardChange.updated,
-        },
-      ),
-    );
-  }
 }
 
 class const _SyncButton({required final CardsSync sync})
@@ -208,8 +161,9 @@ class const _SyncButton({required final CardsSync sync})
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    // Sync is not built yet; this is where pressing the button will start it.
-    final onPressed = sync.isBusy ? null : () {};
+    final onPressed = sync.isBusy
+        ? null
+        : () => context.read<CardsBloc>().add(const CardsSyncRequested());
 
     return switch (sync) {
       CardsSyncSyncing() => AppButton.text(

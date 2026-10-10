@@ -187,7 +187,5 @@ State<Cards> _cardsPageState(WidgetTester tester) {
 }
 
 bool _canPop(WidgetTester tester) {
-  return GoRouter.of(
-    tester.element(find.byType(Navigator).last),
-  ).canPop();
+  return GoRouter.of(tester.element(find.byType(Navigator).last)).canPop();
 }

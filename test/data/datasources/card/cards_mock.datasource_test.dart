@@ -21,7 +21,7 @@ void main() {
     expect(unsyncedCards.single.id, 'card-11');
     expect(unsyncedCards.single.syncStatus, CardSyncStatus.created);
 
-    await dataSource.markCardsSynced(['card-11']);
+    await dataSource.markCardsSynced(await dataSource.getUnsyncedCards());
 
     expect(await dataSource.getUnsyncedCards(), isEmpty);
     final syncedCard = await dataSource.getCardById('card-11');

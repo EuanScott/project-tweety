@@ -47,9 +47,7 @@ void main() {
 
       expect(
         shape?.side.color ??
-            Theme.of(
-              tester.element(find.byType(Card).first),
-            ).cardTheme.shape,
+            Theme.of(tester.element(find.byType(Card).first)).cardTheme.shape,
         isNot(Colors.transparent),
       );
     });

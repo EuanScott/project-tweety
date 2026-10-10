@@ -280,17 +280,28 @@ void main() {
       );
     });
 
-    testWidgets('steps to the next state on a long press in debug builds', (
-      tester,
-    ) async {
+    testWidgets('pressing Sync pushes the pending changes', (tester) async {
+      final repository = FakeCardsRepository()
+        ..syncSummary = const cards_repository.CardsSyncSummary(
+          pendingChanges: {
+            'card-1': cards_repository.PendingCardChange.updated,
+          },
+        )
+        ..summaryAfterSync = const cards_repository.CardsSyncSummary()
+        ..syncResult = const cards_repository.CardsSyncResult(
+          changeCount: 1,
+          savedCount: 1,
+        );
+      replaceCardsRepository(repository);
       await pumpApp(tester, initialLocation: AppRoutes.cardsPath);
 
-      await tester.longPress(find.text('All Cards synced'));
+      await tester.tap(find.widgetWithText(AppButton, 'Sync'));
+      await tester.pump();
       await tester.pump();
 
-      expect(find.text('4 changes on this device only'), findsOneWidget);
-      expect(find.text('New'), findsOneWidget);
-      expect(find.text('Edited'), findsNWidgets(2));
+      expect(repository.syncRequestCount, 1);
+      expect(find.text('Synced just now'), findsOneWidget);
+      expect(find.text('Edited'), findsNothing);
     });
 
     testWidgets('scrolls away with the Cards', (tester) async {

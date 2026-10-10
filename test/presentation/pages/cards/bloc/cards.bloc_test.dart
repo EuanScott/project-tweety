@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart';
@@ -614,5 +616,232 @@ void main() {
         ),
       ],
     );
+
+    group('sync', () {
+      const twoPending = CardsSyncSummary(
+        pendingChanges: {
+          'card-1': PendingCardChange.updated,
+          'card-2': PendingCardChange.deleted,
+        },
+      );
+      late FakeCardsRepository repository;
+      late CardsBloc bloc;
+      late List<CardsSync> syncs;
+
+      setUp(() {
+        repository = FakeCardsRepository(cards: const [card]);
+        bloc = CardsBloc(repository);
+        syncs = [];
+        bloc.stream.map((state) => state.sync).distinct().listen(syncs.add);
+      });
+
+      tearDown(() => bloc.close());
+
+      Future<void> settle() => pumpEventQueue();
+
+      test('loading the Cards shows what is pending and marks each '
+          'Card', () async {
+        repository.syncSummary = twoPending;
+
+        bloc.add(const CardsStarted());
+        await settle();
+
+        expect(bloc.state.sync, const CardsSync.pending(changeCount: 2));
+        expect(bloc.state.unsyncedChanges, {
+          'card-1': UnsyncedCardChange.updated,
+        });
+      });
+
+      test('with nothing pending, loading shows the last sync '
+          'time', () async {
+        final lastSyncedAt = DateTime.utc(2026, 10, 9);
+        repository.syncSummary = CardsSyncSummary(lastSyncedAt: lastSyncedAt);
+
+        bloc.add(const CardsStarted());
+        await settle();
+
+        expect(bloc.state.sync, CardsSync.upToDate(lastSyncedAt: lastSyncedAt));
+      });
+
+      test('a saved change refreshes the pending count', () async {
+        bloc.add(const CardsStarted());
+        await settle();
+        repository.syncSummary = const CardsSyncSummary(
+          pendingChanges: {'created-card': PendingCardChange.created},
+        );
+
+        bloc
+          ..add(const CardsCreateStarted())
+          ..add(
+            const CardsDraftChanged(
+              CardDraft(title: 'New', description: 'New'),
+            ),
+          )
+          ..add(const CardsCreateSubmitted());
+        await settle();
+
+        expect(bloc.state.sync, const CardsSync.pending(changeCount: 1));
+        expect(bloc.state.unsyncedChanges, {
+          'created-card': UnsyncedCardChange.created,
+        });
+      });
+
+      test('with nothing pending, a sync says it is already up to '
+          'date', () async {
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        expect(syncs, const [CardsSync.alreadyUpToDate()]);
+      });
+
+      test('a full sync shows progress, then synced, and clears the '
+          'markers', () async {
+        repository
+          ..syncSummary = twoPending
+          ..summaryAfterSync = const CardsSyncSummary()
+          ..syncProgress = [1, 2]
+          ..syncResult = const CardsSyncResult(changeCount: 2, savedCount: 2);
+
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        expect(syncs, const [
+          CardsSync.syncing(savedCount: 0, changeCount: 2),
+          CardsSync.syncing(savedCount: 1, changeCount: 2),
+          CardsSync.syncing(savedCount: 2, changeCount: 2),
+          CardsSync.synced(changeCount: 2),
+        ]);
+        expect(bloc.state.unsyncedChanges, isEmpty);
+      });
+
+      test('a partial sync names what will try again, and keeps its '
+          'marker', () async {
+        repository
+          ..syncSummary = twoPending
+          ..summaryAfterSync = const CardsSyncSummary(
+            pendingChanges: {'card-1': PendingCardChange.updated},
+          )
+          ..syncResult = const CardsSyncResult(changeCount: 2, savedCount: 1);
+
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        expect(
+          bloc.state.sync,
+          const CardsSync.partial(savedCount: 1, changeCount: 2),
+        );
+        expect(bloc.state.unsyncedChanges, {
+          'card-1': UnsyncedCardChange.updated,
+        });
+      });
+
+      test('nothing saved because of the network says offline', () async {
+        repository
+          ..syncSummary = twoPending
+          ..syncResult = const CardsSyncResult(
+            changeCount: 2,
+            savedCount: 0,
+            onlyNetworkFailures: true,
+          );
+
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        expect(bloc.state.sync, const CardsSync.offline(changeCount: 2));
+      });
+
+      test('nothing saved for any other reason says it could not '
+          'sync', () async {
+        repository
+          ..syncSummary = twoPending
+          ..syncResult = const CardsSyncResult(changeCount: 2, savedCount: 0);
+
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        expect(bloc.state.sync, const CardsSync.failed(changeCount: 2));
+      });
+
+      test('a sync that throws says it could not sync', () async {
+        repository
+          ..syncSummary = twoPending
+          ..syncResult = const CardsSyncResult(changeCount: 2, savedCount: 0)
+          ..syncError = Exception('database closed');
+
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        expect(bloc.state.sync, const CardsSync.failed(changeCount: 2));
+      });
+
+      test('a second press while a sync runs is dropped', () async {
+        repository
+          ..syncSummary = twoPending
+          ..pendingSync = Completer<void>();
+
+        bloc
+          ..add(const CardsSyncRequested())
+          ..add(const CardsSyncRequested());
+        await settle();
+        repository.pendingSync!.complete();
+        await settle();
+
+        expect(repository.syncRequestCount, 1);
+      });
+
+      test('a full sync with changes saved during it shows them as '
+          'pending', () async {
+        repository
+          ..syncSummary = twoPending
+          ..summaryAfterSync = const CardsSyncSummary(
+            pendingChanges: {'card-3': PendingCardChange.updated},
+          )
+          ..syncResult = const CardsSyncResult(changeCount: 2, savedCount: 2);
+
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        expect(bloc.state.sync, const CardsSync.pending(changeCount: 1));
+      });
+
+      test('a change saved during a sync updates the markers and keeps '
+          'the progress', () async {
+        bloc.add(const CardsStarted());
+        await settle();
+        repository
+          ..syncSummary = twoPending
+          ..syncResult = const CardsSyncResult(changeCount: 2, savedCount: 2)
+          ..pendingSync = Completer<void>();
+        bloc.add(const CardsSyncRequested());
+        await settle();
+
+        repository.syncSummary = const CardsSyncSummary(
+          pendingChanges: {
+            'card-1': PendingCardChange.updated,
+            'card-2': PendingCardChange.deleted,
+            'created-card': PendingCardChange.created,
+          },
+        );
+        bloc
+          ..add(const CardsCreateStarted())
+          ..add(
+            const CardsDraftChanged(
+              CardDraft(title: 'New', description: 'New'),
+            ),
+          )
+          ..add(const CardsCreateSubmitted());
+        await settle();
+
+        expect(
+          bloc.state.sync,
+          const CardsSync.syncing(savedCount: 0, changeCount: 2),
+        );
+        expect(
+          bloc.state.unsyncedChanges,
+          containsPair('created-card', UnsyncedCardChange.created),
+        );
+        repository.pendingSync!.complete();
+      });
+    });
   });
 }

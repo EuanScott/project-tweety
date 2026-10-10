@@ -48,18 +48,17 @@ void main() {
       },
     );
 
-    testWidgets(
-      'allows navigation without dialog when draft is clean',
-      (WidgetTester tester) async {
-        await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
+    testWidgets('allows navigation without dialog when draft is clean', (
+      WidgetTester tester,
+    ) async {
+      await pumpApp(tester, initialLocation: AppRoutes.cardsNewPath);
 
-        // Don't enter any text - draft is clean
-        await tester.tap(find.text('Cards'));
-        await tester.pumpAndSettle();
+      // Don't enter any text - draft is clean
+      await tester.tap(find.text('Cards'));
+      await tester.pumpAndSettle();
 
-        expect(find.byType(AlertDialog), findsNothing);
-        expect(currentRoutePath(tester), AppRoutes.cardsPath);
-      },
-    );
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(currentRoutePath(tester), AppRoutes.cardsPath);
+    });
   });
 }

@@ -13,10 +13,8 @@ abstract class Card with _$Card {
 
 @freezed
 abstract class CardDraft with _$CardDraft {
-  const factory({
-    required String title,
-    required String description,
-  }) = _CardDraft;
+  const factory({required String title, required String description}) =
+      _CardDraft;
 
   const new _();
 
@@ -43,6 +41,35 @@ class InvalidCardDraftException implements Exception {
 
 class const CardNotFoundException(final String cardId) implements Exception;
 
+/// A change on this device that the Account's copy does not have yet.
+enum PendingCardChange { created, updated, deleted }
+
+/// Where sync stands while no sync is running.
+@freezed
+abstract class CardsSyncSummary with _$CardsSyncSummary {
+  const factory({
+    @Default(<String, PendingCardChange>{})
+    Map<String, PendingCardChange> pendingChanges,
+
+    /// The latest time any Card still on this device was synced.
+    DateTime? lastSyncedAt,
+  }) = _CardsSyncSummary;
+}
+
+/// How one sync ended. [changeCount] is what it tried to push, and
+/// [savedCount] is what the server confirmed.
+@freezed
+abstract class CardsSyncResult with _$CardsSyncResult {
+  const factory({
+    required int changeCount,
+    required int savedCount,
+
+    /// Whether every change that was not saved failed because the server
+    /// could not be reached, rather than because it refused the change.
+    @Default(false) bool onlyNetworkFailures,
+  }) = _CardsSyncResult;
+}
+
 abstract class CardsRepository {
   Future<List<Card>> getCards();
 
@@ -53,4 +80,12 @@ abstract class CardsRepository {
   Future<Card> updateCard({required String cardId, required CardDraft draft});
 
   Future<void> deleteCard(String cardId);
+
+  Future<CardsSyncSummary> getSyncSummary();
+
+  /// Pushes every pending change. Calls [onProgress] once before the push
+  /// with no changes saved, then again as the server confirms each one.
+  Future<CardsSyncResult> syncCards({
+    void Function(int savedCount, int changeCount)? onProgress,
+  });
 }

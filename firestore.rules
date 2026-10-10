@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Cards are written by the app's push-only sync and are owned by their path:
+// users/{uid}/cards/{cardId}. Everything not matched here is denied.
+// Deploy by hand: firebase deploy --only firestore:rules --project=project-tweety
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function isValidCard(card) {
+      return card.keys().hasOnly(['title', 'description', 'updatedAt'])
+        && card.keys().hasAll(['title', 'description', 'updatedAt'])
+        && card.title is string && card.title.size() > 0
+        && card.description is string && card.description.size() > 0
+        && card.updatedAt is timestamp;
+    }
+
+    match /users/{uid}/cards/{cardId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid) && isValidCard(request.resource.data);
+    }
+  }
+}

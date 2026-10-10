@@ -14,11 +14,7 @@ class const _CardDetailsMessage({
         child: Column(
           mainAxisSize: .min,
           children: [
-            Text(
-              title,
-              style: theme.textTheme.titleMedium,
-              textAlign: .center,
-            ),
+            Text(title, style: theme.textTheme.titleMedium, textAlign: .center),
             const SizedBox(height: 8),
             Text(description, textAlign: .center),
           ],

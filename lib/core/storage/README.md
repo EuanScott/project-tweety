@@ -39,10 +39,18 @@ Version 2 adds sync metadata:
 - `last_synced_at TEXT`
 - `deleted_at TEXT`
 
-Version 3 inserts the ten sample cards only when the table is empty. Opening or reading an existing
-latest-version database never seeds it again, including when every card has been removed.
+Version 3 once inserted ten sample cards into an empty table. It is now a no-op
+([ADR-0008](../../../docs/decisions/0008-cards-are-owned-by-the-signed-in-account.md)), so a new
+database starts with no cards.
 
-Version-1 and version-2 files migrate in place without replacing existing rows. Downgrades remain
+Version 4 adds the owning Account:
+
+- `user_id TEXT`, nullable for good, with the index `cards_user_id`
+
+Rows that exist before version 4 keep a null `user_id` until the first signed-in Account adopts
+them. Adoption belongs to the Cards datasource, not to the migration.
+
+Version-1, version-2 and version-3 files migrate in place without replacing existing rows. Downgrades remain
 explicitly rejected; the app never destroys an existing database to recover from a version mismatch.
 
 ## Preferences storage

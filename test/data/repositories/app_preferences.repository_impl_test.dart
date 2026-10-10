@@ -67,10 +67,7 @@ void main() {
           (await storageDriver.readPreferences()).themeColour.name,
           themeColour.name,
         );
-        expect(
-          (await repository.getAppPreferences()).themeColour,
-          themeColour,
-        );
+        expect((await repository.getAppPreferences()).themeColour, themeColour);
       });
     }
   });

@@ -102,22 +102,43 @@ class MockCardsDataSource implements CardsDataSource {
   }
 
   @override
-  Future<void> markCardsSynced(List<String> cardIds) async {
-    if (cardIds.isEmpty) {
+  Future<void> markCardsSynced(List<CardDto> pushedCards) async {
+    if (pushedCards.isEmpty) {
       return;
     }
 
-    final cardIdSet = cardIds.toSet();
+    final pushedUpdatedAt = {
+      for (final card in pushedCards) card.id: card.updatedAt,
+    };
+    bool unchangedSincePush(CardDto card) =>
+        pushedUpdatedAt.containsKey(card.id) &&
+        pushedUpdatedAt[card.id] == card.updatedAt;
+
     _cards.removeWhere(
       (card) =>
-          cardIdSet.contains(card.id) &&
-          card.syncStatus == CardSyncStatus.deleted,
+          unchangedSincePush(card) && card.syncStatus == CardSyncStatus.deleted,
     );
 
     final now = DateTime.now().toUtc();
+    final presentIds = {for (final card in _cards) card.id};
+    for (final card in pushedCards) {
+      if (card.syncStatus != CardSyncStatus.deleted &&
+          !presentIds.contains(card.id)) {
+        _cards.add(
+          CardDto(
+            id: card.id,
+            title: card.title,
+            description: card.description,
+            syncStatus: CardSyncStatus.deleted,
+            updatedAt: now,
+            deletedAt: now,
+          ),
+        );
+      }
+    }
     for (var index = 0; index < _cards.length; index++) {
       final card = _cards[index];
-      if (!cardIdSet.contains(card.id)) {
+      if (!unchangedSincePush(card)) {
         continue;
       }
 

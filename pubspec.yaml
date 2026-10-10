@@ -2,7 +2,7 @@ name: project_tweety
 description: "A playground app to try out ideas that we aren't implementing at work or I would like to implement at work."
 publish_to: 'none'
 
-version: 0.28.0
+version: 0.29.0
 
 environment:
   sdk: 3.13.0
@@ -10,6 +10,8 @@ environment:
 
 dependencies:
   bloc: ^9.0.0
+  bloc_concurrency: ^0.3.0
+  cloud_firestore: ^6.10.0
   cupertino_icons: ^2.0.0
   cupertino_ui: ^1.0.0
   design_system:

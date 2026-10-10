@@ -13,5 +13,7 @@ abstract class CardsDataSource {
 
   Future<List<CardDto>> getUnsyncedCards();
 
-  Future<void> markCardsSynced(List<String> cardIds);
+  /// Acknowledges Cards the server confirmed. Each entry is the snapshot
+  /// that was pushed; a Card changed since its snapshot stays unsynced.
+  Future<void> markCardsSynced(List<CardDto> pushedCards);
 }

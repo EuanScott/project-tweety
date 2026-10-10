@@ -47,10 +47,8 @@ class FirebaseAuthRepository implements AuthRepository {
     });
 
     try {
-      await Future.wait([
-        _initializeGoogleSignIn(),
-        firstEvent.future,
-      ]).timeout(_startTimeout);
+      await Future.wait([_initializeGoogleSignIn(), firstEvent.future])
+          .timeout(_startTimeout);
     } on TimeoutException catch (error, stackTrace) {
       _report(error, stackTrace);
     }

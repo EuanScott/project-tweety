@@ -15,11 +15,7 @@ void main() {
     });
 
     test('blank strings count as missing', () {
-      const profile = Profile(
-        displayName: '  ',
-        email: '',
-        phoneNumber: '\t',
-      );
+      const profile = Profile(displayName: '  ', email: '', phoneNumber: '\t');
 
       expect(profile.knownDisplayName, isNull);
       expect(profile.knownEmail, isNull);
@@ -41,10 +37,7 @@ void main() {
 
     group('initials', () {
       test('use the first and last words of the name', () {
-        expect(
-          const Profile(displayName: 'ada king lovelace').initials,
-          'AL',
-        );
+        expect(const Profile(displayName: 'ada king lovelace').initials, 'AL');
       });
 
       test('use one letter for a one-word name', () {

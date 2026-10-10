@@ -20,6 +20,9 @@ sealed class CardsEvent with _$CardsEvent {
 
   const factory deleteSubmitted(String cardId) = CardsDeleteSubmitted;
 
+  /// Pushes every pending change to the Account.
+  const factory syncRequested() = CardsSyncRequested;
+
   /// Replaces where sync stands and which Cards carry an unsynced change.
   const factory syncChanged(
     CardsSync sync, {
