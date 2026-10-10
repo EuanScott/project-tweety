@@ -66,6 +66,7 @@ void main() {
           'last_synced_at': null,
           'deleted_at': null,
           'user_id': null,
+          'created_at': '',
         });
       },
     );
@@ -112,7 +113,11 @@ void main() {
         );
         expect(snapshot.columns, contains('user_id'));
         expect(snapshot.cards, <Map<String, Object?>>[
-          {...existingCard, 'user_id': null},
+          {
+            ...existingCard,
+            'user_id': null,
+            'created_at': existingCard['updated_at'],
+          },
         ]);
       },
     );
@@ -142,7 +147,11 @@ void main() {
                 : null,
           },
       ];
-      await _createV3Database(databasePath, existingCards: existingCards);
+      await _createMigratedDatabase(
+        databasePath,
+        version: 3,
+        existingCards: existingCards,
+      );
 
       final database = openAppDatabase();
       final snapshot = await database.read((db) async {
@@ -151,17 +160,19 @@ void main() {
         return (version: versionRows.single['user_version'], cards: cards);
       });
 
-      expect(snapshot.version, 4);
+      expect(snapshot.version, AppDatabaseMigrations.latestVersion);
       expect(snapshot.cards, [
-        for (final card in existingCards) {...card, 'user_id': null},
+        for (final card in existingCards)
+          {...card, 'user_id': null, 'created_at': card['updated_at']},
       ]);
     });
 
     test(
       'the first signed-in Account adopts the rows of a migrated v3 database',
       () async {
-        await _createV3Database(
+        await _createMigratedDatabase(
           databasePath,
+          version: 3,
           existingCards: [
             <String, Object?>{
               'id': 'card-1',
@@ -190,6 +201,44 @@ void main() {
             containsPair('sync_status', 'created'),
           ),
         );
+      },
+    );
+
+    test(
+      'opening a v4 database dates each Card from its last change',
+      () async {
+        await _createMigratedDatabase(
+          databasePath,
+          version: 4,
+          existingCards: [
+            <String, Object?>{
+              'id': 'dated-card',
+              'title': 'Dated card',
+              'description': 'Changed before created_at existed',
+              'sync_status': 'synced',
+              'updated_at': '2026-07-01T12:00:00.000Z',
+              'user_id': 'first-account',
+            },
+            <String, Object?>{
+              'id': 'undated-card',
+              'title': 'Undated card',
+              'description': 'Never stamped by schema version 2',
+              'sync_status': 'synced',
+              'updated_at': '',
+              'user_id': 'first-account',
+            },
+          ],
+        );
+
+        final database = openAppDatabase();
+        final rows = await database.read(
+          (db) => db.query('cards', orderBy: 'rowid ASC'),
+        );
+
+        expect(rows.map((row) => row['created_at']), [
+          '2026-07-01T12:00:00.000Z',
+          '',
+        ]);
       },
     );
   });
@@ -247,14 +296,15 @@ Future<void> _createV2Database(
   await database.close();
 }
 
-Future<void> _createV3Database(
+Future<void> _createMigratedDatabase(
   String databasePath, {
+  required int version,
   required List<Map<String, Object?>> existingCards,
 }) async {
   final database = await databaseFactoryFfi.openDatabase(
     databasePath,
     options: OpenDatabaseOptions(
-      version: 3,
+      version: version,
       onCreate: (db, version) async {
         await AppDatabaseMigrations.migrate(db, 0, version);
         for (final card in existingCards) {

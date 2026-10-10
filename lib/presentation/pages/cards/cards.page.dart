@@ -7,8 +7,6 @@ import 'package:navigation/navigation.dart';
 import 'package:project_tweety/data/repositories/card/cards.repository.dart'
     as card_model
     show Card;
-import 'package:project_tweety/data/repositories/card/cards.repository.dart'
-    show CardDraft, CardDraftField;
 import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.model.dart';
@@ -18,7 +16,6 @@ import 'bloc/cards.bloc.dart';
 import 'card_details/card_details.page.dart';
 import 'draft_discard_guard.widget.dart';
 
-part 'widgets/cards_editor.widget.dart';
 part 'widgets/cards_empty.widget.dart';
 part 'widgets/cards_error.widget.dart';
 part 'widgets/cards_list.widget.dart';
@@ -42,6 +39,16 @@ class _CardsState extends State<Cards> {
   void initState() {
     super.initState();
     if (widget.isCreating) {
+      context.read<CardsBloc>().add(const CardsCreateStarted());
+    }
+  }
+
+  /// Cards locations can share one page, so moving to the editor may reuse
+  /// this state rather than build a new one.
+  @override
+  void didUpdateWidget(Cards oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isCreating && !oldWidget.isCreating) {
       context.read<CardsBloc>().add(const CardsCreateStarted());
     }
   }
@@ -77,7 +84,7 @@ class _CardsState extends State<Cards> {
               if (!isSplit && widget.isCreating) {
                 return PageScaffold(
                   title: l10n.cardCreateTitle,
-                  body: const _CardEditor(),
+                  body: const CardEditor(),
                 );
               }
 
@@ -98,7 +105,7 @@ class _CardsState extends State<Cards> {
                 ),
                 showsPrimaryAction: !widget.isCreating,
                 secondaryBody: widget.isCreating
-                    ? const _CardEditor()
+                    ? const CardEditor()
                     : selectedCardId == null
                     ? const CardDetailsEmptyState()
                     : CardDetailsContent(cardId: selectedCardId),

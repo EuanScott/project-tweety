@@ -47,4 +47,52 @@ void main() {
     expect(find.text('Description'), findsOneWidget);
     expect(find.text('Description is required'), findsOneWidget);
   });
+
+  for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+    testWidgets('asks the ${platform.name} keyboard to capitalise sentences by '
+        'default', (tester) async {
+      await tester.pumpWidget(
+        _onPlatform(
+          platform,
+          AppTextField(
+            controller: TextEditingController(),
+            label: 'Title',
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(_textCapitalization(tester), TextCapitalization.sentences);
+    });
+
+    testWidgets('passes a chosen capitalisation to the ${platform.name} '
+        'keyboard', (tester) async {
+      await tester.pumpWidget(
+        _onPlatform(
+          platform,
+          AppTextField(
+            controller: TextEditingController(),
+            label: 'Email',
+            textCapitalization: TextCapitalization.none,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+
+      expect(_textCapitalization(tester), TextCapitalization.none);
+    });
+  }
+}
+
+Widget _onPlatform(TargetPlatform platform, Widget field) {
+  return MaterialApp(
+    theme: ThemeData(platform: platform),
+    home: Scaffold(body: field),
+  );
+}
+
+TextCapitalization _textCapitalization(WidgetTester tester) {
+  return tester
+      .widget<EditableText>(find.byType(EditableText))
+      .textCapitalization;
 }

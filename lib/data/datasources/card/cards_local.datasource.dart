@@ -25,7 +25,7 @@ class CardsLocalDataSource(
         _tableName,
         where: 'user_id = ? AND sync_status != ?',
         whereArgs: [uid, CardSyncStatus.deleted.storageValue],
-        orderBy: 'rowid ASC',
+        orderBy: 'created_at DESC, rowid DESC',
       );
       return rows.map(CardDto.fromDatabaseRow).toList(growable: false);
     });
@@ -58,6 +58,7 @@ class CardsLocalDataSource(
         title: card.title,
         description: card.description,
         syncStatus: CardSyncStatus.created,
+        createdAt: now,
         updatedAt: now,
         userId: uid,
       );
@@ -85,6 +86,7 @@ class CardsLocalDataSource(
         title: card.title,
         description: card.description,
         syncStatus: syncStatus,
+        createdAt: existingCard.createdAt,
         updatedAt: now,
         lastSyncedAt: existingCard.lastSyncedAt,
         deletedAt: null,
@@ -191,6 +193,7 @@ class CardsLocalDataSource(
                 title: card.title,
                 description: card.description,
                 syncStatus: CardSyncStatus.deleted,
+                createdAt: card.createdAt,
                 updatedAt: DateTime.parse(now),
                 deletedAt: DateTime.parse(now),
                 userId: uid,

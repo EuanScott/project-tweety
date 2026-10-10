@@ -36,14 +36,16 @@ class MockCardsDataSource implements CardsDataSource {
 
   @override
   Future<CardDto> createCard(CardDto card) async {
+    final now = DateTime.now().toUtc();
     final createdCard = CardDto(
       id: card.id,
       title: card.title,
       description: card.description,
       syncStatus: CardSyncStatus.created,
-      updatedAt: DateTime.now().toUtc(),
+      createdAt: now,
+      updatedAt: now,
     );
-    _cards.add(createdCard);
+    _cards.insert(0, createdCard);
     return createdCard;
   }
 
@@ -62,6 +64,7 @@ class MockCardsDataSource implements CardsDataSource {
       syncStatus: existingCard.syncStatus == CardSyncStatus.created
           ? CardSyncStatus.created
           : CardSyncStatus.updated,
+      createdAt: existingCard.createdAt,
       updatedAt: DateTime.now().toUtc(),
       lastSyncedAt: existingCard.lastSyncedAt,
     );
@@ -88,6 +91,7 @@ class MockCardsDataSource implements CardsDataSource {
       title: existingCard.title,
       description: existingCard.description,
       syncStatus: CardSyncStatus.deleted,
+      createdAt: existingCard.createdAt,
       updatedAt: now,
       lastSyncedAt: existingCard.lastSyncedAt,
       deletedAt: now,
@@ -147,6 +151,7 @@ class MockCardsDataSource implements CardsDataSource {
         title: card.title,
         description: card.description,
         syncStatus: CardSyncStatus.synced,
+        createdAt: card.createdAt,
         updatedAt: card.updatedAt,
         lastSyncedAt: now,
       );

@@ -24,6 +24,7 @@ class const CardDto({
   required final String title,
   required final String description,
   final CardSyncStatus syncStatus = CardSyncStatus.synced,
+  final DateTime? createdAt,
   final DateTime? updatedAt,
   final DateTime? lastSyncedAt,
   final DateTime? deletedAt,
@@ -39,6 +40,7 @@ class const CardDto({
       'last_synced_at': lastSyncedAt?.toIso8601String(),
       'deleted_at': deletedAt?.toIso8601String(),
       'user_id': userId,
+      'created_at': createdAt?.toIso8601String() ?? '',
     };
   }
 
@@ -48,6 +50,7 @@ class const CardDto({
       title: row['title']! as String,
       description: row['description']! as String,
       syncStatus: CardSyncStatus.fromStorageValue(row['sync_status']),
+      createdAt: _dateTimeFromStorageValue(row['created_at']),
       updatedAt: _dateTimeFromStorageValue(row['updated_at']),
       lastSyncedAt: _dateTimeFromStorageValue(row['last_synced_at']),
       deletedAt: _dateTimeFromStorageValue(row['deleted_at']),

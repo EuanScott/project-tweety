@@ -43,4 +43,22 @@ void main() {
     expect(unsyncedCards.single.id, 'card-1');
     expect(unsyncedCards.single.syncStatus, CardSyncStatus.deleted);
   });
+
+  test(
+    'lists a created Card first and keeps its creation time on edit',
+    () async {
+      final CardsDataSource dataSource = MockCardsDataSource();
+      final createdCard = await dataSource.createCard(
+        const CardDto(id: 'card-11', title: 'New card', description: 'Body'),
+      );
+
+      final updatedCard = await dataSource.updateCard(
+        const CardDto(id: 'card-11', title: 'Edited card', description: 'Body'),
+      );
+
+      expect((await dataSource.getCards()).first.id, 'card-11');
+      expect(createdCard.createdAt?.isUtc, isTrue);
+      expect(updatedCard?.createdAt, createdCard.createdAt);
+    },
+  );
 }

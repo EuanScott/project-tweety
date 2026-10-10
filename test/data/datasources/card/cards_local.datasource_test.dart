@@ -37,17 +37,80 @@ void main() {
       await temporaryDirectory.delete(recursive: true);
     });
 
-    test('returns stored cards in insertion order', () async {
+    test('returns stored cards newest first', () async {
       final cards = await dataSource.getCards();
 
       expect(cards.map((card) => card.id), <String>[
-        'card-1',
-        'card-2',
         'card-3',
+        'card-2',
+        'card-1',
       ]);
-      expect(cards.first.title, 'Card Title 1');
-      expect(cards.first.description, 'Body of card 1');
-      expect(cards.first.userId, _accountA);
+      expect(cards.last.title, 'Card Title 1');
+      expect(cards.last.description, 'Body of card 1');
+      expect(cards.last.userId, _accountA);
+      expect(cards.last.createdAt, DateTime.utc(2026, 7, 1, 10, 1));
+    });
+
+    test('orders by when a Card was created, not when it was stored', () async {
+      await _insertRows(database, [
+        _row(4, createdAt: '2026-06-01T10:00:00.000Z'),
+      ]);
+
+      final cards = await dataSource.getCards();
+
+      expect(cards.last.id, 'card-4');
+    });
+
+    test(
+      'lists Cards with no creation time last, newest stored first',
+      () async {
+        await _insertRows(database, [
+          _row(4, createdAt: ''),
+          _row(5, createdAt: ''),
+        ]);
+
+        final cards = await dataSource.getCards();
+
+        expect(cards.map((card) => card.id), <String>[
+          'card-3',
+          'card-2',
+          'card-1',
+          'card-5',
+          'card-4',
+        ]);
+      },
+    );
+
+    test('a created Card is listed before every older Card', () async {
+      final createdCard = await dataSource.createCard(
+        const CardDto(
+          id: 'card-11',
+          title: 'New card',
+          description: 'New card description',
+        ),
+      );
+
+      final cards = await dataSource.getCards();
+
+      expect(cards.first.id, 'card-11');
+      expect(createdCard.createdAt?.isUtc, isTrue);
+      expect(createdCard.createdAt, createdCard.updatedAt);
+    });
+
+    test('an edit keeps when the Card was created', () async {
+      final updatedCard = await dataSource.updateCard(
+        const CardDto(
+          id: 'card-1',
+          title: 'Updated card',
+          description: 'Updated card description',
+        ),
+      );
+
+      final cards = await dataSource.getCards();
+
+      expect(updatedCard?.createdAt, DateTime.utc(2026, 7, 1, 10, 1));
+      expect(cards.last.id, 'card-1');
+      expect(cards.last.createdAt, DateTime.utc(2026, 7, 1, 10, 1));
     });
 
     test('returns a stored card by id', () async {
@@ -435,6 +498,7 @@ Map<String, Object?> _row(
   String? userId = _accountA,
   String status = 'synced',
   String? lastSyncedAt = '2026-07-01T12:00:00.000Z',
+  String? createdAt,
 }) => <String, Object?>{
   'id': 'card-$number',
   'title': 'Card Title $number',
@@ -444,6 +508,8 @@ Map<String, Object?> _row(
   'last_synced_at': lastSyncedAt,
   'deleted_at': status == 'deleted' ? '2026-07-02T10:00:00.000Z' : null,
   'user_id': userId,
+  'created_at':
+      createdAt ?? '2026-07-01T10:${number.toString().padLeft(2, '0')}:00.000Z',
 };
 
 Future<void> _insertRows(

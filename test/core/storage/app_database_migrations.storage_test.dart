@@ -57,6 +57,7 @@ void main() {
           'last_synced_at',
           'deleted_at',
           'user_id',
+          'created_at',
         ]);
         expect(snapshot.indexes, [contains('cards(user_id)')]);
         expect(snapshot.cards, isEmpty);

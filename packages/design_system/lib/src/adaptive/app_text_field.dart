@@ -12,6 +12,10 @@ class const AppTextField({
   final int? minLines = 1,
   final int? maxLines = 1,
   final TextInputAction? textInputAction,
+
+  /// Which letters the keyboard offers in upper case. Sentences suits the
+  /// free text most fields hold; pass none for codes, emails and the like.
+  final TextCapitalization textCapitalization = TextCapitalization.sentences,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -26,6 +30,7 @@ class const AppTextField({
         minLines: minLines,
         maxLines: maxLines,
         textInputAction: textInputAction,
+        textCapitalization: textCapitalization,
       );
     }
 
@@ -35,6 +40,7 @@ class const AppTextField({
       minLines: minLines,
       maxLines: maxLines,
       textInputAction: textInputAction,
+      textCapitalization: textCapitalization,
       onChanged: onChanged,
       decoration: InputDecoration(labelText: label, errorText: errorText),
     );
@@ -50,6 +56,7 @@ class const _CupertinoTextField({
   required final int? minLines,
   required final int? maxLines,
   required final TextInputAction? textInputAction,
+  required final TextCapitalization textCapitalization,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -67,6 +74,7 @@ class const _CupertinoTextField({
           minLines: minLines,
           maxLines: maxLines,
           textInputAction: textInputAction,
+          textCapitalization: textCapitalization,
           onChanged: onChanged,
         ),
         if (errorText != null) ...[

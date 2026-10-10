@@ -59,7 +59,7 @@ class const _CardDetailsView({required final String cardId})
           ),
           CardsDetailSuccess(:final card) =>
             state.isEditingCard(cardId)
-                ? _CardDetailsEditor(cardId: cardId)
+                ? CardEditor(cardId: cardId)
                 : _CardDetailsBody(card: card),
         };
       },

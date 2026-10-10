@@ -154,7 +154,6 @@ void main() {
           createStatus: CardsCreateStatus.creating,
         ),
         const CardsState(
-          draft: CardDraft(title: 'New title', description: 'New description'),
           items: [
             Card(
               id: 'created-card',
@@ -162,10 +161,37 @@ void main() {
               description: 'New description',
             ),
           ],
-          hasSubmittedCreate: true,
           createStatus: CardsCreateStatus.success,
           createdCardId: 'created-card',
         ),
+      ],
+    );
+
+    blocTest<CardsBloc, CardsState>(
+      'a created Card is listed first and leaves no unsaved draft',
+      build: () => CardsBloc(FakeCardsRepository(cards: const [card])),
+      seed: () => const CardsState(status: CardsStatus.success, items: [card]),
+      act: (bloc) => bloc
+        ..add(const CardsCreateStarted())
+        ..add(
+          const CardsDraftChanged(
+            CardDraft(title: 'New title', description: 'New description'),
+          ),
+        )
+        ..add(const CardsCreateSubmitted()),
+      skip: 3,
+      expect: () => [
+        isA<CardsState>()
+            .having((state) => state.items.map((item) => item.id), 'item ids', [
+              'created-card',
+              'card-1',
+            ])
+            .having(
+              (state) => state.createdCardId,
+              'created id',
+              'created-card',
+            )
+            .having((state) => state.isDraftDirty, 'is dirty', isFalse),
       ],
     );
 

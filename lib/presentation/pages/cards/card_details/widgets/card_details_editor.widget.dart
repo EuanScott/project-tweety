@@ -1,19 +1,27 @@
 part of '../card_details.page.dart';
 
-class const _CardDetailsEditor({required final String cardId})
+/// The one form for a Card. It creates a new Card when [cardId] is null and
+/// edits that Card otherwise.
+class const CardEditor({final String? cardId, super.key})
     extends StatefulWidget {
   @override
-  State<_CardDetailsEditor> createState() => _CardDetailsEditorState();
+  State<CardEditor> createState() => _CardEditorState();
 }
 
-class _CardDetailsEditorState extends State<_CardDetailsEditor> {
+class _CardEditorState extends State<CardEditor> {
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
+
+  bool get _isCreating => widget.cardId == null;
 
   @override
   void initState() {
     super.initState();
-    final draft = context.read<CardsBloc>().state.draft;
+    // A new Card starts empty: its fresh draft may not have reached the bloc
+    // yet, so the bloc's draft could still hold an earlier edit.
+    final draft = _isCreating
+        ? const CardDraft(title: '', description: '')
+        : context.read<CardsBloc>().state.draft;
     _titleController = TextEditingController(text: draft.title);
     _descriptionController = TextEditingController(text: draft.description);
   }
@@ -28,6 +36,7 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final cardId = widget.cardId;
 
     return PopScope(
       canPop: !context.select((CardsBloc bloc) => bloc.state.isDraftDirty),
@@ -38,23 +47,23 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
         }
 
         unawaited(
-          CardsDraftDiscardGuard.discardThen(
-            context,
-            () => context.read<CardsBloc>().add(const CardsEditCancelled()),
-          ),
+          CardsDraftDiscardGuard.discardThen(context, () => _close(context)),
         );
       },
       child: BlocBuilder<CardsBloc, CardsState>(
         builder: (context, state) {
-          final isMissing = state.hasMissingEditFor(widget.cardId);
-          final isUpdating = state.isUpdating;
-          final disabled = isMissing || isUpdating;
+          final isMissing = cardId != null && state.hasMissingEditFor(cardId);
+          final isSaving = _isCreating ? state.isCreating : state.isUpdating;
+          final hasSaveError = _isCreating
+              ? state.createError
+              : state.editError;
+          final disabled = isMissing || isSaving;
 
           return ListView(
             padding: const .symmetric(vertical: 16),
             children: [
               Text(
-                l10n.cardEditTitle,
+                _isCreating ? l10n.cardCreateTitle : l10n.cardEditTitle,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 24),
@@ -85,10 +94,10 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
                 textInputAction: .done,
                 onChanged: (_) => _onDraftChanged(context),
               ),
-              if (state.editError) ...[
+              if (hasSaveError) ...[
                 const SizedBox(height: 16),
                 Text(
-                  l10n.cardEditFailed,
+                  _isCreating ? l10n.cardCreateFailed : l10n.cardEditFailed,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ],
@@ -106,22 +115,20 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
               ] else ...[
                 const SizedBox(height: 24),
                 AppButton.primary(
-                  onPressed: isUpdating
-                      ? null
-                      : () => context.read<CardsBloc>().add(
-                          const CardsEditSubmitted(),
-                        ),
-                  child: Text(l10n.cardEditSaveAction),
+                  onPressed: isSaving ? null : () => _save(context),
+                  child: Text(
+                    _isCreating
+                        ? l10n.cardCreateAction
+                        : l10n.cardEditSaveAction,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 AppButton.secondary(
-                  onPressed: isUpdating
+                  onPressed: isSaving
                       ? null
                       : () => CardsDraftDiscardGuard.discardThen(
                           context,
-                          () => context.read<CardsBloc>().add(
-                            const CardsEditCancelled(),
-                          ),
+                          () => _close(context),
                         ),
                   child: Text(l10n.cardEditCancelAction),
                 ),
@@ -131,6 +138,23 @@ class _CardDetailsEditorState extends State<_CardDetailsEditor> {
         },
       ),
     );
+  }
+
+  void _save(BuildContext context) {
+    context.read<CardsBloc>().add(
+      _isCreating ? const CardsCreateSubmitted() : const CardsEditSubmitted(),
+    );
+  }
+
+  /// Leaving a new Card returns to the list; leaving an edit returns to the
+  /// Card it was editing.
+  void _close(BuildContext context) {
+    if (_isCreating) {
+      context.goCards();
+      return;
+    }
+
+    context.read<CardsBloc>().add(const CardsEditCancelled());
   }
 
   void _onDraftChanged(BuildContext context) {

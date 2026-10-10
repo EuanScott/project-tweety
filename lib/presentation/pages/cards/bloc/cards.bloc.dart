@@ -286,7 +286,11 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
       final card = await _cardsRepository.createCard(state.draft);
       emit(
         state.copyWith(
-          items: [...state.items, card],
+          items: [card, ...state.items],
+          draft: const CardDraft(title: '', description: ''),
+          initialDraft: null,
+          invalidDraftFields: const <CardDraftField>{},
+          hasSubmittedCreate: false,
           createStatus: CardsCreateStatus.success,
           createdCardId: card.id,
         ),

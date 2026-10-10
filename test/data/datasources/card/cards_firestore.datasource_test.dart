@@ -30,8 +30,8 @@ void main() {
   });
 
   group('FirestoreCardsRemoteDataSource', () {
-    test('writes a created or edited Card as its title, description and '
-        'updatedAt under the Account', () async {
+    test('writes a created or edited Card as its title, description, '
+        'createdAt and updatedAt under the Account', () async {
       final outcomes = await buildDataSource().pushCards([
         _card('card-1', CardSyncStatus.created),
         _card('card-2', CardSyncStatus.updated),
@@ -45,14 +45,33 @@ void main() {
         'users/account-a/cards/card-1': {
           'title': 'Title card-1',
           'description': 'Body card-1',
+          'createdAt': Timestamp.fromDate(_createdAt),
           'updatedAt': Timestamp.fromDate(_updatedAt),
         },
         'users/account-a/cards/card-2': {
           'title': 'Title card-2',
           'description': 'Body card-2',
+          'createdAt': Timestamp.fromDate(_createdAt),
           'updatedAt': Timestamp.fromDate(_updatedAt),
         },
       });
+    });
+
+    test('dates a Card with no creation time from its last change', () async {
+      await buildDataSource().pushCards([
+        CardDto(
+          id: 'card-1',
+          title: 'Title card-1',
+          description: 'Body card-1',
+          syncStatus: CardSyncStatus.updated,
+          updatedAt: _updatedAt,
+        ),
+      ]);
+
+      expect(
+        firestore.writes['users/account-a/cards/card-1'],
+        containsPair('createdAt', Timestamp.fromDate(_updatedAt)),
+      );
     });
 
     test('deletes the document for a tombstone', () async {
@@ -159,6 +178,7 @@ void main() {
   });
 }
 
+final _createdAt = DateTime.utc(2026, 10, 1, 9);
 final _updatedAt = DateTime.utc(2026, 10, 9, 12);
 
 CardDto _card(String id, CardSyncStatus status) => CardDto(
@@ -166,6 +186,7 @@ CardDto _card(String id, CardSyncStatus status) => CardDto(
   title: 'Title $id',
   description: 'Body $id',
   syncStatus: status,
+  createdAt: _createdAt,
   updatedAt: _updatedAt,
 );
 

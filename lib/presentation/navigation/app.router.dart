@@ -115,6 +115,7 @@ GoRouter createRouter({
                       context,
                       state,
                       const Cards(isCreating: true),
+                      isSelection: true,
                     ),
                   ),
                   GoRoute(
@@ -128,6 +129,7 @@ GoRouter createRouter({
                         context,
                         state,
                         Cards(selectedCardId: cardId),
+                        isSelection: true,
                       );
                     },
                   ),
@@ -171,10 +173,14 @@ GoRouter createRouter({
   );
 }
 
+/// The one compact page the editor and every card share.
+const _cardsSelectionPageKey = ValueKey('cards-selection');
+
 /// Builds the page for a Cards location.
 ///
-/// A compact region stacks a native page per location, so a card or the editor
-/// always sits on the list and swipes back to it.
+/// A compact region stacks a native page on the list, so a card or the editor
+/// always swipes back to it. The editor and every card share that one page, so
+/// a new card replaces its editor in place instead of sliding in over it.
 ///
 /// A split region shows the list and the selection side by side on one page.
 /// The topmost location owns that page under a shared key, so it stays mounted
@@ -186,9 +192,15 @@ Page<void> _cardsPage(
   GoRouterState state,
   Widget child, {
   bool isCovered = false,
+  bool isSelection = false,
 }) {
   if (PaneLayoutScope.of(context) != PaneLayoutMode.split) {
-    return platformPage(context, state, child);
+    return platformPage(
+      context,
+      state,
+      child,
+      key: isSelection ? _cardsSelectionPageKey : null,
+    );
   }
 
   if (isCovered) {

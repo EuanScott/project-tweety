@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 abstract final class AppDatabaseMigrations {
-  static const latestVersion = 4;
+  static const latestVersion = 5;
   static const _syncedCardStatus = 'synced';
 
   static Future<void> migrate(
@@ -19,6 +19,8 @@ abstract final class AppDatabaseMigrations {
           await _seedSampleCardsV3(db);
         case 4:
           await _addCardsOwnerV4(db);
+        case 5:
+          await _addCardsCreatedAtV5(db);
         default:
           throw StateError('Missing database migration for version $version');
       }
@@ -61,5 +63,14 @@ abstract final class AppDatabaseMigrations {
   static Future<void> _addCardsOwnerV4(DatabaseExecutor db) async {
     await db.execute('ALTER TABLE cards ADD COLUMN user_id TEXT');
     await db.execute('CREATE INDEX cards_user_id ON cards(user_id)');
+  }
+
+  // Cards made before this column have no creation time, so their last
+  // change stands in for it. A row never stamped by v2 stays empty.
+  static Future<void> _addCardsCreatedAtV5(DatabaseExecutor db) async {
+    await db.execute(
+      "ALTER TABLE cards ADD COLUMN created_at TEXT NOT NULL DEFAULT ''",
+    );
+    await db.execute('UPDATE cards SET created_at = updated_at');
   }
 }

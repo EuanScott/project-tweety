@@ -40,15 +40,17 @@ class const FirestoreCardsRemoteDataSource(
 
   Future<CardPushOutcome> _push(String uid, CardDto card) async {
     final document = _firestore.doc('users/$uid/cards/${card.id}');
+    final updatedAt = card.updatedAt ?? DateTime.now().toUtc();
     try {
       final write = card.syncStatus == CardSyncStatus.deleted
           ? document.delete()
           : document.set(<String, Object?>{
               'title': card.title,
               'description': card.description,
-              'updatedAt': Timestamp.fromDate(
-                card.updatedAt ?? DateTime.now().toUtc(),
-              ),
+              // A Card stored before creation times existed is dated from
+              // its last change, matching how the local store backfilled it.
+              'createdAt': Timestamp.fromDate(card.createdAt ?? updatedAt),
+              'updatedAt': Timestamp.fromDate(updatedAt),
             });
       await write.timeout(_writeTimeout);
 

@@ -142,7 +142,7 @@ class FakeCardsRepository implements CardsRepository {
       title: draft.title.trim(),
       description: draft.description.trim(),
     );
-    _cards.add(card);
+    _cards.insert(0, card);
 
     return Future<Card>.value(card);
   }
