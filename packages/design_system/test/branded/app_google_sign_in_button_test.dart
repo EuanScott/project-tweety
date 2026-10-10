@@ -42,6 +42,18 @@ void main() {
     return decoration.color!;
   }
 
+  BorderRadiusGeometry? surfaceRadius(WidgetTester tester) {
+    final decoration =
+        tester
+                .widget<DecoratedBox>(
+                  find.byKey(AppGoogleSignInButton.surfaceKey),
+                )
+                .decoration
+            as BoxDecoration;
+
+    return decoration.borderRadius;
+  }
+
   group('AppGoogleSignInButton', () {
     testWidgets('shows the Google mark and label, and reports presses', (
       tester,
@@ -143,6 +155,34 @@ void main() {
           360,
         );
       });
+    }
+
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets(
+        'matches the app button shape and side padding on ${platform.name}',
+        (tester) async {
+          await pumpButton(tester, onPressed: () {}, platform: platform);
+
+          expect(
+            surfaceRadius(tester),
+            const BorderRadius.all(Radius.circular(12)),
+          );
+
+          final surface = tester.getRect(
+            find.byKey(AppGoogleSignInButton.surfaceKey),
+          );
+          final mark = tester.getRect(
+            find.byKey(AppGoogleSignInButton.markKey),
+          );
+          final label = tester.getRect(find.text('Sign in with Google'));
+          expect(mark.left - surface.left, 16);
+          expect(surface.right - label.right, 16);
+          expect(
+            label.left - mark.right,
+            platform == TargetPlatform.iOS ? 12 : 10,
+          );
+        },
+      );
     }
 
     testWidgets('is at least 48 px tall', (tester) async {

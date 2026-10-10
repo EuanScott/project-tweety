@@ -95,9 +95,10 @@ same in every preset.
 
 A branded control looks the same on Material and Cupertino, because a third
 party owns its look. `AppGoogleSignInButton` follows Google's branding
-guidelines: colours, Google Sans Medium 14/20, a 1 px border, and the side
-padding Google specifies for Android and for iOS. Only the press feedback
-follows the platform.
+guidelines: colours, Google Sans Medium 14/20 and a 1 px border. Its 12 px
+corner radius, 16 px side padding and 48 px height match `AppButton`, inside
+the rectangular shape the guidelines allow. Only the press feedback and the
+gap after the mark (10 px Android, 12 px iOS) follow the platform.
 
 The "G" mark in `assets/google/` comes unchanged from Google's sign-in asset
 kit (<https://developers.google.com/identity/branding-guidelines>). The kit

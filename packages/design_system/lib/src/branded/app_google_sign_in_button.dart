@@ -8,8 +8,10 @@ import '../adaptive/app_loading_indicator.dart';
 /// guidelines with the official "G" mark from Google's asset kit.
 ///
 /// This is a branded control, so it looks the same on Material and Cupertino.
-/// Only the press feedback and the side padding follow the platform, as
-/// Google's guidelines specify different padding for Android and iOS.
+/// Its colours, font and mark stay as Google's guidelines specify. Its corner
+/// radius, side padding and height match `AppButton`, which the guidelines
+/// allow for a rectangular button. Only the press feedback and the gap after
+/// the mark follow the platform, as Google specifies for Android and iOS.
 ///
 /// The caller passes localized [label] and [loadingLabel]. A null [onPressed]
 /// disables the button. While [loading], the button shows
@@ -37,7 +39,8 @@ class const AppGoogleSignInButton({
   static const _markAsset = 'assets/google/google_g_mark.png';
   static const _markSize = 20.0;
   static const _minHeight = 48.0;
-  static const _radius = BorderRadius.all(Radius.circular(4));
+  static const _sidePadding = 16.0;
+  static const _radius = BorderRadius.all(Radius.circular(12));
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +49,7 @@ class const AppGoogleSignInButton({
     final colors = Theme.of(context).brightness == Brightness.dark
         ? _GoogleButtonColors.dark
         : _GoogleButtonColors.light;
-    final spacing = isCupertino
-        ? _GoogleButtonSpacing.ios
-        : _GoogleButtonSpacing.android;
+    final markGap = isCupertino ? 12.0 : 10.0;
     final textStyle = GoogleFonts.googleSans(
       fontSize: 14,
       height: 20 / 14,
@@ -66,10 +67,7 @@ class const AppGoogleSignInButton({
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: _minHeight),
         child: Padding(
-          padding: EdgeInsetsDirectional.only(
-            start: spacing.start,
-            end: spacing.end,
-          ),
+          padding: const .symmetric(horizontal: _sidePadding),
           child: Center(
             widthFactor: 1,
             child: Row(
@@ -87,7 +85,7 @@ class const AppGoogleSignInButton({
                           height: _markSize,
                         ),
                 ),
-                SizedBox(width: spacing.afterMark),
+                SizedBox(width: markGap),
                 Flexible(
                   child: Text(
                     loading ? loadingLabel : label,
@@ -200,19 +198,4 @@ enum _GoogleButtonColors {
   final Color fill;
   final Color stroke;
   final Color text;
-}
-
-enum _GoogleButtonSpacing {
-  android(start: 12, afterMark: 10, end: 12),
-  ios(start: 16, afterMark: 12, end: 16);
-
-  new({
-    required this.start,
-    required this.afterMark,
-    required this.end,
-  });
-
-  final double start;
-  final double afterMark;
-  final double end;
 }
