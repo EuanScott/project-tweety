@@ -17,7 +17,7 @@ Flutter tooling rather than by convention.
 | `test_driver/` | The host machine, in a **separate process**, alongside the running app | `flutter drive --driver=…` | none — a plain Dart program |
 
 `integration_test/` must sit outside `test/` because a bare `flutter test` globs
-everything under `test/` and runs it on the host VM. `cards_sqlite_smoke.flow_test.dart`
+everything under `test/` and runs it on the host VM. `logs_sqlite_smoke.flow_test.dart`
 needs a real device and real platform channels; inside `test/` it would be
 collected by every CI run and fail.
 
@@ -50,9 +50,9 @@ from [AGENTS.md](../../AGENTS.md) and is preferred where a role is meaningful:
 
 ```text
 app_database.storage_test.dart
-cards_local.datasource_test.dart
-cards.repository_impl_test.dart
-cards.bloc_test.dart
+logs_local.datasource_test.dart
+logs.repository_impl_test.dart
+logs.bloc_test.dart
 app_modal.widget_test.dart
 ```
 
@@ -79,7 +79,7 @@ do, and it is the healthier pattern — the dependency is visible in the test, a
 there is no global container to reset.
 
 ```dart
-final bloc = CardsBloc(FakeCardsRepository(cards: const [card]));
+final bloc = LogsBloc(FakeLogsRepository(logs: const [logEntry]));
 ```
 
 Reach for the real container only when the test drives `MyApp`, which resolves
@@ -92,17 +92,17 @@ than open-coding the reset cycle.
 
 - `app_harness.dart` — `useAppHarness()` registers the `setUp`/`tearDown` pair
   (in-memory shared preferences, the system-text-settings channel stub, a real
-  DI container with a working cards fake, a signed-in auth fake, and a tilt
+  DI container with a working logs fake, a signed-in auth fake, and a tilt
   fake). `pumpApp(tester, …)` renders `MyApp` at a chosen surface size, locale,
   platform, brightness, and Session.
   `currentRoutePath(tester)` reads the active `go_router` location.
-- `fake_cards_repository.dart` — one configurable `FakeCardsRepository` backed by
+- `fake_logs_repository.dart` — one configurable `FakeLogsRepository` backed by
   a mutable list. Pass `readError`, `createError`, `updateError`, or
   `deleteError` to make a single operation fail; read `collectionReadCount`,
   `createRequestCount`, and friends to assert call counts.
-  `FakeCardsRepository.collectionOnly(loader)` treats any detail read as a
+  `FakeLogsRepository.collectionOnly(loader)` treats any detail read as a
   failure, for tests asserting that details derive from the loaded collection.
-  `FakeCardsRepository.gated()` leaves writes pending until the test completes
+  `FakeLogsRepository.gated()` leaves writes pending until the test completes
   them, for asserting in-flight state.
 - `fake_auth_repository.dart` — `FakeAuthRepository`, signed in by default
   so `MyApp` tests pass the launch gate. Pass `profile` to set the Profile of
@@ -124,20 +124,20 @@ A typical whole-app test:
 
 ```dart
 void main() {
-  group('Cards editor', () {
+  group('Logs editor', () {
     useAppHarness();
 
-    testWidgets('creates a card from the compact editor route', (tester) async {
-      replaceCardsRepository(FakeCardsRepository(cards: const []));
+    testWidgets('creates a log entry from the compact editor route', (tester) async {
+      replaceLogsRepository(FakeLogsRepository(logs: const []));
 
-      await pumpApp(tester, initialLocation: '${AppRoutes.cardsPath}/new');
+      await pumpApp(tester, initialLocation: '${AppRoutes.logsPath}/new');
       // …
     });
   });
 }
 ```
 
-Prefer adding a parameter to `FakeCardsRepository` over writing a new fake
+Prefer adding a parameter to `FakeLogsRepository` over writing a new fake
 class. The five variants it replaced were each a one-method override, and they
 had already been duplicated across two files.
 
@@ -155,7 +155,7 @@ flutter test
 One file:
 
 ```sh
-flutter test test/presentation/pages/cards/cards_editor.widget_test.dart
+flutter test test/presentation/pages/logs/logs_editor.widget_test.dart
 ```
 
 One test by name:
@@ -175,7 +175,7 @@ flutter test --coverage
 On a device, which CI does not do:
 
 ```sh
-flutter test integration_test/cards_sqlite_smoke.flow_test.dart -d <device-id>
+flutter test integration_test/logs_sqlite_smoke.flow_test.dart -d <device-id>
 ```
 
 Through the driver, for web:
@@ -184,11 +184,11 @@ Through the driver, for web:
 chromedriver --port=4444
 flutter drive \
   --driver=test_driver/integration_test.dart \
-  --target=integration_test/cards_sqlite_smoke.flow_test.dart \
+  --target=integration_test/logs_sqlite_smoke.flow_test.dart \
   -d chrome
 ```
 
 ## Related guides
 
 - [Navigation, deep links, and route guards](navigation.md)
-- [Cards SQLite persistence and native smoke testing](../architecture/cards_sqlite_foundation.md)
+- [Logs SQLite persistence and native smoke testing](../architecture/logs_sqlite_foundation.md)

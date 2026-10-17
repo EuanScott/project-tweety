@@ -60,10 +60,7 @@ void main() {
     });
 
     for (final (platform, headers) in [
-      (
-        TargetPlatform.android,
-        ['Appearance', 'Language', 'Text and display'],
-      ),
+      (TargetPlatform.android, ['Appearance', 'Language', 'Text and display']),
       (TargetPlatform.iOS, ['APPEARANCE', 'LANGUAGE', 'TEXT AND DISPLAY']),
     ]) {
       testWidgets('shows the three sections in order on ${platform.name}', (
@@ -158,9 +155,7 @@ void main() {
       expect(find.text(_fjordDescription), findsNothing);
     });
 
-    testWidgets('marks the theme description as a live region', (
-      tester,
-    ) async {
+    testWidgets('marks the theme description as a live region', (tester) async {
       final semantics = tester.ensureSemantics();
       await _pumpPreferences(tester);
 
@@ -194,9 +189,7 @@ void main() {
       expect(find.text('Apariencia'), findsOneWidget);
     });
 
-    testWidgets('chooses a language from a pushed list on iOS', (
-      tester,
-    ) async {
+    testWidgets('chooses a language from a pushed list on iOS', (tester) async {
       final repository = await _pumpPreferences(
         tester,
         platform: TargetPlatform.iOS,
@@ -333,7 +326,7 @@ void main() {
 
       expect(find.text('Appearance'), findsOneWidget);
       expect(find.text('Home'), findsWidgets);
-      expect(find.text('Cards'), findsOneWidget);
+      expect(find.text('Logs'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget);
     });
 

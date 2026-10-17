@@ -18,23 +18,23 @@ extension AppNavigation on BuildContext {
     return pushNamed<T>(AppRoutes.settingsAppPreferencesName);
   }
 
-  /// Shows a card's details inside Cards, stacked on the list in a compact
+  /// Shows a log entry's details inside Logs, stacked on the list in a compact
   /// region.
-  void goCardDetails(String cardId) {
+  void goLogEntryDetails(String logEntryId) {
     goNamed(
-      AppRoutes.cardsDetailName,
-      pathParameters: {AppRoutes.cardsDetailIdParameter: cardId},
+      AppRoutes.logsDetailName,
+      pathParameters: {AppRoutes.logsDetailIdParameter: logEntryId},
     );
   }
 
-  /// Shows the card creation editor inside Cards, stacked on the list in a
+  /// Shows the log entry creation editor inside Logs, stacked on the list in a
   /// compact region.
-  void goNewCard() {
-    goNamed(AppRoutes.cardsNewName);
+  void goNewLogEntry() {
+    goNamed(AppRoutes.logsNewName);
   }
 
-  /// Replaces the current Cards branch location with its collection root.
-  void goCards() {
-    goNamed(AppRoutes.cardsName);
+  /// Replaces the current Logs branch location with its collection root.
+  void goLogs() {
+    goNamed(AppRoutes.logsName);
   }
 }

@@ -17,8 +17,8 @@ import 'package:project_tweety/presentation/navigation/tabs/app_tab.model.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab_configs.constants.dart';
 import 'package:project_tweety/presentation/pages/access_denied/access_denied.page.dart';
 import 'package:project_tweety/presentation/pages/app_preferences/app_preferences.page.dart';
-import 'package:project_tweety/presentation/pages/cards/cards.page.dart';
-import 'package:project_tweety/presentation/pages/cards/bloc/cards.bloc.dart';
+import 'package:project_tweety/presentation/pages/logs/logs.page.dart';
+import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 import 'package:project_tweety/presentation/pages/sign_in/sign_in.page.dart';
@@ -83,52 +83,51 @@ GoRouter createRouter({
         ],
       ),
       NavigationBranch<AppTab>(
-        tab: AppTab.cards,
-        restorationScopeId: 'cards_branch',
+        tab: AppTab.logs,
+        restorationScopeId: 'logs_branch',
         observers: _navigationObservers(analyticsTracker),
         routes: [
           ShellRoute(
             builder: (context, state, child) {
               return PaneLayoutScope(
                 child: BlocProvider(
-                  create: (_) =>
-                      GetIt.I<CardsBloc>()..add(const CardsStarted()),
+                  create: (_) => GetIt.I<LogsBloc>()..add(const LogsStarted()),
                   child: child,
                 ),
               );
             },
             routes: [
               GoRoute(
-                path: AppRoutes.cardsPath,
-                name: AppRoutes.cardsName,
-                pageBuilder: (context, state) => _cardsPage(
+                path: AppRoutes.logsPath,
+                name: AppRoutes.logsName,
+                pageBuilder: (context, state) => _logsPage(
                   context,
                   state,
-                  const Cards(),
-                  isCovered: state.fullPath != AppRoutes.cardsPath,
+                  const Logs(),
+                  isCovered: state.fullPath != AppRoutes.logsPath,
                 ),
                 routes: [
                   GoRoute(
-                    path: AppRoutes.cardsNewChildPath,
-                    name: AppRoutes.cardsNewName,
-                    pageBuilder: (context, state) => _cardsPage(
+                    path: AppRoutes.logsNewChildPath,
+                    name: AppRoutes.logsNewName,
+                    pageBuilder: (context, state) => _logsPage(
                       context,
                       state,
-                      const Cards(isCreating: true),
+                      const Logs(isCreating: true),
                       isSelection: true,
                     ),
                   ),
                   GoRoute(
-                    path: AppRoutes.cardsDetailChildPath,
-                    name: AppRoutes.cardsDetailName,
+                    path: AppRoutes.logsDetailChildPath,
+                    name: AppRoutes.logsDetailName,
                     pageBuilder: (context, state) {
-                      final cardId = state
-                          .pathParameters[AppRoutes.cardsDetailIdParameter]!;
+                      final logEntryId = state
+                          .pathParameters[AppRoutes.logsDetailIdParameter]!;
 
-                      return _cardsPage(
+                      return _logsPage(
                         context,
                         state,
-                        Cards(selectedCardId: cardId),
+                        Logs(selectedLogEntryId: logEntryId),
                         isSelection: true,
                       );
                     },
@@ -173,21 +172,21 @@ GoRouter createRouter({
   );
 }
 
-/// The one compact page the editor and every card share.
-const _cardsSelectionPageKey = ValueKey('cards-selection');
+/// The one compact page the editor and every log entry share.
+const _logsSelectionPageKey = ValueKey('logs-selection');
 
-/// Builds the page for a Cards location.
+/// Builds the page for a Logs location.
 ///
-/// A compact region stacks a native page on the list, so a card or the editor
-/// always swipes back to it. The editor and every card share that one page, so
-/// a new card replaces its editor in place instead of sliding in over it.
+/// A compact region stacks a native page on the list, so a log entry or the editor
+/// always swipes back to it. The editor and every log entry share that one page, so
+/// a new log entry replaces its editor in place instead of sliding in over it.
 ///
 /// A split region shows the list and the selection side by side on one page.
 /// The topmost location owns that page under a shared key, so it stays mounted
 /// as the selection changes: the list keeps its scroll position and nothing
 /// animates over a layout that never changed. The list location is [isCovered]
 /// by a selection there and is never visible, so it builds nothing.
-Page<void> _cardsPage(
+Page<void> _logsPage(
   BuildContext context,
   GoRouterState state,
   Widget child, {
@@ -199,7 +198,7 @@ Page<void> _cardsPage(
       context,
       state,
       child,
-      key: isSelection ? _cardsSelectionPageKey : null,
+      key: isSelection ? _logsSelectionPageKey : null,
     );
   }
 
@@ -211,7 +210,7 @@ Page<void> _cardsPage(
   }
 
   return NoTransitionPage<void>(
-    key: const ValueKey('cards-panes'),
+    key: const ValueKey('logs-panes'),
     name: state.name,
     child: child,
   );

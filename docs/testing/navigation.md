@@ -49,7 +49,7 @@ Try:
 
 ```text
 http://localhost:<port>/#/settings/app-preferences
-http://localhost:<port>/#/cards/card-1
+http://localhost:<port>/#/logs/card-1
 http://localhost:<port>/#/missing
 ```
 
@@ -72,8 +72,8 @@ Expected result: Access denied.
 - `/` redirects to `/home`
 - `/home`
 - `/access-denied`
-- `/cards`
-- `/cards/:cardId`
+- `/logs`
+- `/logs/:entryId`
 - `/settings`
 - `/settings/app-preferences`
 

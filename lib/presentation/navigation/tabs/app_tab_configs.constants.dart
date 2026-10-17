@@ -14,11 +14,11 @@ const appTabConfigs = [
     labelBuilder: _homeTabLabel,
   ),
   NavigationTabConfig<AppTab>(
-    tab: AppTab.cards,
-    rootPath: AppRoutes.cardsPath,
-    routeName: AppRoutes.cardsName,
-    icon: Icons.grid_view_rounded,
-    labelBuilder: _cardsTabLabel,
+    tab: AppTab.logs,
+    rootPath: AppRoutes.logsPath,
+    routeName: AppRoutes.logsName,
+    icon: Icons.cabin,
+    labelBuilder: _logsTabLabel,
   ),
   NavigationTabConfig<AppTab>(
     tab: AppTab.settings,
@@ -33,8 +33,8 @@ String _homeTabLabel(BuildContext context) {
   return AppLocalizations.of(context)!.homeTab;
 }
 
-String _cardsTabLabel(BuildContext context) {
-  return AppLocalizations.of(context)!.cardsTab;
+String _logsTabLabel(BuildContext context) {
+  return AppLocalizations.of(context)!.logsTab;
 }
 
 String _settingsTabLabel(BuildContext context) {

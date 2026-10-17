@@ -15,7 +15,7 @@ void main() {
       await pumpApp(tester);
 
       expect(find.text('Home'), findsWidgets);
-      expect(find.text('Cards'), findsOneWidget);
+      expect(find.text('Logs'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget);
     });
 
@@ -25,58 +25,59 @@ void main() {
       await pumpApp(tester, initialLocation: AppRoutes.rootPath);
 
       expect(find.text('Home'), findsWidgets);
-      expect(find.text('Cards'), findsOneWidget);
+      expect(find.text('Logs'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget);
     });
 
-    testWidgets('switches to cards tab', (WidgetTester tester) async {
+    testWidgets('switches to logs tab', (WidgetTester tester) async {
       replaceAppPreferencesRepository(
         FakeAppPreferencesRepository(const AppPreferences(languageCode: 'en')),
       );
 
       await pumpApp(tester);
 
-      await tester.tap(find.text('Cards'));
+      await tester.tap(find.text('Logs'));
       await tester.pumpAndSettle();
 
       expect(find.text('Card Title 1'), findsWidgets);
       expect(find.byIcon(Icons.refresh), findsNothing);
     });
 
-    testWidgets('active cards tab returns wide direct details route to root', (
+    testWidgets('active logs tab returns wide direct details route to root', (
       WidgetTester tester,
     ) async {
       await pumpApp(
         tester,
         surfaceSize: const Size(900, 800),
-        initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
+        initialLocation: '${AppRoutes.logsDetailFullPathPrefix}card-1',
       );
 
       expect(find.text('card-1'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.grid_view_rounded));
+      await tester.tap(find.byIcon(Icons.cabin));
       await tester.pumpAndSettle();
 
       expect(find.text('card-1'), findsNothing);
-      expect(find.text('Select a card'), findsOneWidget);
+      expect(find.text('Select an entry'), findsOneWidget);
     });
 
-    testWidgets('tapping active cards tab returns card details to cards root', (
-      WidgetTester tester,
-    ) async {
-      await pumpApp(
-        tester,
-        surfaceSize: const Size(400, 800),
-        initialLocation: '${AppRoutes.cardsDetailFullPathPrefix}card-1',
-      );
+    testWidgets(
+      'tapping active logs tab returns log entry details to the Logs root',
+      (WidgetTester tester) async {
+        await pumpApp(
+          tester,
+          surfaceSize: const Size(400, 800),
+          initialLocation: '${AppRoutes.logsDetailFullPathPrefix}card-1',
+        );
 
-      await tester.tap(find.byIcon(Icons.grid_view_rounded));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.cabin));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Card details'), findsNothing);
-      expect(find.text('card-1'), findsNothing);
-      expect(find.text('Card Title 1'), findsOneWidget);
-    });
+        expect(find.text('Entry details'), findsNothing);
+        expect(find.text('card-1'), findsNothing);
+        expect(find.text('Card Title 1'), findsOneWidget);
+      },
+    );
 
     testWidgets('explains denied settings deep links', (
       WidgetTester tester,
@@ -130,129 +131,128 @@ void main() {
       expect(find.text('Personalisation'), findsOneWidget);
     });
 
-    testWidgets('tapping active cards tab scrolls cards list to the top', (
+    testWidgets('tapping active logs tab scrolls the Logs list to the top', (
       WidgetTester tester,
     ) async {
       await pumpApp(tester, surfaceSize: const Size(400, 600));
 
-      await tester.tap(find.text('Cards'));
+      await tester.tap(find.text('Logs'));
       await tester.pumpAndSettle();
 
-      final cardsList = find.byWidgetPredicate(
+      final logsList = find.byWidgetPredicate(
         (widget) => widget is CustomScrollView && widget.controller != null,
       );
 
-      await tester.drag(cardsList, const Offset(0, -900));
+      await tester.drag(logsList, const Offset(0, -900));
       await tester.pumpAndSettle();
 
       expect(find.text('Card Title 1'), findsNothing);
 
-      await tester.tap(find.byIcon(Icons.grid_view_rounded));
+      await tester.tap(find.byIcon(Icons.cabin));
       await tester.pumpAndSettle();
 
       expect(find.text('Card Title 1'), findsOneWidget);
     });
 
     testWidgets(
-      'iOS cards use large title scroll coordination without refresh action',
+      'iOS Logs page uses large title scroll coordination without refresh action',
       (WidgetTester tester) async {
         await pumpApp(tester, platform: TargetPlatform.iOS);
 
-        await tester.tap(find.text('Cards'));
+        await tester.tap(find.text('Logs'));
         await tester.pumpAndSettle();
 
         expect(find.byType(CupertinoSliverNavigationBar), findsOneWidget);
         expect(find.byIcon(Icons.refresh), findsNothing);
 
-        final cardsList = find.byType(CustomScrollView).first;
-        final scrollView = tester.widget<CustomScrollView>(cardsList);
+        final logsList = find.byType(CustomScrollView).first;
+        final scrollView = tester.widget<CustomScrollView>(logsList);
         expect(scrollView.controller, isNotNull);
       },
     );
 
     testWidgets(
-      'tapping active cards rail item scrolls cards list to the top',
+      'tapping active Logs rail item scrolls the Logs list to the top',
       (WidgetTester tester) async {
         await pumpApp(tester, surfaceSize: const Size(900, 800));
 
-        await tester.tap(find.text('Cards'));
+        await tester.tap(find.text('Logs'));
         await tester.pumpAndSettle();
 
-        final cardsList = find.byWidgetPredicate(
+        final logsList = find.byWidgetPredicate(
           (widget) => widget is CustomScrollView && widget.controller != null,
         );
 
-        await tester.drag(cardsList, const Offset(0, -900));
+        await tester.drag(logsList, const Offset(0, -900));
         await tester.pumpAndSettle();
 
         expect(find.text('Card Title 1'), findsNothing);
 
-        await tester.tap(find.byIcon(Icons.grid_view_rounded));
+        await tester.tap(find.byIcon(Icons.cabin));
         await tester.pumpAndSettle();
 
         expect(find.text('Card Title 1'), findsOneWidget);
       },
     );
 
-    testWidgets(
-      'tapping active cards rail item resets a selected cards route',
-      (WidgetTester tester) async {
-        await pumpApp(tester, surfaceSize: const Size(900, 800));
+    testWidgets('tapping active Logs rail item resets a selected logs route', (
+      WidgetTester tester,
+    ) async {
+      await pumpApp(tester, surfaceSize: const Size(900, 800));
 
-        await tester.tap(find.text('Cards'));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Card Title 1'));
-        await tester.pumpAndSettle();
+      await tester.tap(find.text('Logs'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Card Title 1'));
+      await tester.pumpAndSettle();
 
-        final cardsList = find.byWidgetPredicate(
+      final logsList = find.byWidgetPredicate(
+        (widget) => widget is CustomScrollView && widget.controller != null,
+      );
+
+      await tester.drag(logsList, const Offset(0, -900));
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget<CustomScrollView>(logsList).controller!.offset,
+        greaterThan(0),
+      );
+      expect(find.text('card-1'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.cabin));
+      await tester.pumpAndSettle();
+
+      final resetLogsList = tester.widget<CustomScrollView>(
+        find.byWidgetPredicate(
           (widget) => widget is CustomScrollView && widget.controller != null,
-        );
+        ),
+      );
 
-        await tester.drag(cardsList, const Offset(0, -900));
-        await tester.pumpAndSettle();
+      expect(find.text('card-1'), findsNothing);
+      expect(currentRoutePath(tester), AppRoutes.logsPath);
+      expect(
+        resetLogsList.controller!.offset,
+        greaterThan(0),
+        reason:
+            'clearing the selection keeps the list where the reader '
+            'left it; a second tap on the active tab scrolls to the top',
+      );
 
-        expect(
-          tester.widget<CustomScrollView>(cardsList).controller!.offset,
-          greaterThan(0),
-        );
-        expect(find.text('card-1'), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.cabin));
+      await tester.pumpAndSettle();
 
-        await tester.tap(find.byIcon(Icons.grid_view_rounded));
-        await tester.pumpAndSettle();
-
-        final resetCardsList = tester.widget<CustomScrollView>(
-          find.byWidgetPredicate(
-            (widget) => widget is CustomScrollView && widget.controller != null,
-          ),
-        );
-
-        expect(find.text('card-1'), findsNothing);
-        expect(currentRoutePath(tester), AppRoutes.cardsPath);
-        expect(
-          resetCardsList.controller!.offset,
-          greaterThan(0),
-          reason:
-              'clearing the selection keeps the list where the reader '
-              'left it; a second tap on the active tab scrolls to the top',
-        );
-
-        await tester.tap(find.byIcon(Icons.grid_view_rounded));
-        await tester.pumpAndSettle();
-
-        expect(
-          tester
-              .widget<CustomScrollView>(
-                find.byWidgetPredicate(
-                  (widget) =>
-                      widget is CustomScrollView && widget.controller != null,
-                ),
-              )
-              .controller!
-              .offset,
-          0,
-        );
-        expect(find.text('Card Title 1'), findsWidgets);
-      },
-    );
+      expect(
+        tester
+            .widget<CustomScrollView>(
+              find.byWidgetPredicate(
+                (widget) =>
+                    widget is CustomScrollView && widget.controller != null,
+              ),
+            )
+            .controller!
+            .offset,
+        0,
+      );
+      expect(find.text('Card Title 1'), findsWidgets);
+    });
   });
 }

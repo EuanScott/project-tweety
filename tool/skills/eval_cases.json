@@ -222,7 +222,7 @@
       "skill": "page-scaffold",
       "category": "positive_routing",
       "tier": "high_risk",
-      "prompt": "$page-scaffold Create an isolated eval_cards page using the existing CardsRepository dependency and a BLoC. Operation: getCards. Do not add data/domain files or navigation wiring.",
+      "prompt": "$page-scaffold Create an isolated eval_logs page using the existing LogsRepository dependency and a BLoC. Operation: getLogs. Do not add data/domain files or navigation wiring.",
       "invariants": [
         { "id": "exit", "kind": "exit_code", "value": 0 },
         {
@@ -233,12 +233,12 @@
         {
           "id": "page",
           "kind": "git_diff_contains",
-          "value": "lib/presentation/pages/eval_cards"
+          "value": "lib/presentation/pages/eval_logs"
         },
         {
           "id": "no_data",
           "kind": "git_diff_excludes",
-          "value": "lib/data/repositories/eval_cards"
+          "value": "lib/data/repositories/eval_logs"
         }
       ]
     },

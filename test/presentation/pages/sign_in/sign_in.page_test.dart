@@ -68,12 +68,12 @@ void main() {
 
       expect(find.text('Project Tweety'), findsOneWidget);
       expect(
-        find.text('Sign in to keep your Cards and back them up.'),
+        find.text('Sign in to keep your logs and back them up.'),
         findsOneWidget,
       );
       expect(find.text('Sign in with Google'), findsOneWidget);
       expect(
-        find.text('Your Cards stay on this device until you sync them.'),
+        find.text('Your logs stay on this device until you sync them.'),
         findsOneWidget,
       );
       expect(find.text("Sign-in didn't work"), findsNothing);
@@ -172,7 +172,7 @@ void main() {
       expect(find.text('Sign in'), findsOneWidget);
       expect(find.text('Use your Google Account to continue.'), findsOneWidget);
       expect(
-        find.text('Your Cards, on this device and backed up when you choose.'),
+        find.text('Your logs, on this device and backed up when you choose.'),
         findsOneWidget,
       );
     });
@@ -281,10 +281,7 @@ void main() {
       );
       await tester.pump();
 
-      expect(
-        tester.getRect(find.byType(AppGoogleSignInButton)),
-        buttonRect,
-      );
+      expect(tester.getRect(find.byType(AppGoogleSignInButton)), buttonRect);
       expect(
         tester.getTopLeft(find.byKey(SignInPage.scenePaneKey)).dy,
         lessThan(0),

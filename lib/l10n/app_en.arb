@@ -11,67 +11,67 @@
   "@dynamicFormTab": {
     "description": "Label for dynamic form tab"
   },
-  "cardsTab": "Cards",
-  "@cardsTab": {
-    "description": "Label for cards tab"
+  "logsTab": "Logs",
+  "@logsTab": {
+    "description": "Label for logs tab"
   },
-  "cardDetailsTitle": "Card details",
-  "@cardDetailsTitle": {
-    "description": "Title for the card details page"
+  "logEntryDetailsTitle": "Entry details",
+  "@logEntryDetailsTitle": {
+    "description": "Title for the log entry details page"
   },
-  "cardDetailsIdLabel": "ID",
-  "@cardDetailsIdLabel": {
-    "description": "Label for the card id shown on the card details page"
+  "logEntryDetailsIdLabel": "ID",
+  "@logEntryDetailsIdLabel": {
+    "description": "Label for the log entry id shown on the log entry details page"
   },
-  "cardDetailsEmptyTitle": "Select a card",
-  "@cardDetailsEmptyTitle": {
-    "description": "Title shown in the wide cards detail pane before a card is selected"
+  "logEntryDetailsEmptyTitle": "Select an entry",
+  "@logEntryDetailsEmptyTitle": {
+    "description": "Title shown in the wide logs detail pane before a log entry is selected"
   },
-  "cardDetailsEmptyDescription": "Choose a card from the list to see details.",
-  "@cardDetailsEmptyDescription": {
-    "description": "Description shown in the wide cards detail pane before a card is selected"
+  "logEntryDetailsEmptyDescription": "Choose an entry from the list to see details.",
+  "@logEntryDetailsEmptyDescription": {
+    "description": "Description shown in the wide logs detail pane before a log entry is selected"
   },
-  "cardDetailsMissingTitle": "Card not found",
-  "@cardDetailsMissingTitle": {
-    "description": "Title shown when a card details route references an unknown card id"
+  "logEntryDetailsMissingTitle": "Entry not found",
+  "@logEntryDetailsMissingTitle": {
+    "description": "Title shown when a log entry details route references an unknown log entry id"
   },
-  "cardDetailsMissingDescription": "This card is not available.",
-  "@cardDetailsMissingDescription": {
-    "description": "Description shown when a card details route references an unknown card id"
+  "logEntryDetailsMissingDescription": "This entry is not available.",
+  "@logEntryDetailsMissingDescription": {
+    "description": "Description shown when a log entry details route references an unknown log entry id"
   },
-  "cardDetailsLoadFailedTitle": "Unable to load card",
-  "@cardDetailsLoadFailedTitle": {
-    "description": "Title shown when card details fail to load"
+  "logEntryDetailsLoadFailedTitle": "Unable to load entry",
+  "@logEntryDetailsLoadFailedTitle": {
+    "description": "Title shown when log entry details fail to load"
   },
-  "cardDetailsLoadFailedDescription": "Try opening the card again.",
-  "cardCreateTitle": "New card",
-  "cardCreateAction": "Create card",
-  "cardCreateTitleLabel": "Title",
-  "cardCreateDescriptionLabel": "Description",
-  "cardCreateTitleRequired": "Enter a title.",
-  "cardCreateDescriptionRequired": "Enter a description.",
-  "cardCreateEmptyTitle": "No cards yet",
-  "cardCreateEmptyDescription": "Create your first card to get started.",
-  "cardCreateFailed": "Unable to save card. Try again.",
-  "cardEditTitle": "Edit card",
-  "cardEditAction": "Edit card",
-  "cardEditSaveAction": "Save changes",
-  "cardEditCancelAction": "Cancel",
-  "cardEditFailed": "Unable to update card. Try again.",
-  "cardEditNotFound": "Card no longer exists.",
-  "cardEditReturnToCardsAction": "Return to cards",
-  "cardDiscardConfirmationTitle": "Discard changes?",
-  "cardDiscardConfirmationDescription": "Your unsaved changes will be lost.",
-  "cardDiscardCancelAction": "Keep editing",
-  "cardDiscardAction": "Discard changes",
-  "cardDeleteAction": "Delete card",
-  "cardDeleteRetryAction": "Retry deletion",
-  "cardDeleteCancelAction": "Keep card",
-  "cardDeleteConfirmationTitle": "Delete card?",
-  "cardDeleteConfirmationDescription": "This card will be removed from your list.",
-  "cardDeleteFailed": "Unable to delete card. Try again.",
-  "@cardDetailsLoadFailedDescription": {
-    "description": "Description shown when card details fail to load"
+  "logEntryDetailsLoadFailedDescription": "Try opening the entry again.",
+  "logEntryCreateTitle": "New entry",
+  "logEntryCreateAction": "Create entry",
+  "logEntryCreateTitleLabel": "Title",
+  "logEntryCreateDescriptionLabel": "Description",
+  "logEntryCreateTitleRequired": "Enter a title.",
+  "logEntryCreateDescriptionRequired": "Enter a description.",
+  "logEntryCreateEmptyTitle": "No entries yet",
+  "logEntryCreateEmptyDescription": "Create your first entry to get started.",
+  "logEntryCreateFailed": "Unable to save entry. Try again.",
+  "logEntryEditTitle": "Edit entry",
+  "logEntryEditAction": "Edit entry",
+  "logEntryEditSaveAction": "Save changes",
+  "logEntryEditCancelAction": "Cancel",
+  "logEntryEditFailed": "Unable to update entry. Try again.",
+  "logEntryEditNotFound": "Entry no longer exists.",
+  "logEntryEditReturnToLogsAction": "Return to logs",
+  "logEntryDiscardConfirmationTitle": "Discard changes?",
+  "logEntryDiscardConfirmationDescription": "Your unsaved changes will be lost.",
+  "logEntryDiscardCancelAction": "Keep editing",
+  "logEntryDiscardAction": "Discard changes",
+  "logEntryDeleteAction": "Delete entry",
+  "logEntryDeleteRetryAction": "Retry deletion",
+  "logEntryDeleteCancelAction": "Keep entry",
+  "logEntryDeleteConfirmationTitle": "Delete entry?",
+  "logEntryDeleteConfirmationDescription": "This entry will be removed from your logs.",
+  "logEntryDeleteFailed": "Unable to delete entry. Try again.",
+  "@logEntryDetailsLoadFailedDescription": {
+    "description": "Description shown when log entry details fail to load"
   },
   "settingsTab": "Settings",
   "@settingsTab": {
@@ -232,11 +232,11 @@
   "@appPreferencesRetry": {
     "description": "Retry button label for app preferences loading"
   },
-  "signInCompactSubtitle": "Sign in to keep your Cards and back them up.",
+  "signInCompactSubtitle": "Sign in to keep your logs and back them up.",
   "@signInCompactSubtitle": {
     "description": "Subtitle under the app name on the compact sign-in page"
   },
-  "signInSceneSubtitle": "Your Cards, on this device and backed up when you choose.",
+  "signInSceneSubtitle": "Your logs, on this device and backed up when you choose.",
   "@signInSceneSubtitle": {
     "description": "Subtitle over the illustration on the split sign-in page"
   },
@@ -268,7 +268,7 @@
   "@signInErrorOther": {
     "description": "Body of the sign-in failure message for any failure other than the network"
   },
-  "signInFootnote": "Your Cards stay on this device until you sync them.",
+  "signInFootnote": "Your logs stay on this device until you sync them.",
   "@signInFootnote": {
     "description": "Footnote under the sign-in button"
   },
@@ -332,7 +332,7 @@
   "@accountSigningOut": {
     "description": "Label of the sign-out button while signing out"
   },
-  "accountSignOutFootnote": "Your Cards stay on this device when you sign out.",
+  "accountSignOutFootnote": "Your logs stay on this device when you sign out.",
   "@accountSignOutFootnote": {
     "description": "Footnote under the sign-out button"
   },
@@ -340,7 +340,7 @@
   "@accountSignOutConfirmTitle": {
     "description": "Title of the sign-out confirmation dialog"
   },
-  "accountSignOutConfirmBody": "Your Cards stay on this device. Sign in again to see them.",
+  "accountSignOutConfirmBody": "Your logs stay on this device. Sign in again to see them.",
   "@accountSignOutConfirmBody": {
     "description": "Body of the sign-out confirmation dialog"
   },
@@ -352,12 +352,12 @@
   "@accountSignOutConfirmAction": {
     "description": "Confirm action of the sign-out confirmation dialog"
   },
-  "cardsSyncUpToDateTitle": "All Cards synced",
-  "@cardsSyncUpToDateTitle": {
+  "logsSyncUpToDateTitle": "All logs synced",
+  "@logsSyncUpToDateTitle": {
     "description": "Sync row headline when no change waits to sync"
   },
-  "cardsSyncLastSynced": "Last sync at {time}",
-  "@cardsSyncLastSynced": {
+  "logsSyncLastSynced": "Last sync at {time}",
+  "@logsSyncLastSynced": {
     "description": "Sync row sub-line naming when the last sync finished",
     "placeholders": {
       "time": {
@@ -366,8 +366,8 @@
       }
     }
   },
-  "cardsSyncPendingTitle": "{count, plural, =1{1 change on this device only} other{{count} changes on this device only}}",
-  "@cardsSyncPendingTitle": {
+  "logsSyncPendingTitle": "{count, plural, =1{1 change on this device only} other{{count} changes on this device only}}",
+  "@logsSyncPendingTitle": {
     "description": "Sync row headline when changes wait to sync; deletions count",
     "placeholders": {
       "count": {
@@ -375,8 +375,8 @@
       }
     }
   },
-  "cardsSyncPendingSubtitle": "{count, plural, =1{Sync to save it to your Account} other{Sync to save them to your Account}}",
-  "@cardsSyncPendingSubtitle": {
+  "logsSyncPendingSubtitle": "{count, plural, =1{Sync to save it to your Account} other{Sync to save them to your Account}}",
+  "@logsSyncPendingSubtitle": {
     "description": "Sync row sub-line when changes wait to sync",
     "placeholders": {
       "count": {
@@ -384,12 +384,12 @@
       }
     }
   },
-  "cardsSyncSyncingTitle": "Syncing…",
-  "@cardsSyncSyncingTitle": {
+  "logsSyncSyncingTitle": "Syncing…",
+  "@logsSyncSyncingTitle": {
     "description": "Sync row headline while a sync runs"
   },
-  "cardsSyncSyncingSubtitle": "{savedCount} of {changeCount} changes saved",
-  "@cardsSyncSyncingSubtitle": {
+  "logsSyncSyncingSubtitle": "{savedCount} of {changeCount} changes saved",
+  "@logsSyncSyncingSubtitle": {
     "description": "Sync row progress while a sync runs",
     "placeholders": {
       "savedCount": {
@@ -400,12 +400,12 @@
       }
     }
   },
-  "cardsSyncSyncedTitle": "Synced just now",
-  "@cardsSyncSyncedTitle": {
+  "logsSyncSyncedTitle": "Synced just now",
+  "@logsSyncSyncedTitle": {
     "description": "Sync row headline after every change synced"
   },
-  "cardsSyncSyncedSubtitle": "{count, plural, =1{1 change saved to your Account} other{{count} changes saved to your Account}}",
-  "@cardsSyncSyncedSubtitle": {
+  "logsSyncSyncedSubtitle": "{count, plural, =1{1 change saved to your Account} other{{count} changes saved to your Account}}",
+  "@logsSyncSyncedSubtitle": {
     "description": "Sync row sub-line after every change synced",
     "placeholders": {
       "count": {
@@ -413,8 +413,8 @@
       }
     }
   },
-  "cardsSyncPartialTitle": "{savedCount} of {changeCount} changes synced",
-  "@cardsSyncPartialTitle": {
+  "logsSyncPartialTitle": "{savedCount} of {changeCount} changes synced",
+  "@logsSyncPartialTitle": {
     "description": "Sync row headline after only some changes synced",
     "placeholders": {
       "savedCount": {
@@ -425,8 +425,8 @@
       }
     }
   },
-  "cardsSyncPartialSubtitle": "{count, plural, =1{1 change will try again next sync} other{{count} changes will try again next sync}}",
-  "@cardsSyncPartialSubtitle": {
+  "logsSyncPartialSubtitle": "{count, plural, =1{1 change will try again next sync} other{{count} changes will try again next sync}}",
+  "@logsSyncPartialSubtitle": {
     "description": "Sync row sub-line naming the changes the next sync retries",
     "placeholders": {
       "count": {
@@ -434,12 +434,12 @@
       }
     }
   },
-  "cardsSyncOfflineTitle": "You're offline",
-  "@cardsSyncOfflineTitle": {
+  "logsSyncOfflineTitle": "You're offline",
+  "@logsSyncOfflineTitle": {
     "description": "Sync row headline when a sync failed for lack of network"
   },
-  "cardsSyncOfflineSubtitle": "{count, plural, =1{1 change is safe on this device. Sync when you're back online.} other{{count} changes are safe on this device. Sync when you're back online.}}",
-  "@cardsSyncOfflineSubtitle": {
+  "logsSyncOfflineSubtitle": "{count, plural, =1{1 change is safe on this device. Sync when you're back online.} other{{count} changes are safe on this device. Sync when you're back online.}}",
+  "@logsSyncOfflineSubtitle": {
     "description": "Sync row sub-line when a sync failed for lack of network",
     "placeholders": {
       "count": {
@@ -447,12 +447,12 @@
       }
     }
   },
-  "cardsSyncFailedTitle": "Couldn't sync",
-  "@cardsSyncFailedTitle": {
+  "logsSyncFailedTitle": "Couldn't sync",
+  "@logsSyncFailedTitle": {
     "description": "Sync row headline when a sync failed for any reason other than the network"
   },
-  "cardsSyncFailedSubtitle": "{count, plural, =1{1 change is safe on this device. Try again later.} other{{count} changes are safe on this device. Try again later.}}",
-  "@cardsSyncFailedSubtitle": {
+  "logsSyncFailedSubtitle": "{count, plural, =1{1 change is safe on this device. Try again later.} other{{count} changes are safe on this device. Try again later.}}",
+  "@logsSyncFailedSubtitle": {
     "description": "Sync row sub-line when a sync failed for any other reason",
     "placeholders": {
       "count": {
@@ -460,63 +460,63 @@
       }
     }
   },
-  "cardsSyncAlreadyUpToDateTitle": "Already up to date",
-  "@cardsSyncAlreadyUpToDateTitle": {
+  "logsSyncAlreadyUpToDateTitle": "Already up to date",
+  "@logsSyncAlreadyUpToDateTitle": {
     "description": "Sync row headline after a sync with nothing to send"
   },
-  "cardsSyncAlreadyUpToDateSubtitle": "Nothing to sync",
-  "@cardsSyncAlreadyUpToDateSubtitle": {
+  "logsSyncAlreadyUpToDateSubtitle": "Nothing to sync",
+  "@logsSyncAlreadyUpToDateSubtitle": {
     "description": "Sync row sub-line after a sync with nothing to send"
   },
-  "cardsSyncDownloadingTitle": "{count, plural, =1{Getting 1 Card from your Account…} other{Getting {count} Cards from your Account…}}",
-  "@cardsSyncDownloadingTitle": {
-    "description": "Sync row headline while Cards missing from this device download",
+  "logsSyncDownloadingTitle": "{count, plural, =1{Getting 1 entry from your Account…} other{Getting {count} entries from your Account…}}",
+  "@logsSyncDownloadingTitle": {
+    "description": "Sync row headline while log entries missing from this device download",
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "cardsSyncDownloadingSubtitle": "You can keep working",
-  "@cardsSyncDownloadingSubtitle": {
-    "description": "Sync row sub-line while Cards download"
+  "logsSyncDownloadingSubtitle": "You can keep working",
+  "@logsSyncDownloadingSubtitle": {
+    "description": "Sync row sub-line while log entries download"
   },
-  "cardsSyncDownloadedTitle": "{count, plural, =1{1 Card added from your Account} other{{count} Cards added from your Account}}",
-  "@cardsSyncDownloadedTitle": {
-    "description": "Sync row headline after Cards downloaded",
+  "logsSyncDownloadedTitle": "{count, plural, =1{1 entry added from your Account} other{{count} entries added from your Account}}",
+  "@logsSyncDownloadedTitle": {
+    "description": "Sync row headline after log entries downloaded",
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "cardsSyncDownloadedSubtitle": "{count, plural, =1{It was made on another device} other{They were made on another device}}",
-  "@cardsSyncDownloadedSubtitle": {
-    "description": "Sync row sub-line after Cards downloaded",
+  "logsSyncDownloadedSubtitle": "{count, plural, =1{It was made on another device} other{They were made on another device}}",
+  "@logsSyncDownloadedSubtitle": {
+    "description": "Sync row sub-line after log entries downloaded",
     "placeholders": {
       "count": {
         "type": "int"
       }
     }
   },
-  "cardsSyncAction": "Sync",
-  "@cardsSyncAction": {
+  "logsSyncAction": "Sync",
+  "@logsSyncAction": {
     "description": "Sync row button that starts a sync"
   },
-  "cardsSyncRetryAction": "Try again",
-  "@cardsSyncRetryAction": {
+  "logsSyncRetryAction": "Try again",
+  "@logsSyncRetryAction": {
     "description": "Sync row button that starts a sync after a failure"
   },
-  "cardsSyncInProgressAction": "Syncing",
-  "@cardsSyncInProgressAction": {
+  "logsSyncInProgressAction": "Syncing",
+  "@logsSyncInProgressAction": {
     "description": "Disabled sync row button while a sync runs"
   },
-  "cardsUnsyncedCreated": "New",
-  "@cardsUnsyncedCreated": {
-    "description": "Marker on a Card created since the last sync"
+  "logsUnsyncedCreated": "New",
+  "@logsUnsyncedCreated": {
+    "description": "Marker on a log entry created since the last sync"
   },
-  "cardsUnsyncedUpdated": "Edited",
-  "@cardsUnsyncedUpdated": {
-    "description": "Marker on a Card edited since the last sync"
+  "logsUnsyncedUpdated": "Edited",
+  "@logsUnsyncedUpdated": {
+    "description": "Marker on a log entry edited since the last sync"
   }
 }

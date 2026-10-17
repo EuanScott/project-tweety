@@ -56,7 +56,7 @@ build. The rationale is [ADR-0010](docs/decisions/0010-pre-commit-analysis-and-c
 Native Android and iOS coverage remains an explicit device/simulator check:
 
 ```sh
-flutter test integration_test/cards_sqlite_smoke.flow_test.dart -d <device-id>
+flutter test integration_test/logs_sqlite_smoke.flow_test.dart -d <device-id>
 ```
 
 See [the testing guide](docs/testing/README.md) for what belongs in `test/`,
@@ -154,7 +154,7 @@ The rationale is [ADR-0018](docs/decisions/0018-supply-chain-security-checks-in-
 Broader project guides live under `docs/`. Current guides include:
 
 - [Navigation, deep links, and route guards](docs/testing/navigation.md)
-- [Cards SQLite persistence and native smoke testing](docs/architecture/cards_sqlite_foundation.md)
+- [Logs SQLite persistence and native smoke testing](docs/architecture/logs_sqlite_foundation.md)
 - [Architecture Decision Records](docs/decisions/README.md)
 - [Conventional-commit-driven versioning](docs/decisions/0009-conventional-commit-driven-versioning.md)
 

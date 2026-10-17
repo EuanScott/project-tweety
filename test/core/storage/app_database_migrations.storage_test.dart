@@ -28,7 +28,7 @@ void main() {
     });
 
     test(
-      'creates the latest cards schema with no Cards on first open',
+      'creates the latest schema with no log entries on first open',
       () async {
         final snapshot = await database.read((db) async {
           final versionRows = await db.rawQuery('PRAGMA user_version');
@@ -37,13 +37,13 @@ void main() {
             "SELECT sql FROM sqlite_master WHERE type = 'index' "
             "AND tbl_name = 'cards' AND sql IS NOT NULL",
           );
-          final cards = await db.query('cards');
+          final logs = await db.query('cards');
 
           return (
             version: versionRows.single['user_version'],
             columns: columnRows.map((row) => row['name']).toList(),
             indexes: indexRows.map((row) => row['sql']).toList(),
-            cards: cards,
+            logs: logs,
           );
         });
 
@@ -60,7 +60,7 @@ void main() {
           'created_at',
         ]);
         expect(snapshot.indexes, [contains('cards(user_id)')]);
-        expect(snapshot.cards, isEmpty);
+        expect(snapshot.logs, isEmpty);
       },
     );
   });

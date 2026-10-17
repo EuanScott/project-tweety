@@ -58,7 +58,7 @@ void main() {
     testWidgets('signing out mid-session returns to sign-in', (tester) async {
       final repository = FakeAuthRepository();
       replaceAuthRepository(repository);
-      await pumpApp(tester, initialLocation: AppRoutes.cardsPath);
+      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
       expect(find.byType(SignInPage), findsNothing);
 
       repository.emit(const Session.signedOut());

@@ -118,215 +118,215 @@ abstract class AppLocalizations {
   /// **'Form'**
   String get dynamicFormTab;
 
-  /// Label for cards tab
+  /// Label for logs tab
   ///
   /// In en, this message translates to:
-  /// **'Cards'**
-  String get cardsTab;
+  /// **'Logs'**
+  String get logsTab;
 
-  /// Title for the card details page
+  /// Title for the log entry details page
   ///
   /// In en, this message translates to:
-  /// **'Card details'**
-  String get cardDetailsTitle;
+  /// **'Entry details'**
+  String get logEntryDetailsTitle;
 
-  /// Label for the card id shown on the card details page
+  /// Label for the log entry id shown on the log entry details page
   ///
   /// In en, this message translates to:
   /// **'ID'**
-  String get cardDetailsIdLabel;
+  String get logEntryDetailsIdLabel;
 
-  /// Title shown in the wide cards detail pane before a card is selected
+  /// Title shown in the wide logs detail pane before a log entry is selected
   ///
   /// In en, this message translates to:
-  /// **'Select a card'**
-  String get cardDetailsEmptyTitle;
+  /// **'Select an entry'**
+  String get logEntryDetailsEmptyTitle;
 
-  /// Description shown in the wide cards detail pane before a card is selected
+  /// Description shown in the wide logs detail pane before a log entry is selected
   ///
   /// In en, this message translates to:
-  /// **'Choose a card from the list to see details.'**
-  String get cardDetailsEmptyDescription;
+  /// **'Choose an entry from the list to see details.'**
+  String get logEntryDetailsEmptyDescription;
 
-  /// Title shown when a card details route references an unknown card id
+  /// Title shown when a log entry details route references an unknown log entry id
   ///
   /// In en, this message translates to:
-  /// **'Card not found'**
-  String get cardDetailsMissingTitle;
+  /// **'Entry not found'**
+  String get logEntryDetailsMissingTitle;
 
-  /// Description shown when a card details route references an unknown card id
+  /// Description shown when a log entry details route references an unknown log entry id
   ///
   /// In en, this message translates to:
-  /// **'This card is not available.'**
-  String get cardDetailsMissingDescription;
+  /// **'This entry is not available.'**
+  String get logEntryDetailsMissingDescription;
 
-  /// Title shown when card details fail to load
+  /// Title shown when log entry details fail to load
   ///
   /// In en, this message translates to:
-  /// **'Unable to load card'**
-  String get cardDetailsLoadFailedTitle;
+  /// **'Unable to load entry'**
+  String get logEntryDetailsLoadFailedTitle;
 
-  /// Description shown when card details fail to load
+  /// Description shown when log entry details fail to load
   ///
   /// In en, this message translates to:
-  /// **'Try opening the card again.'**
-  String get cardDetailsLoadFailedDescription;
+  /// **'Try opening the entry again.'**
+  String get logEntryDetailsLoadFailedDescription;
 
-  /// No description provided for @cardCreateTitle.
+  /// No description provided for @logEntryCreateTitle.
   ///
   /// In en, this message translates to:
-  /// **'New card'**
-  String get cardCreateTitle;
+  /// **'New entry'**
+  String get logEntryCreateTitle;
 
-  /// No description provided for @cardCreateAction.
+  /// No description provided for @logEntryCreateAction.
   ///
   /// In en, this message translates to:
-  /// **'Create card'**
-  String get cardCreateAction;
+  /// **'Create entry'**
+  String get logEntryCreateAction;
 
-  /// No description provided for @cardCreateTitleLabel.
+  /// No description provided for @logEntryCreateTitleLabel.
   ///
   /// In en, this message translates to:
   /// **'Title'**
-  String get cardCreateTitleLabel;
+  String get logEntryCreateTitleLabel;
 
-  /// No description provided for @cardCreateDescriptionLabel.
+  /// No description provided for @logEntryCreateDescriptionLabel.
   ///
   /// In en, this message translates to:
   /// **'Description'**
-  String get cardCreateDescriptionLabel;
+  String get logEntryCreateDescriptionLabel;
 
-  /// No description provided for @cardCreateTitleRequired.
+  /// No description provided for @logEntryCreateTitleRequired.
   ///
   /// In en, this message translates to:
   /// **'Enter a title.'**
-  String get cardCreateTitleRequired;
+  String get logEntryCreateTitleRequired;
 
-  /// No description provided for @cardCreateDescriptionRequired.
+  /// No description provided for @logEntryCreateDescriptionRequired.
   ///
   /// In en, this message translates to:
   /// **'Enter a description.'**
-  String get cardCreateDescriptionRequired;
+  String get logEntryCreateDescriptionRequired;
 
-  /// No description provided for @cardCreateEmptyTitle.
+  /// No description provided for @logEntryCreateEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'No cards yet'**
-  String get cardCreateEmptyTitle;
+  /// **'No entries yet'**
+  String get logEntryCreateEmptyTitle;
 
-  /// No description provided for @cardCreateEmptyDescription.
+  /// No description provided for @logEntryCreateEmptyDescription.
   ///
   /// In en, this message translates to:
-  /// **'Create your first card to get started.'**
-  String get cardCreateEmptyDescription;
+  /// **'Create your first entry to get started.'**
+  String get logEntryCreateEmptyDescription;
 
-  /// No description provided for @cardCreateFailed.
+  /// No description provided for @logEntryCreateFailed.
   ///
   /// In en, this message translates to:
-  /// **'Unable to save card. Try again.'**
-  String get cardCreateFailed;
+  /// **'Unable to save entry. Try again.'**
+  String get logEntryCreateFailed;
 
-  /// No description provided for @cardEditTitle.
+  /// No description provided for @logEntryEditTitle.
   ///
   /// In en, this message translates to:
-  /// **'Edit card'**
-  String get cardEditTitle;
+  /// **'Edit entry'**
+  String get logEntryEditTitle;
 
-  /// No description provided for @cardEditAction.
+  /// No description provided for @logEntryEditAction.
   ///
   /// In en, this message translates to:
-  /// **'Edit card'**
-  String get cardEditAction;
+  /// **'Edit entry'**
+  String get logEntryEditAction;
 
-  /// No description provided for @cardEditSaveAction.
+  /// No description provided for @logEntryEditSaveAction.
   ///
   /// In en, this message translates to:
   /// **'Save changes'**
-  String get cardEditSaveAction;
+  String get logEntryEditSaveAction;
 
-  /// No description provided for @cardEditCancelAction.
+  /// No description provided for @logEntryEditCancelAction.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get cardEditCancelAction;
+  String get logEntryEditCancelAction;
 
-  /// No description provided for @cardEditFailed.
+  /// No description provided for @logEntryEditFailed.
   ///
   /// In en, this message translates to:
-  /// **'Unable to update card. Try again.'**
-  String get cardEditFailed;
+  /// **'Unable to update entry. Try again.'**
+  String get logEntryEditFailed;
 
-  /// No description provided for @cardEditNotFound.
+  /// No description provided for @logEntryEditNotFound.
   ///
   /// In en, this message translates to:
-  /// **'Card no longer exists.'**
-  String get cardEditNotFound;
+  /// **'Entry no longer exists.'**
+  String get logEntryEditNotFound;
 
-  /// No description provided for @cardEditReturnToCardsAction.
+  /// No description provided for @logEntryEditReturnToLogsAction.
   ///
   /// In en, this message translates to:
-  /// **'Return to cards'**
-  String get cardEditReturnToCardsAction;
+  /// **'Return to logs'**
+  String get logEntryEditReturnToLogsAction;
 
-  /// No description provided for @cardDiscardConfirmationTitle.
+  /// No description provided for @logEntryDiscardConfirmationTitle.
   ///
   /// In en, this message translates to:
   /// **'Discard changes?'**
-  String get cardDiscardConfirmationTitle;
+  String get logEntryDiscardConfirmationTitle;
 
-  /// No description provided for @cardDiscardConfirmationDescription.
+  /// No description provided for @logEntryDiscardConfirmationDescription.
   ///
   /// In en, this message translates to:
   /// **'Your unsaved changes will be lost.'**
-  String get cardDiscardConfirmationDescription;
+  String get logEntryDiscardConfirmationDescription;
 
-  /// No description provided for @cardDiscardCancelAction.
+  /// No description provided for @logEntryDiscardCancelAction.
   ///
   /// In en, this message translates to:
   /// **'Keep editing'**
-  String get cardDiscardCancelAction;
+  String get logEntryDiscardCancelAction;
 
-  /// No description provided for @cardDiscardAction.
+  /// No description provided for @logEntryDiscardAction.
   ///
   /// In en, this message translates to:
   /// **'Discard changes'**
-  String get cardDiscardAction;
+  String get logEntryDiscardAction;
 
-  /// No description provided for @cardDeleteAction.
+  /// No description provided for @logEntryDeleteAction.
   ///
   /// In en, this message translates to:
-  /// **'Delete card'**
-  String get cardDeleteAction;
+  /// **'Delete entry'**
+  String get logEntryDeleteAction;
 
-  /// No description provided for @cardDeleteRetryAction.
+  /// No description provided for @logEntryDeleteRetryAction.
   ///
   /// In en, this message translates to:
   /// **'Retry deletion'**
-  String get cardDeleteRetryAction;
+  String get logEntryDeleteRetryAction;
 
-  /// No description provided for @cardDeleteCancelAction.
+  /// No description provided for @logEntryDeleteCancelAction.
   ///
   /// In en, this message translates to:
-  /// **'Keep card'**
-  String get cardDeleteCancelAction;
+  /// **'Keep entry'**
+  String get logEntryDeleteCancelAction;
 
-  /// No description provided for @cardDeleteConfirmationTitle.
+  /// No description provided for @logEntryDeleteConfirmationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Delete card?'**
-  String get cardDeleteConfirmationTitle;
+  /// **'Delete entry?'**
+  String get logEntryDeleteConfirmationTitle;
 
-  /// No description provided for @cardDeleteConfirmationDescription.
+  /// No description provided for @logEntryDeleteConfirmationDescription.
   ///
   /// In en, this message translates to:
-  /// **'This card will be removed from your list.'**
-  String get cardDeleteConfirmationDescription;
+  /// **'This entry will be removed from your logs.'**
+  String get logEntryDeleteConfirmationDescription;
 
-  /// No description provided for @cardDeleteFailed.
+  /// No description provided for @logEntryDeleteFailed.
   ///
   /// In en, this message translates to:
-  /// **'Unable to delete card. Try again.'**
-  String get cardDeleteFailed;
+  /// **'Unable to delete entry. Try again.'**
+  String get logEntryDeleteFailed;
 
   /// Label for settings tab
   ///
@@ -565,13 +565,13 @@ abstract class AppLocalizations {
   /// Subtitle under the app name on the compact sign-in page
   ///
   /// In en, this message translates to:
-  /// **'Sign in to keep your Cards and back them up.'**
+  /// **'Sign in to keep your logs and back them up.'**
   String get signInCompactSubtitle;
 
   /// Subtitle over the illustration on the split sign-in page
   ///
   /// In en, this message translates to:
-  /// **'Your Cards, on this device and backed up when you choose.'**
+  /// **'Your logs, on this device and backed up when you choose.'**
   String get signInSceneSubtitle;
 
   /// Heading above the sign-in button on the split sign-in page
@@ -619,7 +619,7 @@ abstract class AppLocalizations {
   /// Footnote under the sign-in button
   ///
   /// In en, this message translates to:
-  /// **'Your Cards stay on this device until you sync them.'**
+  /// **'Your logs stay on this device until you sync them.'**
   String get signInFootnote;
 
   /// Screen reader description of the sign-in illustration
@@ -715,7 +715,7 @@ abstract class AppLocalizations {
   /// Footnote under the sign-out button
   ///
   /// In en, this message translates to:
-  /// **'Your Cards stay on this device when you sign out.'**
+  /// **'Your logs stay on this device when you sign out.'**
   String get accountSignOutFootnote;
 
   /// Title of the sign-out confirmation dialog
@@ -727,7 +727,7 @@ abstract class AppLocalizations {
   /// Body of the sign-out confirmation dialog
   ///
   /// In en, this message translates to:
-  /// **'Your Cards stay on this device. Sign in again to see them.'**
+  /// **'Your logs stay on this device. Sign in again to see them.'**
   String get accountSignOutConfirmBody;
 
   /// Cancel action of the sign-out confirmation dialog
@@ -745,152 +745,152 @@ abstract class AppLocalizations {
   /// Sync row headline when no change waits to sync
   ///
   /// In en, this message translates to:
-  /// **'All Cards synced'**
-  String get cardsSyncUpToDateTitle;
+  /// **'All logs synced'**
+  String get logsSyncUpToDateTitle;
 
   /// Sync row sub-line naming when the last sync finished
   ///
   /// In en, this message translates to:
   /// **'Last sync at {time}'**
-  String cardsSyncLastSynced(DateTime time);
+  String logsSyncLastSynced(DateTime time);
 
   /// Sync row headline when changes wait to sync; deletions count
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 change on this device only} other{{count} changes on this device only}}'**
-  String cardsSyncPendingTitle(int count);
+  String logsSyncPendingTitle(int count);
 
   /// Sync row sub-line when changes wait to sync
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{Sync to save it to your Account} other{Sync to save them to your Account}}'**
-  String cardsSyncPendingSubtitle(int count);
+  String logsSyncPendingSubtitle(int count);
 
   /// Sync row headline while a sync runs
   ///
   /// In en, this message translates to:
   /// **'Syncing…'**
-  String get cardsSyncSyncingTitle;
+  String get logsSyncSyncingTitle;
 
   /// Sync row progress while a sync runs
   ///
   /// In en, this message translates to:
   /// **'{savedCount} of {changeCount} changes saved'**
-  String cardsSyncSyncingSubtitle(int savedCount, int changeCount);
+  String logsSyncSyncingSubtitle(int savedCount, int changeCount);
 
   /// Sync row headline after every change synced
   ///
   /// In en, this message translates to:
   /// **'Synced just now'**
-  String get cardsSyncSyncedTitle;
+  String get logsSyncSyncedTitle;
 
   /// Sync row sub-line after every change synced
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 change saved to your Account} other{{count} changes saved to your Account}}'**
-  String cardsSyncSyncedSubtitle(int count);
+  String logsSyncSyncedSubtitle(int count);
 
   /// Sync row headline after only some changes synced
   ///
   /// In en, this message translates to:
   /// **'{savedCount} of {changeCount} changes synced'**
-  String cardsSyncPartialTitle(int savedCount, int changeCount);
+  String logsSyncPartialTitle(int savedCount, int changeCount);
 
   /// Sync row sub-line naming the changes the next sync retries
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 change will try again next sync} other{{count} changes will try again next sync}}'**
-  String cardsSyncPartialSubtitle(int count);
+  String logsSyncPartialSubtitle(int count);
 
   /// Sync row headline when a sync failed for lack of network
   ///
   /// In en, this message translates to:
   /// **'You\'re offline'**
-  String get cardsSyncOfflineTitle;
+  String get logsSyncOfflineTitle;
 
   /// Sync row sub-line when a sync failed for lack of network
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 change is safe on this device. Sync when you\'re back online.} other{{count} changes are safe on this device. Sync when you\'re back online.}}'**
-  String cardsSyncOfflineSubtitle(int count);
+  String logsSyncOfflineSubtitle(int count);
 
   /// Sync row headline when a sync failed for any reason other than the network
   ///
   /// In en, this message translates to:
   /// **'Couldn\'t sync'**
-  String get cardsSyncFailedTitle;
+  String get logsSyncFailedTitle;
 
   /// Sync row sub-line when a sync failed for any other reason
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 change is safe on this device. Try again later.} other{{count} changes are safe on this device. Try again later.}}'**
-  String cardsSyncFailedSubtitle(int count);
+  String logsSyncFailedSubtitle(int count);
 
   /// Sync row headline after a sync with nothing to send
   ///
   /// In en, this message translates to:
   /// **'Already up to date'**
-  String get cardsSyncAlreadyUpToDateTitle;
+  String get logsSyncAlreadyUpToDateTitle;
 
   /// Sync row sub-line after a sync with nothing to send
   ///
   /// In en, this message translates to:
   /// **'Nothing to sync'**
-  String get cardsSyncAlreadyUpToDateSubtitle;
+  String get logsSyncAlreadyUpToDateSubtitle;
 
-  /// Sync row headline while Cards missing from this device download
+  /// Sync row headline while log entries missing from this device download
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{Getting 1 Card from your Account…} other{Getting {count} Cards from your Account…}}'**
-  String cardsSyncDownloadingTitle(int count);
+  /// **'{count, plural, =1{Getting 1 entry from your Account…} other{Getting {count} entries from your Account…}}'**
+  String logsSyncDownloadingTitle(int count);
 
-  /// Sync row sub-line while Cards download
+  /// Sync row sub-line while log entries download
   ///
   /// In en, this message translates to:
   /// **'You can keep working'**
-  String get cardsSyncDownloadingSubtitle;
+  String get logsSyncDownloadingSubtitle;
 
-  /// Sync row headline after Cards downloaded
+  /// Sync row headline after log entries downloaded
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 Card added from your Account} other{{count} Cards added from your Account}}'**
-  String cardsSyncDownloadedTitle(int count);
+  /// **'{count, plural, =1{1 entry added from your Account} other{{count} entries added from your Account}}'**
+  String logsSyncDownloadedTitle(int count);
 
-  /// Sync row sub-line after Cards downloaded
+  /// Sync row sub-line after log entries downloaded
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{It was made on another device} other{They were made on another device}}'**
-  String cardsSyncDownloadedSubtitle(int count);
+  String logsSyncDownloadedSubtitle(int count);
 
   /// Sync row button that starts a sync
   ///
   /// In en, this message translates to:
   /// **'Sync'**
-  String get cardsSyncAction;
+  String get logsSyncAction;
 
   /// Sync row button that starts a sync after a failure
   ///
   /// In en, this message translates to:
   /// **'Try again'**
-  String get cardsSyncRetryAction;
+  String get logsSyncRetryAction;
 
   /// Disabled sync row button while a sync runs
   ///
   /// In en, this message translates to:
   /// **'Syncing'**
-  String get cardsSyncInProgressAction;
+  String get logsSyncInProgressAction;
 
-  /// Marker on a Card created since the last sync
+  /// Marker on a log entry created since the last sync
   ///
   /// In en, this message translates to:
   /// **'New'**
-  String get cardsUnsyncedCreated;
+  String get logsUnsyncedCreated;
 
-  /// Marker on a Card edited since the last sync
+  /// Marker on a log entry edited since the last sync
   ///
   /// In en, this message translates to:
   /// **'Edited'**
-  String get cardsUnsyncedUpdated;
+  String get logsUnsyncedUpdated;
 }
 
 class _AppLocalizationsDelegate

@@ -30,7 +30,7 @@ nearest `AGENTS.md`; for feature details, prefer the linked focused guide.
 - [Architecture documentation](architecture/README.md) navigates current-state
   architecture documents, while [the ADR catalog](decisions/README.md) records
   durable decisions and their rationale.
-- [Cards SQLite foundation](architecture/cards_sqlite_foundation.md) records the current local persistence design.
+- [Logs SQLite foundation](architecture/logs_sqlite_foundation.md) records the current local persistence design.
 - [Glossary](../GLOSSARY.md) defines the shared Logs terms used by the
   architecture and implementation history.
 - [Navigation testing](testing/navigation.md) records deep-link, guard, and adaptive-shell coverage.

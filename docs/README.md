@@ -12,7 +12,7 @@ source folder.
 
 - [Source map](source_map.md)
 - [Architecture documentation](architecture/README.md)
-- [Cards SQLite persistence](architecture/cards_sqlite_foundation.md)
+- [Logs SQLite persistence](architecture/logs_sqlite_foundation.md)
 - [Glossary](../GLOSSARY.md)
 
 ## Design
@@ -27,7 +27,6 @@ source folder.
 
 - [SQLite cards app persistence](plans/cards_sqlite_data_layer.md)
 - [Complete Cards SQLite integration](plans/cards_sqlite_end_to_end_integration.md)
-- [Sign-in page and launch gate](plans/sign_in_implementation.md)
 
 ## Research
 
