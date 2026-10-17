@@ -556,12 +556,6 @@ abstract class AppLocalizations {
   /// **'Unable to open settings on this device.'**
   String get appPreferencesSystemTextOpenFailed;
 
-  /// Retry button label for app preferences loading
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get appPreferencesRetry;
-
   /// Subtitle under the app name on the compact sign-in page
   ///
   /// In en, this message translates to:
@@ -862,17 +856,23 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{It was made on another device} other{They were made on another device}}'**
   String logsSyncDownloadedSubtitle(int count);
 
+  /// Generic button that tries a failed action again
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetryAction;
+
   /// Sync row button that starts a sync
   ///
   /// In en, this message translates to:
   /// **'Sync'**
   String get logsSyncAction;
 
-  /// Sync row button that starts a sync after a failure
+  /// Message shown when the list of log entries cannot be loaded
   ///
   /// In en, this message translates to:
-  /// **'Try again'**
-  String get logsSyncRetryAction;
+  /// **'Unable to load logs right now.'**
+  String get logsLoadFailedMessage;
 
   /// Disabled sync row button while a sync runs
   ///

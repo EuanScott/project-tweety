@@ -13,13 +13,52 @@ void main() {
     title: 'Card Title 1',
     description: 'Card body',
   );
+  const logEntryDraft = LogEntryDraft(
+    title: 'Card Title 1',
+    description: 'Card body',
+  );
 
   group('LogsBloc', () {
     blocTest<LogsBloc, LogsState>(
+      'discarding an unsaved new entry clears the draft and the dirty flag',
+      build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
+      act: (bloc) => bloc
+        ..add(const LogsCreateStarted())
+        ..add(
+          const LogsDraftChanged(
+            LogEntryDraft(title: 'Unsaved', description: ''),
+          ),
+        )
+        ..add(const LogsDraftDiscarded()),
+      verify: (bloc) {
+        expect(bloc.state.editor, const LogsEditor.closed());
+        expect(bloc.state.isDraftDirty, isFalse);
+      },
+    );
+
+    blocTest<LogsBloc, LogsState>(
+      'discarding an edit of an existing entry closes the editor',
+      build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
+      act: (bloc) => bloc
+        ..add(const LogsEditStarted('card-1'))
+        ..add(
+          const LogsDraftChanged(
+            LogEntryDraft(title: 'Changed', description: 'Card body'),
+          ),
+        )
+        ..add(const LogsDraftDiscarded()),
+      verify: (bloc) {
+        expect(bloc.state.editor, const LogsEditor.closed());
+        expect(bloc.state.isEditingLogEntry('card-1'), isFalse);
+        expect(bloc.state.isDraftDirty, isFalse);
+      },
+    );
+
+    blocTest<LogsBloc, LogsState>(
       'tracks dirty state from raw draft values against the editor snapshot',
       build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) => bloc
         ..add(const LogsEditStarted('card-1'))
         ..add(
@@ -46,8 +85,8 @@ void main() {
       build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
       act: (bloc) => bloc.add(const LogsStarted()),
       expect: () => [
-        const LogsState(status: LogsStatus.loading),
-        const LogsState(status: LogsStatus.success, items: [logEntry]),
+        const LogsState(load: LogsLoad.loading()),
+        const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       ],
       verify: (bloc) {
         expect(
@@ -68,20 +107,17 @@ void main() {
       ),
       act: (bloc) => bloc.add(const LogsStarted()),
       expect: () => [
-        const LogsState(status: LogsStatus.loading),
-        const LogsState(
-          status: LogsStatus.failure,
-          errorMessage: 'Unable to load logs right now.',
-        ),
+        const LogsState(load: LogsLoad.loading()),
+        const LogsState(load: LogsLoad.failed(LogsError.loadFailed)),
       ],
       verify: (bloc) {
         expect(
-          const LogsState(status: LogsStatus.loading).detailFor('card-1'),
+          const LogsState(load: LogsLoad.loading()).detailFor('card-1'),
           const LogsDetail.loading(),
         );
         expect(
           bloc.state.detailFor('card-1'),
-          const LogsDetail.failure('Unable to load logs right now.'),
+          const LogsDetail.failure(LogsError.loadFailed),
         );
       },
       errors: () => [isA<StateError>()],
@@ -91,6 +127,7 @@ void main() {
       'shows validation after submit and updates it from raw draft changes',
       build: () => LogsBloc(FakeLogsRepository(logs: const [])),
       act: (bloc) => bloc
+        ..add(const LogsCreateStarted())
         ..add(
           const LogsDraftChanged(LogEntryDraft(title: '  ', description: '\t')),
         )
@@ -106,30 +143,55 @@ void main() {
           ),
         ),
       expect: () => [
+        const LogsState(editor: LogsEditor.creating()),
         const LogsState(
-          draft: LogEntryDraft(title: '  ', description: '\t'),
-        ),
-        const LogsState(
-          draft: LogEntryDraft(title: '  ', description: '\t'),
-          hasSubmittedCreate: true,
-          invalidDraftFields: {
-            LogEntryDraftField.title,
-            LogEntryDraftField.description,
-          },
-        ),
-        const LogsState(
-          draft: LogEntryDraft(title: 'Raw title', description: '\t'),
-          hasSubmittedCreate: true,
-          invalidDraftFields: {LogEntryDraftField.description},
-        ),
-        const LogsState(
-          draft: LogEntryDraft(
-            title: 'Raw title',
-            description: 'Raw description',
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(title: '  ', description: '\t'),
           ),
-          hasSubmittedCreate: true,
+        ),
+        const LogsState(
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(title: '  ', description: '\t'),
+            hasSubmitted: true,
+            invalidFields: {
+              LogEntryDraftField.title,
+              LogEntryDraftField.description,
+            },
+          ),
+        ),
+        const LogsState(
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(title: 'Raw title', description: '\t'),
+            hasSubmitted: true,
+            invalidFields: {LogEntryDraftField.description},
+          ),
+        ),
+        const LogsState(
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: 'Raw title',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+          ),
         ),
       ],
+    );
+
+    blocTest<LogsBloc, LogsState>(
+      'ignores draft changes and saves while no editor is open',
+      build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
+      act: (bloc) => bloc
+        ..add(
+          const LogsDraftChanged(
+            LogEntryDraft(title: 'Stray', description: 'Stray'),
+          ),
+        )
+        ..add(const LogsCreateSubmitted())
+        ..add(const LogsEditSubmitted())
+        ..add(const LogsEditCancelled())
+        ..add(const LogsDraftDiscarded()),
+      expect: () => const <LogsState>[],
     );
 
     blocTest<LogsBloc, LogsState>(
@@ -140,6 +202,7 @@ void main() {
       },
       act: (bloc) async {
         bloc
+          ..add(const LogsCreateStarted())
           ..add(
             const LogsDraftChanged(
               LogEntryDraft(title: 'New title', description: 'New description'),
@@ -151,20 +214,25 @@ void main() {
         expect(controlledCreateRepository.createRequestCount, 1);
         controlledCreateRepository.completeCreate();
       },
+      skip: 1,
       expect: () => [
         const LogsState(
-          draft: LogEntryDraft(
-            title: 'New title',
-            description: 'New description',
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: 'New title',
+              description: 'New description',
+            ),
           ),
         ),
         const LogsState(
-          draft: LogEntryDraft(
-            title: 'New title',
-            description: 'New description',
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: 'New title',
+              description: 'New description',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.saving,
           ),
-          hasSubmittedCreate: true,
-          createStatus: LogsCreateStatus.creating,
         ),
         const LogsState(
           items: [
@@ -174,17 +242,43 @@ void main() {
               description: 'New description',
             ),
           ],
-          createStatus: LogsCreateStatus.success,
-          createdLogEntryId: 'created-card',
+          outcome: LogsOutcome.created('created-card'),
         ),
       ],
     );
 
     blocTest<LogsBloc, LogsState>(
+      'a create that ends after its editor was discarded still lists and '
+      'opens the new entry, and leaves the editor closed',
+      build: () {
+        controlledCreateRepository = FakeLogsRepository.gated();
+        return LogsBloc(controlledCreateRepository);
+      },
+      act: (bloc) async {
+        bloc
+          ..add(const LogsCreateStarted())
+          ..add(
+            const LogsDraftChanged(
+              LogEntryDraft(title: 'New title', description: 'New description'),
+            ),
+          )
+          ..add(const LogsCreateSubmitted());
+        await Future<void>.delayed(Duration.zero);
+        bloc.add(const LogsDraftDiscarded());
+        await Future<void>.delayed(Duration.zero);
+        controlledCreateRepository.completeCreate();
+      },
+      verify: (bloc) {
+        expect(bloc.state.editor, const LogsEditor.closed());
+        expect(bloc.state.outcome, const LogsOutcome.created('created-card'));
+        expect(bloc.state.items.map((item) => item.id), ['created-card']);
+      },
+    );
+
+    blocTest<LogsBloc, LogsState>(
       'a created log entry is listed first and leaves no unsaved draft',
       build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) => bloc
         ..add(const LogsCreateStarted())
         ..add(
@@ -201,9 +295,9 @@ void main() {
               'card-1',
             ])
             .having(
-              (state) => state.createdLogEntryId,
-              'created id',
-              'created-card',
+              (state) => state.outcome,
+              'outcome',
+              const LogsOutcome.created('created-card'),
             )
             .having((state) => state.isDraftDirty, 'is dirty', isFalse),
       ],
@@ -218,6 +312,7 @@ void main() {
         ),
       ),
       act: (bloc) => bloc
+        ..add(const LogsCreateStarted())
         ..add(
           const LogsDraftChanged(
             LogEntryDraft(
@@ -227,29 +322,35 @@ void main() {
           ),
         )
         ..add(const LogsCreateSubmitted()),
+      skip: 1,
       expect: () => [
         const LogsState(
-          draft: LogEntryDraft(
-            title: '  Raw title  ',
-            description: 'Raw description',
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: '  Raw title  ',
+              description: 'Raw description',
+            ),
           ),
         ),
         const LogsState(
-          draft: LogEntryDraft(
-            title: '  Raw title  ',
-            description: 'Raw description',
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: '  Raw title  ',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.saving,
           ),
-          hasSubmittedCreate: true,
-          createStatus: LogsCreateStatus.creating,
         ),
         const LogsState(
-          draft: LogEntryDraft(
-            title: '  Raw title  ',
-            description: 'Raw description',
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: '  Raw title  ',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.failed,
           ),
-          hasSubmittedCreate: true,
-          createStatus: LogsCreateStatus.failure,
-          createError: true,
         ),
       ],
       errors: () => [isA<StateError>()],
@@ -259,33 +360,39 @@ void main() {
       'preserves the active raw draft and validation state when refreshing',
       build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
       seed: () => const LogsState(
-        draft: LogEntryDraft(
-          title: '  Raw title  ',
-          description: 'Raw description',
+        editor: LogsEditor.creating(
+          draft: LogEntryDraft(
+            title: '  Raw title  ',
+            description: 'Raw description',
+          ),
+          hasSubmitted: true,
+          invalidFields: {LogEntryDraftField.title},
         ),
-        hasSubmittedCreate: true,
-        invalidDraftFields: {LogEntryDraftField.title},
       ),
       act: (bloc) => bloc.add(const LogsStarted()),
       expect: () => [
         const LogsState(
-          status: LogsStatus.loading,
-          draft: LogEntryDraft(
-            title: '  Raw title  ',
-            description: 'Raw description',
+          load: LogsLoad.loading(),
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: '  Raw title  ',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            invalidFields: {LogEntryDraftField.title},
           ),
-          hasSubmittedCreate: true,
-          invalidDraftFields: {LogEntryDraftField.title},
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: '  Raw title  ',
-            description: 'Raw description',
+          editor: LogsEditor.creating(
+            draft: LogEntryDraft(
+              title: '  Raw title  ',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            invalidFields: {LogEntryDraftField.title},
           ),
-          hasSubmittedCreate: true,
-          invalidDraftFields: {LogEntryDraftField.title},
         ),
       ],
     );
@@ -293,8 +400,7 @@ void main() {
     blocTest<LogsBloc, LogsState>(
       'updates an edited log entry atomically and returns to read-only details',
       build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) => bloc
         ..add(const LogsEditStarted('card-1'))
         ..add(
@@ -308,45 +414,42 @@ void main() {
         ..add(const LogsEditSubmitted()),
       expect: () => [
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(title: 'Card Title 1', description: 'Card body'),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: logEntryDraft,
           ),
-          editingLogEntryId: 'card-1',
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: '  Updated title  ',
-            description: 'Updated body',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: '  Updated title  ',
+              description: 'Updated body',
+            ),
           ),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
-          ),
-          editingLogEntryId: 'card-1',
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: '  Updated title  ',
-            description: 'Updated body',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: '  Updated title  ',
+              description: 'Updated body',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.saving,
           ),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
-          ),
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
-          editStatus: LogsEditStatus.updating,
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [
             LogEntry(
               id: 'card-1',
@@ -354,8 +457,6 @@ void main() {
               description: 'Updated body',
             ),
           ],
-          editStatus: LogsEditStatus.success,
-          updatedLogEntryId: 'card-1',
         ),
       ],
     );
@@ -368,8 +469,7 @@ void main() {
           updateError: const LogEntryNotFoundException('card-1'),
         ),
       ),
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) => bloc
         ..add(const LogsEditStarted('card-1'))
         ..add(
@@ -377,63 +477,42 @@ void main() {
             LogEntryDraft(title: 'Raw title', description: 'Raw description'),
           ),
         )
+        ..add(const LogsEditSubmitted())
         ..add(const LogsEditSubmitted()),
+      skip: 2,
       expect: () => [
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(title: 'Card Title 1', description: 'Card body'),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: 'Raw title',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.saving,
           ),
-          editingLogEntryId: 'card-1',
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: 'Raw title',
-            description: 'Raw description',
+          editor: LogsEditor.missing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: 'Raw title',
+              description: 'Raw description',
+            ),
           ),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
-          ),
-          editingLogEntryId: 'card-1',
-        ),
-        const LogsState(
-          status: LogsStatus.success,
-          items: [logEntry],
-          draft: LogEntryDraft(
-            title: 'Raw title',
-            description: 'Raw description',
-          ),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
-          ),
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
-          editStatus: LogsEditStatus.updating,
-        ),
-        const LogsState(
-          status: LogsStatus.success,
-          items: [logEntry],
-          draft: LogEntryDraft(
-            title: 'Raw title',
-            description: 'Raw description',
-          ),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
-          ),
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
-          editStatus: LogsEditStatus.notFound,
-          missingEditLogEntryId: 'card-1',
         ),
       ],
+      verify: (bloc) {
+        expect(bloc.state.hasMissingEditFor('card-1'), isTrue);
+        expect(bloc.state.isEditingLogEntry('card-1'), isTrue);
+        expect(bloc.state.isDraftDirty, isTrue);
+      },
       errors: () => [isA<LogEntryNotFoundException>()],
     );
 
@@ -443,8 +522,7 @@ void main() {
         controlledCreateRepository = FakeLogsRepository.gated();
         return LogsBloc(controlledCreateRepository);
       },
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) async {
         bloc
           ..add(const LogsEditStarted('card-1'))
@@ -462,26 +540,20 @@ void main() {
       skip: 2,
       expect: () => [
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: 'Updated title',
-            description: 'Card body',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: 'Updated title',
+              description: 'Card body',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.saving,
           ),
-          initialDraft: LogEntryDraft(
-            title: 'Card Title 1',
-            description: 'Card body',
-          ),
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
-          editStatus: LogsEditStatus.updating,
         ),
-        const LogsState(
-          status: LogsStatus.success,
-          items: [logEntry],
-          editStatus: LogsEditStatus.success,
-          updatedLogEntryId: 'card-1',
-        ),
+        const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       ],
     );
 
@@ -489,38 +561,47 @@ void main() {
       'preserves an active edit draft and validation state when refreshing',
       build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
       seed: () => const LogsState(
-        status: LogsStatus.success,
+        load: LogsLoad.loaded(),
         items: [logEntry],
-        draft: LogEntryDraft(
-          title: '  Raw title  ',
-          description: 'Raw description',
+        editor: LogsEditor.editing(
+          logEntryId: 'card-1',
+          initialDraft: logEntryDraft,
+          draft: LogEntryDraft(
+            title: '  Raw title  ',
+            description: 'Raw description',
+          ),
+          hasSubmitted: true,
+          invalidFields: {LogEntryDraftField.title},
         ),
-        invalidDraftFields: {LogEntryDraftField.title},
-        editingLogEntryId: 'card-1',
-        hasSubmittedEdit: true,
       ),
       act: (bloc) => bloc.add(const LogsStarted()),
       expect: () => [
         const LogsState(
-          status: LogsStatus.loading,
-          draft: LogEntryDraft(
-            title: '  Raw title  ',
-            description: 'Raw description',
+          load: LogsLoad.loading(),
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: '  Raw title  ',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            invalidFields: {LogEntryDraftField.title},
           ),
-          invalidDraftFields: {LogEntryDraftField.title},
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: '  Raw title  ',
-            description: 'Raw description',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: '  Raw title  ',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            invalidFields: {LogEntryDraftField.title},
           ),
-          invalidDraftFields: {LogEntryDraftField.title},
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
         ),
       ],
     );
@@ -534,38 +615,46 @@ void main() {
         ),
       ),
       seed: () => const LogsState(
-        status: LogsStatus.success,
+        load: LogsLoad.loaded(),
         items: [logEntry],
-        draft: LogEntryDraft(
-          title: 'Raw title',
-          description: 'Raw description',
+        editor: LogsEditor.editing(
+          logEntryId: 'card-1',
+          initialDraft: logEntryDraft,
+          draft: LogEntryDraft(
+            title: 'Raw title',
+            description: 'Raw description',
+          ),
         ),
-        editingLogEntryId: 'card-1',
       ),
       act: (bloc) => bloc.add(const LogsEditSubmitted()),
       expect: () => [
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: 'Raw title',
-            description: 'Raw description',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: 'Raw title',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.saving,
           ),
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
-          editStatus: LogsEditStatus.updating,
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          draft: LogEntryDraft(
-            title: 'Raw title',
-            description: 'Raw description',
+          editor: LogsEditor.editing(
+            logEntryId: 'card-1',
+            initialDraft: logEntryDraft,
+            draft: LogEntryDraft(
+              title: 'Raw title',
+              description: 'Raw description',
+            ),
+            hasSubmitted: true,
+            save: LogsSaveStatus.failed,
           ),
-          editingLogEntryId: 'card-1',
-          hasSubmittedEdit: true,
-          editStatus: LogsEditStatus.failure,
-          editError: true,
         ),
       ],
       errors: () => [isA<StateError>()],
@@ -577,8 +666,7 @@ void main() {
         controlledCreateRepository = FakeLogsRepository.gated();
         return LogsBloc(controlledCreateRepository);
       },
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) async {
         bloc
           ..add(const LogsDeleteSubmitted('card-1'))
@@ -589,15 +677,13 @@ void main() {
       },
       expect: () => [
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          deleteStatus: LogsDeleteStatus.deleting,
-          deletingLogEntryId: 'card-1',
+          deletion: LogsDeletion.deleting('card-1'),
         ),
         const LogsState(
-          status: LogsStatus.success,
-          deletedLogEntryId: 'card-1',
-          deleteStatus: LogsDeleteStatus.success,
+          load: LogsLoad.loaded(),
+          outcome: LogsOutcome.deleted('card-1'),
         ),
       ],
     );
@@ -610,21 +696,18 @@ void main() {
           deleteError: StateError('delete failed'),
         ),
       ),
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) => bloc.add(const LogsDeleteSubmitted('card-1')),
       expect: () => [
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          deleteStatus: LogsDeleteStatus.deleting,
-          deletingLogEntryId: 'card-1',
+          deletion: LogsDeletion.deleting('card-1'),
         ),
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
-          deleteStatus: LogsDeleteStatus.failure,
-          deleteErrorLogEntryId: 'card-1',
+          deletion: LogsDeletion.failed('card-1'),
         ),
       ],
       errors: () => [isA<StateError>()],
@@ -637,30 +720,18 @@ void main() {
         unchangedEditRepository = FakeLogsRepository(logs: const [logEntry]);
         return LogsBloc(unchangedEditRepository);
       },
-      seed: () => LogsState(
-        status: LogsStatus.success,
-        items: const [logEntry],
-        editingLogEntryId: 'card-1',
-        draft: LogEntryDraft(
-          title: logEntry.title,
-          description: logEntry.description,
-        ),
-        initialDraft: LogEntryDraft(
-          title: logEntry.title,
-          description: logEntry.description,
+      seed: () => const LogsState(
+        load: LogsLoad.loaded(),
+        items: [logEntry],
+        editor: LogsEditor.editing(
+          logEntryId: 'card-1',
+          initialDraft: logEntryDraft,
+          draft: logEntryDraft,
         ),
       ),
       act: (bloc) => bloc.add(const LogsEditSubmitted()),
       expect: () => [
-        LogsState(
-          status: LogsStatus.success,
-          items: const [logEntry],
-          draft: LogEntryDraft(
-            title: logEntry.title,
-            description: logEntry.description,
-          ),
-          editStatus: LogsEditStatus.idle,
-        ),
+        const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       ],
       verify: (_) {
         expect(unchangedEditRepository.updateRequestCount, 0);
@@ -678,8 +749,7 @@ void main() {
     blocTest<LogsBloc, LogsState>(
       'replaces the sync status and the unsynced log entry changes together',
       build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
-      seed: () =>
-          const LogsState(status: LogsStatus.success, items: [logEntry]),
+      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
       act: (bloc) => bloc.add(
         const LogsSyncChanged(
           LogsSync.pending(changeCount: 2),
@@ -688,7 +758,7 @@ void main() {
       ),
       expect: () => [
         const LogsState(
-          status: LogsStatus.success,
+          load: LogsLoad.loaded(),
           items: [logEntry],
           sync: LogsSync.pending(changeCount: 2),
           unsyncedChanges: {'card-1': UnsyncedLogEntryChange.updated},
@@ -770,7 +840,7 @@ void main() {
         bloc.add(const LogsSyncRequested());
         await settle();
 
-        expect(syncs, const [LogsSync.alreadyUpToDate()]);
+        expect(syncs, const [LogsSync.waiting(), LogsSync.alreadyUpToDate()]);
       });
 
       test('a full sync shows progress, then synced, and clears the '
@@ -785,6 +855,7 @@ void main() {
         await settle();
 
         expect(syncs, const [
+          LogsSync.waiting(),
           LogsSync.syncing(savedCount: 0, changeCount: 2),
           LogsSync.syncing(savedCount: 1, changeCount: 2),
           LogsSync.syncing(savedCount: 2, changeCount: 2),
@@ -868,6 +939,30 @@ void main() {
         expect(repository.syncRequestCount, 1);
       });
 
+      test('a sync queued behind a download is visibly busy at once, and '
+          'stays busy when the download ends', () async {
+        repository
+          ..syncSummary = twoPending
+          ..queuedSync = Completer<void>();
+        bloc.add(const LogsSyncRequested());
+        await settle();
+
+        expect(bloc.state.sync.isBusy, isTrue);
+
+        repository.reportDownload(
+          const LogsDownloadProgress.finished(addedCount: 0),
+        );
+        await settle();
+
+        expect(bloc.state.sync.isBusy, isTrue);
+        expect(repository.syncRequestCount, 1);
+
+        repository.queuedSync!.complete();
+        await settle();
+
+        expect(bloc.state.sync.isBusy, isFalse);
+      });
+
       test('a full sync with changes saved during it shows them as '
           'pending', () async {
         repository
@@ -920,6 +1015,95 @@ void main() {
           containsPair('created-card', UnsyncedLogEntryChange.created),
         );
         repository.pendingSync!.complete();
+      });
+    });
+
+    group('download', () {
+      const downloadedEntry = LogEntry(
+        id: 'card-remote',
+        title: 'From another device',
+        description: 'Downloaded',
+      );
+      late FakeLogsRepository repository;
+      late LogsBloc bloc;
+      late List<LogsSync> syncs;
+
+      setUp(() async {
+        repository = FakeLogsRepository(logs: const [logEntry]);
+        bloc = LogsBloc(repository)..add(const LogsStarted());
+        await pumpEventQueue();
+        syncs = [];
+        bloc.stream.map((state) => state.sync).distinct().listen(syncs.add);
+      });
+
+      tearDown(() => bloc.close());
+
+      test('shows the entries being added, then how many were added, in one '
+          'list update', () async {
+        repository.download(const [downloadedEntry]);
+        await pumpEventQueue();
+
+        expect(syncs, const [
+          LogsSync.downloading(logEntryCount: 1),
+          LogsSync.downloaded(logEntryCount: 1),
+        ]);
+        expect(bloc.state.items, contains(downloadedEntry));
+        expect(bloc.state.items, contains(logEntry));
+      });
+
+      test('a download that added entries shows the markers of what is '
+          'still pending', () async {
+        repository.syncSummary = const LogsSyncSummary(
+          pendingChanges: {'card-1': PendingLogEntryChange.updated},
+        );
+
+        repository.download(const [downloadedEntry]);
+        await pumpEventQueue();
+
+        expect(bloc.state.unsyncedChanges, {
+          'card-1': UnsyncedLogEntryChange.updated,
+        });
+      });
+
+      test('a download that ends having added nothing goes back to what is '
+          'pending, and leaves the list alone', () async {
+        repository.syncSummary = const LogsSyncSummary(
+          pendingChanges: {'card-1': PendingLogEntryChange.updated},
+        );
+        final readsBefore = repository.collectionReadCount;
+
+        repository
+          ..reportDownload(const LogsDownloadProgress.adding(logEntryCount: 2))
+          ..reportDownload(const LogsDownloadProgress.finished(addedCount: 0));
+        await pumpEventQueue();
+
+        expect(syncs, const [
+          LogsSync.downloading(logEntryCount: 2),
+          LogsSync.pending(changeCount: 1),
+        ]);
+        expect(repository.collectionReadCount, readsBefore);
+      });
+
+      test('a sync cannot start while a download adds entries', () async {
+        repository.reportDownload(
+          const LogsDownloadProgress.adding(logEntryCount: 2),
+        );
+        await pumpEventQueue();
+
+        bloc.add(const LogsSyncRequested());
+        await pumpEventQueue();
+
+        expect(repository.syncRequestCount, 0);
+        expect(bloc.state.sync, const LogsSync.downloading(logEntryCount: 2));
+      });
+
+      test('stops listening when closed', () async {
+        await bloc.close();
+
+        repository.download(const [downloadedEntry]);
+        await pumpEventQueue();
+
+        expect(syncs, isEmpty);
       });
     });
   });

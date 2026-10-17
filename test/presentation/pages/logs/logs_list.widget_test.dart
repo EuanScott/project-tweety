@@ -499,6 +499,41 @@ void main() {
       expect(repository.collectionReadCount, 2);
     });
 
+    const translatedErrors = {
+      'es': (
+        tab: 'Registros',
+        message: 'No se pudieron cargar los registros ahora mismo.',
+        retry: 'Reintentar',
+      ),
+      'he': (
+        tab: 'יומן',
+        message: 'לא ניתן לטעון את היומן כרגע.',
+        retry: 'נסה שוב',
+      ),
+    };
+    for (final MapEntry(key: code, value: expected)
+        in translatedErrors.entries) {
+      testWidgets('error state shows translated text for $code', (
+        WidgetTester tester,
+      ) async {
+        replaceAppPreferencesRepository(
+          FakeAppPreferencesRepository(AppPreferences(languageCode: code)),
+        );
+        replaceLogsRepository(
+          FakeLogsRepository(readError: StateError('load failed')),
+        );
+
+        await pumpApp(tester, surfaceSize: const Size(400, 800));
+        await tester.tap(find.text(expected.tab));
+        await tester.pumpAndSettle();
+
+        expect(find.text(expected.message), findsOneWidget);
+        expect(find.text(expected.retry), findsOneWidget);
+        expect(find.text('Unable to load logs right now.'), findsNothing);
+        expect(find.text('Retry'), findsNothing);
+      });
+    }
+
     testWidgets('tablet portrait mode shows split pane layout', (
       WidgetTester tester,
     ) async {

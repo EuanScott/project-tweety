@@ -7,6 +7,7 @@ import 'package:navigation/navigation.dart';
 import 'package:project_tweety/data/repositories/log_entry/logs.repository.dart'
     show LogEntry;
 import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:project_tweety/presentation/extensions/logs_error.extension.dart';
 import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.model.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
@@ -57,17 +58,17 @@ class _LogsState extends State<Logs> {
     return LogsDraftDiscardGuard(
       child: BlocListener<LogsBloc, LogsState>(
         listenWhen: (previous, current) =>
-            (previous.createdLogEntryId != current.createdLogEntryId &&
-                current.createdLogEntryId != null) ||
-            (previous.deletedLogEntryId != current.deletedLogEntryId &&
-                current.deletedLogEntryId != null),
+            previous.outcome != current.outcome &&
+            current.outcome is! LogsOutcomeNone,
         listener: (context, state) {
-          final createdLogEntryId = state.createdLogEntryId;
-          if (createdLogEntryId != null) {
-            context.goLogEntryDetails(createdLogEntryId);
-            return;
+          switch (state.outcome) {
+            case LogsOutcomeCreated(:final logEntryId):
+              context.goLogEntryDetails(logEntryId);
+            case LogsOutcomeDeleted():
+              context.goLogs();
+            case LogsOutcomeNone():
+              break;
           }
-          context.goLogs();
         },
         child: TabReselectHandler(
           tab: AppTab.logs,
@@ -149,10 +150,8 @@ class const _LogsView({
     // TODO: buildWhen and listenWhen for small dedicated UI tasks (snackbar or only conditional rebuilds required)
     return BlocBuilder<LogsBloc, LogsState>(
       builder: (context, state) {
-        if (state.isFailure) {
-          return _LogsError(
-            message: state.errorMessage ?? 'Something went wrong.',
-          );
+        if (state.load case LogsLoadFailed(:final error)) {
+          return _LogsError(error: error);
         }
 
         return _LogsList(
@@ -170,11 +169,11 @@ class const _LogsView({
 
   /// What fills the page under the sync row when no log entries are showing.
   Widget? _placeholderFor(LogsState state) {
-    if (state.hasItems) {
+    if (state.items.isNotEmpty) {
       return null;
     }
 
-    if (state.isInitial || state.isLoading) {
+    if (state.isLoading) {
       return const Center(child: AppLoadingIndicator());
     }
 

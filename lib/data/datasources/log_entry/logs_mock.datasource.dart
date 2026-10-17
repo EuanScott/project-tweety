@@ -101,12 +101,49 @@ class MockLogsDataSource implements LogsDataSource {
   }
 
   @override
+  Future<List<LogEntryDto>> getAllLogs() async {
+    return List<LogEntryDto>.unmodifiable(_logs);
+  }
+
+  @override
   Future<List<LogEntryDto>> getUnsyncedLogs() async {
     return List<LogEntryDto>.unmodifiable(
       _logs.where(
         (logEntry) => logEntry.syncStatus != LogEntrySyncStatus.synced,
       ),
     );
+  }
+
+  @override
+  Future<int> addDownloadedLogs(
+    List<LogEntryDto> downloadedLogs, {
+    void Function(int addingCount)? onAdding,
+  }) async {
+    final heldIds = {for (final logEntry in _logs) logEntry.id};
+    final missingLogs = [
+      for (final logEntry in downloadedLogs)
+        if (heldIds.add(logEntry.id)) logEntry,
+    ];
+    if (missingLogs.isEmpty) {
+      return 0;
+    }
+
+    onAdding?.call(missingLogs.length);
+    final now = DateTime.now().toUtc();
+    for (final logEntry in missingLogs) {
+      _logs.add(
+        LogEntryDto(
+          id: logEntry.id,
+          title: logEntry.title,
+          description: logEntry.description,
+          createdAt: logEntry.createdAt,
+          updatedAt: logEntry.updatedAt,
+          lastSyncedAt: now,
+        ),
+      );
+    }
+
+    return missingLogs.length;
   }
 
   @override

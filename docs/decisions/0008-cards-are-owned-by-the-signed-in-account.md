@@ -187,3 +187,29 @@ device, so the download adds nothing.
 A local deletion stays permanent on its own device. A pending tombstone blocks the
 download, and a pushed delete removes the remote document. The second limit above is
 the only way a deleted Card comes back.
+
+## Amendment — 2026-10-17: how the download is built
+
+The 2026-10-09 amendment left these points open. They were decided while building the download.
+
+- **What the sync row shows.** Nothing while the server read runs, because the count is not known
+  yet. When the read finds log entries the device does not hold, the row shows `downloading` with
+  that count until the write ends, and then `downloaded`. A download that adds nothing shows
+  nothing.
+- **"Never at the same time" is a queue.** A sync asked for during a download waits until the
+  download ends, and a download asked for during a sync waits for the sync. Neither is dropped.
+- **Overlapping requests.** A download asked for while one runs joins it, and one more runs after
+  it. A sign-out and sign-in during a download therefore still gets its own download.
+- **A Session change during a download.** Log entries read for one Account are never written for
+  another. The write refuses and adds nothing, and the download that follows the new sign-in
+  reads the new Account.
+- **Failure reporting.** An unreachable server (`unavailable`, or no answer within 30 seconds) is
+  not reported, matching a push. Every other failure is reported. "Retried on the next start" also
+  covers the next sign-in.
+- **Document fields.** `createdAt` is taken from the document too. A document with no `createdAt`
+  is dated from its `updatedAt`, matching the push. A document missing `title`, `description` or
+  `updatedAt` is skipped and reported, so one damaged document cannot block every download.
+- **Rules the 2026-10-09 amendment already implies, stated for review.** There is no `updatedAt`
+  comparison: any local row wins, synced or pending. A synced local row with no remote document is
+  kept, because a download only adds. `firestore.rules` already allows the owner to read, so the
+  rules do not change.

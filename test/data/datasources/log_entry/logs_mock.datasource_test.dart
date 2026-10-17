@@ -69,4 +69,27 @@ void main() {
       expect(updatedLogEntry?.createdAt, createdLogEntry.createdAt);
     },
   );
+
+  test(
+    'adds only downloaded log entries it does not hold, as synced',
+    () async {
+      final LogsDataSource dataSource = MockLogsDataSource();
+
+      final added = await dataSource.addDownloadedLogs(const [
+        LogEntryDto(id: 'card-1', title: 'Remote', description: 'Remote'),
+        LogEntryDto(id: 'card-11', title: 'Remote', description: 'Remote'),
+      ]);
+
+      final logs = await dataSource.getAllLogs();
+      expect(added, 1);
+      expect(
+        logs.firstWhere((logEntry) => logEntry.id == 'card-1').title,
+        isNot('Remote'),
+      );
+      expect(
+        logs.firstWhere((logEntry) => logEntry.id == 'card-11').syncStatus,
+        LogEntrySyncStatus.synced,
+      );
+    },
+  );
 }

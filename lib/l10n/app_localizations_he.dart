@@ -253,9 +253,6 @@ class AppLocalizationsHe extends AppLocalizations {
       'לא ניתן לפתוח את ההגדרות במכשיר הזה.';
 
   @override
-  String get appPreferencesRetry => 'נסה שוב';
-
-  @override
   String get signInCompactSubtitle =>
       'התחבר כדי לשמור את היומן שלך ולגבות אותו.';
 
@@ -490,10 +487,13 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String get commonRetryAction => 'נסה שוב';
+
+  @override
   String get logsSyncAction => 'סנכרן';
 
   @override
-  String get logsSyncRetryAction => 'נסה שוב';
+  String get logsLoadFailedMessage => 'לא ניתן לטעון את היומן כרגע.';
 
   @override
   String get logsSyncInProgressAction => 'מסנכרן';

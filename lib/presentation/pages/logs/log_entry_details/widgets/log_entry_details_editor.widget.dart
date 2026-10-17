@@ -19,9 +19,10 @@ class _LogEntryEditorState extends State<LogEntryEditor> {
     super.initState();
     // A new log entry starts empty: its fresh draft may not have reached the bloc
     // yet, so the bloc's draft could still hold an earlier edit.
-    final draft = _isCreating
-        ? const LogEntryDraft(title: '', description: '')
-        : context.read<LogsBloc>().state.draft;
+    final draft = switch (context.read<LogsBloc>().state.editor) {
+      LogsEditorEditing(:final draft) when !_isCreating => draft,
+      _ => LogsEditor.emptyDraft,
+    };
     _titleController = TextEditingController(text: draft.title);
     _descriptionController = TextEditingController(text: draft.description);
   }
@@ -54,10 +55,9 @@ class _LogEntryEditorState extends State<LogEntryEditor> {
         builder: (context, state) {
           final isMissing =
               logEntryId != null && state.hasMissingEditFor(logEntryId);
-          final isSaving = _isCreating ? state.isCreating : state.isUpdating;
-          final hasSaveError = _isCreating
-              ? state.createError
-              : state.editError;
+          final editor = state.editor;
+          final isSaving = editor.isSaving;
+          final hasSaveError = editor.hasSaveFailed;
           final disabled = isMissing || isSaving;
 
           return ListView(
@@ -73,7 +73,7 @@ class _LogEntryEditorState extends State<LogEntryEditor> {
                 label: l10n.logEntryCreateTitleLabel,
                 enabled: !disabled,
                 errorText:
-                    state.invalidDraftFields.contains(LogEntryDraftField.title)
+                    editor.invalidFields.contains(LogEntryDraftField.title)
                     ? l10n.logEntryCreateTitleRequired
                     : null,
                 textInputAction: .next,
@@ -87,7 +87,7 @@ class _LogEntryEditorState extends State<LogEntryEditor> {
                 minLines: 4,
                 maxLines: 6,
                 errorText:
-                    state.invalidDraftFields.contains(
+                    editor.invalidFields.contains(
                       LogEntryDraftField.description,
                     )
                     ? l10n.logEntryCreateDescriptionRequired

@@ -102,6 +102,12 @@ class const _LogsSyncRow() extends StatelessWidget {
         title: l10n.logsSyncPendingTitle(changeCount),
         subtitle: l10n.logsSyncPendingSubtitle(changeCount),
       ),
+      LogsSyncWaiting() => (
+        icon: Icons.cloud_upload_outlined,
+        iconColor: primary,
+        title: l10n.logsSyncSyncingTitle,
+        subtitle: null,
+      ),
       LogsSyncSyncing(:final savedCount, :final changeCount) => (
         icon: Icons.cloud_upload_outlined,
         iconColor: primary,
@@ -166,7 +172,7 @@ class const _SyncButton({required final LogsSync sync})
         : () => context.read<LogsBloc>().add(const LogsSyncRequested());
 
     return switch (sync) {
-      LogsSyncSyncing() => AppButton.text(
+      LogsSyncWaiting() || LogsSyncSyncing() => AppButton.text(
         onPressed: null,
         fillsWidth: false,
         child: Text(l10n.logsSyncInProgressAction),
@@ -174,7 +180,7 @@ class const _SyncButton({required final LogsSync sync})
       LogsSyncOffline() || LogsSyncFailed() => AppButton.primary(
         onPressed: onPressed,
         fillsWidth: false,
-        child: Text(l10n.logsSyncRetryAction),
+        child: Text(l10n.commonRetryAction),
       ),
       LogsSyncPending() || LogsSyncPartial() => AppButton.primary(
         onPressed: onPressed,

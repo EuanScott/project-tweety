@@ -20,7 +20,7 @@ class const _AppPreferencesError({required final String message})
                   context.read<AppPreferencesCubit>().loadAppPreferences(),
                 );
               },
-              child: Text(l10n.appPreferencesRetry),
+              child: Text(l10n.commonRetryAction),
             ),
           ],
         ),

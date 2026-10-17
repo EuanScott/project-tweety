@@ -54,6 +54,9 @@ void main() {
 
 class const _UnusedLogsRemoteDataSource() implements LogsRemoteDataSource {
   @override
+  Future<List<LogEntryDto>> fetchLogs() => throw UnimplementedError();
+
+  @override
   Future<Map<String, LogEntryPushOutcome>> pushLogs(
     List<LogEntryDto> logs, {
     void Function(String logEntryId, LogEntryPushOutcome outcome)? onPushed,

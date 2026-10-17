@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/core/storage/app_database.storage.dart';
+import 'package:project_tweety/data/datasources/auth/session_holder.datasource.dart';
 import 'package:project_tweety/data/datasources/log_entry/logs_local.datasource.dart';
 import 'package:project_tweety/data/dtos/log_entry/log_entry.dto.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -360,6 +361,52 @@ void main() {
       expect(await dataSource.getLogs(), hasLength(3));
     });
 
+    group('a row with an unknown status and deleted_at set', () {
+      setUp(() async {
+        await _insertRows(database, [
+          {
+            ..._row(4, status: 'garbage'),
+            'deleted_at': '2026-07-02T10:00:00.000Z',
+          },
+        ]);
+      });
+
+      test('is hidden from reads, like any tombstone', () async {
+        final logs = await dataSource.getLogs();
+
+        expect(logs.map((item) => item.id), isNot(contains('card-4')));
+        expect(await dataSource.getLogEntryById('card-4'), isNull);
+      });
+
+      test('is pushed as a delete and then purged', () async {
+        final pending = await dataSource.getUnsyncedLogs();
+        expect(pending.single.syncStatus, LogEntrySyncStatus.deleted);
+
+        await dataSource.markLogsSynced(pending);
+
+        expect(await dataSource.getUnsyncedLogs(), isEmpty);
+        expect(
+          (await _rawRows(database)).map((row) => row['id']),
+          isNot(contains('card-4')),
+        );
+      });
+    });
+
+    test('a known live status with deleted_at set is still a tombstone, '
+        'read and pushed as a delete', () async {
+      await _insertRows(database, [
+        {..._row(4), 'deleted_at': '2026-07-02T10:00:00.000Z'},
+      ]);
+
+      expect(await dataSource.getLogEntryById('card-4'), isNull);
+      final pending = await dataSource.getUnsyncedLogs();
+      expect(pending.single.syncStatus, LogEntrySyncStatus.deleted);
+
+      await dataSource.markLogsSynced(pending);
+
+      expect(await dataSource.getUnsyncedLogs(), isEmpty);
+    });
+
     test('accepts an empty uploaded log entry batch', () async {
       await dataSource.markLogsSynced(const []);
 
@@ -417,32 +464,125 @@ void main() {
       test('every operation throws when nobody is signed in', () async {
         sessionHolder.signedInUid = null;
 
-        await expectLater(dataSource.getLogs(), throwsStateError);
+        await expectLater(
+          dataSource.getLogs(),
+          throwsA(isA<AccountNotSignedInException>()),
+        );
         await expectLater(
           dataSource.getLogEntryById('card-1'),
-          throwsStateError,
+          throwsA(isA<AccountNotSignedInException>()),
         );
         await expectLater(
           dataSource.createLogEntry(
             const LogEntryDto(id: 'card-11', title: 'New', description: 'New'),
           ),
-          throwsStateError,
+          throwsA(isA<AccountNotSignedInException>()),
         );
         await expectLater(
           dataSource.updateLogEntry(
             const LogEntryDto(id: 'card-1', title: 'Edit', description: 'Edit'),
           ),
-          throwsStateError,
+          throwsA(isA<AccountNotSignedInException>()),
         );
         await expectLater(
           dataSource.deleteLogEntry('card-1'),
-          throwsStateError,
+          throwsA(isA<AccountNotSignedInException>()),
         );
-        await expectLater(dataSource.getUnsyncedLogs(), throwsStateError);
+        await expectLater(
+          dataSource.getUnsyncedLogs(),
+          throwsA(isA<AccountNotSignedInException>()),
+        );
         await expectLater(
           dataSource.markLogsSynced([LogEntryDto.fromDatabaseRow(_row(1))]),
-          throwsStateError,
+          throwsA(isA<AccountNotSignedInException>()),
         );
+      });
+    });
+
+    group('download', () {
+      LogEntryDto downloaded(
+        int number, {
+        String title = 'Remote title',
+        DateTime? updatedAt,
+        String userId = _accountA,
+      }) => LogEntryDto(
+        id: 'card-$number',
+        title: title,
+        description: 'Remote body',
+        createdAt: DateTime.utc(2026, 8, 1),
+        updatedAt: updatedAt ?? DateTime.utc(2026, 8, 2),
+        userId: userId,
+      );
+
+      test('adds a missing log entry as synced and owned by the Account, '
+          'with its text and times from the document', () async {
+        final before = DateTime.now().toUtc();
+
+        final added = await dataSource.addDownloadedLogs([downloaded(4)]);
+
+        final row = (await _rawRows(database)).last;
+        expect(added, 1);
+        expect(row, containsPair('id', 'card-4'));
+        expect(row, containsPair('title', 'Remote title'));
+        expect(row, containsPair('description', 'Remote body'));
+        expect(row, containsPair('sync_status', 'synced'));
+        expect(row, containsPair('user_id', _accountA));
+        expect(row, containsPair('created_at', '2026-08-01T00:00:00.000Z'));
+        expect(row, containsPair('updated_at', '2026-08-02T00:00:00.000Z'));
+        expect(row, containsPair('deleted_at', null));
+        final lastSyncedAt = DateTime.parse(row['last_synced_at']! as String);
+        expect(lastSyncedAt.isBefore(before), isFalse);
+        expect(
+          (await dataSource.getLogs()).map((logEntry) => logEntry.id),
+          contains('card-4'),
+        );
+      });
+
+      test('never changes a row the device already holds, whatever its '
+          'state or owner', () async {
+        await _insertRows(database, [
+          _row(4, status: 'created', lastSyncedAt: null),
+          _row(5, status: 'updated'),
+          _row(6, status: 'deleted'),
+          _row(7, userId: _accountB),
+        ]);
+        final before = await _rawRows(database);
+
+        final added = await dataSource.addDownloadedLogs([
+          // card-1 is synced locally; a newer remote copy still loses.
+          downloaded(1, updatedAt: DateTime.utc(2027)),
+          for (var number = 4; number <= 7; number++) downloaded(number),
+        ]);
+
+        expect(added, 0);
+        expect(await _rawRows(database), before);
+      });
+
+      test('adds the oldest change first', () async {
+        await dataSource.addDownloadedLogs([
+          downloaded(4, updatedAt: DateTime.utc(2026, 9, 3)),
+          downloaded(5, updatedAt: DateTime.utc(2026, 9, 1)),
+          downloaded(6, updatedAt: DateTime.utc(2026, 9, 2)),
+        ]);
+
+        expect((await _rawRows(database)).skip(3).map((row) => row['id']), [
+          'card-5',
+          'card-6',
+          'card-4',
+        ]);
+      });
+
+      test('adds nothing when the Session changed since the read', () async {
+        final before = await _rawRows(database);
+
+        await expectLater(
+          dataSource.addDownloadedLogs([
+            downloaded(4),
+            downloaded(5, userId: _accountB),
+          ]),
+          throwsA(isA<AccountNotSignedInException>()),
+        );
+        expect(await _rawRows(database), before);
       });
     });
 
@@ -453,7 +593,21 @@ void main() {
           _row(7, userId: null, status: 'updated'),
           _row(8, userId: null, status: 'created', lastSyncedAt: null),
           _row(9, userId: null, status: 'deleted'),
+          {
+            ..._row(10, userId: null, status: 'garbage'),
+            'deleted_at': '2026-07-02T10:00:00.000Z',
+          },
         ]);
+      });
+
+      test('an unowned tombstone with an unknown status is dropped, '
+          'not adopted', () async {
+        await dataSource.getLogs();
+
+        expect(
+          (await _rawRows(database)).map((row) => row['id']),
+          isNot(contains('card-10')),
+        );
       });
 
       test(

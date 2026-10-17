@@ -262,9 +262,6 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo abrir la configuración en este dispositivo.';
 
   @override
-  String get appPreferencesRetry => 'Reintentar';
-
-  @override
   String get signInCompactSubtitle =>
       'Inicia sesión para conservar tus registros y hacer una copia de seguridad.';
 
@@ -505,10 +502,14 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get commonRetryAction => 'Reintentar';
+
+  @override
   String get logsSyncAction => 'Sincronizar';
 
   @override
-  String get logsSyncRetryAction => 'Reintentar';
+  String get logsLoadFailedMessage =>
+      'No se pudieron cargar los registros ahora mismo.';
 
   @override
   String get logsSyncInProgressAction => 'Sincronizando';

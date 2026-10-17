@@ -76,6 +76,41 @@ void main() {
     );
 
     testWidgets(
+      'returns to the list when the log entry just created is deleted on '
+      'one pane',
+      (tester) async {
+        replaceLogsRepository(FakeLogsRepository());
+        await pumpApp(tester, initialLocation: AppRoutes.logsNewPath);
+
+        await _fillAndCreate(tester);
+        await _deleteSelected(tester);
+
+        expect(currentRoutePath(tester), AppRoutes.logsPath);
+        expect(find.text('New title'), findsNothing);
+        expect(find.text('Card Title 1'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'returns to the list when the log entry just created is deleted on '
+      'two panes',
+      (tester) async {
+        replaceLogsRepository(FakeLogsRepository());
+        await pumpApp(
+          tester,
+          surfaceSize: const Size(1000, 900),
+          initialLocation: AppRoutes.logsNewPath,
+        );
+
+        await _fillAndCreate(tester);
+        await _deleteSelected(tester);
+
+        expect(currentRoutePath(tester), AppRoutes.logsPath);
+        expect(find.text('New title'), findsNothing);
+      },
+    );
+
+    testWidgets(
       'asks before discarding a new log entry started beside a selected '
       'Card',
       (tester) async {
@@ -102,5 +137,12 @@ Future<void> _fillAndCreate(WidgetTester tester) async {
   await tester.enterText(find.byType(AppTextField).first, 'New title');
   await tester.enterText(find.byType(AppTextField).last, 'New description');
   await tester.tap(find.widgetWithText(AppButton, 'Create entry'));
+  await tester.pumpAndSettle();
+}
+
+Future<void> _deleteSelected(WidgetTester tester) async {
+  await tester.tap(find.text('Delete entry'));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Delete entry').last);
   await tester.pumpAndSettle();
 }

@@ -7,6 +7,7 @@ import 'package:project_tweety/presentation/pages/sign_in/sign_in.page.dart';
 
 import '../../support/app_harness.dart';
 import '../../support/fake_auth_repository.dart';
+import '../../support/fake_logs_repository.dart';
 
 void main() {
   group('Launch gate', () {
@@ -16,6 +17,28 @@ void main() {
       await tester.tap(find.byType(AppGoogleSignInButton));
       await tester.pumpAndSettle();
     }
+
+    testWidgets('launching signed in downloads log entries once', (
+      tester,
+    ) async {
+      final logs = FakeLogsRepository();
+      replaceLogsRepository(logs);
+
+      await pumpApp(tester);
+
+      expect(logs.downloadRequestCount, 1);
+    });
+
+    testWidgets('signing in downloads log entries', (tester) async {
+      final logs = FakeLogsRepository();
+      replaceLogsRepository(logs);
+      await pumpApp(tester, session: const Session.signedOut());
+      expect(logs.downloadRequestCount, 0);
+
+      await signIn(tester);
+
+      expect(logs.downloadRequestCount, 1);
+    });
 
     testWidgets('launching signed out shows sign-in without the tab shell', (
       tester,

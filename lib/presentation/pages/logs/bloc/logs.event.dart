@@ -23,6 +23,10 @@ sealed class LogsEvent with _$LogsEvent {
   /// Pushes every pending change to the Account.
   const factory syncRequested() = LogsSyncRequested;
 
+  /// A download reported how it is adding log entries to the device.
+  const factory downloadProgressed(LogsDownloadProgress progress) =
+      LogsDownloadProgressed;
+
   /// Replaces where sync stands and which log entries carry an unsynced change.
   const factory syncChanged(
     LogsSync sync, {

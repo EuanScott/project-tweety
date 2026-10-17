@@ -14,7 +14,7 @@ enum LogEntrySyncStatus {
       'created' => LogEntrySyncStatus.created,
       'updated' => LogEntrySyncStatus.updated,
       'deleted' => LogEntrySyncStatus.deleted,
-      _ => LogEntrySyncStatus.synced,
+      _ => LogEntrySyncStatus.updated,
     };
   }
 }
@@ -45,15 +45,21 @@ class const LogEntryDto({
   }
 
   factory fromDatabaseRow(Map<String, Object?> row) {
+    final deletedAt = _dateTimeFromStorageValue(row['deleted_at']);
+    // Either signal marks a tombstone, so a damaged status never hides a
+    // delete. The local datasource filters with the same rule.
+    final storedStatus = deletedAt != null
+        ? LogEntrySyncStatus.deleted
+        : LogEntrySyncStatus.fromStorageValue(row['sync_status']);
     return LogEntryDto(
       id: row['id']! as String,
       title: row['title']! as String,
       description: row['description']! as String,
-      syncStatus: LogEntrySyncStatus.fromStorageValue(row['sync_status']),
+      syncStatus: storedStatus,
       createdAt: _dateTimeFromStorageValue(row['created_at']),
       updatedAt: _dateTimeFromStorageValue(row['updated_at']),
       lastSyncedAt: _dateTimeFromStorageValue(row['last_synced_at']),
-      deletedAt: _dateTimeFromStorageValue(row['deleted_at']),
+      deletedAt: deletedAt,
       userId: row['user_id'] as String?,
     );
   }

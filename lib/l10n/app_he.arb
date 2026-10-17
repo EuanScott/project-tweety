@@ -75,7 +75,6 @@
   "appPreferencesTextSizeRow": "גודל טקסט וטקסט מודגש",
   "appPreferencesTextSizeFooter": "שינוי גודל הגופן והטקסט המודגש בהגדרות המכשיר.",
   "appPreferencesSystemTextOpenFailed": "לא ניתן לפתוח את ההגדרות במכשיר הזה.",
-  "appPreferencesRetry": "נסה שוב",
   "signInCompactSubtitle": "התחבר כדי לשמור את היומן שלך ולגבות אותו.",
   "signInSceneSubtitle": "היומן שלך, במכשיר הזה ומגובה מתי שתבחר.",
   "signInSplitTitle": "כניסה",
@@ -127,7 +126,8 @@
   "logsSyncDownloadedTitle": "{count, plural, =1{רשומה אחת נוספה מהחשבון שלך} other{{count} רשומות נוספו מהחשבון שלך}}",
   "logsSyncDownloadedSubtitle": "{count, plural, =1{הוא נוצר במכשיר אחר} other{הם נוצרו במכשיר אחר}}",
   "logsSyncAction": "סנכרן",
-  "logsSyncRetryAction": "נסה שוב",
+  "logsLoadFailedMessage": "לא ניתן לטעון את היומן כרגע.",
+  "commonRetryAction": "נסה שוב",
   "logsSyncInProgressAction": "מסנכרן",
   "logsUnsyncedCreated": "חדשה",
   "logsUnsyncedUpdated": "נערכה"

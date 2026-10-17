@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/data/datasources/auth/firebase_session_holder.datasource.dart';
+import 'package:project_tweety/data/datasources/auth/session_holder.datasource.dart';
 
 void main() {
   group('FirebaseSessionHolder', () {
@@ -13,7 +14,7 @@ void main() {
     test('throws when nobody is signed in', () {
       final holder = FirebaseSessionHolder(_FakeFirebaseAuth());
 
-      expect(() => holder.uid, throwsStateError);
+      expect(() => holder.uid, throwsA(isA<AccountNotSignedInException>()));
     });
 
     test('reads the Account at call time, not at construction', () {
@@ -24,7 +25,7 @@ void main() {
       expect(holder.uid, 'b');
 
       firebaseAuth.currentUser = null;
-      expect(() => holder.uid, throwsStateError);
+      expect(() => holder.uid, throwsA(isA<AccountNotSignedInException>()));
     });
   });
 }

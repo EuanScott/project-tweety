@@ -60,5 +60,39 @@ void main() {
       expect(find.byType(AlertDialog), findsNothing);
       expect(currentRoutePath(tester), AppRoutes.logsPath);
     });
+
+    // In the split layout the new-entry editor sits beside the list, so
+    // leaving it never pops a route. Only the guard can clear the discarded
+    // draft there; a draft left behind would ask again on the next entry.
+    testWidgets(
+      'does not show the dialog again after an unsaved new entry was discarded',
+      (WidgetTester tester) async {
+        replaceLogsRepository(FakeLogsRepository());
+        await pumpApp(
+          tester,
+          surfaceSize: const Size(1000, 900),
+          initialLocation: AppRoutes.logsNewPath,
+        );
+
+        await tester.enterText(find.byType(AppTextField).first, 'Raw title');
+        await tester.tap(find.text('Card Title 1'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Discard changes'));
+        await tester.pumpAndSettle();
+        expect(
+          currentRoutePath(tester),
+          '${AppRoutes.logsDetailFullPathPrefix}card-1',
+        );
+
+        await tester.tap(find.text('Card Title 2'));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(
+          currentRoutePath(tester),
+          '${AppRoutes.logsDetailFullPathPrefix}card-2',
+        );
+      },
+    );
   });
 }

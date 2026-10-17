@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_tweety/data/repositories/log_entry/logs.repository.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:project_tweety/presentation/extensions/logs_error.extension.dart';
 import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
 import 'package:project_tweety/presentation/pages/logs/draft_discard_guard.widget.dart';
@@ -49,9 +50,9 @@ class const _LogEntryDetailsView({required final String logEntryId})
       builder: (context, state) {
         return switch (state.detailFor(logEntryId)) {
           LogsDetailLoading() => const Center(child: AppLoadingIndicator()),
-          LogsDetailFailure(:final errorMessage) => _LogEntryDetailsMessage(
+          LogsDetailFailure(:final error) => _LogEntryDetailsMessage(
             title: l10n.logEntryDetailsLoadFailedTitle,
-            description: errorMessage,
+            description: error.message(l10n),
           ),
           LogsDetailMissing() => _LogEntryDetailsMessage(
             title: l10n.logEntryDetailsMissingTitle,

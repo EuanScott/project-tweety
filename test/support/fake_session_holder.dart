@@ -9,5 +9,6 @@ class FakeSessionHolder implements SessionHolder {
 
   @override
   String get uid =>
-      signedInUid ?? (throw StateError('No Account is signed in'));
+      signedInUid ??
+      (throw const AccountNotSignedInException('No Account is signed in'));
 }

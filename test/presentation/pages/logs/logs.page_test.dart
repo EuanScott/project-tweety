@@ -258,7 +258,7 @@ void main() {
       await showSync(tester, const LogsSync.offline(changeCount: 4));
 
       expect(find.text("You're offline"), findsOneWidget);
-      expect(syncButton(tester, 'Try again').onPressed, isNotNull);
+      expect(syncButton(tester, 'Retry').onPressed, isNotNull);
     });
 
     testWidgets('colours only the icon with the success colour once synced', (

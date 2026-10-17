@@ -61,8 +61,7 @@ class _LogsDraftDiscardGuardState extends State<LogsDraftDiscardGuard> {
     if (!mounted) {
       return;
     }
-    final state = context.read<LogsBloc>().state;
-    if (state.isCreating || state.isEditing) {
+    if (context.read<LogsBloc>().state.editor.isOpen) {
       context.read<LogsBloc>().add(const LogsDraftDiscarded());
     }
     onDiscard();
@@ -71,8 +70,7 @@ class _LogsDraftDiscardGuardState extends State<LogsDraftDiscardGuard> {
   Future<bool> _requestBranchReset() async {
     final canDiscard = await _canDiscard();
     if (canDiscard && mounted) {
-      final state = context.read<LogsBloc>().state;
-      if (state.isCreating || state.isEditing) {
+      if (context.read<LogsBloc>().state.editor.isOpen) {
         context.read<LogsBloc>().add(const LogsDraftDiscarded());
       }
     }

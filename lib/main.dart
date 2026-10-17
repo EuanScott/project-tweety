@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/core/analytics/analytics.facade.dart';
 import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
+import 'package:project_tweety/data/services/log_entry/logs_download_trigger.service.dart';
 import 'package:project_tweety/dart_init.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart'
     show AppPreferencesThemeMode;
@@ -48,6 +49,15 @@ class _MyAppState extends State<MyApp> {
     analyticsFacade: widget.analyticsFacade ?? GetIt.I<AnalyticsFacade>(),
     canAccessSettings: widget.canAccessSettings,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    // After the first frame, so startup never waits for a download.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => GetIt.I<LogsDownloadTrigger>().start(),
+    );
+  }
 
   @override
   void dispose() {

@@ -9,5 +9,5 @@ class const FirebaseSessionHolder(final FirebaseAuth _firebaseAuth)
   @override
   String get uid =>
       _firebaseAuth.currentUser?.uid ??
-      (throw StateError('No Account is signed in'));
+      (throw const AccountNotSignedInException('No Account is signed in'));
 }

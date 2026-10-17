@@ -42,6 +42,15 @@ class InvalidLogEntryDraftException implements Exception {
 class const LogEntryNotFoundException(final String logEntryId)
     implements Exception;
 
+/// The Account's copy could not be reached in time, for example because the
+/// device is offline. Trying again later may succeed.
+class const LogsAccountUnreachableException() implements Exception;
+
+/// The Session signed out, or changed Account, while a download ran. Nothing
+/// was written for it, and the next sign-in downloads again. It is expected,
+/// not a fault.
+class const LogsSessionChangedException() implements Exception;
+
 /// A change on this device that the Account's copy does not have yet.
 enum PendingLogEntryChange { created, updated, deleted }
 
@@ -71,6 +80,21 @@ abstract class LogsSyncResult with _$LogsSyncResult {
   }) = _LogsSyncResult;
 }
 
+/// How a download is adding log entries to the device. A download reports
+/// nothing until it knows it has something to add, and then reports `adding`
+/// followed by `finished`. A download that adds nothing, or fails before it
+/// adds, reports nothing at all.
+@freezed
+sealed class LogsDownloadProgress with _$LogsDownloadProgress {
+  /// The Account's copy holds [logEntryCount] log entries that the device does
+  /// not, and they are being added.
+  const factory adding({required int logEntryCount}) = LogsDownloadAdding;
+
+  /// The download ended. [addedCount] can be lower than the count it was
+  /// adding, down to zero when the write failed.
+  const factory finished({required int addedCount}) = LogsDownloadFinished;
+}
+
 abstract class LogsRepository {
   Future<List<LogEntry>> getLogs();
 
@@ -92,4 +116,16 @@ abstract class LogsRepository {
   Future<LogsSyncResult> syncLogs({
     void Function(int savedCount, int changeCount)? onProgress,
   });
+
+  /// Adds every log entry the Account's copy holds and the device does not.
+  /// A log entry already on the device is never changed. A sync and a
+  /// download never run at the same time: each waits for the other. Asked
+  /// for while one runs, it joins that download, and one more runs after it.
+  /// Throws [LogsAccountUnreachableException] when the Account's copy cannot
+  /// be reached, and [LogsSessionChangedException] when the Session signed
+  /// out or changed Account before the write.
+  Future<void> downloadLogs();
+
+  /// Emits as a download adds log entries to the device.
+  Stream<LogsDownloadProgress> get downloadProgress;
 }

@@ -228,10 +228,6 @@
   "@appPreferencesSystemTextOpenFailed": {
     "description": "Error message shown when device settings cannot be opened"
   },
-  "appPreferencesRetry": "Retry",
-  "@appPreferencesRetry": {
-    "description": "Retry button label for app preferences loading"
-  },
   "signInCompactSubtitle": "Sign in to keep your logs and back them up.",
   "@signInCompactSubtitle": {
     "description": "Subtitle under the app name on the compact sign-in page"
@@ -499,13 +495,17 @@
       }
     }
   },
+  "commonRetryAction": "Retry",
+  "@commonRetryAction": {
+    "description": "Generic button that tries a failed action again"
+  },
   "logsSyncAction": "Sync",
   "@logsSyncAction": {
     "description": "Sync row button that starts a sync"
   },
-  "logsSyncRetryAction": "Try again",
-  "@logsSyncRetryAction": {
-    "description": "Sync row button that starts a sync after a failure"
+  "logsLoadFailedMessage": "Unable to load logs right now.",
+  "@logsLoadFailedMessage": {
+    "description": "Message shown when the list of log entries cannot be loaded"
   },
   "logsSyncInProgressAction": "Syncing",
   "@logsSyncInProgressAction": {

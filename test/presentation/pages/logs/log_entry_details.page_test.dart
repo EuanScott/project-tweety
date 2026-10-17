@@ -1,8 +1,10 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
 import 'package:project_tweety/presentation/navigation/app_routes.constants.dart';
 
 import '../../../support/app_harness.dart';
+import '../../../support/fake_app_preferences_repository.dart';
 import '../../../support/fake_logs_repository.dart';
 
 void main() {
@@ -40,6 +42,28 @@ void main() {
         expect(find.text('Unable to load logs right now.'), findsOneWidget);
       },
     );
+
+    testWidgets('shows the load-failure description in Spanish', (
+      WidgetTester tester,
+    ) async {
+      replaceAppPreferencesRepository(
+        FakeAppPreferencesRepository(const AppPreferences(languageCode: 'es')),
+      );
+      replaceLogsRepository(
+        FakeLogsRepository(readError: StateError('read failed')),
+      );
+
+      await pumpApp(
+        tester,
+        initialLocation: '${AppRoutes.logsDetailFullPathPrefix}card-1',
+      );
+
+      expect(find.text('Unable to load logs right now.'), findsNothing);
+      expect(
+        find.text('No se pudieron cargar los registros ahora mismo.'),
+        findsOneWidget,
+      );
+    });
 
     // UI Responsiveness Test (previously manual-only)
     testWidgets('displays log entry ID as selectable text', (

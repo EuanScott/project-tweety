@@ -36,6 +36,10 @@ reconciliation.
 - the datasource contract exposes dirty reads and acknowledgement of confirmed pushes
 - local changes are tracked as created, updated, or deleted until a sync pushes them
 - tombstones are hidden from normal reads and removed after a successful upload
+- a row is a tombstone when `sync_status` is `deleted` or `deleted_at` is set. Every query and the
+  row mapping use this one rule, so a damaged status cannot hide a delete. A stored status the app
+  does not know, on a row with no `deleted_at`, reads as `updated` and is pushed again
+- a download adds the Account's log entries that the device does not hold, and changes nothing else
 
 ## Logs UI and navigation
 
@@ -45,6 +49,27 @@ route-driven: `/logs` shows the collection, `/logs/new` starts creation, and
 editor occupies the Logs body; on wide layouts it occupies the secondary pane.
 Successful creation replaces the create route with the new log entry, successful
 editing keeps the selected log entry, and successful deletion returns to `/logs`.
+
+`LogsState` follows [ADR-0004](../decisions/0004-value-type-conventions.md): each concern
+is a small sealed union that carries only the data valid for its state, so states such as
+"deleting with no log entry" or "an edit failure with no editor" cannot be built.
+
+- `load`: `initial`, `loading`, `loaded` or `failed(LogsError)`. The error is a kind that
+  the widget layer translates.
+- `editor`: `closed`, `creating`, `editing(logEntryId, initialDraft, …)` or
+  `missing(logEntryId, …)`. An open form also holds its draft, whether a save was tried,
+  the invalid fields and a save status (`idle`, `saving`, `failed`). A new log entry opens
+  empty, so the empty draft is its opening snapshot. "An editor is open" (`isOpen`) is the
+  test for discarding a draft, and `isDraftDirty` compares the draft with the snapshot.
+- `deletion`: `idle`, `deleting(id)` or `failed(id)`.
+- `outcome`: `none`, `created(id)` or `deleted(id)`. It is the latest create or delete that finished.
+  The page navigates when it changes, so a later outcome replaces an earlier one. A new create clears it.
+- `sync`: the `LogsSync` union described under Download.
+
+`items` and `unsyncedChanges` stay plain fields because no value of
+theirs conflicts with another field. Draft changes and saves are ignored while no editor is
+open. A save that ends after its editor was discarded still updates the list, but changes
+the editor only if the same editor is still open.
 
 The UI retains a draft when validation or a recoverable mutation failure occurs.
 Before navigation would discard an unsaved draft, it asks for confirmation.
@@ -61,6 +86,47 @@ parallel, with a 10-second timeout. Only writes the server confirmed are acknowl
 edited after its push snapshot stays pending. Firestore offline persistence is off, so SQLite holds
 the only pending queue. The owner-only rules live in `firestore.rules` and are deployed by hand. A
 conflict policy remains deferred.
+
+### Download
+
+A download adds to the device every log entry the Account's copy holds and the device does not
+([ADR-0008](../decisions/0008-cards-are-owned-by-the-signed-in-account.md), amendments of 2026-10-09
+and 2026-10-17). The data path is:
+
+`LogsDownloadTrigger -> LogsRepository.downloadLogs -> LogsRemoteDataSource.fetchLogs -> LogsDataSource.addDownloadedLogs`
+
+1. **Trigger.** `MyApp` starts `LogsDownloadTrigger` after its first frame. The trigger starts a
+   download at once when an Account is already signed in, and again each time the Session changes from
+   signed out to signed in. A Session that changes but stays signed in starts nothing.
+2. **Read.** One read of `users/{uid}/cards` from the server, with a 30-second timeout. Each document
+   becomes a `synced` log entry of that uid. A document with no `createdAt` is dated from its
+   `updatedAt`. A document with a missing or wrong-typed `title`, `description` or `updatedAt` is skipped
+   and reported, and the rest still download.
+3. **Merge.** One write transaction adds each document whose id no row holds, oldest `updatedAt` first,
+   as `synced` with `last_synced_at` set to now. The check happens at write time.
+
+| Row on the device with the same id | Result |
+|---|---|
+| none | inserted as `synced` |
+| `synced`, older or newer than the document | kept; no `updatedAt` comparison |
+| `created`, `updated` or a `deleted` tombstone | kept, still pending |
+| another Account's row | kept; ids are the table's primary key |
+| a `synced` row with no document | kept; a download never deletes |
+
+4. **Exclusion.** The repository runs syncs and downloads one at a time: each waits for the other. A
+   download asked for while one runs joins it, and one more runs after it, so a sign-in during a
+   download is not lost. Rows read for one Account are never written for another: the write throws
+   and adds nothing when the Session signed out or changed Account during the read. The repository
+   reports this as `LogsSessionChangedException`.
+5. **What the person sees.** Nothing while the read runs, unless the person presses Sync. A press
+   shows "Syncing…" at once (`waiting`) and disables the button, while the sync waits for the
+   download. The sync then shows its own progress. When the write has confirmed the Account
+   and found log entries to add, the sync row shows `downloading`, and the Sync button is disabled.
+   When the write ends, the list updates once and the row shows `downloaded`. A download that adds nothing shows nothing.
+6. **Failure.** Nothing visible. An unreachable server (`unavailable`, or the timeout) is not reported,
+   as with a push. A Session that signed out or changed Account during the download is not reported
+   either. Any other failure, for example `permission-denied`, goes to the error reporter. The
+   next start or sign-in tries again.
 
 ## Lifecycle guarantees
 

@@ -3,6 +3,7 @@ import 'package:project_tweety/core/storage/app_database.storage.dart';
 import 'package:project_tweety/data/datasources/auth/session_holder.datasource.dart';
 import 'package:project_tweety/data/datasources/log_entry/logs.datasource.dart';
 import 'package:project_tweety/data/dtos/log_entry/log_entry.dto.dart';
+import 'package:sqflite/sqflite.dart' show ConflictAlgorithm;
 
 /// Log entries stored on this device, scoped to the signed-in Account.
 ///
@@ -18,15 +19,23 @@ class LogsLocalDataSource(
   /// ([ADR-0019](../../../../docs/decisions/0019-log-entries-keep-the-cards-storage-names.md)).
   static const _tableName = 'cards';
 
+  /// A row is a tombstone when either its status or `deleted_at` says so,
+  /// matching how `LogEntryDto.fromDatabaseRow` reads it. A damaged status
+  /// therefore never hides a delete.
+  static const _isTombstone =
+      "(sync_status = 'deleted' OR deleted_at IS NOT NULL)";
+
   String? _adoptedUid;
+
+  static final _undated = DateTime.utc(0);
 
   @override
   Future<List<LogEntryDto>> getLogs() {
     return _read((db, uid) async {
       final rows = await db.query(
         _tableName,
-        where: 'user_id = ? AND sync_status != ?',
-        whereArgs: [uid, LogEntrySyncStatus.deleted.storageValue],
+        where: 'user_id = ? AND NOT $_isTombstone',
+        whereArgs: [uid],
         orderBy: 'created_at DESC, rowid DESC',
       );
       return rows.map(LogEntryDto.fromDatabaseRow).toList(growable: false);
@@ -38,8 +47,8 @@ class LogsLocalDataSource(
     return _read((db, uid) async {
       final rows = await db.query(
         _tableName,
-        where: 'id = ? AND user_id = ? AND sync_status != ?',
-        whereArgs: [logEntryId, uid, LogEntrySyncStatus.deleted.storageValue],
+        where: 'id = ? AND user_id = ? AND NOT $_isTombstone',
+        whereArgs: [logEntryId, uid],
         limit: 1,
       );
 
@@ -145,16 +154,86 @@ class LogsLocalDataSource(
   }
 
   @override
+  Future<List<LogEntryDto>> getAllLogs() {
+    return _read((db, uid) async {
+      final rows = await db.query(
+        _tableName,
+        where: 'user_id = ?',
+        whereArgs: [uid],
+        orderBy: 'rowid ASC',
+      );
+
+      return rows.map(LogEntryDto.fromDatabaseRow).toList(growable: false);
+    });
+  }
+
+  @override
   Future<List<LogEntryDto>> getUnsyncedLogs() {
     return _read((db, uid) async {
       final rows = await db.query(
         _tableName,
-        where: 'user_id = ? AND sync_status != ?',
+        where: 'user_id = ? AND (sync_status != ? OR $_isTombstone)',
         whereArgs: [uid, LogEntrySyncStatus.synced.storageValue],
         orderBy: 'rowid ASC',
       );
 
       return rows.map(LogEntryDto.fromDatabaseRow).toList(growable: false);
+    });
+  }
+
+  @override
+  Future<int> addDownloadedLogs(
+    List<LogEntryDto> downloadedLogs, {
+    void Function(int addingCount)? onAdding,
+  }) {
+    if (downloadedLogs.isEmpty) {
+      return Future<int>.value(0);
+    }
+
+    return _write((db, uid) async {
+      if (downloadedLogs.any((logEntry) => logEntry.userId != uid)) {
+        throw const AccountNotSignedInException(
+          'The download was read for another Account',
+        );
+      }
+
+      // Ids are the primary key across every Account, so any row with the id
+      // wins, including a tombstone or another Account's row.
+      final heldIds = {
+        for (final row in await db.query(_tableName, columns: ['id']))
+          row['id']! as String,
+      };
+      final missingLogs =
+          downloadedLogs
+              .where((logEntry) => !heldIds.contains(logEntry.id))
+              .toList()
+            ..sort(
+              (a, b) =>
+                  (a.updatedAt ?? _undated).compareTo(b.updatedAt ?? _undated),
+            );
+      if (missingLogs.isEmpty) {
+        return 0;
+      }
+
+      onAdding?.call(missingLogs.length);
+      final now = DateTime.now().toUtc();
+      for (final logEntry in missingLogs) {
+        await db.insert(
+          _tableName,
+          LogEntryDto(
+            id: logEntry.id,
+            title: logEntry.title,
+            description: logEntry.description,
+            createdAt: logEntry.createdAt,
+            updatedAt: logEntry.updatedAt,
+            lastSyncedAt: now,
+            userId: uid,
+          ).toDatabaseRow(),
+          conflictAlgorithm: ConflictAlgorithm.ignore,
+        );
+      }
+
+      return missingLogs.length;
     });
   }
 
@@ -179,11 +258,8 @@ class LogsLocalDataSource(
         if (logEntry.syncStatus == LogEntrySyncStatus.deleted) {
           await db.delete(
             _tableName,
-            where: '$unchanged AND sync_status = ?',
-            whereArgs: [
-              ...unchangedArgs,
-              LogEntrySyncStatus.deleted.storageValue,
-            ],
+            where: '$unchanged AND $_isTombstone',
+            whereArgs: unchangedArgs,
           );
         } else {
           final updatedCount = await db.update(
@@ -252,11 +328,7 @@ class LogsLocalDataSource(
   /// Gives every unowned log entry to [uid] as never synced. Nothing unowned was
   /// ever pushed, so a tombstone has nothing left to delete remotely.
   Future<void> _adopt(AppDatabaseWriteExecutor db, String uid) async {
-    await db.delete(
-      _tableName,
-      where: 'user_id IS NULL AND sync_status = ?',
-      whereArgs: [LogEntrySyncStatus.deleted.storageValue],
-    );
+    await db.delete(_tableName, where: 'user_id IS NULL AND $_isTombstone');
     await db.update(_tableName, <String, Object?>{
       'user_id': uid,
       'sync_status': LogEntrySyncStatus.created.storageValue,

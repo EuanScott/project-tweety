@@ -10,10 +10,11 @@ service cloud.firestore {
     }
 
     function isValidCard(card) {
-      return card.keys().hasOnly(['title', 'description', 'updatedAt'])
-        && card.keys().hasAll(['title', 'description', 'updatedAt'])
+      return card.keys().hasOnly(['title', 'description', 'createdAt', 'updatedAt'])
+        && card.keys().hasAll(['title', 'description', 'createdAt', 'updatedAt'])
         && card.title is string && card.title.size() > 0
         && card.description is string && card.description.size() > 0
+        && card.createdAt is timestamp
         && card.updatedAt is timestamp;
     }
 

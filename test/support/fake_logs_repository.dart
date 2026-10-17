@@ -74,9 +74,20 @@ class FakeLogsRepository implements LogsRepository {
   List<int> syncProgress = const [];
   Object? syncError;
 
+  /// Holds [syncLogs] before it starts, as a sync queued behind a running
+  /// download waits, until completed.
+  Completer<void>? queuedSync;
+
   /// Holds [syncLogs] open until completed, to assert in-flight state.
   Completer<void>? pendingSync;
   var syncRequestCount = 0;
+
+  /// [downloadLogs] counts each request, waits for [pendingDownload] when it
+  /// is set, and then throws [downloadError] when that is set.
+  var downloadRequestCount = 0;
+  Completer<void>? pendingDownload;
+  Object? downloadError;
+  final _downloadProgress = StreamController<LogsDownloadProgress>.broadcast();
 
   var collectionReadCount = 0;
   var detailReadCount = 0;
@@ -217,6 +228,7 @@ class FakeLogsRepository implements LogsRepository {
     void Function(int savedCount, int changeCount)? onProgress,
   }) async {
     syncRequestCount += 1;
+    await queuedSync?.future;
     final changeCount = syncResult.changeCount;
     if (changeCount > 0) {
       onProgress?.call(0, changeCount);
@@ -233,6 +245,35 @@ class FakeLogsRepository implements LogsRepository {
     syncSummary = summaryAfterSync ?? syncSummary;
 
     return syncResult;
+  }
+
+  @override
+  Future<void> downloadLogs() async {
+    downloadRequestCount += 1;
+    await pendingDownload?.future;
+
+    if (downloadError case final error?) {
+      return Future<void>.error(error);
+    }
+  }
+
+  @override
+  Stream<LogsDownloadProgress> get downloadProgress => _downloadProgress.stream;
+
+  /// Reports [progress] as a running download would.
+  void reportDownload(LogsDownloadProgress progress) =>
+      _downloadProgress.add(progress);
+
+  /// Adds [downloaded] to the list as a download would, reporting it as it
+  /// goes.
+  void download(List<LogEntry> downloaded) {
+    reportDownload(
+      LogsDownloadProgress.adding(logEntryCount: downloaded.length),
+    );
+    _logs.addAll(downloaded);
+    reportDownload(
+      LogsDownloadProgress.finished(addedCount: downloaded.length),
+    );
   }
 
   /// The ten log entries the app ships with, shared by every test that needs a

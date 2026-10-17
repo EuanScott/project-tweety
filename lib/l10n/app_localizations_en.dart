@@ -259,9 +259,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Unable to open settings on this device.';
 
   @override
-  String get appPreferencesRetry => 'Retry';
-
-  @override
   String get signInCompactSubtitle =>
       'Sign in to keep your logs and back them up.';
 
@@ -500,10 +497,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get commonRetryAction => 'Retry';
+
+  @override
   String get logsSyncAction => 'Sync';
 
   @override
-  String get logsSyncRetryAction => 'Try again';
+  String get logsLoadFailedMessage => 'Unable to load logs right now.';
 
   @override
   String get logsSyncInProgressAction => 'Syncing';

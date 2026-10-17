@@ -70,7 +70,8 @@ and the next sync attempts them again.
 The automatic fetch that adds to the device every log entry the external
 record holds but the device does not. It only adds: a log entry the device
 already holds, including a tombstone, is never changed by a download. It runs
-without anyone asking, and a failed download is retried on the next one.
+without anyone asking, each time the Session becomes signed in, and never at the
+same time as a sync. A failed download is retried on the next one.
 _Avoid_: restore, pull, sync down
 
 **Owner**:

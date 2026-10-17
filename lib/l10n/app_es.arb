@@ -75,7 +75,6 @@
   "appPreferencesTextSizeRow": "Tamaño del texto y negrita",
   "appPreferencesTextSizeFooter": "Cambia el tamaño de letra y la negrita en los ajustes del dispositivo.",
   "appPreferencesSystemTextOpenFailed": "No se pudo abrir la configuración en este dispositivo.",
-  "appPreferencesRetry": "Reintentar",
   "signInCompactSubtitle": "Inicia sesión para conservar tus registros y hacer una copia de seguridad.",
   "signInSceneSubtitle": "Tus registros, en este dispositivo y con copia de seguridad cuando tú decidas.",
   "signInSplitTitle": "Iniciar sesión",
@@ -127,7 +126,8 @@
   "logsSyncDownloadedTitle": "{count, plural, =1{1 entrada añadida desde tu Cuenta} other{{count} entradas añadidas desde tu Cuenta}}",
   "logsSyncDownloadedSubtitle": "{count, plural, =1{Se creó en otro dispositivo} other{Se crearon en otro dispositivo}}",
   "logsSyncAction": "Sincronizar",
-  "logsSyncRetryAction": "Reintentar",
+  "logsLoadFailedMessage": "No se pudieron cargar los registros ahora mismo.",
+  "commonRetryAction": "Reintentar",
   "logsSyncInProgressAction": "Sincronizando",
   "logsUnsyncedCreated": "Nueva",
   "logsUnsyncedUpdated": "Editada"
