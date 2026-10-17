@@ -14,19 +14,29 @@ void main() {
       await _pumpScaffold(
         tester,
         surfaceSize: const Size(900, 800),
-        scaffold: const PageScaffold(title: 'Test', body: Text('Primary')),
+        scaffold: const PageScaffold(
+          title: 'Test',
+          kind: PageKind.detail,
+          body: Text('Primary'),
+        ),
       );
 
       expect(find.text('Primary'), findsOneWidget);
       expect(find.byType(VerticalDivider), findsNothing);
     });
 
-    testWidgets('renders Cupertino page chrome on iOS', (tester) async {
+    testWidgets('puts a detail page title in the toolbar on iOS', (
+      tester,
+    ) async {
       await _pumpScaffold(
         tester,
         platform: TargetPlatform.iOS,
         surfaceSize: const Size(400, 800),
-        scaffold: const PageScaffold(title: 'Test', body: Text('Primary')),
+        scaffold: const PageScaffold(
+          title: 'Test',
+          kind: PageKind.detail,
+          body: Text('Primary'),
+        ),
       );
 
       expect(find.byType(CupertinoPageScaffold), findsOneWidget);
@@ -46,6 +56,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: PageScaffold(
           title: 'Test',
+          kind: PageKind.detail,
           body: const Text('Primary'),
           trailingAction: ToolBarAction(
             icon: Icons.add,
@@ -64,10 +75,76 @@ void main() {
       expect(pressed, isTrue);
     });
 
-    testWidgets('renders and triggers the trailing action on iOS', (
+    for (final kind in PageKind.values) {
+      testWidgets('renders and triggers the trailing action on a ${kind.name} '
+          'page on iOS', (tester) async {
+        var pressed = false;
+
+        await _pumpScaffold(
+          tester,
+          platform: TargetPlatform.iOS,
+          surfaceSize: const Size(400, 800),
+          scaffold: PageScaffold(
+            title: 'Test',
+            kind: kind,
+            body: const Text('Primary'),
+            trailingAction: ToolBarAction(
+              icon: Icons.add,
+              tooltip: 'Add',
+              onPressed: () => pressed = true,
+            ),
+          ),
+        );
+
+        expect(find.byType(AppIconButton), findsOneWidget);
+        expect(find.byIcon(Icons.add), findsOneWidget);
+
+        await tester.tap(find.byType(AppIconButton));
+        await tester.pumpAndSettle();
+
+        expect(pressed, isTrue);
+      });
+    }
+
+    for (final platform in const [TargetPlatform.android, TargetPlatform.iOS]) {
+      for (final kind in PageKind.values) {
+        testWidgets('renders and triggers an avatar action on a ${kind.name} '
+            'page on ${platform.name}', (tester) async {
+          const avatarKey = Key('avatar');
+          var pressed = false;
+
+          await _pumpScaffold(
+            tester,
+            platform: platform,
+            surfaceSize: const Size(400, 800),
+            scaffold: PageScaffold(
+              title: 'Test',
+              kind: kind,
+              body: const Text('Primary'),
+              trailingAction: ToolBarAction.avatar(
+                avatar: const SizedBox.square(key: avatarKey, dimension: 32),
+                tooltip: 'Account',
+                onPressed: () => pressed = true,
+              ),
+            ),
+          );
+
+          expect(find.byType(AppIconButton), findsOneWidget);
+          expect(find.byKey(avatarKey), findsOneWidget);
+
+          await tester.tap(find.byKey(avatarKey));
+          await tester.pumpAndSettle();
+
+          expect(pressed, isTrue);
+        });
+      }
+    }
+
+    testWidgets('puts the primary action only in the toolbar on iOS', (
       tester,
     ) async {
       var pressed = false;
+      double? clearance;
 
       await _pumpScaffold(
         tester,
@@ -75,8 +152,14 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: PageScaffold(
           title: 'Test',
-          body: const Text('Primary'),
-          trailingAction: ToolBarAction(
+          kind: PageKind.display,
+          body: Builder(
+            builder: (context) {
+              clearance = AppPrimaryActionPane.bottomClearanceOf(context);
+              return const Text('Primary');
+            },
+          ),
+          primaryAction: ToolBarIconAction(
             icon: Icons.add,
             tooltip: 'Add',
             onPressed: () => pressed = true,
@@ -84,8 +167,8 @@ void main() {
         ),
       );
 
-      expect(find.byType(AppIconButton), findsOneWidget);
-      expect(find.byIcon(Icons.add), findsOneWidget);
+      expect(find.byType(FloatingActionButton), findsNothing);
+      expect(clearance, 0);
 
       await tester.tap(find.byType(AppIconButton));
       await tester.pumpAndSettle();
@@ -93,44 +176,54 @@ void main() {
       expect(pressed, isTrue);
     });
 
-    for (final platform in const [TargetPlatform.android, TargetPlatform.iOS]) {
-      testWidgets('renders and triggers an avatar action on ${platform.name}', (
+    test('rejects a primary action together with a trailing action', () {
+      final action = ToolBarIconAction(icon: Icons.add, onPressed: () {});
+
+      expect(
+        () => PageScaffold(
+          title: 'Test',
+          kind: PageKind.display,
+          body: const Text('Primary'),
+          primaryAction: action,
+          trailingAction: action,
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    testWidgets('floats the primary action over the body on Android', (
+      tester,
+    ) async {
+      await _pumpScaffold(
         tester,
-      ) async {
-        const avatarKey = Key('avatar');
-        var pressed = false;
-
-        await _pumpScaffold(
-          tester,
-          platform: platform,
-          surfaceSize: const Size(400, 800),
-          scaffold: PageScaffold(
-            title: 'Test',
-            body: const Text('Primary'),
-            trailingAction: ToolBarAction.avatar(
-              avatar: const SizedBox.square(key: avatarKey, dimension: 32),
-              tooltip: 'Account',
-              onPressed: () => pressed = true,
-            ),
+        platform: TargetPlatform.android,
+        surfaceSize: const Size(400, 800),
+        scaffold: PageScaffold(
+          title: 'Test',
+          kind: PageKind.display,
+          body: const Text('Primary'),
+          primaryAction: ToolBarIconAction(
+            icon: Icons.add,
+            tooltip: 'Add',
+            onPressed: () {},
           ),
-        );
+        ),
+      );
 
-        expect(find.byType(AppIconButton), findsOneWidget);
-        expect(find.byKey(avatarKey), findsOneWidget);
-
-        await tester.tap(find.byKey(avatarKey));
-        await tester.pumpAndSettle();
-
-        expect(pressed, isTrue);
-      });
-    }
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+      expect(find.byType(AppIconButton), findsNothing);
+    });
 
     testWidgets('renders Material page chrome on Android', (tester) async {
       await _pumpScaffold(
         tester,
         platform: TargetPlatform.android,
         surfaceSize: const Size(400, 800),
-        scaffold: const PageScaffold(title: 'Test', body: Text('Primary')),
+        scaffold: const PageScaffold(
+          title: 'Test',
+          kind: PageKind.detail,
+          body: Text('Primary'),
+        ),
       );
 
       expect(find.byType(Scaffold), findsOneWidget);
@@ -140,7 +233,7 @@ void main() {
       expect(find.text('Primary'), findsOneWidget);
     });
 
-    testWidgets('renders a large Cupertino title when requested on iOS', (
+    testWidgets('shows a large title for a display page on iOS', (
       tester,
     ) async {
       await _pumpScaffold(
@@ -149,7 +242,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          titleBehavior: PageTitleBehavior.large,
+          kind: PageKind.display,
           body: Text('Primary'),
         ),
       );
@@ -160,7 +253,7 @@ void main() {
       expect(find.text('Primary'), findsOneWidget);
     });
 
-    testWidgets('can disable large Cupertino title collapse for short pages', (
+    testWidgets('lets a display page title collapse into the toolbar on iOS', (
       tester,
     ) async {
       await _pumpScaffold(
@@ -169,7 +262,28 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          titleBehavior: PageTitleBehavior.largeStatic,
+          kind: PageKind.display,
+          body: Text('Primary'),
+        ),
+      );
+
+      final nestedScrollView = tester.widget<NestedScrollView>(
+        find.byType(NestedScrollView),
+      );
+
+      expect(nestedScrollView.physics, isNull);
+    });
+
+    testWidgets('keeps a fixed display page title from collapsing on iOS', (
+      tester,
+    ) async {
+      await _pumpScaffold(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(
+          title: 'Large Title',
+          kind: PageKind.displayFixed,
           body: Text('Primary'),
         ),
       );
@@ -181,7 +295,7 @@ void main() {
       expect(nestedScrollView.physics, isA<NeverScrollableScrollPhysics>());
     });
 
-    testWidgets('keeps large-title capable Android pages on Material chrome', (
+    testWidgets('keeps display pages on Material chrome on Android', (
       tester,
     ) async {
       final theme = DesignSystemTheme.dark().copyWith(
@@ -194,7 +308,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          titleBehavior: PageTitleBehavior.large,
+          kind: PageKind.display,
           body: Text('Primary'),
         ),
       );
@@ -218,7 +332,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Large Title',
-          titleBehavior: PageTitleBehavior.large,
+          kind: PageKind.display,
           body: Text('Primary'),
         ),
       );
@@ -243,7 +357,7 @@ void main() {
           surfaceSize: const Size(400, 800),
           scaffold: const PageScaffold(
             title: 'Large Title',
-            titleBehavior: PageTitleBehavior.large,
+            kind: PageKind.display,
             body: Text('Primary'),
           ),
         );
@@ -256,23 +370,22 @@ void main() {
       },
     );
 
-    testWidgets(
-      'keeps Material app bar when large Cupertino title is requested on Android',
-      (tester) async {
-        await _pumpScaffold(
-          tester,
-          surfaceSize: const Size(400, 800),
-          scaffold: const PageScaffold(
-            title: 'Large Title',
-            titleBehavior: PageTitleBehavior.large,
-            body: Text('Primary'),
-          ),
-        );
+    testWidgets('keeps the Material app bar for a display page on Android', (
+      tester,
+    ) async {
+      await _pumpScaffold(
+        tester,
+        surfaceSize: const Size(400, 800),
+        scaffold: const PageScaffold(
+          title: 'Large Title',
+          kind: PageKind.display,
+          body: Text('Primary'),
+        ),
+      );
 
-        expect(find.byType(AppBar), findsOneWidget);
-        expect(find.byType(CupertinoSliverNavigationBar), findsNothing);
-      },
-    );
+      expect(find.byType(AppBar), findsOneWidget);
+      expect(find.byType(CupertinoSliverNavigationBar), findsNothing);
+    });
 
     testWidgets('renders the native Cupertino back button on iOS', (
       tester,
@@ -284,7 +397,11 @@ void main() {
             pages: const [
               MaterialPage(child: Text('Root')),
               MaterialPage(
-                child: PageScaffold(title: 'Details', body: Text('Nested')),
+                child: PageScaffold(
+                  title: 'Details',
+                  kind: PageKind.detail,
+                  body: Text('Nested'),
+                ),
               ),
             ],
             onDidRemovePage: (_) {},
@@ -304,6 +421,7 @@ void main() {
         surfaceSize: const Size(400, 800),
         scaffold: const PageScaffold(
           title: 'Test',
+          kind: PageKind.detail,
           body: Text('Primary'),
           secondaryBody: Text('Secondary'),
         ),
@@ -322,6 +440,7 @@ void main() {
         surfaceSize: const Size(900, 800),
         scaffold: const PageScaffold(
           title: 'Test',
+          kind: PageKind.detail,
           body: Text('Primary'),
           secondaryBody: Text('Secondary'),
           primaryBodyWidth: 240,
@@ -345,7 +464,7 @@ void main() {
         surfaceSize: const Size(900, 800),
         scaffold: const PageScaffold(
           title: 'Test',
-          titleBehavior: PageTitleBehavior.largeStatic,
+          kind: PageKind.displayFixed,
           body: SizedBox.expand(key: primaryKey),
           secondaryBody: SizedBox.expand(key: secondaryKey),
         ),
@@ -381,7 +500,7 @@ void main() {
         surfaceSize: const Size(900, 800),
         scaffold: PageScaffold(
           title: 'Test',
-          titleBehavior: PageTitleBehavior.large,
+          kind: PageKind.display,
           body: Builder(
             builder: (context) {
               primaryController = PrimaryScrollController.maybeOf(context);
@@ -412,6 +531,7 @@ void main() {
         surfaceSize: const Size(900, 800),
         scaffold: const PageScaffold(
           title: 'Test',
+          kind: PageKind.detail,
           body: SizedBox.expand(key: primaryKey),
           secondaryBody: SizedBox.expand(key: secondaryKey),
         ),
@@ -443,6 +563,7 @@ void main() {
         ],
         scaffold: const PageScaffold(
           title: 'Test',
+          kind: PageKind.detail,
           body: SizedBox.expand(key: primaryKey),
           secondaryBody: SizedBox.expand(key: secondaryKey),
         ),
@@ -472,6 +593,7 @@ void main() {
                   breakpoint: 400,
                   child: PageScaffold(
                     title: 'Test',
+                    kind: PageKind.detail,
                     body: Text('Primary'),
                     secondaryBody: Text('Secondary'),
                   ),
@@ -495,6 +617,7 @@ void main() {
         surfaceSize: const Size(900, 800),
         scaffold: const PageScaffold(
           title: 'Test',
+          kind: PageKind.detail,
           body: Text('Primary'),
           secondaryBody: Text('Secondary'),
           primaryBodyWidth: 240,

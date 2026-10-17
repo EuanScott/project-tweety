@@ -58,7 +58,7 @@ class _HomeView extends StatelessWidget {
 
     return PageScaffold(
       title: l10n.homeTab,
-      titleBehavior: PageTitleBehavior.large,
+      kind: PageKind.display,
       trailingAction: ToolBarAction.avatar(
         avatar: BlocSelector<AccountCubit, AccountState, Profile>(
           selector: (state) => state.profile,

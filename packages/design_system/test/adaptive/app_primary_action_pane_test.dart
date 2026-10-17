@@ -53,16 +53,11 @@ void main() {
       expect(clearance, pane.bottom - button.top);
     });
 
-    testWidgets('shows only the content on iOS, where the action belongs in '
-        'the navigation bar', (tester) async {
-      var clearance = -1.0;
-      await tester.pumpWidget(
-        _host(TargetPlatform.iOS, onClearance: (value) => clearance = value),
-      );
+    testWidgets('floats the action on iOS too, because the caller decides '
+        'where the action belongs', (tester) async {
+      await tester.pumpWidget(_host(TargetPlatform.iOS, onClearance: (_) {}));
 
-      expect(find.byType(FloatingActionButton), findsNothing);
-      expect(find.byKey(_contentKey), findsOneWidget);
-      expect(clearance, 0);
+      expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
     testWidgets('keeps the space of a hidden action so content does not '

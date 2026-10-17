@@ -15,7 +15,7 @@ class Settings extends StatelessWidget {
 
     return PageScaffold(
       title: l10n.settingsTab,
-      titleBehavior: PageTitleBehavior.largeStatic,
+      kind: PageKind.display,
       bodyPadding: EdgeInsets.zero,
       body: const _SettingsView(),
     );
@@ -30,7 +30,6 @@ class _SettingsView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return ListView(
-      physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       children: [
         AppListSection(

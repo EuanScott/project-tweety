@@ -15,7 +15,11 @@ class TemplatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => GetIt.I<TemplateBloc>()..add(const TemplateStarted()),
-      child: const PageScaffold(title: '_template', body: _TemplateView()),
+      child: const PageScaffold(
+        title: '_template',
+        kind: PageKind.display,
+        body: _TemplateView(),
+      ),
     );
   }
 }

@@ -26,6 +26,7 @@ class AppPreferencesPage extends StatelessWidget {
 
     return PageScaffold(
       title: l10n.appPreferencesTitle,
+      kind: PageKind.display,
       bodyPadding: EdgeInsets.zero,
       body: const _AppPreferencesView(),
     );

@@ -1,14 +1,12 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'app_design_platform.dart';
 import 'app_floating_action_button.dart';
 
-/// A content pane that shows the page's primary action where the active
-/// platform design language expects it.
+/// A content pane with the page's primary action floating at its bottom end.
 ///
-/// On Material, [action] floats at the bottom end of the pane. On Cupertino,
-/// the pane shows only [child], because the primary action belongs in the
-/// navigation bar.
+/// The pane floats any [action] it receives, on every platform. The caller
+/// decides where the action belongs: on Cupertino a page puts it in the
+/// navigation bar instead, and gives this pane no action.
 ///
 /// Scrolling content inside the pane reads [bottomClearanceOf] and adds it to
 /// its bottom padding, so its last item can scroll clear of the action. A
@@ -28,7 +26,8 @@ class AppPrimaryActionPane extends StatelessWidget {
   /// The pane content.
   final Widget child;
 
-  /// The primary action. Leave it null to show [child] alone.
+  /// The primary action. Leave it null to show [child] alone, for example on
+  /// Cupertino, where the action belongs in the navigation bar.
   final AppFloatingActionButton? action;
 
   /// Whether [action] is shown. A hidden action still reserves its space.
@@ -39,8 +38,7 @@ class AppPrimaryActionPane extends StatelessWidget {
   static const double _actionMargin = 16;
 
   /// The bottom space that content inside the nearest pane must reserve so
-  /// the action does not cover it. It is zero when the pane has no action or
-  /// the platform puts the action in the navigation bar.
+  /// the action does not cover it. It is zero when the pane has no action.
   static double bottomClearanceOf(BuildContext context) {
     return context
             .dependOnInheritedWidgetOfExactType<_AppPrimaryActionScope>()
@@ -51,7 +49,7 @@ class AppPrimaryActionPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final action = this.action;
-    if (action == null || AppDesignPlatform.of(context).isCupertino) {
+    if (action == null) {
       return child;
     }
 

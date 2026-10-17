@@ -84,6 +84,7 @@ class _CardsState extends State<Cards> {
               if (!isSplit && widget.isCreating) {
                 return PageScaffold(
                   title: l10n.cardCreateTitle,
+                  kind: PageKind.detail,
                   body: const CardEditor(),
                 );
               }
@@ -95,9 +96,7 @@ class _CardsState extends State<Cards> {
               return PageScaffold(
                 title: l10n.cardsTab,
                 impliesBackAction: false,
-                titleBehavior: isSplit
-                    ? PageTitleBehavior.largeStatic
-                    : PageTitleBehavior.large,
+                kind: isSplit ? PageKind.displayFixed : PageKind.display,
                 primaryAction: ToolBarIconAction(
                   icon: Icons.add,
                   tooltip: l10n.cardCreateAction,

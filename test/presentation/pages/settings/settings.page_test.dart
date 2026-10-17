@@ -15,19 +15,25 @@ void main() {
       expect(find.byType(CupertinoNavigationBar), findsNothing);
     });
 
-    testWidgets('does not collapse its large title for short content', (
+    testWidgets('lets its large title collapse into the toolbar on scroll', (
       tester,
     ) async {
       await _pumpSettings(tester);
 
-      await tester.drag(find.byType(ListView), const Offset(0, -300));
-      await tester.pumpAndSettle();
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byType(ListView)),
+      );
+      await gesture.moveBy(const Offset(0, -100));
+      await tester.pump();
 
-      final navigationBar = tester.widget<NestedScrollView>(
+      final header = tester.state<NestedScrollViewState>(
         find.byType(NestedScrollView),
       );
 
-      expect(navigationBar.physics, isA<NeverScrollableScrollPhysics>());
+      expect(header.outerController.offset, greaterThan(0));
+
+      await gesture.up();
+      await tester.pumpAndSettle();
     });
 
     testWidgets('groups the personalisation row in a list section', (

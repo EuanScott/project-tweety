@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Fallback page shown when `go_router` cannot resolve a route.
@@ -6,7 +7,8 @@ import 'package:material_ui/material_ui.dart';
 /// action should navigate.
 /// Creates a route error page.
 class const NavigationRouteErrorPage({
-  /// The title shown in the app bar and page body.
+  /// The title shown in the platform's app bar or navigation bar, and in the
+  /// page body.
   required final String title,
 
   /// The body text explaining the navigation error.
@@ -26,38 +28,46 @@ class const NavigationRouteErrorPage({
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const .all(24),
-            child: Column(
-              mainAxisSize: .min,
-              children: [
-                Icon(
-                  Icons.map_outlined,
-                  size: 48,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  title,
-                  style: theme.textTheme.headlineSmall,
-                  textAlign: .center,
-                ),
-                const SizedBox(height: 8),
-                Text(description, textAlign: .center),
-                const SizedBox(height: 24),
-                FilledButton(
-                  onPressed: onActionPressed,
-                  child: Text(actionLabel),
-                ),
-              ],
-            ),
+    final body = SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const .all(24),
+          child: Column(
+            mainAxisSize: .min,
+            children: [
+              Icon(
+                Icons.map_outlined,
+                size: 48,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                title,
+                style: theme.textTheme.headlineSmall,
+                textAlign: .center,
+              ),
+              const SizedBox(height: 8),
+              Text(description, textAlign: .center),
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: onActionPressed,
+                child: Text(actionLabel),
+              ),
+            ],
           ),
         ),
       ),
     );
+
+    return switch (theme.platform) {
+      TargetPlatform.iOS || TargetPlatform.macOS => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(middle: Text(title)),
+        child: body,
+      ),
+      _ => Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: body,
+      ),
+    };
   }
 }

@@ -106,7 +106,10 @@ void main() {
             ? 'APPEARANCE'
             : 'Appearance';
 
-        expect(find.text('Personalisation'), findsOneWidget);
+        expect(find.text('Personalisation'), findsWidgets);
+        if (platform == TargetPlatform.iOS) {
+          expect(find.byType(CupertinoSliverNavigationBar), findsOneWidget);
+        }
         expect(find.text(_intro), findsOneWidget);
         expect(
           tester.getBottomLeft(find.text(_intro)).dy,
@@ -300,7 +303,9 @@ void main() {
         final sections = find.byType(AppListSection);
         final rect = tester.getRect(sections.first);
         final page = tester.getRect(
-          find.ancestor(of: sections.first, matching: find.byType(Scrollable)),
+          find
+              .ancestor(of: sections.first, matching: find.byType(Scrollable))
+              .first,
         );
         final picker = find.byType(AppSwatchPicker<AppPreferencesThemeColour>);
 

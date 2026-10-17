@@ -12,6 +12,7 @@ class AccessDeniedPage extends StatelessWidget {
 
     return PageScaffold(
       title: l10n.accessDeniedTitle,
+      kind: PageKind.detail,
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 360),

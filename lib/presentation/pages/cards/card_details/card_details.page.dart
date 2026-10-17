@@ -26,6 +26,7 @@ class const CardDetailsPage({required final String cardId, super.key})
 
     return PageScaffold(
       title: l10n.cardDetailsTitle,
+      kind: PageKind.detail,
       body: CardDetailsContent(cardId: cardId),
     );
   }

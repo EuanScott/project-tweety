@@ -1,11 +1,11 @@
 import 'package:design_system/design_system.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:project_tweety/presentation/widgets/page_title_behavior.model.dart';
+import 'package:project_tweety/presentation/widgets/page_kind.model.dart';
 import 'package:project_tweety/presentation/widgets/split_pane_layout.widget.dart';
 import 'package:project_tweety/presentation/widgets/tool_bar_action.model.dart';
 
-export 'package:project_tweety/presentation/widgets/page_title_behavior.model.dart';
+export 'package:project_tweety/presentation/widgets/page_kind.model.dart';
 export 'package:project_tweety/presentation/widgets/tool_bar_action.model.dart';
 
 /// A shared page shell that standardises the app scaffold structure.
@@ -23,6 +23,14 @@ export 'package:project_tweety/presentation/widgets/tool_bar_action.model.dart';
 class const PageScaffold({
   /// The title rendered in the shared app bar.
   required final String title,
+
+  /// What the page is, which decides how [title] is shown.
+  ///
+  /// Use [PageKind.display] for a page to browse and come back to, and
+  /// [PageKind.detail] for a page about one thing. Cupertino shows a display
+  /// page's title large, and moves it into the navigation bar on scroll.
+  /// Material shows every kind in the standard [AppBar].
+  required final PageKind kind,
 
   /// The primary content of the page.
   required final Widget body,
@@ -51,20 +59,14 @@ class const PageScaffold({
   ///
   /// Cupertino shows it in the navigation bar, in place of [trailingAction].
   /// Material shows it as a floating action button over [body], so on wider
-  /// layouts it stays with the pane it acts on. Use it or [trailingAction],
-  /// not both: Cupertino has room for only one of them.
+  /// layouts it stays with the pane it acts on. Set it or [trailingAction],
+  /// not both: Cupertino has room for only one of them, so the constructor
+  /// asserts this.
   final ToolBarIconAction? primaryAction,
 
   /// Whether [primaryAction] is shown. Hide it, rather than removing it, while
   /// it does not apply, so the content under it keeps its place.
   final bool showsPrimaryAction = true,
-
-  /// How the page title should be presented.
-  ///
-  /// Material platforms currently render all variants with the standard
-  /// [AppBar]. Cupertino platforms render large-title variants with
-  /// [CupertinoSliverNavigationBar].
-  final PageTitleBehavior titleBehavior = .standard,
 
   /// Optional fixed width for [body] when [secondaryBody] is visible.
   final double? primaryBodyWidth,
@@ -76,6 +78,13 @@ class const PageScaffold({
   final EdgeInsetsGeometry bodyPadding = _bodyPadding,
   super.key,
 }) extends StatelessWidget {
+  this
+    : assert(
+        primaryAction == null || trailingAction == null,
+        'Use primaryAction or trailingAction, not both: Cupertino has room '
+        'for only one of them.',
+      );
+
   static const EdgeInsets _bodyPadding = .symmetric(horizontal: 16);
   static const double _cupertinoLargeTitleBodyTopInset = 16;
 
@@ -87,46 +96,26 @@ class const PageScaffold({
         : null;
 
     if (AppDesignPlatform.of(context).isCupertino) {
-      if (titleBehavior.usesLargeCupertinoTitle) {
-        return CupertinoPageScaffold(
-          child: NestedScrollView(
-            physics: titleBehavior.allowsCupertinoCollapse
-                ? null
-                : const NeverScrollableScrollPhysics(),
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                CupertinoSliverNavigationBar(
-                  backgroundColor: cupertinoBackgroundColor,
-                  leading: _cupertinoLeadingAction,
-                  automaticallyImplyLeading: impliesBackAction,
-                  largeTitle: Text(title),
-                  trailing: _cupertinoTrailingAction,
-                ),
-              ];
-            },
-            body: SafeArea(
-              top: false,
-              child: _PageScaffoldBody(
-                scaffold: this,
-                additionalPadding: const .only(
-                  top: _cupertinoLargeTitleBodyTopInset,
-                ),
-              ),
-            ),
-          ),
-        );
-      }
-
-      return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
+      return switch (kind) {
+        .display => _cupertinoLargeTitleScaffold(
           backgroundColor: cupertinoBackgroundColor,
-          leading: _cupertinoLeadingAction,
-          automaticallyImplyLeading: impliesBackAction,
-          middle: Text(title),
-          trailing: _cupertinoTrailingAction,
+          collapses: true,
         ),
-        child: SafeArea(child: _PageScaffoldBody(scaffold: this)),
-      );
+        .displayFixed => _cupertinoLargeTitleScaffold(
+          backgroundColor: cupertinoBackgroundColor,
+          collapses: false,
+        ),
+        .detail => CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            backgroundColor: cupertinoBackgroundColor,
+            leading: _cupertinoLeadingAction,
+            automaticallyImplyLeading: impliesBackAction,
+            middle: Text(title),
+            trailing: _cupertinoTrailingAction,
+          ),
+          child: SafeArea(child: _PageScaffoldBody(scaffold: this)),
+        ),
+      };
     }
 
     return Scaffold(
@@ -137,6 +126,39 @@ class const PageScaffold({
         trailingAction: trailingAction,
       ),
       body: SafeArea(child: _PageScaffoldBody(scaffold: this)),
+    );
+  }
+
+  /// A large title that moves into the navigation bar on scroll when
+  /// [collapses] is true, and stays large otherwise.
+  Widget _cupertinoLargeTitleScaffold({
+    required Color? backgroundColor,
+    required bool collapses,
+  }) {
+    return CupertinoPageScaffold(
+      child: NestedScrollView(
+        physics: collapses ? null : const NeverScrollableScrollPhysics(),
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            CupertinoSliverNavigationBar(
+              backgroundColor: backgroundColor,
+              leading: _cupertinoLeadingAction,
+              automaticallyImplyLeading: impliesBackAction,
+              largeTitle: Text(title),
+              trailing: _cupertinoTrailingAction,
+            ),
+          ];
+        },
+        body: SafeArea(
+          top: false,
+          child: _PageScaffoldBody(
+            scaffold: this,
+            additionalPadding: const .only(
+              top: _cupertinoLargeTitleBodyTopInset,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -199,7 +221,9 @@ class const _PageScaffoldBody({
   Widget build(BuildContext context) {
     final secondaryBody = scaffold.secondaryBody;
     final primaryAction = scaffold.primaryAction;
-    final action = primaryAction == null
+    // Cupertino shows the primary action in the navigation bar instead.
+    final action =
+        primaryAction == null || AppDesignPlatform.of(context).isCupertino
         ? null
         : AppFloatingActionButton(
             icon: primaryAction.icon,
