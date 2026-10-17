@@ -9,7 +9,7 @@ Cards persist to local SQLite. That foundation was built with synchronization
 scaffolding that has never run: a `CardSyncStatus` enum, `updatedAt`,
 `lastSyncedAt` and `deletedAt` columns, tombstone rows hidden from normal reads,
 and the `getUnsyncedCards()` / `markCardsSynced()` pair on `CardsDataSource`.
-[The architecture record](../architecture/cards_sqlite_foundation.md) defers the
+[The architecture record](../architecture/logs_sqlite_foundation.md) defers the
 bulk upload API, the sync UI, and any conflict policy.
 
 Adopting Firebase supplies the external record that scaffolding was waiting for.

@@ -37,9 +37,9 @@ The application follows a **Clean Architecture** variant with strictly separated
 
 ### Domain Layer (`lib/domain/`)
 
-- Contains **business entities** (e.g., `Card`, `AppPreferences`)
-- Defines **repository interfaces** (e.g., `CardsRepository`, `AppPreferencesRepository`)
-- Houses **domain-specific value types** (e.g., `CardDraft`)
+- Contains **business entities** (e.g., `LogEntry`, `AppPreferences`)
+- Defines **repository interfaces** (e.g., `LogsRepository`, `AppPreferencesRepository`)
+- Houses **domain-specific value types** (e.g., `LogEntryDraft`)
 - No dependencies on Flutter, data sources, or external packages
 
 ### Data Layer (`lib/data/`)
@@ -47,7 +47,7 @@ The application follows a **Clean Architecture** variant with strictly separated
 - Implements **repository interfaces** from the domain layer
 - Manages **data sources** (local SQLite, mock, future remote)
 - Handles **DTOs** (Data Transfer Objects) and mapping to/from domain entities
-- Contains **services** (e.g., `CardIdGenerator`)
+- Contains **services** (e.g., `LogEntryIdGenerator`)
 
 ### Core Layer (`lib/core/`)
 
@@ -121,35 +121,35 @@ The repository pattern abstracts data access, providing a clean seam for testing
 
 ```
 Domain Layer
-├── lib/domain/repositories/card/cards.repository.dart    # Abstract interface
+├── lib/domain/repositories/logEntry/logs.repository.dart    # Abstract interface
 
 Data Layer
-├── lib/data/repositories/card/cards.repository_impl.dart # Concrete implementation
-└── lib/data/datasources/card/                            # Data source contracts & impls
-    ├── cards.datasource.dart                             # Abstract contract
-    ├── cards_local.datasource.dart                       # SQLite implementation
-    └── cards_mock.datasource.dart                        # Mock implementation
+├── lib/data/repositories/logEntry/logs.repository_impl.dart # Concrete implementation
+└── lib/data/datasources/logEntry/                            # Data source contracts & impls
+    ├── logs.datasource.dart                             # Abstract contract
+    ├── logs_local.datasource.dart                       # SQLite implementation
+    └── logs_mock.datasource.dart                        # Mock implementation
 ```
 
 ### Contract Example
 
 ```dart
 // Domain: Abstract interface
-abstract class CardsRepository {
-  Future<List<Card>> getCards();
-  Future<Card?> getCardById(String cardId);
-  Future<Card> createCard(CardDraft draft);
-  Future<Card> updateCard({required String cardId, required CardDraft draft});
-  Future<void> deleteCard(String cardId);
+abstract class LogsRepository {
+  Future<List<LogEntry>> getLogs();
+  Future<LogEntry?> getLogEntryById(String logEntryId);
+  Future<LogEntry> createLogEntry(LogEntryDraft draft);
+  Future<LogEntry> updateLogEntry({required String logEntryId, required LogEntryDraft draft});
+  Future<void> deleteLogEntry(String logEntryId);
 }
 
 // Data: Concrete implementation
-@LazySingleton(as: CardsRepository)
-class CardsRepositoryImpl implements CardsRepository {
-  CardsRepositoryImpl(this._dataSource, this._cardIdGenerator);
+@LazySingleton(as: LogsRepository)
+class LogsRepositoryImpl implements LogsRepository {
+  LogsRepositoryImpl(this._dataSource, this._logEntryIdGenerator);
   
-  final CardsDataSource _dataSource;
-  final CardIdGenerator _cardIdGenerator;
+  final LogsDataSource _dataSource;
+  final LogEntryIdGenerator _logEntryIdGenerator;
   
   // Implementations...
 }
@@ -157,9 +157,9 @@ class CardsRepositoryImpl implements CardsRepository {
 
 ### Key Principles
 
-- **Data Source is the Seam**: `CardsDataSource` is the abstraction point for switching between local SQLite, mock, or
+- **Data Source is the Seam**: `LogsDataSource` is the abstraction point for switching between local SQLite, mock, or
   future remote implementations
-- **Validation at Repository**: Business rule validation (e.g., `InvalidCardDraftException`) happens in the repository
+- **Validation at Repository**: Business rule validation (e.g., `InvalidLogEntryDraftException`) happens in the repository
   implementation
 - **Mapping at Boundaries**: Repository implementations map between DTOs and domain entities
 
@@ -180,22 +180,22 @@ State management uses the **BLoC pattern** via the `bloc` and `flutter_bloc` pac
 
 ```dart
 // Events (sealed class via freezed)
-part 'cards.event.dart';
+part 'logs.event.dart';
 
 // State (sealed class via freezed)
-part 'cards.state.dart';
+part 'logs.state.dart';
 
 @injectable
-class CardsBloc extends Bloc<CardsEvent, CardsState> {
-  CardsBloc(this._cardsRepository) : super(const CardsState()) {
-    on<CardsStarted>(_onStarted);
-    on<CardsCreateStarted>(_onCreateStarted);
-    on<CardsDraftChanged>(_onDraftChanged);
-    on<CardsCreateSubmitted>(_onCreateSubmitted);
+class LogsBloc extends Bloc<LogsEvent, LogsState> {
+  LogsBloc(this._logsRepository) : super(const LogsState()) {
+    on<LogsStarted>(_onStarted);
+    on<LogsCreateStarted>(_onCreateStarted);
+    on<LogsDraftChanged>(_onDraftChanged);
+    on<LogsCreateSubmitted>(_onCreateSubmitted);
     // ... event handlers
   }
 
-  final CardsRepository _cardsRepository;
+  final LogsRepository _logsRepository;
 
 // Event handlers...
 }
@@ -220,10 +220,10 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
 MultiBlocProvider(
   providers: [
     BlocProvider(
-      create: (_) => GetIt.I<CardsBloc>()..add(const CardsStarted()),
+      create: (_) => GetIt.I<LogsBloc>()..add(const LogsStarted()),
     ),
   ],
-  child: BlocBuilder<CardsBloc, CardsState>(
+  child: BlocBuilder<LogsBloc, LogsState>(
     builder: (context, state) {
       // Build UI based on state
     },
@@ -307,21 +307,21 @@ concepts.
 
 ```
 Data Layer (DTOs)
-└── lib/data/dtos/card/card.dto.dart    # Database representation
+└── lib/data/dtos/logEntry/logEntry.dto.dart    # Database representation
 
 Domain Layer (Entities)
-└── lib/data/repositories/card/cards.repository.dart  # Contains Card entity
+└── lib/data/repositories/logEntry/logs.repository.dart  # Contains LogEntry entity
 ```
 
 ### DTO Example
 
 ```dart
-class CardDto {
-  const CardDto({
+class LogEntryDto {
+  const LogEntryDto({
     required this.id,
     required this.title,
     required this.description,
-    this.syncStatus = CardSyncStatus.synced,
+    this.syncStatus = LogEntrySyncStatus.synced,
     this.updatedAt,
     this.lastSyncedAt,
     this.deletedAt,
@@ -330,7 +330,7 @@ class CardDto {
   final String id;
   final String title;
   final String description;
-  final CardSyncStatus syncStatus;
+  final LogEntrySyncStatus syncStatus;
   final DateTime? updatedAt;
   final DateTime? lastSyncedAt;
   final DateTime? deletedAt;
@@ -339,11 +339,11 @@ class CardDto {
   Map<String, Object?> toDatabaseRow() { ... }
   
   // From database row
-  factory CardDto.fromDatabaseRow(Map<String, Object?> row) { ... }
+  factory LogEntryDto.fromDatabaseRow(Map<String, Object?> row) { ... }
   
   // To domain entity
-  Card toValue() {
-    return Card(id: id, title: title, description: description);
+  LogEntry toValue() {
+    return LogEntry(id: id, title: title, description: description);
   }
 }
 ```
@@ -352,20 +352,20 @@ class CardDto {
 
 ```dart
 @freezed
-abstract class Card with _$Card {
-  const factory Card({
+abstract class LogEntry with _$LogEntry {
+  const factory LogEntry({
     required String id,
     required String title,
     required String description,
-  }) = _Card;
+  }) = _LogEntry;
 }
 ```
 
 ### Mapping Flow
 
 ```
-Database Row → CardDto.fromDatabaseRow() → CardDto → CardDto.toValue() → Card (Domain Entity)
-Card (Domain Entity) + CardDraft → CardDto (via repository) → Database Row
+Database Row → LogEntryDto.fromDatabaseRow() → LogEntryDto → LogEntryDto.toValue() → LogEntry (Domain Entity)
+LogEntry (Domain Entity) + LogEntryDraft → LogEntryDto (via repository) → Database Row
 ```
 
 ---
@@ -385,9 +385,9 @@ Card (Domain Entity) + CardDraft → CardDto (via repository) → Database Row
 
 | Layer        | Value Types             | Example                        |
 |--------------|-------------------------|--------------------------------|
-| Domain       | Entities                | `Card`, `AppPreferences`       |
-| Data         | DTOs, Repository types  | `CardDto`, `CardDraft`         |
-| Presentation | BLoC state, events      | `CardsState`, `CardsEvent`     |
+| Domain       | Entities                | `LogEntry`, `AppPreferences`       |
+| Data         | DTOs, Repository types  | `LogEntryDto`, `LogEntryDraft`         |
+| Presentation | BLoC state, events      | `LogsState`, `LogsEvent`     |
 | Core         | Configuration, settings | `AppPreferencesStorage` models |
 
 ### Sealed Unions
@@ -397,17 +397,17 @@ Prefer sealed unions over status enums with nullable fields:
 ```dart
 // Preferred: Sealed union
 @freezed
-abstract class CardsDetail with _$CardsDetail {
-  const factory CardsDetail.loading() = _Loading;
-  const factory CardsDetail.success(Card card) = _Success;
-  const factory CardsDetail.notFound(String cardId) = _NotFound;
-  const factory CardsDetail.failure(Object error) = _Failure;
+abstract class LogsDetail with _$LogsDetail {
+  const factory LogsDetail.loading() = _Loading;
+  const factory LogsDetail.success(LogEntry logEntry) = _Success;
+  const factory LogsDetail.notFound(String logEntryId) = _NotFound;
+  const factory LogsDetail.failure(Object error) = _Failure;
 }
 
 // Avoid: Status enum with nullable fields
-// class CardsDetail {
-//   final CardsDetailStatus status;
-//   final Card? card;  // Can be null, but success implies non-null
+// class LogsDetail {
+//   final LogsDetailStatus status;
+//   final LogEntry? logEntry;  // Can be null, but success implies non-null
 // }
 ```
 
@@ -454,7 +454,7 @@ GoRouter createRouter({
     tabs: appTabConfigs,
     branches: [
       // Home branch
-      // Cards branch (with ShellRoute for split-pane layouts)
+      // Logs branch (with ShellRoute for split-pane layouts)
       // Settings branch
     ],
     observers: _navigationObservers(analyticsTracker),
@@ -466,7 +466,7 @@ GoRouter createRouter({
 ### Key Features
 
 - **Tab-based navigation**: Uses `NavigationBranch<AppTab>` for each tab
-- **Shell routes**: For shared UI (e.g., `PaneLayoutScope` for cards split-pane)
+- **Shell routes**: For shared UI (e.g., `PaneLayoutScope` for the Logs split-pane)
 - **Route guards**: `RouteAccessPolicy` controls access to settings routes
 - **Analytics**: Automatic screen view tracking via observers
 - **Error handling**: Custom error pages with recovery actions
@@ -494,15 +494,15 @@ class RouteAccessPolicy {
 
 ## Storage
 
-**ADR-0007** establishes local SQLite as the source of truth for Cards.
+**ADR-0007** establishes local SQLite as the source of truth for log entries.
 
 ### Architecture
 
 ```
 AppDatabase (Sqflite lifecycle)
-└── CardsLocalDataSource (CRUD operations)
-    └── CardsRepositoryImpl (business logic)
-        └── CardsBloc (state management)
+└── LogsLocalDataSource (CRUD operations)
+    └── LogsRepositoryImpl (business logic)
+        └── LogsBloc (state management)
 ```
 
 ### Database Layer
@@ -515,10 +515,10 @@ AppDatabase (Sqflite lifecycle)
 
 The database includes synchronization support even though Firestore sync is not yet implemented:
 
-- **`CardSyncStatus` enum**: `synced`, `created`, `updated`, `deleted`
-- **Tombstone records**: Deleted cards hidden from normal reads, preserved for sync
-- **`getUnsyncedCards()`**: Returns cards awaiting synchronization
-- **`markCardsSynced()`**: Acknowledges successful uploads
+- **`LogEntrySyncStatus` enum**: `synced`, `created`, `updated`, `deleted`
+- **Tombstone records**: Deleted log entries hidden from normal reads, preserved for sync
+- **`getUnsyncedLogs()`**: Returns log entries awaiting synchronization
+- **`markLogsSynced()`**: Acknowledges successful uploads
 
 ### Lifecycle Guarantees
 
@@ -527,12 +527,12 @@ The database includes synchronization support even though Firestore sync is not 
 - Writes commit atomically or roll back
 - Close drains active callbacks; later callers reopen cleanly
 - Downgrade attempts fail without modifying the database
-- Close and reopen preserve cards and their pending lifecycle state
+- Close and reopen preserve log entries and their pending lifecycle state
 
 ### Testing
 
 - Native process-relaunch smoke test verifies persistence across actual Android/iOS process restart
-- Run with: `flutter test integration_test/cards_sqlite_smoke.flow_test.dart -d <device-id>`
+- Run with: `flutter test integration_test/logs_sqlite_smoke.flow_test.dart -d <device-id>`
 
 ---
 
@@ -583,7 +583,7 @@ Located in `test/support/`:
 | File                                               | Purpose                                                                                       |
 |----------------------------------------------------|-----------------------------------------------------------------------------------------------|
 | `app_harness.dart`                                 | `useAppHarness()` for setup/teardown, `pumpApp()` for rendering `MyApp`, `currentRoutePath()` |
-| `fake_cards_repository.dart`                       | Configurable `FakeCardsRepository` with error injection and call counting                     |
+| `fake_logs_repository.dart`                       | Configurable `FakeLogsRepository` with error injection and call counting                     |
 | `fake_app_preferences_repository.dart`             | `FakeAppPreferencesRepository` recording saves                                                |
 | `in_memory_shared_preferences_async_platform.dart` | Platform fake for shared preferences                                                          |
 
@@ -591,12 +591,12 @@ Located in `test/support/`:
 
 ```dart
 void main() {
-  group('Cards editor', () {
+  group('Logs editor', () {
     useAppHarness();
 
-    testWidgets('creates a card from the compact editor route', (tester) async {
-      replaceCardsRepository(FakeCardsRepository(cards: const []));
-      await pumpApp(tester, initialLocation: '${AppRoutes.cardsPath}/new');
+    testWidgets('creates a log entry from the compact editor route', (tester) async {
+      replaceLogsRepository(FakeLogsRepository(logs: const []));
+      await pumpApp(tester, initialLocation: '${AppRoutes.logsPath}/new');
       // ... assertions
     });
   });
@@ -607,7 +607,7 @@ void main() {
 
 - **Default to constructing subjects directly** rather than through `GetIt`
 - **Name files**: `<name>_test.dart` (singular; `_tests.dart` is silently skipped)
-- **Role infix**: Mirror `lib/` convention (e.g., `cards.repository_impl_test.dart`)
+- **Role infix**: Mirror `lib/` convention (e.g., `logs.repository_impl_test.dart`)
 
 ---
 
@@ -617,7 +617,7 @@ void main() {
 
 - **Dart files**: `lowercase_with_underscores.dart`
 - **Test files**: `<name>_test.dart` (exactly; plural forms are not collected)
-- **Role infix**: Use dot-role for meaningful roles (e.g., `cards.bloc.dart`, `app_preferences.cubit.dart`)
+- **Role infix**: Use dot-role for meaningful roles (e.g., `logs.bloc.dart`, `app_preferences.cubit.dart`)
 - **Freezed files**: `*.freezed.dart` for generated code (never hand-edited)
 
 ### Directory Structure
@@ -635,13 +635,13 @@ lib/
 ├── data/                  # Data layer
 │   ├── constants/
 │   ├── datasources/
-│   │   └── card/
+│   │   └── logEntry/
 │   ├── dtos/
-│   │   └── card/
+│   │   └── logEntry/
 │   ├── repositories/
-│   │   └── card/
+│   │   └── logEntry/
 │   └── services/
-│       └── card/
+│       └── logEntry/
 ├── domain/                # Domain layer
 │   ├── entities/
 │   │   └── app_preferences/
@@ -657,9 +657,9 @@ lib/
 │       ├── access_denied/
 │       ├── app_preferences/
 │       │   └── cubit/
-│       ├── cards/
+│       ├── logs/
 │       │   ├── bloc/
-│       │   ├── card_details/
+│       │   ├── log_entry_details/
 │       │   │   └── widgets/
 │       │   └── widgets/
 │       ├── home/
@@ -691,6 +691,6 @@ The generated `*.freezed.dart` files are **never hand-edited** (per `AGENTS.md`)
 ## Related Documentation
 
 - [Testing Guide](../testing/README.md) — Test organization and conventions
-- [Cards SQLite Foundation](./cards_sqlite_foundation.md) — Cards persistence details
+- [Logs SQLite Foundation](./logs_sqlite_foundation.md) — log entry persistence details
 - [Navigation Guide](../testing/navigation.md) — Deep links and route guards
 - [ADR Index](../decisions/README.md) — Architecture Decision Records

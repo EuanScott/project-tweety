@@ -17,14 +17,14 @@ class AppRoutes {
   /// Named route shown when a guarded route denies access.
   static const accessDeniedName = 'accessDenied';
 
-  /// Named route for the cards tab root.
-  static const cardsName = 'cards';
+  /// Named route for the logs tab root.
+  static const logsName = 'logs';
 
-  /// Named route for a card details page inside the cards tab.
-  static const cardsDetailName = 'cardsDetail';
+  /// Named route for a log entry details page inside the logs tab.
+  static const logsDetailName = 'logsDetail';
 
-  /// Named route for creating a card inside Cards.
-  static const cardsNewName = 'cardsNew';
+  /// Named route for creating a log entry inside Logs.
+  static const logsNewName = 'logsNew';
 
   /// Named route for the settings tab root.
   static const settingsName = 'settings';
@@ -45,29 +45,29 @@ class AppRoutes {
   /// Absolute path for guarded-route access denial.
   static const accessDeniedPath = '/access-denied';
 
-  /// Absolute path for the cards tab root.
-  static const cardsPath = '/cards';
+  /// Absolute path for the logs tab root.
+  static const logsPath = '/logs';
 
-  /// Card id path parameter used by [cardsDetailPath].
-  static const cardsDetailIdParameter = 'cardId';
+  /// Log entry id path parameter used by [logsDetailPath].
+  static const logsDetailIdParameter = 'entryId';
 
-  /// Relative child path for creating a card under [cardsPath].
+  /// Relative child path for creating a log entry under [logsPath].
   ///
-  /// Card creation and card details are children of [cardsPath], so a compact
+  /// Log entry creation and log entry details are children of [logsPath], so a compact
   /// region always stacks them on the list and can swipe back to it.
-  static const cardsNewChildPath = 'new';
+  static const logsNewChildPath = 'new';
 
-  /// Absolute path for creating a card under Cards.
-  static const cardsNewPath = '$cardsPath/$cardsNewChildPath';
+  /// Absolute path for creating a log entry under Logs.
+  static const logsNewPath = '$logsPath/$logsNewChildPath';
 
-  /// Relative child path for card details under [cardsPath].
-  static const cardsDetailChildPath = ':$cardsDetailIdParameter';
+  /// Relative child path for log entry details under [logsPath].
+  static const logsDetailChildPath = ':$logsDetailIdParameter';
 
-  /// Absolute path for card details under Cards.
-  static const cardsDetailPath = '$cardsPath/$cardsDetailChildPath';
+  /// Absolute path for log entry details under Logs.
+  static const logsDetailPath = '$logsPath/$logsDetailChildPath';
 
-  /// Absolute path prefix for directly opening card details.
-  static const cardsDetailFullPathPrefix = '$cardsPath/';
+  /// Absolute path prefix for directly opening log entry details.
+  static const logsDetailFullPathPrefix = '$logsPath/';
 
   /// Absolute path for the settings tab root.
   static const settingsPath = '/settings';

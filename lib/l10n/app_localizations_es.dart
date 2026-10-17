@@ -19,118 +19,118 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dynamicFormTab => 'Formulario';
 
   @override
-  String get cardsTab => 'Tarjetas';
+  String get logsTab => 'Registros';
 
   @override
-  String get cardDetailsTitle => 'Detalles de la tarjeta';
+  String get logEntryDetailsTitle => 'Detalles de la entrada';
 
   @override
-  String get cardDetailsIdLabel => 'ID';
+  String get logEntryDetailsIdLabel => 'ID';
 
   @override
-  String get cardDetailsEmptyTitle => 'Selecciona una tarjeta';
+  String get logEntryDetailsEmptyTitle => 'Selecciona una entrada';
 
   @override
-  String get cardDetailsEmptyDescription =>
-      'Elige una tarjeta de la lista para ver los detalles.';
+  String get logEntryDetailsEmptyDescription =>
+      'Elige una entrada de la lista para ver los detalles.';
 
   @override
-  String get cardDetailsMissingTitle => 'Tarjeta no encontrada';
+  String get logEntryDetailsMissingTitle => 'Entrada no encontrada';
 
   @override
-  String get cardDetailsMissingDescription =>
-      'Esta tarjeta no está disponible.';
+  String get logEntryDetailsMissingDescription =>
+      'Esta entrada no está disponible.';
 
   @override
-  String get cardDetailsLoadFailedTitle => 'No se pudo cargar la tarjeta';
+  String get logEntryDetailsLoadFailedTitle => 'No se pudo cargar la entrada';
 
   @override
-  String get cardDetailsLoadFailedDescription =>
-      'Intenta abrir la tarjeta de nuevo.';
+  String get logEntryDetailsLoadFailedDescription =>
+      'Intenta abrir la entrada de nuevo.';
 
   @override
-  String get cardCreateTitle => 'Nueva tarjeta';
+  String get logEntryCreateTitle => 'Nueva entrada';
 
   @override
-  String get cardCreateAction => 'Crear tarjeta';
+  String get logEntryCreateAction => 'Crear entrada';
 
   @override
-  String get cardCreateTitleLabel => 'Título';
+  String get logEntryCreateTitleLabel => 'Título';
 
   @override
-  String get cardCreateDescriptionLabel => 'Descripción';
+  String get logEntryCreateDescriptionLabel => 'Descripción';
 
   @override
-  String get cardCreateTitleRequired => 'Ingresa un título.';
+  String get logEntryCreateTitleRequired => 'Ingresa un título.';
 
   @override
-  String get cardCreateDescriptionRequired => 'Ingresa una descripción.';
+  String get logEntryCreateDescriptionRequired => 'Ingresa una descripción.';
 
   @override
-  String get cardCreateEmptyTitle => 'Aún no hay tarjetas';
+  String get logEntryCreateEmptyTitle => 'Aún no hay entradas';
 
   @override
-  String get cardCreateEmptyDescription =>
-      'Crea tu primera tarjeta para comenzar.';
+  String get logEntryCreateEmptyDescription =>
+      'Crea tu primera entrada para comenzar.';
 
   @override
-  String get cardCreateFailed =>
-      'No se pudo guardar la tarjeta. Inténtalo de nuevo.';
+  String get logEntryCreateFailed =>
+      'No se pudo guardar la entrada. Inténtalo de nuevo.';
 
   @override
-  String get cardEditTitle => 'Editar tarjeta';
+  String get logEntryEditTitle => 'Editar entrada';
 
   @override
-  String get cardEditAction => 'Editar tarjeta';
+  String get logEntryEditAction => 'Editar entrada';
 
   @override
-  String get cardEditSaveAction => 'Guardar cambios';
+  String get logEntryEditSaveAction => 'Guardar cambios';
 
   @override
-  String get cardEditCancelAction => 'Cancelar';
+  String get logEntryEditCancelAction => 'Cancelar';
 
   @override
-  String get cardEditFailed =>
-      'No se pudo actualizar la tarjeta. Inténtalo de nuevo.';
+  String get logEntryEditFailed =>
+      'No se pudo actualizar la entrada. Inténtalo de nuevo.';
 
   @override
-  String get cardEditNotFound => 'La tarjeta ya no existe.';
+  String get logEntryEditNotFound => 'La entrada ya no existe.';
 
   @override
-  String get cardEditReturnToCardsAction => 'Volver a las tarjetas';
+  String get logEntryEditReturnToLogsAction => 'Volver a los registros';
 
   @override
-  String get cardDiscardConfirmationTitle => '¿Descartar cambios?';
+  String get logEntryDiscardConfirmationTitle => '¿Descartar cambios?';
 
   @override
-  String get cardDiscardConfirmationDescription =>
+  String get logEntryDiscardConfirmationDescription =>
       'Se perderán los cambios sin guardar.';
 
   @override
-  String get cardDiscardCancelAction => 'Seguir editando';
+  String get logEntryDiscardCancelAction => 'Seguir editando';
 
   @override
-  String get cardDiscardAction => 'Descartar cambios';
+  String get logEntryDiscardAction => 'Descartar cambios';
 
   @override
-  String get cardDeleteAction => 'Eliminar tarjeta';
+  String get logEntryDeleteAction => 'Eliminar entrada';
 
   @override
-  String get cardDeleteRetryAction => 'Reintentar eliminación';
+  String get logEntryDeleteRetryAction => 'Reintentar eliminación';
 
   @override
-  String get cardDeleteCancelAction => 'Conservar tarjeta';
+  String get logEntryDeleteCancelAction => 'Conservar entrada';
 
   @override
-  String get cardDeleteConfirmationTitle => '¿Eliminar tarjeta?';
+  String get logEntryDeleteConfirmationTitle => '¿Eliminar entrada?';
 
   @override
-  String get cardDeleteConfirmationDescription =>
-      'Esta tarjeta se eliminará de tu lista.';
+  String get logEntryDeleteConfirmationDescription =>
+      'Esta entrada se eliminará de tus registros.';
 
   @override
-  String get cardDeleteFailed =>
-      'No se pudo eliminar la tarjeta. Inténtalo de nuevo.';
+  String get logEntryDeleteFailed =>
+      'No se pudo eliminar la entrada. Inténtalo de nuevo.';
 
   @override
   String get settingsTab => 'Configuración';
@@ -266,11 +266,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get signInCompactSubtitle =>
-      'Inicia sesión para conservar tus Tarjetas y hacer una copia de seguridad.';
+      'Inicia sesión para conservar tus registros y hacer una copia de seguridad.';
 
   @override
   String get signInSceneSubtitle =>
-      'Tus Tarjetas, en este dispositivo y con copia de seguridad cuando tú decidas.';
+      'Tus registros, en este dispositivo y con copia de seguridad cuando tú decidas.';
 
   @override
   String get signInSplitTitle => 'Iniciar sesión';
@@ -296,7 +296,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get signInFootnote =>
-      'Tus Tarjetas se quedan en este dispositivo hasta que las sincronices.';
+      'Tus registros se quedan en este dispositivo hasta que los sincronices.';
 
   @override
   String get signInSceneDescription =>
@@ -346,14 +346,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get accountSignOutFootnote =>
-      'Tus Tarjetas se quedan en este dispositivo cuando cierras sesión.';
+      'Tus registros se quedan en este dispositivo cuando cierras sesión.';
 
   @override
   String get accountSignOutConfirmTitle => '¿Cerrar sesión?';
 
   @override
   String get accountSignOutConfirmBody =>
-      'Tus Tarjetas se quedan en este dispositivo. Vuelve a iniciar sesión para verlas.';
+      'Tus registros se quedan en este dispositivo. Vuelve a iniciar sesión para verlos.';
 
   @override
   String get accountSignOutConfirmCancel => 'Cancelar';
@@ -362,10 +362,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountSignOutConfirmAction => 'Cerrar sesión';
 
   @override
-  String get cardsSyncUpToDateTitle => 'Todas las Tarjetas sincronizadas';
+  String get logsSyncUpToDateTitle => 'Todos los registros sincronizados';
 
   @override
-  String cardsSyncLastSynced(DateTime time) {
+  String logsSyncLastSynced(DateTime time) {
     final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
     final String timeString = timeDateFormat.format(time);
 
@@ -373,7 +373,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPendingTitle(int count) {
+  String logsSyncPendingTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -384,7 +384,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPendingSubtitle(int count) {
+  String logsSyncPendingSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -395,18 +395,18 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncSyncingTitle => 'Sincronizando…';
+  String get logsSyncSyncingTitle => 'Sincronizando…';
 
   @override
-  String cardsSyncSyncingSubtitle(int savedCount, int changeCount) {
+  String logsSyncSyncingSubtitle(int savedCount, int changeCount) {
     return '$savedCount de $changeCount cambios guardados';
   }
 
   @override
-  String get cardsSyncSyncedTitle => 'Sincronizado ahora mismo';
+  String get logsSyncSyncedTitle => 'Sincronizado ahora mismo';
 
   @override
-  String cardsSyncSyncedSubtitle(int count) {
+  String logsSyncSyncedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -417,12 +417,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPartialTitle(int savedCount, int changeCount) {
+  String logsSyncPartialTitle(int savedCount, int changeCount) {
     return '$savedCount de $changeCount cambios sincronizados';
   }
 
   @override
-  String cardsSyncPartialSubtitle(int count) {
+  String logsSyncPartialSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -433,10 +433,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncOfflineTitle => 'Sin conexión';
+  String get logsSyncOfflineTitle => 'Sin conexión';
 
   @override
-  String cardsSyncOfflineSubtitle(int count) {
+  String logsSyncOfflineSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -448,10 +448,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncFailedTitle => 'No se pudo sincronizar';
+  String get logsSyncFailedTitle => 'No se pudo sincronizar';
 
   @override
-  String cardsSyncFailedSubtitle(int count) {
+  String logsSyncFailedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -463,38 +463,38 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncAlreadyUpToDateTitle => 'Ya está todo al día';
+  String get logsSyncAlreadyUpToDateTitle => 'Ya está todo al día';
 
   @override
-  String get cardsSyncAlreadyUpToDateSubtitle => 'Nada que sincronizar';
+  String get logsSyncAlreadyUpToDateSubtitle => 'Nada que sincronizar';
 
   @override
-  String cardsSyncDownloadingTitle(int count) {
+  String logsSyncDownloadingTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Obteniendo $count Tarjetas de tu Cuenta…',
-      one: 'Obteniendo 1 Tarjeta de tu Cuenta…',
+      other: 'Obteniendo $count entradas de tu Cuenta…',
+      one: 'Obteniendo 1 entrada de tu Cuenta…',
     );
     return '$_temp0';
   }
 
   @override
-  String get cardsSyncDownloadingSubtitle => 'Puedes seguir trabajando';
+  String get logsSyncDownloadingSubtitle => 'Puedes seguir trabajando';
 
   @override
-  String cardsSyncDownloadedTitle(int count) {
+  String logsSyncDownloadedTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Tarjetas añadidas desde tu Cuenta',
-      one: '1 Tarjeta añadida desde tu Cuenta',
+      other: '$count entradas añadidas desde tu Cuenta',
+      one: '1 entrada añadida desde tu Cuenta',
     );
     return '$_temp0';
   }
 
   @override
-  String cardsSyncDownloadedSubtitle(int count) {
+  String logsSyncDownloadedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -505,17 +505,17 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncAction => 'Sincronizar';
+  String get logsSyncAction => 'Sincronizar';
 
   @override
-  String get cardsSyncRetryAction => 'Reintentar';
+  String get logsSyncRetryAction => 'Reintentar';
 
   @override
-  String get cardsSyncInProgressAction => 'Sincronizando';
+  String get logsSyncInProgressAction => 'Sincronizando';
 
   @override
-  String get cardsUnsyncedCreated => 'Nueva';
+  String get logsUnsyncedCreated => 'Nueva';
 
   @override
-  String get cardsUnsyncedUpdated => 'Editada';
+  String get logsUnsyncedUpdated => 'Editada';
 }

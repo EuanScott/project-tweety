@@ -19,113 +19,115 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dynamicFormTab => 'Form';
 
   @override
-  String get cardsTab => 'Cards';
+  String get logsTab => 'Logs';
 
   @override
-  String get cardDetailsTitle => 'Card details';
+  String get logEntryDetailsTitle => 'Entry details';
 
   @override
-  String get cardDetailsIdLabel => 'ID';
+  String get logEntryDetailsIdLabel => 'ID';
 
   @override
-  String get cardDetailsEmptyTitle => 'Select a card';
+  String get logEntryDetailsEmptyTitle => 'Select an entry';
 
   @override
-  String get cardDetailsEmptyDescription =>
-      'Choose a card from the list to see details.';
+  String get logEntryDetailsEmptyDescription =>
+      'Choose an entry from the list to see details.';
 
   @override
-  String get cardDetailsMissingTitle => 'Card not found';
+  String get logEntryDetailsMissingTitle => 'Entry not found';
 
   @override
-  String get cardDetailsMissingDescription => 'This card is not available.';
+  String get logEntryDetailsMissingDescription =>
+      'This entry is not available.';
 
   @override
-  String get cardDetailsLoadFailedTitle => 'Unable to load card';
+  String get logEntryDetailsLoadFailedTitle => 'Unable to load entry';
 
   @override
-  String get cardDetailsLoadFailedDescription => 'Try opening the card again.';
+  String get logEntryDetailsLoadFailedDescription =>
+      'Try opening the entry again.';
 
   @override
-  String get cardCreateTitle => 'New card';
+  String get logEntryCreateTitle => 'New entry';
 
   @override
-  String get cardCreateAction => 'Create card';
+  String get logEntryCreateAction => 'Create entry';
 
   @override
-  String get cardCreateTitleLabel => 'Title';
+  String get logEntryCreateTitleLabel => 'Title';
 
   @override
-  String get cardCreateDescriptionLabel => 'Description';
+  String get logEntryCreateDescriptionLabel => 'Description';
 
   @override
-  String get cardCreateTitleRequired => 'Enter a title.';
+  String get logEntryCreateTitleRequired => 'Enter a title.';
 
   @override
-  String get cardCreateDescriptionRequired => 'Enter a description.';
+  String get logEntryCreateDescriptionRequired => 'Enter a description.';
 
   @override
-  String get cardCreateEmptyTitle => 'No cards yet';
+  String get logEntryCreateEmptyTitle => 'No entries yet';
 
   @override
-  String get cardCreateEmptyDescription =>
-      'Create your first card to get started.';
+  String get logEntryCreateEmptyDescription =>
+      'Create your first entry to get started.';
 
   @override
-  String get cardCreateFailed => 'Unable to save card. Try again.';
+  String get logEntryCreateFailed => 'Unable to save entry. Try again.';
 
   @override
-  String get cardEditTitle => 'Edit card';
+  String get logEntryEditTitle => 'Edit entry';
 
   @override
-  String get cardEditAction => 'Edit card';
+  String get logEntryEditAction => 'Edit entry';
 
   @override
-  String get cardEditSaveAction => 'Save changes';
+  String get logEntryEditSaveAction => 'Save changes';
 
   @override
-  String get cardEditCancelAction => 'Cancel';
+  String get logEntryEditCancelAction => 'Cancel';
 
   @override
-  String get cardEditFailed => 'Unable to update card. Try again.';
+  String get logEntryEditFailed => 'Unable to update entry. Try again.';
 
   @override
-  String get cardEditNotFound => 'Card no longer exists.';
+  String get logEntryEditNotFound => 'Entry no longer exists.';
 
   @override
-  String get cardEditReturnToCardsAction => 'Return to cards';
+  String get logEntryEditReturnToLogsAction => 'Return to logs';
 
   @override
-  String get cardDiscardConfirmationTitle => 'Discard changes?';
+  String get logEntryDiscardConfirmationTitle => 'Discard changes?';
 
   @override
-  String get cardDiscardConfirmationDescription =>
+  String get logEntryDiscardConfirmationDescription =>
       'Your unsaved changes will be lost.';
 
   @override
-  String get cardDiscardCancelAction => 'Keep editing';
+  String get logEntryDiscardCancelAction => 'Keep editing';
 
   @override
-  String get cardDiscardAction => 'Discard changes';
+  String get logEntryDiscardAction => 'Discard changes';
 
   @override
-  String get cardDeleteAction => 'Delete card';
+  String get logEntryDeleteAction => 'Delete entry';
 
   @override
-  String get cardDeleteRetryAction => 'Retry deletion';
+  String get logEntryDeleteRetryAction => 'Retry deletion';
 
   @override
-  String get cardDeleteCancelAction => 'Keep card';
+  String get logEntryDeleteCancelAction => 'Keep entry';
 
   @override
-  String get cardDeleteConfirmationTitle => 'Delete card?';
+  String get logEntryDeleteConfirmationTitle => 'Delete entry?';
 
   @override
-  String get cardDeleteConfirmationDescription =>
-      'This card will be removed from your list.';
+  String get logEntryDeleteConfirmationDescription =>
+      'This entry will be removed from your logs.';
 
   @override
-  String get cardDeleteFailed => 'Unable to delete card. Try again.';
+  String get logEntryDeleteFailed => 'Unable to delete entry. Try again.';
 
   @override
   String get settingsTab => 'Settings';
@@ -261,11 +263,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signInCompactSubtitle =>
-      'Sign in to keep your Cards and back them up.';
+      'Sign in to keep your logs and back them up.';
 
   @override
   String get signInSceneSubtitle =>
-      'Your Cards, on this device and backed up when you choose.';
+      'Your logs, on this device and backed up when you choose.';
 
   @override
   String get signInSplitTitle => 'Sign in';
@@ -290,7 +292,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signInFootnote =>
-      'Your Cards stay on this device until you sync them.';
+      'Your logs stay on this device until you sync them.';
 
   @override
   String get signInSceneDescription =>
@@ -340,14 +342,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountSignOutFootnote =>
-      'Your Cards stay on this device when you sign out.';
+      'Your logs stay on this device when you sign out.';
 
   @override
   String get accountSignOutConfirmTitle => 'Sign out?';
 
   @override
   String get accountSignOutConfirmBody =>
-      'Your Cards stay on this device. Sign in again to see them.';
+      'Your logs stay on this device. Sign in again to see them.';
 
   @override
   String get accountSignOutConfirmCancel => 'Cancel';
@@ -356,10 +358,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountSignOutConfirmAction => 'Sign out';
 
   @override
-  String get cardsSyncUpToDateTitle => 'All Cards synced';
+  String get logsSyncUpToDateTitle => 'All logs synced';
 
   @override
-  String cardsSyncLastSynced(DateTime time) {
+  String logsSyncLastSynced(DateTime time) {
     final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
     final String timeString = timeDateFormat.format(time);
 
@@ -367,7 +369,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPendingTitle(int count) {
+  String logsSyncPendingTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -378,7 +380,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPendingSubtitle(int count) {
+  String logsSyncPendingSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -389,18 +391,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncSyncingTitle => 'Syncing…';
+  String get logsSyncSyncingTitle => 'Syncing…';
 
   @override
-  String cardsSyncSyncingSubtitle(int savedCount, int changeCount) {
+  String logsSyncSyncingSubtitle(int savedCount, int changeCount) {
     return '$savedCount of $changeCount changes saved';
   }
 
   @override
-  String get cardsSyncSyncedTitle => 'Synced just now';
+  String get logsSyncSyncedTitle => 'Synced just now';
 
   @override
-  String cardsSyncSyncedSubtitle(int count) {
+  String logsSyncSyncedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -411,12 +413,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPartialTitle(int savedCount, int changeCount) {
+  String logsSyncPartialTitle(int savedCount, int changeCount) {
     return '$savedCount of $changeCount changes synced';
   }
 
   @override
-  String cardsSyncPartialSubtitle(int count) {
+  String logsSyncPartialSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -427,10 +429,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncOfflineTitle => 'You\'re offline';
+  String get logsSyncOfflineTitle => 'You\'re offline';
 
   @override
-  String cardsSyncOfflineSubtitle(int count) {
+  String logsSyncOfflineSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -442,10 +444,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncFailedTitle => 'Couldn\'t sync';
+  String get logsSyncFailedTitle => 'Couldn\'t sync';
 
   @override
-  String cardsSyncFailedSubtitle(int count) {
+  String logsSyncFailedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -456,38 +458,38 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncAlreadyUpToDateTitle => 'Already up to date';
+  String get logsSyncAlreadyUpToDateTitle => 'Already up to date';
 
   @override
-  String get cardsSyncAlreadyUpToDateSubtitle => 'Nothing to sync';
+  String get logsSyncAlreadyUpToDateSubtitle => 'Nothing to sync';
 
   @override
-  String cardsSyncDownloadingTitle(int count) {
+  String logsSyncDownloadingTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Getting $count Cards from your Account…',
-      one: 'Getting 1 Card from your Account…',
+      other: 'Getting $count entries from your Account…',
+      one: 'Getting 1 entry from your Account…',
     );
     return '$_temp0';
   }
 
   @override
-  String get cardsSyncDownloadingSubtitle => 'You can keep working';
+  String get logsSyncDownloadingSubtitle => 'You can keep working';
 
   @override
-  String cardsSyncDownloadedTitle(int count) {
+  String logsSyncDownloadedTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Cards added from your Account',
-      one: '1 Card added from your Account',
+      other: '$count entries added from your Account',
+      one: '1 entry added from your Account',
     );
     return '$_temp0';
   }
 
   @override
-  String cardsSyncDownloadedSubtitle(int count) {
+  String logsSyncDownloadedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -498,17 +500,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncAction => 'Sync';
+  String get logsSyncAction => 'Sync';
 
   @override
-  String get cardsSyncRetryAction => 'Try again';
+  String get logsSyncRetryAction => 'Try again';
 
   @override
-  String get cardsSyncInProgressAction => 'Syncing';
+  String get logsSyncInProgressAction => 'Syncing';
 
   @override
-  String get cardsUnsyncedCreated => 'New';
+  String get logsUnsyncedCreated => 'New';
 
   @override
-  String get cardsUnsyncedUpdated => 'Edited';
+  String get logsUnsyncedUpdated => 'Edited';
 }

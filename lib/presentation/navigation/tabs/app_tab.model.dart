@@ -2,4 +2,4 @@
 ///
 /// The enum order is intentionally aligned with the bottom navigation
 /// destinations and the `StatefulShellRoute` branches.
-enum AppTab { home, cards, settings }
+enum AppTab { home, logs, settings }

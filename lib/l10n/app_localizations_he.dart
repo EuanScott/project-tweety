@@ -19,110 +19,112 @@ class AppLocalizationsHe extends AppLocalizations {
   String get dynamicFormTab => 'טופס';
 
   @override
-  String get cardsTab => 'כרטיסים';
+  String get logsTab => 'יומן';
 
   @override
-  String get cardDetailsTitle => 'פרטי כרטיס';
+  String get logEntryDetailsTitle => 'פרטי רשומה';
 
   @override
-  String get cardDetailsIdLabel => 'מזהה';
+  String get logEntryDetailsIdLabel => 'מזהה';
 
   @override
-  String get cardDetailsEmptyTitle => 'בחר כרטיס';
+  String get logEntryDetailsEmptyTitle => 'בחר רשומה';
 
   @override
-  String get cardDetailsEmptyDescription =>
-      'בחר כרטיס מהרשימה כדי לראות פרטים.';
+  String get logEntryDetailsEmptyDescription =>
+      'בחר רשומה מהרשימה כדי לראות פרטים.';
 
   @override
-  String get cardDetailsMissingTitle => 'הכרטיס לא נמצא';
+  String get logEntryDetailsMissingTitle => 'הרשומה לא נמצאה';
 
   @override
-  String get cardDetailsMissingDescription => 'הכרטיס הזה אינו זמין.';
+  String get logEntryDetailsMissingDescription => 'הרשומה הזו אינה זמינה.';
 
   @override
-  String get cardDetailsLoadFailedTitle => 'לא ניתן לטעון את הכרטיס';
+  String get logEntryDetailsLoadFailedTitle => 'לא ניתן לטעון את הרשומה';
 
   @override
-  String get cardDetailsLoadFailedDescription => 'נסה לפתוח את הכרטיס שוב.';
+  String get logEntryDetailsLoadFailedDescription => 'נסה לפתוח את הרשומה שוב.';
 
   @override
-  String get cardCreateTitle => 'כרטיס חדש';
+  String get logEntryCreateTitle => 'רשומה חדשה';
 
   @override
-  String get cardCreateAction => 'צור כרטיס';
+  String get logEntryCreateAction => 'צור רשומה';
 
   @override
-  String get cardCreateTitleLabel => 'כותרת';
+  String get logEntryCreateTitleLabel => 'כותרת';
 
   @override
-  String get cardCreateDescriptionLabel => 'תיאור';
+  String get logEntryCreateDescriptionLabel => 'תיאור';
 
   @override
-  String get cardCreateTitleRequired => 'הזן כותרת.';
+  String get logEntryCreateTitleRequired => 'הזן כותרת.';
 
   @override
-  String get cardCreateDescriptionRequired => 'הזן תיאור.';
+  String get logEntryCreateDescriptionRequired => 'הזן תיאור.';
 
   @override
-  String get cardCreateEmptyTitle => 'אין עדיין כרטיסים';
+  String get logEntryCreateEmptyTitle => 'אין עדיין רשומות';
 
   @override
-  String get cardCreateEmptyDescription => 'צור את הכרטיס הראשון כדי להתחיל.';
+  String get logEntryCreateEmptyDescription =>
+      'צור את הרשומה הראשונה כדי להתחיל.';
 
   @override
-  String get cardCreateFailed => 'לא ניתן לשמור את הכרטיס. נסה שוב.';
+  String get logEntryCreateFailed => 'לא ניתן לשמור את הרשומה. נסה שוב.';
 
   @override
-  String get cardEditTitle => 'עריכת כרטיס';
+  String get logEntryEditTitle => 'עריכת רשומה';
 
   @override
-  String get cardEditAction => 'עריכת כרטיס';
+  String get logEntryEditAction => 'עריכת רשומה';
 
   @override
-  String get cardEditSaveAction => 'שמירת שינויים';
+  String get logEntryEditSaveAction => 'שמירת שינויים';
 
   @override
-  String get cardEditCancelAction => 'ביטול';
+  String get logEntryEditCancelAction => 'ביטול';
 
   @override
-  String get cardEditFailed => 'לא ניתן לעדכן את הכרטיס. נסה שוב.';
+  String get logEntryEditFailed => 'לא ניתן לעדכן את הרשומה. נסה שוב.';
 
   @override
-  String get cardEditNotFound => 'הכרטיס כבר לא קיים.';
+  String get logEntryEditNotFound => 'הרשומה כבר לא קיימת.';
 
   @override
-  String get cardEditReturnToCardsAction => 'חזרה לכרטיסים';
+  String get logEntryEditReturnToLogsAction => 'חזרה ליומן';
 
   @override
-  String get cardDiscardConfirmationTitle => 'לבטל את השינויים?';
+  String get logEntryDiscardConfirmationTitle => 'לבטל את השינויים?';
 
   @override
-  String get cardDiscardConfirmationDescription => 'השינויים שלא נשמרו יאבדו.';
+  String get logEntryDiscardConfirmationDescription =>
+      'השינויים שלא נשמרו יאבדו.';
 
   @override
-  String get cardDiscardCancelAction => 'להמשיך לערוך';
+  String get logEntryDiscardCancelAction => 'להמשיך לערוך';
 
   @override
-  String get cardDiscardAction => 'ביטול שינויים';
+  String get logEntryDiscardAction => 'ביטול שינויים';
 
   @override
-  String get cardDeleteAction => 'מחק כרטיס';
+  String get logEntryDeleteAction => 'מחק רשומה';
 
   @override
-  String get cardDeleteRetryAction => 'נסה למחוק שוב';
+  String get logEntryDeleteRetryAction => 'נסה למחוק שוב';
 
   @override
-  String get cardDeleteCancelAction => 'השאר כרטיס';
+  String get logEntryDeleteCancelAction => 'השאר רשומה';
 
   @override
-  String get cardDeleteConfirmationTitle => 'למחוק את הכרטיס?';
+  String get logEntryDeleteConfirmationTitle => 'למחוק את הרשומה?';
 
   @override
-  String get cardDeleteConfirmationDescription => 'הכרטיס יוסר מהרשימה שלך.';
+  String get logEntryDeleteConfirmationDescription => 'הרשומה תוסר מהיומן שלך.';
 
   @override
-  String get cardDeleteFailed => 'לא ניתן למחוק את הכרטיס. נסה שוב.';
+  String get logEntryDeleteFailed => 'לא ניתן למחוק את הרשומה. נסה שוב.';
 
   @override
   String get settingsTab => 'הגדרות';
@@ -255,11 +257,10 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get signInCompactSubtitle =>
-      'התחבר כדי לשמור את הכרטיסים שלך ולגבות אותם.';
+      'התחבר כדי לשמור את היומן שלך ולגבות אותו.';
 
   @override
-  String get signInSceneSubtitle =>
-      'הכרטיסים שלך, במכשיר הזה ומגובים מתי שתבחר.';
+  String get signInSceneSubtitle => 'היומן שלך, במכשיר הזה ומגובה מתי שתבחר.';
 
   @override
   String get signInSplitTitle => 'כניסה';
@@ -283,8 +284,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get signInErrorOther => 'משהו השתבש. נסה שוב.';
 
   @override
-  String get signInFootnote =>
-      'הכרטיסים שלך נשארים במכשיר הזה עד שתסנכרן אותם.';
+  String get signInFootnote => 'היומן שלך נשאר במכשיר הזה עד שתסנכרן אותו.';
 
   @override
   String get signInSceneDescription =>
@@ -333,15 +333,14 @@ class AppLocalizationsHe extends AppLocalizations {
   String get accountSigningOut => 'מתנתק…';
 
   @override
-  String get accountSignOutFootnote =>
-      'הכרטיסים שלך נשארים במכשיר הזה כשאתה מתנתק.';
+  String get accountSignOutFootnote => 'היומן שלך נשאר במכשיר הזה כשאתה מתנתק.';
 
   @override
   String get accountSignOutConfirmTitle => 'להתנתק?';
 
   @override
   String get accountSignOutConfirmBody =>
-      'הכרטיסים שלך נשארים במכשיר הזה. התחבר שוב כדי לראות אותם.';
+      'היומן שלך נשאר במכשיר הזה. התחבר שוב כדי לראות אותו.';
 
   @override
   String get accountSignOutConfirmCancel => 'ביטול';
@@ -350,10 +349,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get accountSignOutConfirmAction => 'התנתק';
 
   @override
-  String get cardsSyncUpToDateTitle => 'כל הכרטיסים מסונכרנים';
+  String get logsSyncUpToDateTitle => 'כל הרשומות מסונכרנות';
 
   @override
-  String cardsSyncLastSynced(DateTime time) {
+  String logsSyncLastSynced(DateTime time) {
     final intl.DateFormat timeDateFormat = intl.DateFormat.jm(localeName);
     final String timeString = timeDateFormat.format(time);
 
@@ -361,7 +360,7 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPendingTitle(int count) {
+  String logsSyncPendingTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -372,7 +371,7 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPendingSubtitle(int count) {
+  String logsSyncPendingSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -383,18 +382,18 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncSyncingTitle => 'מסנכרן…';
+  String get logsSyncSyncingTitle => 'מסנכרן…';
 
   @override
-  String cardsSyncSyncingSubtitle(int savedCount, int changeCount) {
+  String logsSyncSyncingSubtitle(int savedCount, int changeCount) {
     return '$savedCount מתוך $changeCount שינויים נשמרו';
   }
 
   @override
-  String get cardsSyncSyncedTitle => 'סונכרן הרגע';
+  String get logsSyncSyncedTitle => 'סונכרן הרגע';
 
   @override
-  String cardsSyncSyncedSubtitle(int count) {
+  String logsSyncSyncedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -405,12 +404,12 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String cardsSyncPartialTitle(int savedCount, int changeCount) {
+  String logsSyncPartialTitle(int savedCount, int changeCount) {
     return '$savedCount מתוך $changeCount שינויים סונכרנו';
   }
 
   @override
-  String cardsSyncPartialSubtitle(int count) {
+  String logsSyncPartialSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -421,10 +420,10 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncOfflineTitle => 'אין חיבור לרשת';
+  String get logsSyncOfflineTitle => 'אין חיבור לרשת';
 
   @override
-  String cardsSyncOfflineSubtitle(int count) {
+  String logsSyncOfflineSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -435,10 +434,10 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncFailedTitle => 'לא ניתן לסנכרן';
+  String get logsSyncFailedTitle => 'לא ניתן לסנכרן';
 
   @override
-  String cardsSyncFailedSubtitle(int count) {
+  String logsSyncFailedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -449,38 +448,38 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncAlreadyUpToDateTitle => 'הכול כבר מעודכן';
+  String get logsSyncAlreadyUpToDateTitle => 'הכול כבר מעודכן';
 
   @override
-  String get cardsSyncAlreadyUpToDateSubtitle => 'אין מה לסנכרן';
+  String get logsSyncAlreadyUpToDateSubtitle => 'אין מה לסנכרן';
 
   @override
-  String cardsSyncDownloadingTitle(int count) {
+  String logsSyncDownloadingTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'מוריד $count כרטיסים מהחשבון שלך…',
-      one: 'מוריד כרטיס אחד מהחשבון שלך…',
+      other: 'מוריד $count רשומות מהחשבון שלך…',
+      one: 'מוריד רשומה אחת מהחשבון שלך…',
     );
     return '$_temp0';
   }
 
   @override
-  String get cardsSyncDownloadingSubtitle => 'אפשר להמשיך לעבוד';
+  String get logsSyncDownloadingSubtitle => 'אפשר להמשיך לעבוד';
 
   @override
-  String cardsSyncDownloadedTitle(int count) {
+  String logsSyncDownloadedTitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count כרטיסים נוספו מהחשבון שלך',
-      one: 'כרטיס אחד נוסף מהחשבון שלך',
+      other: '$count רשומות נוספו מהחשבון שלך',
+      one: 'רשומה אחת נוספה מהחשבון שלך',
     );
     return '$_temp0';
   }
 
   @override
-  String cardsSyncDownloadedSubtitle(int count) {
+  String logsSyncDownloadedSubtitle(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -491,17 +490,17 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get cardsSyncAction => 'סנכרן';
+  String get logsSyncAction => 'סנכרן';
 
   @override
-  String get cardsSyncRetryAction => 'נסה שוב';
+  String get logsSyncRetryAction => 'נסה שוב';
 
   @override
-  String get cardsSyncInProgressAction => 'מסנכרן';
+  String get logsSyncInProgressAction => 'מסנכרן';
 
   @override
-  String get cardsUnsyncedCreated => 'חדש';
+  String get logsUnsyncedCreated => 'חדשה';
 
   @override
-  String get cardsUnsyncedUpdated => 'נערך';
+  String get logsUnsyncedUpdated => 'נערכה';
 }

@@ -399,27 +399,26 @@ void main() {
         expect(rootObserver.pushedRoutes.length, greaterThan(0));
       });
 
-      testWidgets(
-        'fills to standardMaxHeightFactor even with short content',
-        (tester) async {
-          await tester.pumpWidget(
-            const _TestApp(
-              mediaQuerySize: Size(400, 800),
-              home: _ModalLauncher(variant: _ModalVariant.blocking),
-            ),
-          );
+      testWidgets('fills to standardMaxHeightFactor even with short content', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          const _TestApp(
+            mediaQuerySize: Size(400, 800),
+            home: _ModalLauncher(variant: _ModalVariant.blocking),
+          ),
+        );
 
-          await _tapAndFinishTransition(tester, find.text('open-modal'));
+        await _tapAndFinishTransition(tester, find.text('open-modal'));
 
-          final bottomSheet = tester.widget<BottomSheet>(
-            find.byType(BottomSheet),
-          );
-          const expectedHeight = 800 * AppModal.standardMaxHeightFactor;
+        final bottomSheet = tester.widget<BottomSheet>(
+          find.byType(BottomSheet),
+        );
+        const expectedHeight = 800 * AppModal.standardMaxHeightFactor;
 
-          expect(bottomSheet.constraints!.minHeight, expectedHeight);
-          expect(bottomSheet.constraints!.maxHeight, expectedHeight);
-        },
-      );
+        expect(bottomSheet.constraints!.minHeight, expectedHeight);
+        expect(bottomSheet.constraints!.maxHeight, expectedHeight);
+      });
     });
 
     group('close button', () {
@@ -433,9 +432,7 @@ void main() {
         expect(find.byIcon(Icons.close), findsNothing);
       });
 
-      testWidgets('does not show a close button on .compact', (
-        tester,
-      ) async {
+      testWidgets('does not show a close button on .compact', (tester) async {
         await tester.pumpWidget(
           const _TestApp(home: _ModalLauncher(variant: _ModalVariant.compact)),
         );
@@ -447,9 +444,7 @@ void main() {
 
       testWidgets('never shows a close button on .blocking', (tester) async {
         await tester.pumpWidget(
-          const _TestApp(
-            home: _ModalLauncher(variant: _ModalVariant.blocking),
-          ),
+          const _TestApp(home: _ModalLauncher(variant: _ModalVariant.blocking)),
         );
 
         await _tapAndFinishTransition(tester, find.text('open-modal'));
@@ -560,9 +555,7 @@ void main() {
       });
 
       group('close button', () {
-        testWidgets('shows a close button by default on .page', (
-          tester,
-        ) async {
+        testWidgets('shows a close button by default on .page', (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               platform: TargetPlatform.iOS,
@@ -590,9 +583,7 @@ void main() {
           expect(find.byIcon(Icons.close), findsOneWidget);
         });
 
-        testWidgets('never shows a close button on .blocking', (
-          tester,
-        ) async {
+        testWidgets('never shows a close button on .blocking', (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               platform: TargetPlatform.iOS,
@@ -641,29 +632,26 @@ void main() {
       });
 
       group('default height', () {
-        testWidgets(
-          '.page defaults to standardMaxHeightFactor of the screen',
-          (tester) async {
-            await tester.pumpWidget(
-              const _TestApp(
-                platform: TargetPlatform.iOS,
-                mediaQuerySize: Size(400, 800),
-                home: _ModalLauncher(variant: _ModalVariant.page),
-              ),
-            );
+        testWidgets('.page defaults to standardMaxHeightFactor of the screen', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              platform: TargetPlatform.iOS,
+              mediaQuerySize: Size(400, 800),
+              home: _ModalLauncher(variant: _ModalVariant.page),
+            ),
+          );
 
-            await _tapAndFinishTransition(tester, find.text('open-modal'));
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
 
-            final container = tester.widget<Container>(
-              find.byType(Container),
-            );
+          final container = tester.widget<Container>(find.byType(Container));
 
-            expect(
-              container.constraints!.maxHeight,
-              800 * AppModal.standardMaxHeightFactor,
-            );
-          },
-        );
+          expect(
+            container.constraints!.maxHeight,
+            800 * AppModal.standardMaxHeightFactor,
+          );
+        });
 
         testWidgets(
           '.blocking defaults to standardMaxHeightFactor of the screen',
@@ -678,9 +666,7 @@ void main() {
 
             await _tapAndFinishTransition(tester, find.text('open-modal'));
 
-            final container = tester.widget<Container>(
-              find.byType(Container),
-            );
+            final container = tester.widget<Container>(find.byType(Container));
 
             expect(
               container.constraints!.maxHeight,
@@ -764,9 +750,7 @@ void main() {
 
             const expectedMaxHeight = 800 * 0.5;
 
-            final container = tester.widget<Container>(
-              find.byType(Container),
-            );
+            final container = tester.widget<Container>(find.byType(Container));
 
             expect(container.constraints, isNotNull);
             expect(container.constraints!.maxHeight, expectedMaxHeight);
@@ -779,10 +763,7 @@ void main() {
           await tester.pumpWidget(
             const _TestApp(
               platform: TargetPlatform.iOS,
-              home: _ResultHarness(
-                variant: _ModalVariant.page,
-                canPop: false,
-              ),
+              home: _ResultHarness(variant: _ModalVariant.page, canPop: false),
             ),
           );
 
@@ -1028,9 +1009,7 @@ void main() {
 
         testWidgets(
           'shows a close button on .page when showCloseButton is true',
-          (
-            tester,
-          ) async {
+          (tester) async {
             await tester.pumpWidget(
               const _TestApp(
                 mediaQuerySize: expandedSize,
@@ -1062,9 +1041,7 @@ void main() {
           expect(find.byIcon(Icons.close), findsNothing);
         });
 
-        testWidgets('never shows a close button on .blocking', (
-          tester,
-        ) async {
+        testWidgets('never shows a close button on .blocking', (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               mediaQuerySize: expandedSize,
@@ -1129,39 +1106,37 @@ void main() {
           expect(find.text('result:true'), findsOneWidget);
         });
 
-        testWidgets(
-          'treats a surface exactly at the breakpoint as windowed',
-          (tester) async {
-            await tester.pumpWidget(
-              const _TestApp(
-                mediaQuerySize: Size(600, 1000),
-                home: _ModalLauncher(variant: _ModalVariant.page),
-              ),
-            );
+        testWidgets('treats a surface exactly at the breakpoint as windowed', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              mediaQuerySize: Size(600, 1000),
+              home: _ModalLauncher(variant: _ModalVariant.page),
+            ),
+          );
 
-            await _tapAndFinishTransition(tester, find.text('open-modal'));
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
 
-            expect(find.byType(BottomSheet), findsNothing);
-            expect(find.byType(Dialog), findsOneWidget);
-          },
-        );
+          expect(find.byType(BottomSheet), findsNothing);
+          expect(find.byType(Dialog), findsOneWidget);
+        });
 
-        testWidgets(
-          'stays a bottom sheet just below the breakpoint',
-          (tester) async {
-            await tester.pumpWidget(
-              const _TestApp(
-                mediaQuerySize: Size(599, 1000),
-                home: _ModalLauncher(variant: _ModalVariant.page),
-              ),
-            );
+        testWidgets('stays a bottom sheet just below the breakpoint', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            const _TestApp(
+              mediaQuerySize: Size(599, 1000),
+              home: _ModalLauncher(variant: _ModalVariant.page),
+            ),
+          );
 
-            await _tapAndFinishTransition(tester, find.text('open-modal'));
+          await _tapAndFinishTransition(tester, find.text('open-modal'));
 
-            expect(find.byType(Dialog), findsNothing);
-            expect(find.byType(BottomSheet), findsOneWidget);
-          },
-        );
+          expect(find.byType(Dialog), findsNothing);
+          expect(find.byType(BottomSheet), findsOneWidget);
+        });
       });
 
       group('cupertino', () {
@@ -1207,9 +1182,7 @@ void main() {
 
           await _tapAndFinishTransition(tester, find.text('open-modal'));
 
-          final container = tester.widget<Container>(
-            find.byType(Container),
-          );
+          final container = tester.widget<Container>(find.byType(Container));
 
           expect(container.constraints!.maxWidth, AppModal.windowedMaxWidth);
         });
@@ -1256,17 +1229,13 @@ void main() {
 
             const expectedMaxHeight = 1200 * 0.5;
 
-            final container = tester.widget<Container>(
-              find.byType(Container),
-            );
+            final container = tester.widget<Container>(find.byType(Container));
 
             expect(container.constraints!.maxHeight, expectedMaxHeight);
           },
         );
 
-        testWidgets('shows a close button on .page by default', (
-          tester,
-        ) async {
+        testWidgets('shows a close button on .page by default', (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               platform: TargetPlatform.iOS,
@@ -1280,9 +1249,7 @@ void main() {
           expect(find.byIcon(Icons.close), findsOneWidget);
         });
 
-        testWidgets('never shows a close button on .blocking', (
-          tester,
-        ) async {
+        testWidgets('never shows a close button on .blocking', (tester) async {
           await tester.pumpWidget(
             const _TestApp(
               platform: TargetPlatform.iOS,
@@ -1585,10 +1552,7 @@ class _ResultHarnessState extends State<_ResultHarness> {
 }
 
 class _NestedNavigatorHarness extends StatelessWidget {
-  const new({
-    required this.variant,
-    required this.useRootNavigator,
-  });
+  const new({required this.variant, required this.useRootNavigator});
 
   final _ModalVariant variant;
   final bool useRootNavigator;

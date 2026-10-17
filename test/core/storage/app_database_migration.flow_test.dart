@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/core/storage/app_database.storage.dart';
 import 'package:project_tweety/core/storage/app_database_migrations.storage.dart';
-import 'package:project_tweety/data/datasources/card/cards_local.datasource.dart';
+import 'package:project_tweety/data/datasources/log_entry/logs_local.datasource.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../support/fake_session_holder.dart';
@@ -43,24 +43,27 @@ void main() {
     test(
       'opening a v1 database preserves rows and adds sync metadata',
       () async {
-        const existingCard = <String, Object?>{
+        const existingLogEntry = <String, Object?>{
           'id': 'foundation-card',
           'title': 'Foundation card',
           'description': 'Created by schema version 1',
         };
-        await _createV1Database(databasePath, existingCard: existingCard);
+        await _createV1Database(
+          databasePath,
+          existingLogEntry: existingLogEntry,
+        );
 
         final database = openAppDatabase();
         final snapshot = await database.read((db) async {
           final versionRows = await db.rawQuery('PRAGMA user_version');
-          final cards = await db.query('cards');
-          return (version: versionRows.single['user_version'], cards: cards);
+          final logs = await db.query('cards');
+          return (version: versionRows.single['user_version'], logs: logs);
         });
 
         expect(snapshot.version, AppDatabaseMigrations.latestVersion);
-        expect(snapshot.cards, hasLength(1));
-        expect(snapshot.cards.single, <String, Object?>{
-          ...existingCard,
+        expect(snapshot.logs, hasLength(1));
+        expect(snapshot.logs.single, <String, Object?>{
+          ...existingLogEntry,
           'sync_status': 'synced',
           'updated_at': '',
           'last_synced_at': null,
@@ -74,7 +77,7 @@ void main() {
     test(
       'opening a v2 database migrates it and preserves existing rows',
       () async {
-        const existingCard = <String, Object?>{
+        const existingLogEntry = <String, Object?>{
           'id': 'legacy-card',
           'title': 'Legacy card',
           'description': 'Created before the latest migration',
@@ -83,18 +86,21 @@ void main() {
           'last_synced_at': '2026-06-30T12:00:00.000Z',
           'deleted_at': null,
         };
-        await _createV2Database(databasePath, existingCard: existingCard);
+        await _createV2Database(
+          databasePath,
+          existingLogEntry: existingLogEntry,
+        );
 
         final database = openAppDatabase();
         final snapshot = await database.read((db) async {
           final versionRows = await db.rawQuery('PRAGMA user_version');
           final columnRows = await db.rawQuery('PRAGMA table_info(cards)');
-          final cards = await db.query('cards');
+          final logs = await db.query('cards');
 
           return (
             version: versionRows.single['user_version'],
             columns: columnRows.map((row) => row['name']).toSet(),
-            cards: cards,
+            logs: logs,
           );
         });
 
@@ -112,11 +118,11 @@ void main() {
           }),
         );
         expect(snapshot.columns, contains('user_id'));
-        expect(snapshot.cards, <Map<String, Object?>>[
+        expect(snapshot.logs, <Map<String, Object?>>[
           {
-            ...existingCard,
+            ...existingLogEntry,
             'user_id': null,
-            'created_at': existingCard['updated_at'],
+            'created_at': existingLogEntry['updated_at'],
           },
         ]);
       },
@@ -126,14 +132,14 @@ void main() {
       await _createV2Database(databasePath);
 
       final database = openAppDatabase();
-      final cards = await database.read((db) => db.query('cards'));
+      final logs = await database.read((db) => db.query('cards'));
 
-      expect(cards, isEmpty);
+      expect(logs, isEmpty);
     });
 
     test('opening a v3 database keeps every row unowned and its sync state '
         'untouched', () async {
-      final existingCards = [
+      final existingLogs = [
         for (final status in ['synced', 'created', 'updated', 'deleted'])
           <String, Object?>{
             'id': '$status-card',
@@ -150,20 +156,20 @@ void main() {
       await _createMigratedDatabase(
         databasePath,
         version: 3,
-        existingCards: existingCards,
+        existingLogs: existingLogs,
       );
 
       final database = openAppDatabase();
       final snapshot = await database.read((db) async {
         final versionRows = await db.rawQuery('PRAGMA user_version');
-        final cards = await db.query('cards', orderBy: 'rowid ASC');
-        return (version: versionRows.single['user_version'], cards: cards);
+        final logs = await db.query('cards', orderBy: 'rowid ASC');
+        return (version: versionRows.single['user_version'], logs: logs);
       });
 
       expect(snapshot.version, AppDatabaseMigrations.latestVersion);
-      expect(snapshot.cards, [
-        for (final card in existingCards)
-          {...card, 'user_id': null, 'created_at': card['updated_at']},
+      expect(snapshot.logs, [
+        for (final logEntry in existingLogs)
+          {...logEntry, 'user_id': null, 'created_at': logEntry['updated_at']},
       ]);
     });
 
@@ -173,7 +179,7 @@ void main() {
         await _createMigratedDatabase(
           databasePath,
           version: 3,
-          existingCards: [
+          existingLogs: [
             <String, Object?>{
               'id': 'card-1',
               'title': 'Card Title 1',
@@ -187,13 +193,13 @@ void main() {
         );
 
         final database = openAppDatabase();
-        final cards = await CardsLocalDataSource(
+        final logs = await LogsLocalDataSource(
           database,
           FakeSessionHolder('first-account'),
-        ).getCards();
+        ).getLogs();
         final rows = await database.read((db) => db.query('cards'));
 
-        expect(cards.single.id, 'card-1');
+        expect(logs.single.id, 'card-1');
         expect(
           rows.single,
           allOf(
@@ -205,12 +211,12 @@ void main() {
     );
 
     test(
-      'opening a v4 database dates each Card from its last change',
+      'opening a v4 database dates each log entry from its last change',
       () async {
         await _createMigratedDatabase(
           databasePath,
           version: 4,
-          existingCards: [
+          existingLogs: [
             <String, Object?>{
               'id': 'dated-card',
               'title': 'Dated card',
@@ -246,7 +252,7 @@ void main() {
 
 Future<void> _createV1Database(
   String databasePath, {
-  required Map<String, Object?> existingCard,
+  required Map<String, Object?> existingLogEntry,
 }) async {
   final database = await databaseFactoryFfi.openDatabase(
     databasePath,
@@ -260,7 +266,7 @@ Future<void> _createV1Database(
             description TEXT NOT NULL
           )
         ''');
-        await db.insert('cards', existingCard);
+        await db.insert('cards', existingLogEntry);
       },
     ),
   );
@@ -269,7 +275,7 @@ Future<void> _createV1Database(
 
 Future<void> _createV2Database(
   String databasePath, {
-  Map<String, Object?>? existingCard,
+  Map<String, Object?>? existingLogEntry,
 }) async {
   final database = await databaseFactoryFfi.openDatabase(
     databasePath,
@@ -287,8 +293,8 @@ Future<void> _createV2Database(
             deleted_at TEXT
           )
         ''');
-        if (existingCard != null) {
-          await db.insert('cards', existingCard);
+        if (existingLogEntry != null) {
+          await db.insert('cards', existingLogEntry);
         }
       },
     ),
@@ -299,7 +305,7 @@ Future<void> _createV2Database(
 Future<void> _createMigratedDatabase(
   String databasePath, {
   required int version,
-  required List<Map<String, Object?>> existingCards,
+  required List<Map<String, Object?>> existingLogs,
 }) async {
   final database = await databaseFactoryFfi.openDatabase(
     databasePath,
@@ -307,8 +313,8 @@ Future<void> _createMigratedDatabase(
       version: version,
       onCreate: (db, version) async {
         await AppDatabaseMigrations.migrate(db, 0, version);
-        for (final card in existingCards) {
-          await db.insert('cards', card);
+        for (final logEntry in existingLogs) {
+          await db.insert('cards', logEntry);
         }
       },
     ),

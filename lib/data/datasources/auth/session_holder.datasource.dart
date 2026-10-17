@@ -1,4 +1,4 @@
-/// Who owns the Cards that a query reads or writes: the signed-in Account.
+/// Who owns the log entries that a query reads or writes: the signed-in Account.
 ///
 /// It is read at query time and holds no copy of its own. It is separate from
 /// `AuthRepository`, so a datasource never depends on a repository

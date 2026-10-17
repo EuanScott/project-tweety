@@ -10,12 +10,12 @@ import 'package:project_tweety/core/di/dependency_injection.dart';
 import 'package:project_tweety/core/platform/device_tilt.service.dart';
 import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
 import 'package:project_tweety/data/repositories/auth/session.model.dart';
-import 'package:project_tweety/data/repositories/card/cards.repository.dart';
+import 'package:project_tweety/data/repositories/log_entry/logs.repository.dart';
 import 'package:project_tweety/main.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 import 'fake_auth_repository.dart';
-import 'fake_cards_repository.dart';
+import 'fake_logs_repository.dart';
 import 'fake_device_tilt_service.dart';
 import 'in_memory_shared_preferences_async_platform.dart';
 
@@ -27,7 +27,7 @@ const systemTextSettingsChannel = MethodChannel(
 ///
 /// Installs in-memory shared preferences, stubs the system text settings
 /// channel, builds a real DI container, and swaps in a working
-/// [FakeCardsRepository] so tests that do not care about cards still render.
+/// [FakeLogsRepository] so tests that do not care about log entries still render.
 /// It also swaps in a signed-in [FakeAuthRepository], so the launch gate lets
 /// tests into the app, and a [FakeDeviceTiltService], so the sign-in scene
 /// never reaches the sensors.
@@ -47,8 +47,8 @@ void useAppHarness() {
         });
     await GetIt.I.reset();
     await configureCoreDependencies();
-    await GetIt.I.unregister<CardsRepository>();
-    GetIt.I.registerLazySingleton<CardsRepository>(FakeCardsRepository.new);
+    await GetIt.I.unregister<LogsRepository>();
+    GetIt.I.registerLazySingleton<LogsRepository>(FakeLogsRepository.new);
     await GetIt.I.unregister<AuthRepository>();
     GetIt.I.registerSingleton<AuthRepository>(FakeAuthRepository());
     await GetIt.I.unregister<DeviceTiltService>();

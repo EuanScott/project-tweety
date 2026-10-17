@@ -24,7 +24,10 @@ directory on first use.
 Database callbacks must use the executor passed to them. They must not recursively call `read`,
 `write`, or `close` on `AppDatabase`.
 
-### Cards schema
+### Log entries schema
+
+Log entries are stored in the `cards` table. The stored names predate the Logs
+rename and are kept ([ADR-0019](../../../docs/decisions/0019-log-entries-keep-the-cards-storage-names.md)).
 
 Version 1 creates `cards` with the following columns:
 
@@ -41,14 +44,14 @@ Version 2 adds sync metadata:
 
 Version 3 once inserted ten sample cards into an empty table. It is now a no-op
 ([ADR-0008](../../../docs/decisions/0008-cards-are-owned-by-the-signed-in-account.md)), so a new
-database starts with no cards.
+database starts with no log entries.
 
 Version 4 adds the owning Account:
 
 - `user_id TEXT`, nullable for good, with the index `cards_user_id`
 
 Rows that exist before version 4 keep a null `user_id` until the first signed-in Account adopts
-them. Adoption belongs to the Cards datasource, not to the migration.
+them. Adoption belongs to the Logs datasource, not to the migration.
 
 Version-1, version-2 and version-3 files migrate in place without replacing existing rows. Downgrades remain
 explicitly rejected; the app never destroys an existing database to recover from a version mismatch.

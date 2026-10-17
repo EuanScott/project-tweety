@@ -27,7 +27,7 @@ void main() {
     phoneNumber: phone,
   );
 
-  const signOutFootnote = 'Your Cards stay on this device when you sign out.';
+  const signOutFootnote = 'Your logs stay on this device when you sign out.';
   late FakeAuthRepository repository;
 
   Future<void> openModal(
@@ -114,7 +114,7 @@ void main() {
       expect(emailStatus(tester), 'Verified');
       expect(find.text('Google'), findsOneWidget);
       expect(
-        find.text('Your Cards stay on this device when you sign out.'),
+        find.text('Your logs stay on this device when you sign out.'),
         findsOneWidget,
       );
     });
@@ -219,16 +219,14 @@ void main() {
 
       expect(find.text('Sign out?'), findsOneWidget);
       expect(
-        find.text('Your Cards stay on this device. Sign in again to see them.'),
+        find.text('Your logs stay on this device. Sign in again to see them.'),
         findsOneWidget,
       );
       await tester.tap(find.text(action).last);
       await tester.pump();
     }
 
-    testWidgets('cancel closes the dialog and changes nothing', (
-      tester,
-    ) async {
+    testWidgets('cancel closes the dialog and changes nothing', (tester) async {
       await openModal(tester, complete);
 
       await confirm(tester, 'Cancel');

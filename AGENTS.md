@@ -93,9 +93,9 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
   - Everything under `test/support/`.
 - Test files always end `_test.dart`, singular. The Dart runner globs exactly
   that, so a file named `_tests.dart` is silently never collected. A test of
-  one file mirrors that file's name: `cards.bloc_test.dart`,
+  one file mirrors that file's name: `logs.bloc_test.dart`,
   `app_modal.widget_test.dart`. A test that drives several units uses the
-  `flow` role: `cards_navigation.flow_test.dart`.
+  `flow` role: `logs_navigation.flow_test.dart`.
 
 ### Value Types & Comments
 
@@ -126,7 +126,7 @@ Judgement calls, not mechanical gates — weigh per change, don't cite one to ju
   `test/support/`. The rationale is [ADR-0002](docs/decisions/0002-test-layer-conventions.md).
 - Default to constructing the subject under test directly. Use `GetIt` only for
   tests that drive `MyApp`, and go through `useAppHarness()` when you do.
-- Prefer adding a parameter to `FakeCardsRepository` over writing a new fake.
+- Prefer adding a parameter to `FakeLogsRepository` over writing a new fake.
 - Prefer targeted tests first, then broader validation if needed.
 - Add or update tests near the affected area when the repo already has an appropriate test pattern.
 - Avoid fixing unrelated failing tests as part of a focused task.

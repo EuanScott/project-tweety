@@ -38,7 +38,7 @@ This keeps the route graph easy to scan while moving repeated shell logic out of
 ## Deep Links
 
 `go_router` treats the incoming location as the source of truth, so routes such
-as `/settings/app-preferences` and `/cards/:cardId` can be opened directly.
+as `/settings/app-preferences` and `/logs/:entryId` can be opened directly.
 
 Widget tests exercise this with `MyApp(initialLocation: ...)`. Platform-level
 Android and iOS link registration is not configured yet.
@@ -99,7 +99,7 @@ The shared shell switches navigation chrome from the available width:
 - medium width from `600dp`: compact `NavigationRail` with labels under icons
 - tablet width from `1200dp`: permanent `NavigationDrawer`
 
-Feature pages should still decide their own content layout. For example, the Cards branch uses `/cards/:cardId` as a nested route: compact widths show details as a page, while wider widths can keep the list and selected details visible together.
+Feature pages should still decide their own content layout. For example, the Logs branch uses `/logs/:entryId` as a nested route: compact widths show details as a page, while wider widths can keep the list and selected details visible together.
 
 ## Adding a Nested Route
 
@@ -143,7 +143,7 @@ Root tab pages can register active-tab behavior with:
 
 ```dart
 TabReselectHandler<AppTab>(
-  tab: AppTab.cards,
+  tab: AppTab.logs,
   onReselect: _scrollToTop,
   child: PageScaffold(...),
 )
