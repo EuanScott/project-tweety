@@ -71,4 +71,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0016](0016-theme-colours-are-complete-brand-presets.md) | Theme colours are complete brand presets named after places and plants | accepted |
 | [0017](0017-neutral-app-icon-and-splash.md) | App icon and splash screen are neutral across theme colours | proposed |
 | [0018](0018-supply-chain-security-checks-in-ci.md) | Supply-chain security is checked in CI by OSV-Scanner, OpenSSF Scorecard and Dependabot | accepted |
+| [0019](0019-log-entries-keep-the-cards-storage-names.md) | Log entries keep the `cards` storage names | accepted |
 <!-- adr-index:end -->
