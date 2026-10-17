@@ -151,4 +151,4 @@ Default canonical triage labels (`needs-triage`, `needs-info`, `ready-for-agent`
 
 ### Domain docs
 
-Single-context: `CONTEXT.md` at the repo root (create lazily) + ADRs under `docs/decisions/`. See `docs/agents/domain.md`.
+Single-context: `GLOSSARY.md` at the repo root (create lazily) + ADRs under `docs/decisions/`. See `docs/agents/domain.md`.
