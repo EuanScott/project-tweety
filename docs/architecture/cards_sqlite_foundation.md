@@ -1,6 +1,6 @@
 # Cards SQLite persistence
 
-The feature terms used here are defined in the [Cards context](../CONTEXT.md).
+The feature terms used here are defined in the [glossary](../../GLOSSARY.md).
 
 ## Decision
 
