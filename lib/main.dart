@@ -5,6 +5,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:project_tweety/core/analytics/analytics.facade.dart';
+import 'package:project_tweety/core/platform/home_screen_shortcut.model.dart';
+import 'package:project_tweety/core/platform/home_screen_shortcut.service.dart';
 import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
 import 'package:project_tweety/data/services/log_entry/logs_download_trigger.service.dart';
 import 'package:project_tweety/dart_init.dart';
@@ -49,10 +51,14 @@ class _MyAppState extends State<MyApp> {
     analyticsFacade: widget.analyticsFacade ?? GetIt.I<AnalyticsFacade>(),
     canAccessSettings: widget.canAccessSettings,
   );
+  late final StreamSubscription<HomeScreenShortcut> _shortcuts;
 
   @override
   void initState() {
     super.initState();
+    _shortcuts = GetIt.I<HomeScreenShortcutService>().watchShortcuts().listen(
+      _openShortcut,
+    );
     // After the first frame, so startup never waits for a download.
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => GetIt.I<LogsDownloadTrigger>().start(),
@@ -61,12 +67,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    unawaited(_shortcuts.cancel());
     _router.dispose();
     _session.dispose();
     super.dispose();
   }
 
   //region Helpers
+
+  void _openShortcut(HomeScreenShortcut shortcut) {
+    switch (shortcut) {
+      case .createLog:
+        _router.go(AppRoutes.logsNewPath);
+    }
+  }
 
   ThemeMode _themeMode(AppPreferencesThemeMode themeMode) {
     switch (themeMode) {

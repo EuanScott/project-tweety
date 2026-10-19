@@ -19,6 +19,8 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		CED0E6B37121AD68583C97E6 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D14828EA74095916F2218F3 /* Pods_Runner.framework */; };
+		2A7807047EB2B592DE49D8C1 /* HomeScreenShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A679CA31AF3055E1F336813 /* HomeScreenShortcuts.swift */; };
+		0BDE98FDE8031897705FE16C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 771FC63E857D05B621167EF5 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,10 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D9D1469857348B3E13D25B7F /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		EC082A196E66A3AD5F786200 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		0A679CA31AF3055E1F336813 /* HomeScreenShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenShortcuts.swift; sourceTree = "<group>"; };
+		E4294823A6B72F431209E0E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C0567AE4187418B8C5A3D249 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3CCB7CC683E5575BCA9C938F /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +175,8 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FB11ED2DC5600515810 /* SceneDelegate.swift */,
+				0A679CA31AF3055E1F336813 /* HomeScreenShortcuts.swift */,
+				771FC63E857D05B621167EF5 /* InfoPlist.strings */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
@@ -247,6 +255,8 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
+				he,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
 			packageReferences = (
@@ -279,6 +289,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				8DE17C3C03213DB4AA4E50EC /* GoogleService-Info.plist in Resources */,
+				0BDE98FDE8031897705FE16C /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +388,7 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				74858FB01ED2DC5600515810 /* SceneDelegate.swift in Sources */,
+				2A7807047EB2B592DE49D8C1 /* HomeScreenShortcuts.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,6 +418,16 @@
 				97C147001CF9000F007C117D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		771FC63E857D05B621167EF5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E4294823A6B72F431209E0E0 /* en */,
+				C0567AE4187418B8C5A3D249 /* es */,
+				3CCB7CC683E5575BCA9C938F /* he */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
