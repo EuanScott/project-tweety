@@ -72,4 +72,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0017](0017-neutral-app-icon-and-splash.md) | App icon and splash screen are neutral across theme colours | proposed |
 | [0018](0018-supply-chain-security-checks-in-ci.md) | Supply-chain security is checked in CI by OSV-Scanner, OpenSSF Scorecard and Dependabot | accepted |
 | [0019](0019-log-entries-keep-the-cards-storage-names.md) | Log entries keep the `cards` storage names | accepted |
+| [0020](0020-ios-control-extension-targets-ios-18.md) | The iOS control extension targets iOS 18 | accepted |
 <!-- adr-index:end -->

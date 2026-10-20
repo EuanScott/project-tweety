@@ -1,16 +1,22 @@
 import Flutter
 import UIKit
 
-/// Holds the home screen quick action the person picked until Dart takes it.
+/// Holds the home screen quick action or Control Center control the person
+/// picked until Dart takes it.
 ///
-/// A quick action can launch the app before the Dart router exists, so this
+/// Either trigger can launch the app before the Dart router exists, so this
 /// never pushes the action itself. It stores the action, signals Dart, and
 /// Dart takes it when it is ready. Taking clears it, so an action opens once.
+///
+/// The pending type and live instance are static because the control's
+/// intent can run before or after `register(with:)`.
 final class HomeScreenShortcuts: NSObject, FlutterSceneLifeCycleDelegate {
   private static let channelName = "project_tweety/home_screen_shortcuts"
 
+  private static var pendingType: String?
+  private static var live: HomeScreenShortcuts?
+
   private let channel: FlutterMethodChannel
-  private var pendingType: String?
 
   private init(channel: FlutterMethodChannel) {
     self.channel = channel
@@ -22,6 +28,12 @@ final class HomeScreenShortcuts: NSObject, FlutterSceneLifeCycleDelegate {
     )
     instance.channel.setMethodCallHandler(instance.handle)
     registrar.addSceneDelegate(instance)
+    live = instance
+  }
+
+  static func hold(type: String) {
+    pendingType = type
+    live?.channel.invokeMethod("shortcutPending", arguments: nil)
   }
 
   func scene(
@@ -56,16 +68,15 @@ final class HomeScreenShortcuts: NSObject, FlutterSceneLifeCycleDelegate {
       return false
     }
 
-    pendingType = String(shortcutItem.type.dropFirst(prefix.count))
-    channel.invokeMethod("shortcutPending", arguments: nil)
+    HomeScreenShortcuts.hold(type: String(shortcutItem.type.dropFirst(prefix.count)))
     return true
   }
 
   private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "takePendingShortcut":
-      result(pendingType)
-      pendingType = nil
+      result(HomeScreenShortcuts.pendingType)
+      HomeScreenShortcuts.pendingType = nil
     default:
       result(FlutterMethodNotImplemented)
     }
