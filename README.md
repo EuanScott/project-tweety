@@ -1,6 +1,8 @@
 # Project Tweety
 
 [![Version](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FEuanScott%2Fproject-tweety%2Fmain%2Fpubspec.yaml&query=%24.version&label=version&color=blue)](pubspec.yaml)
+[![Flutter](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FEuanScott%2Fproject-tweety%2Fmain%2Fpubspec.yaml&query=%24.environment.flutter&label=flutter&logo=flutter&color=02569B)](pubspec.yaml)
+[![Dart](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FEuanScott%2Fproject-tweety%2Fmain%2Fpubspec.yaml&query=%24.environment.sdk&label=dart&logo=dart&color=0175C2)](pubspec.yaml)
 [![CI](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/EuanScott/project-tweety/badge)](https://scorecard.dev/viewer/?uri=github.com/EuanScott/project-tweety)
 
@@ -25,7 +27,7 @@ as this is a playground project, I will be using [Trunk Based Development](https
 Nothing fancy here, I'm just following the "Get started" guide on
 the [Official Flutter Docs](https://docs.flutter.dev/get-started/install)
 
-This project requires Flutter `3.47.0` (Dart `3.13.0`). After installing dependencies, enable the repo's git hooks once
+This project requires Flutter `3.47.8` (Dart `3.13.7`). After installing dependencies, enable the repo's git hooks once
 per clone:
 
 ```sh
