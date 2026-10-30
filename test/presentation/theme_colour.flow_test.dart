@@ -36,9 +36,9 @@ void main() {
         const Color(0xFF0E7474),
       );
 
-      await appContext(
-        tester,
-      ).read<AppPreferencesCubit>().updateThemeColour(.kalahari);
+      await appContext(tester)
+          .read<AppPreferencesCubit>()
+          .updateThemeColour(.kalahari);
       await tester.pumpAndSettle();
 
       expect(

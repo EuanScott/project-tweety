@@ -46,9 +46,7 @@ class _HomeShowcase extends StatelessWidget {
         AppButton.text(
           onPressed: () {
             unawaited(
-              context.showAppModal(
-                const Center(child: Text('Modal content')),
-              ),
+              context.showAppModal(const Center(child: Text('Modal content'))),
             );
           },
           child: const Text('Context Modal'),

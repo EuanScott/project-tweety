@@ -27,9 +27,8 @@ void main() {
     }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
     test('the app opts in to predictive back on Android 14 and later', () {
-      final manifest = File(
-        'android/app/src/main/AndroidManifest.xml',
-      ).readAsStringSync();
+      final manifest = File('android/app/src/main/AndroidManifest.xml')
+          .readAsStringSync();
 
       final applicationTag = RegExp(
         '<application[^>]*>',

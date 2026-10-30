@@ -55,9 +55,7 @@ void main() {
 
     testWidgets(
       'draws a divider between the panes, inset from top and bottom',
-      (
-        tester,
-      ) async {
+      (tester) async {
         await _pumpLayout(tester, size: const Size(900, 600));
 
         final divider = find.byType(VerticalDivider);
@@ -134,11 +132,7 @@ void main() {
     });
 
     testWidgets('honours a fixed primary width', (tester) async {
-      await _pumpLayout(
-        tester,
-        size: const Size(900, 600),
-        primaryWidth: 240,
-      );
+      await _pumpLayout(tester, size: const Size(900, 600), primaryWidth: 240);
 
       expect(tester.getSize(find.byKey(_primaryKey)).width, 224);
     });
@@ -167,10 +161,7 @@ Future<void> _pumpLayout(
           displayFeatures: displayFeatures,
         ),
         child: Padding(
-          padding: EdgeInsets.only(
-            left: layoutOffset.dx,
-            top: layoutOffset.dy,
-          ),
+          padding: EdgeInsets.only(left: layoutOffset.dx, top: layoutOffset.dy),
           child: Align(
             alignment: Alignment.topLeft,
             child: SizedBox.fromSize(
