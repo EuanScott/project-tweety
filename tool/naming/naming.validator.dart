@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
-const _agentsPath = 'AGENTS.md';
+const _standardsPath = 'CODING_STANDARDS.md';
 const _rolesStart = '<!-- naming-roles:start -->';
 const _rolesEnd = '<!-- naming-roles:end -->';
 const _testSuffix = '_test';
@@ -16,17 +16,10 @@ const _bootstrapFiles = <String>{
   'lib/dart_init.dart',
   'lib/core/di/dependency_injection.dart',
 };
-final _topLevelMain = RegExp(
-  r'^(?:[\w<>?, ]+\s)?main\s*\(',
-  multiLine: true,
-);
+final _topLevelMain = RegExp(r'^(?:[\w<>?, ]+\s)?main\s*\(', multiLine: true);
 
 final class NamingDiagnostic {
-  const new({
-    required this.code,
-    required this.message,
-    required this.path,
-  });
+  const new({required this.code, required this.message, required this.path});
 
   final String code;
   final String message;
@@ -41,11 +34,7 @@ final class NamingValidationResult {
   bool get isValid => diagnostics.isEmpty;
 }
 
-typedef _Roles = ({
-  Set<String> general,
-  Set<String> tooling,
-  Set<String> test,
-});
+typedef _Roles = ({Set<String> general, Set<String> tooling, Set<String> test});
 
 final class NamingValidator {
   const new({required this.repositoryRoot});
@@ -59,9 +48,9 @@ final class NamingValidator {
         NamingDiagnostic(
           code: 'naming.roles.missing',
           message:
-              '$_agentsPath has no role list between $_rolesStart and '
+              '$_standardsPath has no role list between $_rolesStart and '
               '$_rolesEnd.',
-          path: _agentsPath,
+          path: _standardsPath,
         ),
       ]);
     }
@@ -75,9 +64,9 @@ final class NamingValidator {
           NamingDiagnostic(
             code: 'naming.roles.group_missing',
             message:
-                '$_agentsPath role list has no "- $label" line, or it lists '
+                '$_standardsPath role list has no "- $label" line, or it lists '
                 'no roles.',
-            path: _agentsPath,
+            path: _standardsPath,
           ),
       ]);
     }
@@ -132,7 +121,7 @@ final class NamingValidator {
       return _diagnostic(
         path,
         'naming.role.unknown',
-        'Role .$role is not listed in $_agentsPath.',
+        'Role .$role is not listed in $_standardsPath.',
       );
     }
     return null;
@@ -143,7 +132,7 @@ final class NamingValidator {
       code: code,
       message:
           '$problem Expected feature_or_entity.role.dart with a role from '
-          '$_agentsPath.',
+          '$_standardsPath.',
       path: path,
     );
   }
@@ -156,10 +145,7 @@ final class NamingValidator {
             'test',
             p.posix
                 .relative(bootstrap, from: 'lib')
-                .replaceFirst(
-                  RegExp(r'\.dart$'),
-                  '_test.dart',
-                ),
+                .replaceFirst(RegExp(r'\.dart$'), '_test.dart'),
           ),
     );
   }
@@ -177,9 +163,11 @@ final class NamingValidator {
   }
 
   _Roles? _readRoles() {
-    final contents = File(
-      p.join(repositoryRoot.path, _agentsPath),
-    ).readAsStringSync();
+    final file = File(p.join(repositoryRoot.path, _standardsPath));
+    if (!file.existsSync()) {
+      return null;
+    }
+    final contents = file.readAsStringSync();
     final start = contents.indexOf(_rolesStart);
     final end = contents.indexOf(_rolesEnd);
     if (start < 0 || end < start) {
@@ -189,9 +177,9 @@ final class NamingValidator {
     final tooling = <String>{};
     final test = <String>{};
     for (final line in contents.substring(start, end).split('\n')) {
-      final roles = RegExp(
-        r'`\.(\w+)`',
-      ).allMatches(line).map((match) => match.group(1)!);
+      final roles = RegExp(r'`\.(\w+)`')
+          .allMatches(line)
+          .map((match) => match.group(1)!);
       final label = line.trimLeft();
       if (label.startsWith('- $_toolingLabel')) {
         tooling.addAll(roles);

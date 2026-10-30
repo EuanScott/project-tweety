@@ -30,6 +30,6 @@ lib/domain/
   BLoCs into domain.
 - Do not create a use case that only forwards one repository call unchanged.
 
-Read `lib/AGENTS.md` for naming conventions and
-`lib/domain/AGENTS.md` for policy and boundary rules. Use `$domain-scaffold`
-when the domain branch is justified.
+Read `CODING_STANDARDS.md` for naming conventions and
+`lib/domain/AGENTS.md` for policy and boundary rules. Use the `domain-scaffold`
+skill when the domain branch is justified.

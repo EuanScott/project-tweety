@@ -20,8 +20,8 @@ DataSource -> DTO -> RepositoryImpl -> Domain entity -> Use case -> BLoC/Cubit
 ## Canonical guidance
 
 - Implementation rules: [AGENTS.md](AGENTS.md)
-- Repository baseline: [repositories/_template](repositories/_template/)
-- Data-only scaffolding: `$data-scaffold`
+- Repository baseline: [repository templates](../../tool/templates/feature/data/repositories/)
+- Data-only scaffolding: the `data-scaffold` skill
 
 DTOs stay inside data. Repositories return app-facing values or implement a
 domain contract when domain is justified. Older features may use legacy names;

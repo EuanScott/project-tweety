@@ -22,7 +22,7 @@ void main() {
         equals(<String, Object?>{
           'code': 'corpus.skills_root.missing',
           'message': 'Local skill corpus directory does not exist.',
-          'path': '.codex/skills',
+          'path': '.agents/skills',
         }),
       );
     });
@@ -86,6 +86,73 @@ Run the workflow safely.
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.code),
         contains('skill.frontmatter.keys'),
+      );
+    });
+
+    test('allows a disable-model-invocation frontmatter key', () async {
+      final fixture = await _SkillFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.addSkill('explicit-only');
+      await fixture.writeSkillMarkdown('explicit-only', '''
+---
+name: explicit-only
+description: Validate a focused local workflow safely.
+disable-model-invocation: true
+---
+
+# Explicit Only
+
+## Workflow
+
+Inspect the request, perform the focused workflow, and report verification.
+''');
+
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
+
+      expect(result.diagnostics, isEmpty);
+    });
+
+    test('requires Claude and OpenAI invocation policies to agree', () async {
+      final fixture = await _SkillFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.addSkill('implicit-in-claude');
+      await fixture.addSkill('explicit-in-claude');
+      await fixture.writeSkillMarkdown('implicit-in-claude', '''
+---
+name: implicit-in-claude
+description: Validate a focused local workflow safely.
+disable-model-invocation: false
+---
+
+# Implicit In Claude
+
+## Workflow
+
+Inspect the request, perform the focused workflow, and report verification.
+''');
+      await fixture.writeOpenAiMetadata('explicit-in-claude', '''
+interface:
+  display_name: "Explicit In Claude"
+  short_description: "Run the focused explicit-in-claude workflow safely"
+  default_prompt: "Use \$explicit-in-claude to perform <request> through the focused workflow."
+policy:
+  allow_implicit_invocation: true
+''');
+
+      final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
+
+      expect(
+        result.diagnostics
+            .where(
+              (diagnostic) => diagnostic.code == 'skill.invocation.mismatch',
+            )
+            .map((diagnostic) => diagnostic.path),
+        unorderedEquals(<String>[
+          '.agents/skills/implicit-in-claude/SKILL.md',
+          '.agents/skills/explicit-in-claude/SKILL.md',
+        ]),
       );
     });
 
@@ -365,15 +432,20 @@ policy:
       final skillMarkdown = await fixture.readSkillMarkdown('path-skill');
       await fixture.writeSkillMarkdown(
         'path-skill',
-        '$skillMarkdown\nInspect `lib/missing_feature.dart`.\n',
+        '$skillMarkdown\nInspect `lib/missing_feature.dart` and `CODING_STANDARDS.md`.\n',
       );
 
       final result = SkillValidator(repositoryRoot: fixture.repositoryRoot)
           .validate();
 
       expect(
-        result.diagnostics.map((diagnostic) => diagnostic.code),
-        contains('repository.path.missing'),
+        result.diagnostics
+            .where((diagnostic) => diagnostic.code == 'repository.path.missing')
+            .map((diagnostic) => diagnostic.message),
+        containsAll(<Matcher>[
+          contains('lib/missing_feature.dart'),
+          contains('CODING_STANDARDS.md'),
+        ]),
       );
     });
 
@@ -411,7 +483,7 @@ policy:
                 (diagnostic) => diagnostic.code == 'repository.path.missing',
               )
               .map((diagnostic) => diagnostic.path),
-          equals(<String>['.codex/skills/references/shared.md']),
+          equals(<String>['.agents/skills/references/shared.md']),
         );
       },
     );
@@ -489,8 +561,8 @@ policy:
       expect(
         duplicates.map((diagnostic) => diagnostic.path).toSet(),
         equals(<String>{
-          '.codex/skills/second-skill/SKILL.md',
-          '.codex/skills/references/shared.md',
+          '.agents/skills/second-skill/SKILL.md',
+          '.agents/skills/references/shared.md',
         }),
       );
     });
@@ -604,11 +676,11 @@ Read [shared guidance](../references/shared.md).
         result.diagnostics
             .where((diagnostic) => diagnostic.code == 'reference.orphan')
             .map((diagnostic) => diagnostic.path),
-        equals(<String>['.codex/skills/references/orphan.md']),
+        equals(<String>['.agents/skills/references/orphan.md']),
       );
       expect(
         result.diagnostics.map((diagnostic) => diagnostic.path),
-        isNot(contains('.codex/skills/references/SKILL.md')),
+        isNot(contains('.agents/skills/references/SKILL.md')),
       );
     });
   });
@@ -631,7 +703,7 @@ class _SkillFixture {
     String description = 'Validate a focused local workflow safely.',
   }) async {
     final skillDirectory = Directory(
-      '${repositoryRoot.path}/.codex/skills/$name',
+      '${repositoryRoot.path}/.agents/skills/$name',
     );
     await Directory('${skillDirectory.path}/agents').create(recursive: true);
 
@@ -639,6 +711,7 @@ class _SkillFixture {
 ---
 name: $name
 description: $description
+disable-model-invocation: true
 ---
 
 # ${_titleCase(name)}
@@ -659,11 +732,11 @@ policy:
   }
 
   Future<void> writeSkillMarkdown(String name, String contents) =>
-      File('${repositoryRoot.path}/.codex/skills/$name/SKILL.md')
+      File('${repositoryRoot.path}/.agents/skills/$name/SKILL.md')
           .writeAsString(contents);
 
   Future<String> readSkillMarkdown(String name) =>
-      File('${repositoryRoot.path}/.codex/skills/$name/SKILL.md')
+      File('${repositoryRoot.path}/.agents/skills/$name/SKILL.md')
           .readAsString();
 
   Future<void> writeReference(
@@ -672,28 +745,28 @@ policy:
     String contents,
   ) async {
     final referenceDirectory = Directory(
-      '${repositoryRoot.path}/.codex/skills/$skillName/references',
+      '${repositoryRoot.path}/.agents/skills/$skillName/references',
     );
     await referenceDirectory.create(recursive: true);
     await File('${referenceDirectory.path}/$referenceName')
         .writeAsString(contents);
   }
 
-  Future<void> writeOpenAiMetadata(String skillName, String contents) =>
-      File('${repositoryRoot.path}/.codex/skills/$skillName/agents/openai.yaml')
-          .writeAsString(contents);
+  Future<void> writeOpenAiMetadata(String skillName, String contents) => File(
+    '${repositoryRoot.path}/.agents/skills/$skillName/agents/openai.yaml',
+  ).writeAsString(contents);
 
   Future<void> writeSkillFile(
     String skillName,
     String relativePath,
     String contents,
   ) =>
-      File('${repositoryRoot.path}/.codex/skills/$skillName/$relativePath')
+      File('${repositoryRoot.path}/.agents/skills/$skillName/$relativePath')
           .writeAsString(contents);
 
   Future<void> writeSharedReference(String name, String contents) async {
     final directory = Directory(
-      '${repositoryRoot.path}/.codex/skills/references',
+      '${repositoryRoot.path}/.agents/skills/references',
     );
     await directory.create(recursive: true);
     await File('${directory.path}/$name').writeAsString(contents);

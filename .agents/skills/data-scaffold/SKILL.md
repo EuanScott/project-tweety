@@ -1,6 +1,7 @@
 ---
 name: data-scaffold
 description: "Scaffold Project Tweety data artifacts for an existing feature: repository contracts and implementations, datasources, DTOs, or transport wiring. Use only for data-layer work."
+disable-model-invocation: true
 ---
 
 # Data Scaffold
@@ -22,7 +23,7 @@ Ask only for required information that repository inspection cannot resolve.
 
 ### 1. Establish authority and preflight targets
 
-Apply sources in this order: user request, applicable `AGENTS.md`, `tool/templates/feature/data/repositories/`, then the nearest data implementation only for uncovered details. Read root, `lib`, and data guidance; read domain guidance only when consuming an existing domain contract.
+Apply sources in this order: user request, applicable `AGENTS.md`, `tool/templates/feature/data/repositories/`, then the nearest data implementation only for uncovered details. Read `CODING_STANDARDS.md`, root, `lib`, and data guidance; read domain guidance only when consuming an existing domain contract.
 
 Before the first red test, inspect only that guidance, the exact existing or
 canonical pair, the requested source seam, and one nearest focused test. Do not

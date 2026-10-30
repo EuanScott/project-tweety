@@ -31,15 +31,115 @@ void main() {
       );
     });
 
+    test('rejects a root instruction file over its budget', () async {
+      final fixture = await _ContextFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.write('AGENTS.md', List.filled(41, 'Rule').join('\n'));
+
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
+
+      expect(
+        result.diagnostics.map((diagnostic) => diagnostic.code),
+        contains('agents.lines.root'),
+      );
+    });
+
+    test('rejects a broken coding standards Markdown reference', () async {
+      final fixture = await _ContextFixture.create();
+      addTearDown(fixture.dispose);
+      await fixture.write('CODING_STANDARDS.md', '[Missing](docs/missing.md)');
+
+      final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+          .validate();
+
+      expect(
+        result.diagnostics.map((diagnostic) => diagnostic.code),
+        contains('reference.missing'),
+      );
+    });
+
+    test(
+      'rejects broken Markdown references in root and docs guides',
+      () async {
+        final fixture = await _ContextFixture.create();
+        addTearDown(fixture.dispose);
+        await fixture.write('GLOSSARY.md', '[Missing](docs/missing.md)');
+        await fixture.write('README.md', '[Missing](docs/missing.md)');
+        await fixture.write(
+          'docs/README.md',
+          '[Missing](architecture/README.md)',
+        );
+
+        final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
+
+        expect(
+          result.diagnostics
+              .where((diagnostic) => diagnostic.code == 'reference.missing')
+              .map((diagnostic) => diagnostic.path),
+          unorderedEquals(<String>[
+            'GLOSSARY.md',
+            'README.md',
+            'docs/README.md',
+          ]),
+        );
+      },
+    );
+
+    test(
+      'ignores Markdown links inside fenced code blocks and HTML comments',
+      () async {
+        final fixture = await _ContextFixture.create();
+        addTearDown(fixture.dispose);
+        await fixture.write('docs/guide.md', '''
+# Guide
+
+<!-- [Commented link](missing_comment.md) -->
+
+Inline syntax example: `[ADR-0001](0001-short-title.md)`.
+
+```sh
+printf '[Example link](missing_code.md)\n'
+```
+''');
+
+        final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
+
+        expect(result.isValid, isTrue);
+      },
+    );
+
     test(
       'leaves skill-governance instructions outside the line budget',
       () async {
         final fixture = await _ContextFixture.create();
         addTearDown(fixture.dispose);
         await fixture.write(
-          '.codex/skills/AGENTS.md',
+          '.agents/skills/AGENTS.md',
           List.filled(51, 'Skill guidance').join('\n'),
         );
+
+        final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
+            .validate();
+
+        expect(result.isValid, isTrue);
+      },
+    );
+
+    test(
+      'checks instruction files once, not again through a symlink',
+      () async {
+        final fixture = await _ContextFixture.create();
+        addTearDown(fixture.dispose);
+        await fixture.write(
+          '.agents/skills/AGENTS.md',
+          List.filled(51, 'Skill guidance').join('\n'),
+        );
+        await Directory('${fixture.repositoryRoot.path}/.claude').create();
+        await Link('${fixture.repositoryRoot.path}/.claude/skills')
+            .create('../.agents/skills');
 
         final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
             .validate();
@@ -170,9 +270,8 @@ void main() {
     test('rejects a missing domain template', () async {
       final fixture = await _ContextFixture.create();
       addTearDown(fixture.dispose);
-      await File(
-        '${fixture.repositoryRoot.path}/${domainTemplatePaths.first}',
-      ).delete();
+      await File('${fixture.repositoryRoot.path}/${domainTemplatePaths.first}')
+          .delete();
 
       final result = ContextValidator(repositoryRoot: fixture.repositoryRoot)
           .validate();

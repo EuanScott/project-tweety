@@ -14,6 +14,7 @@ nearest `AGENTS.md`; for feature details, prefer the linked focused guide.
 
 - [App navigation](../lib/presentation/navigation/app.router.dart) owns routes, page builders, access decisions, localization, and analytics wiring.
 - [Navigation guide](../lib/presentation/navigation/README.md) explains the split with the reusable [navigation package](../packages/navigation/README.md).
+- [Shared widget guidance](../lib/presentation/widgets/AGENTS.md) covers app widgets reused across pages; the `shared-widget` and `update-widget` skills create and change them.
 - [Design system](../packages/design_system/README.md) owns adaptive UI primitives, themes, and brand tokens; pages and shared widgets consume its public package API.
 - [Localization sources](../lib/l10n/) are ARB files; generated localization Dart remains derived output.
 
@@ -27,11 +28,8 @@ nearest `AGENTS.md`; for feature details, prefer the linked focused guide.
 
 ## Current focused architecture
 
-- [Architecture documentation](architecture/README.md) navigates current-state
-  architecture documents, while [the ADR catalog](decisions/README.md) records
-  durable decisions and their rationale.
-- [Logs SQLite foundation](architecture/logs_sqlite_foundation.md) records the current local persistence design.
+- [ADR catalog](decisions/README.md) records durable decisions and their
+  rationale.
 - [Glossary](../GLOSSARY.md) defines the shared Logs terms used by the
   architecture and implementation history.
 - [Navigation testing](testing/navigation.md) records deep-link, guard, and adaptive-shell coverage.
-- [Project plans](plans/) provide historical implementation context, not active architectural authority.

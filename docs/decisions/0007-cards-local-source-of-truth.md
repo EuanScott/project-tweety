@@ -9,7 +9,7 @@ Cards persist to local SQLite. That foundation was built with synchronization
 scaffolding that has never run: a `CardSyncStatus` enum, `updatedAt`,
 `lastSyncedAt` and `deletedAt` columns, tombstone rows hidden from normal reads,
 and the `getUnsyncedCards()` / `markCardsSynced()` pair on `CardsDataSource`.
-[The architecture record](../architecture/logs_sqlite_foundation.md) defers the
+The initial SQLite foundation defers the
 bulk upload API, the sync UI, and any conflict policy.
 
 Adopting Firebase supplies the external record that scaffolding was waiting for.
@@ -20,7 +20,7 @@ and exposes `metadata.hasPendingWrites` so a caller can distinguish a local writ
 from a server-confirmed one. That is the same job the local sync columns do by
 hand.
 
-[Research into Firestore's offline persistence](../research/firestore-offline-persistence.md)
+Research into Firestore's offline persistence
 concluded the local machinery is redundant rather than complementary, and
 recommended retiring the SQLite Cards path in favour of a Firestore-backed
 datasource. Its deciding argument was that two independently durable offline

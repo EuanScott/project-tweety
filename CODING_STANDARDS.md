@@ -9,8 +9,6 @@ reasons behind each rule live in the ADRs in [docs/decisions](docs/decisions/REA
 - Development is trunk-based. Commit directly on `main`, or on the branch the
   user has checked out.
 - Create a branch or pull request only when the user asks for one.
-- TODO(owner): decide whether short-lived spike or research branches
-  (for example `spike/<topic>`) are allowed without an explicit request.
 - Dependabot still opens its own pull requests for dependency updates
   ([ADR-0018](docs/decisions/0018-supply-chain-security-checks-in-ci.md)).
 - Write every commit message as a Conventional Commit: `type(scope): subject`.
@@ -26,7 +24,7 @@ reasons behind each rule live in the ADRs in [docs/decisions](docs/decisions/REA
   - The logic is in `tool/hooks/bump_version.sh`
     ([ADR-0009](docs/decisions/0009-conventional-commit-driven-versioning.md)).
 - The hooks run only after `git config core.hooksPath .githooks` (once per
-  clone). If `git config core.hooksPath` does not print `.githooks`, tell the
+  clone). If `git config core.hooksPath` does not end in `.githooks`, tell the
   user.
 - `.githooks/pre-commit` runs the agent context, skill, ADR and file-naming
   validators, then `flutter analyze --no-fatal-infos` and
@@ -86,7 +84,7 @@ Rules the validator does not check:
   `.dto` in `lib/data` instead.
 - A file has exactly one role. Split a file that fits two roles.
 - A test of one file mirrors that file's name: `logs.bloc_test.dart`,
-  `app_modal.widget_test.dart`. A test that drives several units uses the
+  `logs.page_test.dart`, `app_modal.widget_test.dart`. A test that drives several units uses the
   `flow` role: `logs_navigation.flow_test.dart`.
 
 Exempt from roles: generated output (`*.g.dart`, `*.freezed.dart`,
@@ -125,7 +123,8 @@ declare a top-level `main`, `lib/dart_init.dart`,
 
 ## Generated files
 
-Change the source, then regenerate. Generated files are never hand-edited.
+Change the source, then regenerate. Hand-edit generated output only when the
+task targets it or regeneration is impossible.
 
 - DI (`lib/core/di/dependency_injection.config.dart`) and `freezed` output:
   `dart run build_runner build --delete-conflicting-outputs`.

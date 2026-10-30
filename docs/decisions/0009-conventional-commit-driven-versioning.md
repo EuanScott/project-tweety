@@ -4,6 +4,12 @@ Status: accepted
 Date: 2026-09-11
 Decision maker: Euan Scott
 
+> Note (2026-10-30): `.claude/CLAUDE.md` no longer exists. The Conventional
+> Commits rule is now in the root [`AGENTS.md`](../../AGENTS.md) and
+> [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md#git-workflow) under
+> [ADR-0021](0021-root-agent-context-is-guardrails-and-pointers.md). The
+> decision is unchanged.
+
 ## Context
 
 The repository had no version at all in practice. `pubspec.yaml` carried the

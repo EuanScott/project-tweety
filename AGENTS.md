@@ -1,156 +1,31 @@
 # AGENTS.md
 
-## Project Overview
-- `project-tweety` is a Flutter playground app for exploring ideas, patterns, and experiments outside of production work.
-- Prefer small, focused changes that fit the exploratory nature of the repo.
-- Preserve the existing layered structure instead of introducing new architectural styles unless the task explicitly requires it.
+## Guardrails
 
-## Tech Stack
-- Flutter `3.47.8` with Dart `3.13.7`, pinned exactly in every `pubspec.yaml` (app, `packages/design_system`, `packages/navigation`)
-- Minimum iOS version is `17.0`. Minimum Android version is API level `34` (Android 14). These values are in `ios/Runner.xcodeproj/project.pbxproj`, `android/app/build.gradle` and `flutter_launcher_icons.yaml`. Keep them the same.
-  The `NewLogControls` iOS extension targets iOS `18.0` as a stated exception ([ADR-0020](docs/decisions/0020-ios-control-extension-targets-ios-18.md)).
-- iOS dependencies use Swift Package Manager only. Do not add a `Podfile`. Do not add a plugin that does not support Swift Package Manager.
-- State management and DI packages include `bloc`, `flutter_bloc`, `get_it`, and `injectable`
-- Code generation is used for DI and Flutter-generated assets/localization
+- **Git is trunk-based.** Commit directly on `main`, or on the branch the user
+  has checked out. Create a branch or pull request only when the user asks;
+  this overrides any default to branch before committing.
+- **Commit messages are Conventional Commits.** The type sets the
+  `pubspec.yaml` version bump. Rules: [git workflow](CODING_STANDARDS.md#git-workflow).
 
-## Repository Layout
-- `packages/design_system`: shared Flutter design system package for reusable theming and UI-level primitives
-- `lib/core`: cross-cutting concerns such as analytics, DI, error reporting, and feature flags
-- `lib/data`: constants, DTOs, datasources, repositories, and services
-- `lib/domain`: optional mobile-owned domain concepts, repository contracts, and use cases for features that need app-specific policy beyond BFF-shaped data
-- `lib/presentation`: pages, widgets, extensions, and UI helpers
-- `lib/l10n`: ARB files and generated localization output
-- `test`: widget and shared/unit tests
+## Pointers
 
-For cross-cutting orientation, read the [source map](docs/source_map.md).
-
-## Design Principles
-
-Judgement calls, not mechanical gates — weigh per change, don't cite one to justify either extreme.
-
-- **YAGNI**: don't build a layer, abstraction, or config surface ahead of a concrete need. A deeply layered module (e.g. `lib/domain`) earns its cost only when the current task requires it.
-- **SOLID**: apply where it actually reduces coupling or clarifies a responsibility; don't force a pattern the change doesn't call for.
-- **KISS**: keep control flow inline until it earns extraction. Up to two branches (a simple `if`/`else`) stay inline in the calling method; a third branch or more is what justifies a helper method.
-- **DRY**: two occurrences of a snippet may stay duplicated. The third occurrence is what justifies extracting a shared helper.
-- **Efficiency**: default to linear-time (O(n)) algorithms and single-pass data access. Avoid nested loops or nested lookups over collections (e.g. a `.where`/`.contains` scan inside another loop) when a hash map, set, index, or single pass achieves the same result. Quadratic-or-worse complexity is acceptable only when the input is small and bounded (e.g. a fixed-size UI list) or when a linear rewrite would clearly hurt readability for no real gain — note the reason inline when that trade-off is made.
-
-## Skill Routing
-- Users can work directly in the codebase without using any skill. Skills are optional accelerators, not a required workflow.
-- Invocation policy lives in each skill's `agents/openai.yaml`; authoring and validation rules live in `.codex/skills/AGENTS.md`.
-- For future layered feature work, treat `_template` as the source of truth for the BFF-backed layered architecture scaffold with optional domain.
-  Each template path mirrors its destination. `tool/templates/feature/<layer>/...` maps to `lib/<layer>/...`.
-  The `test` branch maps to the repository `test/` root. Only `data`, `domain`, `presentation`, and `test` are valid layer directories.
-  - `tool/templates/feature/data/repositories/_template.repository.dart`
-  - `tool/templates/feature/data/repositories/_template.repository_impl.dart`
-  - `tool/templates/feature/domain/README.md` when a domain branch is justified
-  - `tool/templates/feature/presentation/pages/_template.page.dart`
-  - `tool/templates/feature/presentation/pages/widgets/_template_error.widget.dart`
-  - `tool/templates/feature/presentation/pages/bloc/`
-  - `tool/templates/feature/test/data/` and `tool/templates/feature/test/presentation/` for TDD references
-- Add `lib/domain` only case-by-case (e.g. settings) — never by default. See `lib/domain/AGENTS.md` for the bar and `lib/AGENTS.md` for the default data-plus-presentation path.
-- Full feature scaffolds, new shared widgets, existing shared-widget updates, and proactive single-view performance audits may select their matching local skill implicitly.
-- Layer-only `$data-scaffold`, `$domain-scaffold`, and `$page-scaffold` flows require explicit invocation. Ordinary behaviour changes stay in the normal implementation/TDD flow.
-
-## Working Conventions
-
-- Follow the existing lint rules in `analysis_options.yaml`. The workspace uses  `very_good_analysis` (not
-  `flutter_lints`), with `strict-casts`,  `strict-inference`, and `strict-raw-types` enabled. Suppressions are listed
-  explicitly with a reason.
-- Match the current import style: package imports for app entrypoints and shared modules, relative imports where already generated or established.
-- Treat this document as the source of truth for repository policy; use the
-  referenced `_template` files as the source of truth for concrete scaffold
-  structure.
-- Visible UI in pages and app-level shared widgets must use the adaptive primitives exported by `package:design_system` when a matching primitive exists. Add missing native/adaptive primitives to `packages/design_system` before using raw Material or Cupertino controls repeatedly — the design-system primitive owns the Material/Cupertino branching, callers express app intent.
-- Page composition (route entry, root view, `part`-file widgets) follows `lib/presentation/pages/AGENTS.md` — read it before touching a page.
-
-### Naming
-
-- Standardize filenames on `feature_or_entity.role.dart`.
-- Use `_` inside the business name and `.` before the technical role.
-- Every hand-written Dart file in `lib/`, `test/`, `integration_test/` and
-  `tool/` has a role from this closed list. `packages/` keep plain pub-style
-  names. The rationale and the meaning of each role are in
-  [ADR-0012](docs/decisions/0012-dart-file-roles-with-di-modules.md).
-  `tool/naming/naming.validator.dart` reads the roles between the markers
-  below, so this list is the single source.
-<!-- naming-roles:start -->
-  - Layer roles: `.page`, `.widget`, `.bloc`, `.cubit`, `.event`, `.state`,
-    `.entity`, `.dto`, `.repository`, `.repository_impl`, `.datasource`,
-    `.usecase`
-  - Support roles: `.service`, `.storage`, `.generator`, `.facade`,
-    `.module`, `.observer`, `.policy`, `.extension`, `.router`,
-    `.constants`, `.model`
-  - Tooling roles, `tool/` and `test/tool/` only: `.validator`, `.cli`,
-    `.executor`, `.evaluator`, `.comparator`, `.manifest`
-  - Test role, before `_test` only: `.flow`
-<!-- naming-roles:end -->
-- `.model` is a plain value type or enum. Use `.entity` in `lib/domain` and
-  `.dto` in `lib/data` instead.
-- A file has exactly one role. Split a file that fits two roles.
-- These files need no role:
-  - Generated output: `*.g.dart`, `*.freezed.dart`, `*.config.dart` and
-    `lib/l10n/app_localizations*.dart`.
-  - Non-test files that declare a top-level `main`.
-  - `lib/dart_init.dart` and `lib/core/di/dependency_injection.dart`.
-  - Everything under `test/support/`.
-- Test files always end `_test.dart`, singular. The Dart runner globs exactly
-  that, so a file named `_tests.dart` is silently never collected. A test of
-  one file mirrors that file's name: `logs.bloc_test.dart`,
-  `app_modal.widget_test.dart`. A test that drives several units uses the
-  `flow` role: `logs_navigation.flow_test.dart`.
-
-### Value Types & Comments
-
-- Immutable value types use `freezed` in every layer — entities, app-facing
-  repository values, storage models, events, and state. Never hand-write a
-  `copyWith` sentinel or an `Equatable` `props` override. Prefer a sealed
-  `freezed` union over a status enum plus nullable fields. See
-  [ADR-0004](docs/decisions/0004-value-type-conventions.md).
-- Do not add inline comments unless they clarify non-obvious behavior that cannot be expressed cleanly in code.
-
-## Generated Files
-- Treat generated files as derived artifacts unless the task explicitly targets generation output.
-- Do not hand-edit these files unless absolutely necessary:
-  - `lib/core/di/dependency_injection.config.dart`
-  - `lib/l10n/app_localizations.dart`
-  - `lib/l10n/app_localizations_en.dart`
-  - `lib/l10n/app_localizations_es.dart`
-- If source annotations, ARB files, or generation inputs change, regenerate instead of patching generated output directly.
-
-## Common Commands
-- Enable the repo git hooks (once per clone): `git config core.hooksPath .githooks`
-- `.githooks/pre-commit` runs the agent context, skill, ADR, and file naming validators on every commit, then `flutter analyze --no-fatal-infos` and `tool/hooks/bloc_lint.sh` on the staged Dart files; bypass with `git commit --no-verify`. CI runs the same checks on the whole project and fails on any warning or error ([ADR-0010](docs/decisions/0010-pre-commit-analysis-and-ci-enforcement.md)).
-- `.githooks/post-commit` bumps `version:` in `pubspec.yaml` from the Conventional Commit type and amends the commit so the bump travels with it. `feat`/`feature` and any breaking marker bump the minor while the major is `0`; `fix`/`perf` bump the patch; every other type leaves the version alone. Bypass with `NO_VERSION_BUMP=1 git commit ...` (`--no-verify` does not skip it), and a version you change by hand in the same commit is never re-bumped. The bump logic lives in `tool/hooks/bump_version.sh`.
-
-## Testing Guidance
-- Read the [testing guide](docs/testing/README.md) for the three test execution
-  contexts, the layer-to-test-type mapping, and the shared harness in
-  `test/support/`. The rationale is [ADR-0002](docs/decisions/0002-test-layer-conventions.md).
-- Default to constructing the subject under test directly. Use `GetIt` only for
-  tests that drive `MyApp`, and go through `useAppHarness()` when you do.
-- Prefer adding a parameter to `FakeLogsRepository` over writing a new fake.
-- Prefer targeted tests first, then broader validation if needed.
-- Add or update tests near the affected area when the repo already has an appropriate test pattern.
-- Avoid fixing unrelated failing tests as part of a focused task.
-- Existing tests may include older scaffolded examples; align new tests with the current app behavior rather than preserving obsolete smoke tests.
-
-## Change Scope
-- Keep changes surgical and relevant to the requested task.
-- Avoid committing build artifacts or platform-specific output unless the user explicitly asks for them.
-- Prefer editing source files under `lib/`, `test/`, and project config files over touching generated directories like `build/`, `.dart_tool/`, `android/build/`, or `ios/Pods/`.
-- Prefer placing reusable app-wide theming in `packages/design_system` instead of recreating it under `lib/`.
-
+- **Directory rules**: before you edit a file, read each `AGENTS.md` on the
+  path from the repository root to that file.
+- **Dart code**: before you write or review it, read
+  [CODING_STANDARDS.md](CODING_STANDARDS.md) (file-name roles, value types,
+  design thresholds, UI primitives, generated files).
+- **Dependencies and platform versions**: before you add a package or change
+  a Flutter, Dart, iOS or Android version, read
+  [platforms and dependencies](CODING_STANDARDS.md#platforms-and-dependencies).
+- **Tests**: read the [testing guide](docs/testing/README.md).
+- **Cross-cutting work**: start from the [source map](docs/source_map.md).
 
 ## Agent skills
 
-### Issue tracker
-
-Issues are tracked as GitHub issues on `EuanScott/project-tweety`, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
-
-### Triage labels
-
-Default canonical triage labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context: `GLOSSARY.md` at the repo root (create lazily) + ADRs under `docs/decisions/`. See `docs/agents/domain.md`.
+- **Issue tracker**: GitHub issues on `EuanScott/project-tweety`, via `gh`.
+  See `docs/agents/issue-tracker.md`.
+- **Triage labels**: type labels only; the canonical triage roles map to none.
+  See `docs/agents/triage-labels.md`.
+- **Domain docs**: single-context, `GLOSSARY.md` plus ADRs in `docs/decisions/`.
+  See `docs/agents/domain.md`.

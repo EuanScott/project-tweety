@@ -43,6 +43,7 @@ tool/hooks/bloc_lint.sh lib test packages
 dart run tool/agent_context/validate.dart
 dart run tool/skills/validate.dart
 dart run tool/decisions/adr.dart check
+dart run tool/naming/naming.dart check
 flutter test
 ```
 
@@ -66,15 +67,16 @@ See [the testing guide](docs/testing/README.md) for what belongs in `test/`,
 
 ### Pre-commit hook
 
-`.githooks/pre-commit` runs the three agent-tooling validators on every commit:
+`.githooks/pre-commit` runs the four repository validators on every commit:
 
 ```sh
 dart run tool/agent_context/validate.dart
 dart run tool/skills/validate.dart
 dart run tool/decisions/adr.dart check
+dart run tool/naming/naming.dart check
 ```
 
-These guard `AGENTS.md` line budgets, Markdown link integrity, skill word budgets, and ADR structure.
+These guard `AGENTS.md` line budgets, Markdown link integrity, skill word budgets, ADR structure, and Dart file-naming roles (`CODING_STANDARDS.md`).
 
 When the commit stages Dart files, the hook then runs `flutter analyze --no-fatal-infos` and
 `tool/hooks/bloc_lint.sh` on those files only. Warnings and errors block the commit; infos are printed but do not.
@@ -156,7 +158,6 @@ The rationale is [ADR-0018](docs/decisions/0018-supply-chain-security-checks-in-
 Broader project guides live under `docs/`. Current guides include:
 
 - [Navigation, deep links, and route guards](docs/testing/navigation.md)
-- [Logs SQLite persistence and native smoke testing](docs/architecture/logs_sqlite_foundation.md)
 - [Architecture Decision Records](docs/decisions/README.md)
 - [Conventional-commit-driven versioning](docs/decisions/0009-conventional-commit-driven-versioning.md)
 

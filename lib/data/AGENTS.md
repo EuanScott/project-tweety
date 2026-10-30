@@ -6,4 +6,5 @@ Read this for work under `lib/data/`.
 - Datasources stay close to a concrete source; DTOs stay inside data.
 - Repositories hide transport and persistence details and return app-facing values.
 - Data does not import presentation or own mobile business policy.
+- A new synced log entry field also needs `isValidCard` in [`firestore.rules`](../../firestore.rules); see the [storage guide](../core/storage/README.md#add-a-log-entry-column).
 - Test mapping and datasource coordination through the repository contract seam.

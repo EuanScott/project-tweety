@@ -3,6 +3,13 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+const _disableModelInvocationKey = 'disable-model-invocation';
+const _allowedFrontmatterKeys = <Object?>{
+  'name',
+  'description',
+  _disableModelInvocationKey,
+};
+
 /// Configurable limits enforced by [SkillValidator].
 final class SkillValidationBudgets {
   const new({
@@ -26,11 +33,7 @@ final class SkillValidationBudgets {
 
 /// Machine-readable validation issue.
 final class SkillDiagnostic {
-  const new({
-    required this.code,
-    required this.message,
-    required this.path,
-  });
+  const new({required this.code, required this.message, required this.path});
 
   final String code;
   final String message;
@@ -59,7 +62,7 @@ final class SkillValidationResult {
   };
 }
 
-/// Validates all skills under `.codex/skills` in [repositoryRoot].
+/// Validates all skills under `.agents/skills` in [repositoryRoot].
 final class SkillValidator {
   const new({
     required this.repositoryRoot,
@@ -71,13 +74,13 @@ final class SkillValidator {
 
   SkillValidationResult validate() {
     final diagnostics = <SkillDiagnostic>[];
-    final skillsRoot = Directory('${repositoryRoot.path}/.codex/skills');
+    final skillsRoot = Directory('${repositoryRoot.path}/.agents/skills');
     if (!skillsRoot.existsSync()) {
       return const SkillValidationResult([
         SkillDiagnostic(
           code: 'corpus.skills_root.missing',
           message: 'Local skill corpus directory does not exist.',
-          path: '.codex/skills',
+          path: '.agents/skills',
         ),
       ]);
     }
@@ -140,14 +143,15 @@ final class SkillValidator {
       try {
         final document = _parseSkillDocument(skillFile.readAsStringSync());
         final frontmatterKeys = document.frontmatter.keys.toSet();
-        if (frontmatterKeys.length != 2 ||
-            !frontmatterKeys.contains('name') ||
-            !frontmatterKeys.contains('description')) {
+        if (!frontmatterKeys.contains('name') ||
+            !frontmatterKeys.contains('description') ||
+            !_allowedFrontmatterKeys.containsAll(frontmatterKeys)) {
           diagnostics.add(
             SkillDiagnostic(
               code: 'skill.frontmatter.keys',
               message:
-                  'Frontmatter must contain exactly "name" and "description".',
+                  'Frontmatter must contain "name" and "description", and may '
+                  'contain "$_disableModelInvocationKey".',
               path: _relativePath(skillFile.path),
             ),
           );
@@ -157,8 +161,7 @@ final class SkillValidator {
           diagnostics.add(
             SkillDiagnostic(
               code: 'skill.name.invalid',
-              message:
-                  'Frontmatter name must be kebab-case and match the directory.',
+              message: 'Frontmatter name must be kebab-case and match the directory.',
               path: _relativePath(skillFile.path),
             ),
           );
@@ -277,11 +280,26 @@ final class SkillValidator {
             ),
           );
         }
-        _validateOpenAiMetadata(
+        final allowImplicitInvocation = _validateOpenAiMetadata(
           skillDirectory: skillDirectory,
           skillName: name is String ? name : directoryName,
           diagnostics: diagnostics,
         );
+        final disableModelInvocation =
+            document.frontmatter[_disableModelInvocationKey] ?? false;
+        if (allowImplicitInvocation != null &&
+            disableModelInvocation != !allowImplicitInvocation) {
+          diagnostics.add(
+            SkillDiagnostic(
+              code: 'skill.invocation.mismatch',
+              message:
+                  '$_disableModelInvocationKey must be '
+                  '${!allowImplicitInvocation} to match '
+                  'agents/openai.yaml policy.allow_implicit_invocation.',
+              path: _relativePath(skillFile.path),
+            ),
+          );
+        }
       } on YamlException catch (error) {
         diagnostics.add(
           SkillDiagnostic(
@@ -338,7 +356,9 @@ final class SkillValidator {
     return path.startsWith(prefix) ? path.substring(prefix.length) : path;
   }
 
-  void _validateOpenAiMetadata({
+  /// Returns the declared implicit-invocation policy, or `null` when the
+  /// metadata does not declare a valid one.
+  bool? _validateOpenAiMetadata({
     required Directory skillDirectory,
     required String skillName,
     required List<SkillDiagnostic> diagnostics,
@@ -353,7 +373,7 @@ final class SkillValidator {
           path: relativePath,
         ),
       );
-      return;
+      return null;
     }
 
     final metadataSource = metadataFile.readAsStringSync();
@@ -368,7 +388,7 @@ final class SkillValidator {
           path: relativePath,
         ),
       );
-      return;
+      return null;
     }
     if (yaml is! YamlMap) {
       diagnostics.add(
@@ -378,7 +398,7 @@ final class SkillValidator {
           path: relativePath,
         ),
       );
-      return;
+      return null;
     }
 
     final interface = yaml['interface'];
@@ -462,9 +482,8 @@ final class SkillValidator {
         );
       }
       final trimmedPrompt = defaultPrompt.trim();
-      final sentenceTerminators = RegExp(
-        r'[.!?](?=\s|$)',
-      ).allMatches(trimmedPrompt);
+      final sentenceTerminators = RegExp(r'[.!?](?=\s|$)')
+          .allMatches(trimmedPrompt);
       if (sentenceTerminators.length != 1 ||
           !RegExp(r'[.!?]$').hasMatch(trimmedPrompt)) {
         diagnostics.add(
@@ -496,12 +515,13 @@ final class SkillValidator {
       diagnostics.add(
         SkillDiagnostic(
           code: 'openai.policy.invalid',
-          message:
-              'policy.allow_implicit_invocation must be an intentional boolean.',
+          message: 'policy.allow_implicit_invocation must be an intentional boolean.',
           path: relativePath,
         ),
       );
+      return null;
     }
+    return allowImplicitInvocation;
   }
 
   _ReferenceInspection _inspectReferences({
@@ -683,9 +703,8 @@ final class SkillValidator {
 }
 
 _SkillDocument _parseSkillDocument(String source) {
-  final match = RegExp(
-    r'^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)',
-  ).firstMatch(source);
+  final match = RegExp(r'^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)')
+      .firstMatch(source);
   if (match == null) {
     throw const FormatException(
       'SKILL.md must start with YAML frontmatter delimited by --- lines.',
@@ -750,7 +769,7 @@ final class _ReferenceInspection {
 
 Iterable<String> _literalRepositoryPaths(String markdown) sync* {
   const pathPrefixes = <String>[
-    '.codex/',
+    '.agents/',
     'android/',
     'assets/',
     'docs/',
@@ -766,6 +785,9 @@ Iterable<String> _literalRepositoryPaths(String markdown) sync* {
   ];
   const rootPaths = <String>{
     'AGENTS.md',
+    'CODING_STANDARDS.md',
+    'GLOSSARY.md',
+    'README.md',
     'analysis_options.yaml',
     'pubspec.lock',
     'pubspec.yaml',
@@ -795,9 +817,8 @@ bool _hasQuotedInterfaceScalar(String yamlSource, String key) {
   for (final line in lines) {
     final trimmed = line.trim();
     if (interfaceIndent == null) {
-      final interfaceMatch = RegExp(
-        r'^(\s*)interface:\s*(?:#.*)?$',
-      ).firstMatch(line);
+      final interfaceMatch = RegExp(r'^(\s*)interface:\s*(?:#.*)?$')
+          .firstMatch(line);
       if (interfaceMatch != null) {
         interfaceIndent = interfaceMatch.group(1)!.length;
       }
@@ -810,9 +831,8 @@ bool _hasQuotedInterfaceScalar(String yamlSource, String key) {
     if (indentation <= interfaceIndent) {
       return false;
     }
-    final scalarMatch = RegExp(
-      '^\\s*${RegExp.escape(key)}:\\s*(.*)\$',
-    ).firstMatch(line);
+    final scalarMatch = RegExp('^\\s*${RegExp.escape(key)}:\\s*(.*)\$')
+        .firstMatch(line);
     if (scalarMatch == null) {
       continue;
     }

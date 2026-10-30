@@ -1,6 +1,7 @@
 ---
 name: domain-scaffold
 description: "Scaffold Project Tweety domain contracts, policy-bearing use cases, and entities for an existing feature with stated mobile-owned behaviour. Use only for domain-layer work."
+disable-model-invocation: true
 ---
 
 # Domain Scaffold
@@ -21,7 +22,7 @@ Reject an empty or infrastructure-only `domain_reason`. Ask only for required in
 
 ### 1. Establish authority and preflight targets
 
-Apply sources in this order: user request, applicable `AGENTS.md`, `tool/templates/feature/domain/README.md`, then the nearest domain implementation only for uncovered details. Use the template to select only the artifacts justified by the stated domain policy. Read root, `lib`, and domain guidance.
+Apply sources in this order: user request, applicable `AGENTS.md`, `tool/templates/feature/domain/README.md`, then the nearest domain implementation only for uncovered details. Use the template to select only the artifacts justified by the stated domain policy. Read `CODING_STANDARDS.md`, root, `lib`, and domain guidance.
 
 List every proposed target. Stop if any target already exists unless the user explicitly requests an update. Keep all new artifacts under `lib/domain/`.
 

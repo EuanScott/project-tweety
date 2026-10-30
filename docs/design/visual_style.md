@@ -9,8 +9,6 @@ so that they look and feel like the same app.
 - Sign-in mocks: [Tweety sign-in screen](https://claude.ai/artifact/FdtMN7Effae6VsgvuJbstF) (Claude Design canvas, pages
   *Screens* and *Tilt depth*)
 - Design system: [Tweety](https://claude.ai/artifact/QyMAeXgoKf4DxVRegGCHvn) (synced from `packages/design_system`)
-- Implementation detail for sign-in: [`docs/plans/sign_in_implementation.md`](../plans/sign_in_implementation.md). It
-  holds the exact scene geometry.
 
 Both Claude Design links are private to the repository owner.
 

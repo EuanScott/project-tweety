@@ -26,7 +26,7 @@ void main() {
       expect(diagnostic.message, contains('feature_or_entity.role.dart'));
     });
 
-    test('rejects a role that AGENTS.md does not list', () async {
+    test('rejects a role that CODING_STANDARDS.md does not list', () async {
       final fixture = await _NamingFixture.create();
       addTearDown(fixture.dispose);
       await fixture.write('lib/about/about.prototype.dart');
@@ -155,19 +155,30 @@ void main() {
       },
     );
 
-    test('reports missing role markers in AGENTS.md', () async {
+    test('reports missing role markers in CODING_STANDARDS.md', () async {
       final fixture = await _NamingFixture.create();
       addTearDown(fixture.dispose);
-      await fixture.write('AGENTS.md', '# AGENTS.md\n');
+      await fixture.write('CODING_STANDARDS.md', '# Coding Standards\n');
       await fixture.write('lib/cards/cards.page.dart');
 
       final result = fixture.validate(['lib/cards/cards.page.dart']);
 
       expect(result.diagnostics.single.code, 'naming.roles.missing');
-      expect(result.diagnostics.single.path, 'AGENTS.md');
+      expect(result.diagnostics.single.path, 'CODING_STANDARDS.md');
     });
 
-    test('accepts a role as soon as AGENTS.md lists it', () async {
+    test('reports a missing CODING_STANDARDS.md as missing roles', () async {
+      final fixture = await _NamingFixture.create();
+      addTearDown(fixture.dispose);
+      await File(p.join(fixture.repositoryRoot.path, 'CODING_STANDARDS.md'))
+          .delete();
+
+      final result = fixture.validate(const []);
+
+      expect(result.diagnostics.single.code, 'naming.roles.missing');
+    });
+
+    test('accepts a role as soon as CODING_STANDARDS.md lists it', () async {
       final fixture = await _NamingFixture.create();
       addTearDown(fixture.dispose);
       await fixture.write('lib/core/analytics/analytics.module.dart');
@@ -175,7 +186,7 @@ void main() {
 
       expect(fixture.validate(paths).isValid, isFalse);
 
-      await fixture.write('AGENTS.md', '''
+      await fixture.write('CODING_STANDARDS.md', '''
 <!-- naming-roles:start -->
   - Support roles: `.module`
   - Tooling roles, `tool/` only: `.validator`
@@ -243,10 +254,10 @@ void main() {
       expect(result.diagnostics.single.path, 'tool/c.dart');
     });
 
-    test('reports a renamed tooling or test label in AGENTS.md', () async {
+    test('reports a renamed tooling or test label', () async {
       final fixture = await _NamingFixture.create();
       addTearDown(fixture.dispose);
-      await fixture.write('AGENTS.md', '''
+      await fixture.write('CODING_STANDARDS.md', '''
 <!-- naming-roles:start -->
   - Layer roles: `.page`
   - Tools: `.validator`
@@ -272,10 +283,10 @@ final class _NamingFixture {
       'project_tweety_naming_',
     );
     final fixture = _NamingFixture._(root);
-    await fixture.write('AGENTS.md', '''
-# AGENTS.md
+    await fixture.write('CODING_STANDARDS.md', '''
+# Coding Standards
 
-### Naming
+## Naming
 
 <!-- naming-roles:start -->
   - Layer roles: `.page`, `.widget`, `.bloc`

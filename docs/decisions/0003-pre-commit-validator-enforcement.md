@@ -5,6 +5,9 @@ Date: 2026-08-07
 Decision maker: Euan Scott
 Superseded by: [ADR-0010](0010-pre-commit-analysis-and-ci-enforcement.md)
 
+> Note (2026-10-30): `.codex/skills/` moved to `.agents/skills/`. Read
+> `.codex/skills` below as `.agents/skills`. The record is otherwise unchanged.
+
 ## Context
 
 Three read-only validators live under `tool/`:

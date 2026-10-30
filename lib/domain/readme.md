@@ -7,7 +7,7 @@ optional: ordinary BFF-shaped flows should use data repositories directly.
 
 - Implementation rules: [AGENTS.md](AGENTS.md)
 - Structural reference: [_template](../../tool/templates/feature/domain/README.md)
-- Domain-only scaffolding: `$domain-scaffold`
+- Domain-only scaffolding: the `domain-scaffold` skill
 
 Use domain for meaningful app-owned decisions, validation, orchestration,
 stateful concepts, or custom behavior. Keep DTOs, transport, persistence, and

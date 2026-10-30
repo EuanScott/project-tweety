@@ -103,9 +103,11 @@ On the no-domain path, make the data contract app-facing and inject it into pres
 
 ### 5. Create presentation last
 
-Mirror the BLoC `_template` by default: use one Freezed state, a feature-scoped status enum, a small event set, `GetIt.I`, page-owned provider lifecycle, and design-system/app primitives for visible UI. Keep the initial state payload-free unless real behavior requires data. Keep the root view in the page file and its pure UI helpers under `widgets/` as `part` files of the page library.
+Mirror the BLoC `_template` by default: use one Freezed state, a feature-scoped status enum, a small event set, `GetIt.I`, page-owned provider lifecycle, and design-system/app primitives for visible UI. Keep the initial state payload-free unless real behavior requires data. Keep the root view in the page file and its pure UI helpers under `widgets/` as `part` files.
 
-When the user explicitly requests Cubit, read [the Cubit variant](../page-scaffold/references/cubit_variant.md) and replace the BLoC/event portion of the manifest; do not claim `_template` is a Cubit template.
+Add routes or localized text only on request (`$page-scaffold`).
+
+For an explicit Cubit request, read [the Cubit variant](../page-scaffold/references/cubit_variant.md) and replace the manifest's BLoC/event portion; do not claim `_template` is a Cubit template.
 
 **Gate:** Confirm the page consumes the selected existing lower-layer dependency and the controller/state files match the chosen BLoC or explicit Cubit variant exactly.
 

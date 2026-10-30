@@ -46,13 +46,14 @@ globs exactly that; a file named `_tests.dart` is silently skipped and its
 assertions never run.
 
 The dot-role infix mirrors the `lib/` `feature_or_entity.role.dart` convention
-from [AGENTS.md](../../AGENTS.md) and is preferred where a role is meaningful:
+from [CODING_STANDARDS.md](../../CODING_STANDARDS.md#naming) and is preferred where a role is meaningful:
 
 ```text
 app_database.storage_test.dart
 logs_local.datasource_test.dart
 logs.repository_impl_test.dart
 logs.bloc_test.dart
+logs.page_test.dart
 app_modal.widget_test.dart
 ```
 
@@ -148,7 +149,11 @@ The local validation loop, matching CI exactly:
 ```sh
 dart format --output=none --set-exit-if-changed .
 flutter analyze --no-fatal-infos
+tool/hooks/bloc_lint.sh lib test packages
 dart run tool/agent_context/validate.dart
+dart run tool/skills/validate.dart
+dart run tool/decisions/adr.dart check
+dart run tool/naming/naming.dart check
 flutter test
 ```
 
@@ -191,4 +196,3 @@ flutter drive \
 ## Related guides
 
 - [Navigation, deep links, and route guards](navigation.md)
-- [Logs SQLite persistence and native smoke testing](../architecture/logs_sqlite_foundation.md)

@@ -38,6 +38,7 @@ packages/*/build/
 *.g.dart
 *.config.dart
 **/.test_runner.dart
+**/.test_optimizer.dart
 
 # Symbolication related
 app.*.symbols

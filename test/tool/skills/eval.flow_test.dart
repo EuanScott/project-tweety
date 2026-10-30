@@ -62,7 +62,7 @@ void main() {
             'item': {
               'id': 'command-1',
               'type': 'command_execution',
-              'command': 'rg --files .codex/skills',
+              'command': 'rg --files .agents/skills',
             },
           }),
           jsonEncode({
@@ -119,7 +119,7 @@ void main() {
       });
       expect(run['toolCalls'], 1);
       expect(run['finalOutput'], 'Complete.');
-      expect(run['commands'], ['rg --files .codex/skills']);
+      expect(run['commands'], ['rg --files .agents/skills']);
       expect(run['metadata'], containsPair('model', 'gpt-test'));
       expect(run['metadata'], containsPair('cliVersion', 'codex-cli 1.2.3'));
       expect(run['invariants'], everyElement(containsPair('passed', true)));

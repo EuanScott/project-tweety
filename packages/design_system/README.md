@@ -13,6 +13,8 @@ copying code.
 - shared typography
 - shared component theme configuration
 - shared brand definitions
+- adaptive UI primitives, which own the Material and Cupertino branching
+- branded controls whose look a third party owns
 
 ## What does not live here
 
@@ -24,11 +26,20 @@ copying code.
 
 ## Current public API
 
-- `DesignSystemTheme.light(...)`
-- `DesignSystemTheme.dark(...)`
-- `DesignBrand`
-- `DesignBrands`
-- `AppGoogleSignInButton`, the official "Sign in with Google" button
+`lib/design_system.dart` is the full list of exports. In summary:
+
+- Theme: `DesignSystemTheme.light(...)`, `DesignSystemTheme.dark(...)`,
+  `DesignBrand`, `DesignBrands`, the bottom-sheet theme, and the status-colour
+  and text-theme extensions.
+- Adaptive primitives in `src/adaptive/`: buttons (`AppButton`,
+  `AppIconButton`, `AppFloatingActionButton`), inputs (`AppTextField`,
+  `AppPickerField`, `AppSwitch`, `AppSegmentedControl`, `AppSwatchPicker`,
+  `AppSelectionRow`), lists (`AppListSection`, `AppListTile`), feedback
+  (`showAppConfirmationDialog`, `AppLoadingIndicator`, `AppRefreshIndicator`),
+  page layout (`AppPageIntro`, `AppPrimaryActionPane`, `PaneLayoutScope`,
+  `PaneLayoutMode`), and
+  platform and size helpers (`AppDesignPlatform`, `DisplayMetrics`).
+- Branded: `AppGoogleSignInButton`, the official "Sign in with Google" button.
 
 ## Usage
 
@@ -112,6 +123,8 @@ redraw or recolour it.
 ```text
 lib/
   design_system.dart
+  src/adaptive/
+    app_button.dart, app_text_field.dart, ... (one primitive per file)
   src/branded/
     app_google_sign_in_button.dart
   src/theme/
@@ -125,12 +138,11 @@ lib/
 
 ## Notes for future extraction
 
-The current scope is intentionally narrow: shared theming first.
+The current scope is shared theming and adaptive UI primitives.
 
-Once this package is stable, the next candidates for shared extraction are:
+The next candidates for shared extraction are:
 
 - spacing and radius tokens
-- shared UI primitives
 - shared reusable widgets
 - icon and asset strategy
 

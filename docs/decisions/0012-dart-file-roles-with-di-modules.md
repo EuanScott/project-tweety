@@ -5,6 +5,11 @@ Date: 2026-10-02
 Decision maker: Euan Scott
 Supersedes: [ADR-0011](0011-dart-file-role-vocabulary.md)
 
+> Note (2026-10-30): the role list moved from `AGENTS.md` to
+> [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md#naming) under
+> [ADR-0021](0021-root-agent-context-is-guardrails-and-pointers.md). Read
+> "AGENTS.md" below as "CODING_STANDARDS.md". The roles are unchanged.
+
 ## Context
 
 [ADR-0011](0011-dart-file-role-vocabulary.md) gave every Dart file a role,

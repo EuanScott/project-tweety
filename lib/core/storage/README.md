@@ -53,8 +53,26 @@ Version 4 adds the owning Account:
 Rows that exist before version 4 keep a null `user_id` until the first signed-in Account adopts
 them. Adoption belongs to the Logs datasource, not to the migration.
 
-Version-1, version-2 and version-3 files migrate in place without replacing existing rows. Downgrades remain
+Version 5 adds the creation time:
+
+- `created_at TEXT NOT NULL DEFAULT ''`, copied from `updated_at` for existing rows
+
+Older files migrate in place without replacing existing rows. Downgrades remain
 explicitly rejected; the app never destroys an existing database to recover from a version mismatch.
+
+### Add a log entry column
+
+Migrations are append-only. Do not edit a migration that already exists.
+
+1. Increase `AppDatabaseMigrations.latestVersion` by one.
+2. Add a `case` for the new version that calls a new `_add...V<n>` method.
+3. Map the column in `toDatabaseRow` and `fromDatabaseRow` of the log entry DTO.
+   Add the field to `toValue()`, `LogEntry` and `LogEntryDraft`. Also add it to `createLogEntry`
+   and `updateLogEntry` in `LogsRepositoryImpl`. If you do not, the app cannot read or save it.
+4. If the field syncs, add it to the Firestore datasource and to `isValidCard` in
+   [`firestore.rules`](../../../firestore.rules). The rules allow only the listed keys, so a push
+   with an unlisted key fails. The rules deploy by hand, separately from the app.
+5. Extend the migration tests in `test/core/storage/`.
 
 ## Preferences storage
 

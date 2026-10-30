@@ -17,8 +17,7 @@ surfaces in every brand ([ADR-0014](0014-neutral-navigation-surfaces.md)),
 so a brand does not need navigation colours.
 
 The app belongs to a family with four cultures: Norway, South Africa,
-Scotland and Portugal. The plan for this work is in
-`docs/plans/theme_colours_implementation.md`.
+Scotland and Portugal.
 
 ## Decision
 

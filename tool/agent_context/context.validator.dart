@@ -5,19 +5,18 @@ import 'package:path/path.dart' as p;
 import '../templates/feature_template_paths.constants.dart';
 
 const _sourceMapPath = 'docs/source_map.md';
+const _rootInstructionsPath = 'AGENTS.md';
+const _rootMarkdownPaths = ['CODING_STANDARDS.md', 'GLOSSARY.md', 'README.md'];
 
 final class ContextValidationBudgets {
-  const new({this.scopedLines = 50});
+  const new({this.rootLines = 40, this.scopedLines = 50});
 
+  final int rootLines;
   final int scopedLines;
 }
 
 final class ContextDiagnostic {
-  const new({
-    required this.code,
-    required this.message,
-    required this.path,
-  });
+  const new({required this.code, required this.message, required this.path});
 
   final String code;
   final String message;
@@ -53,9 +52,8 @@ final class ContextValidator {
             .whereType<File>()
             .where((file) => p.basename(file.path) == 'AGENTS.md')
             .where(
-              (file) => !p
-                  .split(file.path)
-                  .any(_excludedDirectorySegments.contains),
+              (file) =>
+                  !p.split(file.path).any(_excludedDirectorySegments.contains),
             )
             .toList()
           ..sort((left, right) => left.path.compareTo(right.path));
@@ -63,14 +61,13 @@ final class ContextValidator {
     for (final file in instructionFiles) {
       final relativePath = p.relative(file.path, from: repositoryRoot.path);
       final lineCount = file.readAsLinesSync().length;
-      final budget = budgets.scopedLines;
-      final hasBudget =
-          relativePath != 'AGENTS.md' &&
-          relativePath != '.codex/skills/AGENTS.md';
+      final isRoot = relativePath == _rootInstructionsPath;
+      final budget = isRoot ? budgets.rootLines : budgets.scopedLines;
+      final hasBudget = relativePath != '.agents/skills/AGENTS.md';
       if (hasBudget && lineCount > budget) {
         diagnostics.add(
           ContextDiagnostic(
-            code: 'agents.lines.scoped',
+            code: isRoot ? 'agents.lines.root' : 'agents.lines.scoped',
             message:
                 'Instruction file has $lineCount lines; maximum is $budget.',
             path: relativePath,
@@ -91,6 +88,31 @@ final class ContextValidator {
       );
     } else {
       diagnostics.addAll(_missingReferences(sourceMap, _sourceMapPath));
+    }
+
+    for (final relativePath in _rootMarkdownPaths) {
+      final file = File(p.join(repositoryRoot.path, relativePath));
+      if (file.existsSync()) {
+        diagnostics.addAll(_missingReferences(file, relativePath));
+      }
+    }
+
+    final docsRoot = Directory(p.join(repositoryRoot.path, 'docs'));
+    if (docsRoot.existsSync()) {
+      final docFiles =
+          docsRoot
+              .listSync(recursive: true)
+              .whereType<File>()
+              .where((file) => file.path.endsWith('.md'))
+              .toList()
+            ..sort((left, right) => left.path.compareTo(right.path));
+      for (final file in docFiles) {
+        final relativePath = p.relative(file.path, from: repositoryRoot.path);
+        if (relativePath == _sourceMapPath) {
+          continue;
+        }
+        diagnostics.addAll(_missingReferences(file, relativePath));
+      }
     }
 
     final templatesRoot = Directory(
@@ -157,8 +179,13 @@ final class ContextValidator {
 
   List<ContextDiagnostic> _missingReferences(File file, String relativePath) {
     final diagnostics = <ContextDiagnostic>[];
+    final source = file
+        .readAsStringSync()
+        .replaceAll(RegExp(r'```[\s\S]*?```'), '')
+        .replaceAll(RegExp(r'<!--[\s\S]*?-->'), '')
+        .replaceAll(RegExp(r'`[^`\n]*\]\([^`\n]*`'), '');
     final expression = RegExp(r'\[[^\]]+\]\(([^)]+)\)');
-    for (final match in expression.allMatches(file.readAsStringSync())) {
+    for (final match in expression.allMatches(source)) {
       final target = match.group(1)!;
       if (target.startsWith('http') || target.startsWith('#')) {
         continue;

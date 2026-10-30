@@ -17,8 +17,6 @@ Both platforms show navigation on neutral surfaces. The design system also has
 a "quiet surfaces" principle. A planned set of theme colours would need eight
 more tokens per theme colour if navigation stayed branded.
 
-The guideline sources are in
-[`docs/research/navigation-platform-guidelines-2026.md`](../research/navigation-platform-guidelines-2026.md).
 The Material 3 colour roles were verified against Flutter's generated token
 defaults in `material_ui` 1.0.0. The Apple findings come from search summaries
 of Apple's pages, not from a full reading of them.
