@@ -4,7 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import '../comparison/comparison_view.dart';
 import '../shell/showcase_controls.dart';
 
-enum _ButtonVariant { primary, secondary, text, destructive }
+enum _ButtonVariant { primary, secondary, text, destructive, softDestructive }
 
 /// Showcase for [AppButton], demonstrating every variant and its
 /// enabled/disabled state in both comparison panes.
@@ -52,6 +52,8 @@ class _AppButtonShowcaseState extends State<AppButtonShowcase> {
         return AppButton.text(onPressed: onPressed, child: label);
       case .destructive:
         return AppButton.destructive(onPressed: onPressed, child: label);
+      case .softDestructive:
+        return AppButton.softDestructive(onPressed: onPressed, child: label);
     }
   }
 }

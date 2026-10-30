@@ -33,6 +33,10 @@ class _LogsListState extends State<_LogsList> {
   static const int _titleMaxLines = 1;
   static const int _descriptionMaxLines = 2;
 
+  /// A run of line breaks, with any blank space around it, reads as one space
+  /// in the preview so a paragraph break does not waste one of its lines.
+  static final RegExp _lineBreakRun = RegExp(r'\s*[\r\n]\s*');
+
   /// Where a selected log entry is placed when it has to be moved. A split region
   /// shows the details beside the list, so centring keeps the selection next
   /// to what it opened. A compact region shows the list on its own, where the
@@ -84,6 +88,10 @@ class _LogsListState extends State<_LogsList> {
     return AppRefreshIndicator(
       onRefresh: _refresh,
       child: CustomScrollView(
+        // A split pane withholds the primary controller, so changing pane mode
+        // swaps controllers. A scroll position cannot move between them, so the
+        // swap builds a fresh scroll view.
+        key: ObjectKey(scrollController),
         controller: scrollController,
         physics: const AlwaysScrollableScrollPhysics(
           parent: BouncingScrollPhysics(),
@@ -158,12 +166,12 @@ class _LogsListState extends State<_LogsList> {
                     ),
                   ),
                   if (unsyncedChange != null)
-                    _UnsyncedMarker(change: unsyncedChange),
+                    LogEntryUnsyncedMarker(change: unsyncedChange),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
-                item.description,
+                item.description.replaceAll(_lineBreakRun, ' '),
                 style: theme.textTheme.bodyMedium,
                 maxLines: _descriptionMaxLines,
                 overflow: .ellipsis,
@@ -303,30 +311,5 @@ class _LogsListState extends State<_LogsList> {
     }
 
     return _materialScrollController;
-  }
-}
-
-/// Marks a log entry whose change has not reached the Account yet.
-class const _UnsyncedMarker({required final UnsyncedLogEntryChange change})
-    extends StatelessWidget {
-  static const double _dotSize = 8;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final color = theme.colorScheme.secondary;
-
-    return Row(
-      mainAxisSize: .min,
-      spacing: 4,
-      children: [
-        Icon(Icons.circle, size: _dotSize, color: color),
-        Text(switch (change) {
-          UnsyncedLogEntryChange.created => l10n.logsUnsyncedCreated,
-          UnsyncedLogEntryChange.updated => l10n.logsUnsyncedUpdated,
-        }, style: theme.textTheme.labelMedium?.copyWith(color: color)),
-      ],
-    );
   }
 }

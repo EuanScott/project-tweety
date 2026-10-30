@@ -104,6 +104,7 @@ GoRouter createRouter({
                   context,
                   state,
                   const Logs(),
+                  title: AppLocalizations.of(context)!.logsTab,
                   isCovered: state.fullPath != AppRoutes.logsPath,
                 ),
                 routes: [
@@ -190,6 +191,7 @@ Page<void> _logsPage(
   BuildContext context,
   GoRouterState state,
   Widget child, {
+  String? title,
   bool isCovered = false,
   bool isSelection = false,
 }) {
@@ -199,6 +201,7 @@ Page<void> _logsPage(
       state,
       child,
       key: isSelection ? _logsSelectionPageKey : null,
+      title: title,
     );
   }
 

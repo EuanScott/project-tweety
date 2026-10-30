@@ -44,6 +44,26 @@ class _NavigationShellState<TTab extends Object>
   final TabReselectController<TTab> _tabReselectController =
       TabReselectController<TTab>();
   bool _isSideNavigationCollapsed = false;
+  Orientation? _sideNavigationOrientation;
+
+  /// The Cupertino side navigation starts collapsed to icons in a portrait
+  /// window, where it would otherwise take a third of the width, and expanded
+  /// in landscape. A toggle lasts until the orientation changes.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Theme.of(context).platform != .iOS) {
+      return;
+    }
+
+    final orientation = MediaQuery.orientationOf(context);
+    if (orientation == _sideNavigationOrientation) {
+      return;
+    }
+
+    _sideNavigationOrientation = orientation;
+    _isSideNavigationCollapsed = orientation == .portrait;
+  }
 
   @override
   Widget build(BuildContext context) {

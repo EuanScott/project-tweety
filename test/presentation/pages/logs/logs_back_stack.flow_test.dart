@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,6 +23,21 @@ void main() {
       expect(find.text('New entry'), findsNothing);
       expect(find.text('Card Title 1'), findsWidgets);
     }
+
+    testWidgets('names the back button after Logs', (tester) async {
+      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
+
+      await tester.tap(find.text('Card Title 1'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(CupertinoNavigationBarBackButton),
+          matching: find.text('Logs'),
+        ),
+        findsOneWidget,
+      );
+    }, variant: iOS);
 
     testWidgets('a log entry opened by deep link swipes back to the list', (
       tester,

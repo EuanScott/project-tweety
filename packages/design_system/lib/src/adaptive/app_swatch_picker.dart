@@ -218,10 +218,7 @@ class const _Swatch<T>({
             width: _diameter,
             height: _diameter,
             alignment: .center,
-            decoration: BoxDecoration(
-              shape: .circle,
-              color: option.primary,
-            ),
+            decoration: BoxDecoration(shape: .circle, color: option.primary),
             child: isSelected
                 ? Container(
                     width: _tickDiscDiameter,

@@ -44,6 +44,11 @@ class const PaneLayoutScope({
     return scope!.mode;
   }
 
+  /// The mode of the nearest enclosing [PaneLayoutScope], or null when no
+  /// scope encloses [context].
+  static PaneLayoutMode? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_PaneLayoutModeScope>()?.mode;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

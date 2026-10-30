@@ -8,10 +8,7 @@ void main() {
     for (final themeColour in AppPreferencesThemeColour.values) {
       test('${themeColour.name} has a day and a night palette', () {
         final day = ScenePalette.forThemeColour(themeColour, Brightness.light);
-        final night = ScenePalette.forThemeColour(
-          themeColour,
-          Brightness.dark,
-        );
+        final night = ScenePalette.forThemeColour(themeColour, Brightness.dark);
 
         expect(day.isNight, isFalse);
         expect(night.isNight, isTrue);

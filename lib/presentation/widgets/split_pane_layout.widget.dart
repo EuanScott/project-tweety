@@ -180,22 +180,12 @@ class _SplitPaneLayoutState extends State<SplitPaneLayout> {
 class const _PaneDivider() extends StatelessWidget {
   static const double _verticalInsetFraction = 0.05;
 
-  /// Softens the theme's foreground into a charcoal rule. `outlineVariant`
-  /// resolves to solid black here, which reads as a hard cut rather than a
-  /// separator.
-  static const double _tint = 0.28;
-
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: FractionallySizedBox(
         heightFactor: 1 - (_verticalInsetFraction * 2),
-        child: VerticalDivider(
-          width: 1,
-          color: Theme.of(
-            context,
-          ).colorScheme.onSurface.withValues(alpha: _tint),
-        ),
+        child: VerticalDivider(width: 1),
       ),
     );
   }

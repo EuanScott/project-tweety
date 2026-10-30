@@ -294,7 +294,7 @@ void main() {
       await _pumpRouter(
         tester,
         platform: TargetPlatform.iOS,
-        surfaceSize: const Size(700, 800),
+        surfaceSize: const Size(800, 700),
       );
 
       expect(find.byType(CupertinoListSection), findsNothing);
@@ -310,11 +310,23 @@ void main() {
       await _pumpRouter(
         tester,
         platform: TargetPlatform.iOS,
-        surfaceSize: const Size(700, 800),
+        surfaceSize: const Size(800, 700),
       );
 
       expect(find.byType(CupertinoListTile), findsNWidgets(2));
       expect(find.byIcon(CupertinoIcons.check_mark), findsNothing);
+    });
+
+    testWidgets('starts the Cupertino side navigation collapsed in a '
+        'portrait window', (tester) async {
+      await _pumpRouter(
+        tester,
+        platform: TargetPlatform.iOS,
+        surfaceSize: const Size(700, 800),
+      );
+
+      expect(_sideNavigationWidth(tester), 72);
+      expect(find.text('home'), findsNothing);
     });
 
     testWidgets('can collapse and expand Cupertino side navigation', (
@@ -323,7 +335,7 @@ void main() {
       await _pumpRouter(
         tester,
         platform: TargetPlatform.iOS,
-        surfaceSize: const Size(700, 800),
+        surfaceSize: const Size(800, 700),
       );
 
       expect(_sideNavigationWidth(tester), 304);

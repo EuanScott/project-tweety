@@ -223,6 +223,109 @@ void main() {
       expect(find.byType(CupertinoButton), findsOneWidget);
       expect(find.byType(ElevatedButton), findsNothing);
     });
+
+    testWidgets('renders a soft destructive Cupertino button as error-red text '
+        'on a white fill', (tester) async {
+      final theme = DesignSystemTheme.light().copyWith(
+        platform: TargetPlatform.iOS,
+      );
+      final semantics = tester.ensureSemantics();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const AppButton.softDestructive(
+            onPressed: _noop,
+            child: Text('Delete entry'),
+          ),
+        ),
+      );
+
+      final fills = tester
+          .widgetList<DecoratedBox>(
+            find.ancestor(
+              of: find.text('Delete entry'),
+              matching: find.byType(DecoratedBox),
+            ),
+          )
+          .map((decoratedBox) => decoratedBox.decoration)
+          .whereType<BoxDecoration>()
+          .map((decoration) => decoration.color);
+
+      expect(_textColor(tester, 'Delete entry'), theme.colorScheme.error);
+      expect(fills, contains(CupertinoColors.white));
+      expect(
+        tester.getSemantics(find.text('Delete entry')),
+        isSemantics(isButton: true, label: 'Delete entry'),
+      );
+      semantics.dispose();
+    });
+
+    testWidgets('fills a soft destructive Cupertino button with the raised '
+        'dark surface in dark mode', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: DesignSystemTheme.dark().copyWith(
+            platform: TargetPlatform.iOS,
+          ),
+          home: const AppButton.softDestructive(
+            onPressed: _noop,
+            child: Text('Delete entry'),
+          ),
+        ),
+      );
+
+      final fills = tester
+          .widgetList<DecoratedBox>(
+            find.ancestor(
+              of: find.text('Delete entry'),
+              matching: find.byType(DecoratedBox),
+            ),
+          )
+          .map((decoratedBox) => decoratedBox.decoration)
+          .whereType<BoxDecoration>()
+          .map((decoration) => decoration.color);
+
+      expect(_textColor(tester, 'Delete entry'), const Color(0xFFFF8A80));
+      expect(fills, contains(const Color(0xFF2C2C2C)));
+      expect(fills, isNot(contains(CupertinoColors.white)));
+    });
+
+    testWidgets('renders a soft destructive Material button as an error-red '
+        'outline with no fill', (tester) async {
+      final theme = DesignSystemTheme.light().copyWith(
+        platform: TargetPlatform.android,
+      );
+      final semantics = tester.ensureSemantics();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: const AppButton.softDestructive(
+            onPressed: _noop,
+            child: Text('Delete entry'),
+          ),
+        ),
+      );
+
+      final surface = tester.widget<Material>(
+        find.descendant(
+          of: find.byType(OutlinedButton),
+          matching: find.byType(Material),
+        ),
+      );
+      final outline = (surface.shape! as OutlinedBorder).side;
+
+      expect(_textColor(tester, 'Delete entry'), theme.colorScheme.error);
+      expect(outline.color, theme.colorScheme.error);
+      expect(outline.width, 1);
+      expect(surface.color, anyOf(isNull, Colors.transparent));
+      expect(
+        tester.getSemantics(find.text('Delete entry')),
+        isSemantics(isButton: true, label: 'Delete entry'),
+      );
+      semantics.dispose();
+    });
   });
 
   group('AppIconButton', () {

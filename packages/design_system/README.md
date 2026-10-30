@@ -85,9 +85,10 @@ same in every preset.
 2. Supply the required brand tokens. `primary`, `onPrimary`, `secondary` and
    `onSecondary` each have a light and a dark value, so each theme can pass
    contrast. Give the same value to both when a brand needs no change.
-   `onError` is its own token, because a dark `onPrimary` can fail contrast on
-   the error red. `errorContainer` and `onErrorContainer` colour inline error
-   messages in each theme.
+   `error` and `onError` also have a light and a dark value. A deep red falls
+   short of contrast on a dark page, so dark mode uses a light red with dark
+   ink. `errorContainer` and `onErrorContainer` colour inline error messages
+   in each theme.
 3. Add it to `DesignBrands.all`, so the contrast tests cover it.
 4. Pass that brand into `DesignSystemTheme.light(...)` and `DesignSystemTheme.dark(...)`
 
