@@ -16,8 +16,10 @@ class DesignBrands {
   static const Color _surfaceContainerDark = Color(0xFF383838);
   static const Color _outline = Color(0xFFBDBDBD);
   static const Color _disabledColor = Color(0xFF8A9A9A);
-  static const Color _error = Color(0xFFD32F2F);
-  static const Color _onError = Colors.white;
+  static const Color _errorLight = Color(0xFFD32F2F);
+  static const Color _onErrorLight = Colors.white;
+  static const Color _errorDark = Color(0xFFFF8A80);
+  static const Color _onErrorDark = Color(0xFF3B0907);
   static const Color _errorContainerLight = Color(0xFFFDECEC);
   static const Color _onErrorContainerLight = Color(0xFFD32F2F);
   static const Color _errorContainerDark = Color(0xFF2C2C2C);
@@ -37,8 +39,10 @@ class DesignBrands {
     secondaryDark: Color(0xFFD68FC2),
     onSecondaryDark: Color(0xFF2E0A25),
     disabledColor: _disabledColor,
-    error: _error,
-    onError: _onError,
+    errorLight: _errorLight,
+    onErrorLight: _onErrorLight,
+    errorDark: _errorDark,
+    onErrorDark: _onErrorDark,
     errorContainerLight: _errorContainerLight,
     onErrorContainerLight: _onErrorContainerLight,
     errorContainerDark: _errorContainerDark,
@@ -68,8 +72,10 @@ class DesignBrands {
     secondaryDark: Color(0xFFF2A3BF),
     onSecondaryDark: Color(0xFF3D0A20),
     disabledColor: _disabledColor,
-    error: _error,
-    onError: _onError,
+    errorLight: _errorLight,
+    onErrorLight: _onErrorLight,
+    errorDark: _errorDark,
+    onErrorDark: _onErrorDark,
     errorContainerLight: _errorContainerLight,
     onErrorContainerLight: _onErrorContainerLight,
     errorContainerDark: _errorContainerDark,
@@ -99,8 +105,10 @@ class DesignBrands {
     secondaryDark: Color(0xFF9CC3EE),
     onSecondaryDark: Color(0xFF0A2540),
     disabledColor: _disabledColor,
-    error: _error,
-    onError: _onError,
+    errorLight: _errorLight,
+    onErrorLight: _onErrorLight,
+    errorDark: _errorDark,
+    onErrorDark: _onErrorDark,
     errorContainerLight: _errorContainerLight,
     onErrorContainerLight: _onErrorContainerLight,
     errorContainerDark: _errorContainerDark,
@@ -130,8 +138,10 @@ class DesignBrands {
     secondaryDark: Color(0xFFF2C14E),
     onSecondaryDark: Color(0xFF2A1F00),
     disabledColor: _disabledColor,
-    error: _error,
-    onError: _onError,
+    errorLight: _errorLight,
+    onErrorLight: _onErrorLight,
+    errorDark: _errorDark,
+    onErrorDark: _onErrorDark,
     errorContainerLight: _errorContainerLight,
     onErrorContainerLight: _onErrorContainerLight,
     errorContainerDark: _errorContainerDark,
@@ -162,8 +172,10 @@ class DesignBrands {
     secondaryDark: Color(0xFFA9C1E6),
     onSecondaryDark: Color(0xFF0D2240),
     disabledColor: _disabledColor,
-    error: _error,
-    onError: _onError,
+    errorLight: _errorLight,
+    onErrorLight: _onErrorLight,
+    errorDark: _errorDark,
+    onErrorDark: _onErrorDark,
     errorContainerLight: _errorContainerLight,
     onErrorContainerLight: _onErrorContainerLight,
     errorContainerDark: _errorContainerDark,
@@ -194,8 +206,10 @@ class DesignBrands {
     secondaryDark: Color(0xFFA7C4EF),
     onSecondaryDark: Color(0xFF0A2245),
     disabledColor: _disabledColor,
-    error: _error,
-    onError: _onError,
+    errorLight: _errorLight,
+    onErrorLight: _onErrorLight,
+    errorDark: _errorDark,
+    onErrorDark: _onErrorDark,
     errorContainerLight: _errorContainerLight,
     onErrorContainerLight: _onErrorContainerLight,
     errorContainerDark: _errorContainerDark,
@@ -226,8 +240,10 @@ class DesignBrands {
     secondaryDark: Color(0xFF8CC4D4),
     onSecondaryDark: Color(0xFF0A2A33),
     disabledColor: _disabledColor,
-    error: _error,
-    onError: _onError,
+    errorLight: _errorLight,
+    onErrorLight: _onErrorLight,
+    errorDark: _errorDark,
+    onErrorDark: _onErrorDark,
     errorContainerLight: _errorContainerLight,
     onErrorContainerLight: _onErrorContainerLight,
     errorContainerDark: _errorContainerDark,

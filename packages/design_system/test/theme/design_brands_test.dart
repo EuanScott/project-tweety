@@ -75,6 +75,10 @@ void main() {
             'primary on raised': (scheme.primary, raised),
             'secondary on raised': (scheme.secondary, raised),
             'onSurface on page': (scheme.onSurface, page),
+            'onError on error': (scheme.onError, scheme.error),
+            'error on page': (scheme.error, page),
+            'error on raised': (scheme.error, raised),
+            'error on card': (scheme.error, scheme.surfaceContainer),
           };
 
           for (final MapEntry(key: pair, value: (foreground, background))

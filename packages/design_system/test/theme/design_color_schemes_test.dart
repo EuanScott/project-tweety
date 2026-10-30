@@ -5,9 +5,8 @@ import 'package:material_ui/material_ui.dart';
 void main() {
   group('DesignSystemTheme colour schemes', () {
     test('the Fjord light scheme uses the light brand colours', () {
-      final scheme = DesignSystemTheme.light(
-        brand: DesignBrands.fjord,
-      ).colorScheme;
+      final scheme = DesignSystemTheme.light(brand: DesignBrands.fjord)
+          .colorScheme;
 
       expect(scheme.primary, const Color(0xFF0E7474));
       expect(scheme.onPrimary, const Color(0xFFFFFFFF));
@@ -16,9 +15,8 @@ void main() {
     });
 
     test('the Fjord dark scheme uses the dark brand colours', () {
-      final scheme = DesignSystemTheme.dark(
-        brand: DesignBrands.fjord,
-      ).colorScheme;
+      final scheme = DesignSystemTheme.dark(brand: DesignBrands.fjord)
+          .colorScheme;
 
       expect(scheme.primary, const Color(0xFF1BA6A6));
       expect(scheme.onPrimary, const Color(0xFF002020));
@@ -26,26 +24,24 @@ void main() {
       expect(scheme.onSecondary, const Color(0xFF2E0A25));
     });
 
-    test('onError stays white in both themes', () {
+    test('light mode uses a deep red with white ink and dark mode a light '
+        'red with dark ink', () {
       for (final brand in DesignBrands.all) {
-        expect(
-          DesignSystemTheme.light(brand: brand).colorScheme.onError,
-          const Color(0xFFFFFFFF),
-        );
-        expect(
-          DesignSystemTheme.dark(brand: brand).colorScheme.onError,
-          const Color(0xFFFFFFFF),
-        );
+        final light = DesignSystemTheme.light(brand: brand).colorScheme;
+        final dark = DesignSystemTheme.dark(brand: brand).colorScheme;
+
+        expect(light.error, const Color(0xFFD32F2F), reason: brand.name);
+        expect(light.onError, const Color(0xFFFFFFFF), reason: brand.name);
+        expect(dark.error, const Color(0xFFFF8A80), reason: brand.name);
+        expect(dark.onError, const Color(0xFF3B0907), reason: brand.name);
       }
     });
 
     test('the error container suits the sign-in error message', () {
-      final light = DesignSystemTheme.light(
-        brand: DesignBrands.fjord,
-      ).colorScheme;
-      final dark = DesignSystemTheme.dark(
-        brand: DesignBrands.fjord,
-      ).colorScheme;
+      final light = DesignSystemTheme.light(brand: DesignBrands.fjord)
+          .colorScheme;
+      final dark = DesignSystemTheme.dark(brand: DesignBrands.fjord)
+          .colorScheme;
 
       expect(light.errorContainer, const Color(0xFFFDECEC));
       expect(light.onErrorContainer, const Color(0xFFD32F2F));
@@ -55,15 +51,15 @@ void main() {
 
     test('raised containers sit above the sheet in both themes', () {
       expect(
-        DesignSystemTheme.light(
-          brand: DesignBrands.fjord,
-        ).colorScheme.surfaceContainer,
+        DesignSystemTheme.light(brand: DesignBrands.fjord)
+            .colorScheme
+            .surfaceContainer,
         const Color(0xFFFFFFFF),
       );
       expect(
-        DesignSystemTheme.dark(
-          brand: DesignBrands.fjord,
-        ).colorScheme.surfaceContainer,
+        DesignSystemTheme.dark(brand: DesignBrands.fjord)
+            .colorScheme
+            .surfaceContainer,
         const Color(0xFF383838),
       );
     });
