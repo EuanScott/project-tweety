@@ -36,10 +36,8 @@ class const AppSegmentedControl<T extends Object>({
     return SegmentedButton<T>(
       segments: segments
           .map(
-            (segment) => ButtonSegment(
-              value: segment.value,
-              label: Text(segment.label),
-            ),
+            (segment) =>
+                ButtonSegment(value: segment.value, label: Text(segment.label)),
           )
           .toList(growable: false),
       selected: {value},

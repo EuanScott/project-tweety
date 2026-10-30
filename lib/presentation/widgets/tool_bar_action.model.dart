@@ -44,11 +44,8 @@ sealed class ToolBarAction {
 }
 
 final class ToolBarIconAction extends ToolBarAction {
-  const new({
-    required this.icon,
-    required super.onPressed,
-    super.tooltip = '',
-  }) : super._();
+  const new({required this.icon, required super.onPressed, super.tooltip = ''})
+    : super._();
 
   /// The icon shown for this action, on both platforms.
   final IconData icon;

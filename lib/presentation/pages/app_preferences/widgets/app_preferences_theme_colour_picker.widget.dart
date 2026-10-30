@@ -34,10 +34,7 @@ class const _AppPreferencesThemeColourPicker({
           liveRegion: true,
           child: Text(
             selected.description,
-            style: TextStyle(
-              fontSize: 13,
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: TextStyle(fontSize: 13, color: colorScheme.onSurfaceVariant),
           ),
         ),
       ],

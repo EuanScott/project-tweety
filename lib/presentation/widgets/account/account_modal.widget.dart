@@ -314,9 +314,7 @@ class const _AccountDetails({required final Profile profile})
             value: Row(
               spacing: 8,
               children: [
-                ExcludeSemantics(
-                  child: Icon(icon, size: 18, color: iconColor),
-                ),
+                ExcludeSemantics(child: Icon(icon, size: 18, color: iconColor)),
                 Expanded(
                   child: _AccountDetailValue(
                     emailStatus,

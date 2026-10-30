@@ -8,6 +8,9 @@ import 'package:material_ui/material_ui.dart';
 /// and pops with an edge swipe. Every other platform gets a [MaterialPage].
 /// The name and restoration id match the pages go_router builds itself.
 ///
+/// Pass [title] to name the page in the back button of the page above it on
+/// iOS. Material back buttons show no label, so they ignore it.
+///
 /// Pass [key] to let several locations share one page. The navigator then
 /// updates that page in place as the location changes, with no transition.
 ///
@@ -20,6 +23,7 @@ Page<void> platformPage(
   GoRouterState state,
   Widget child, {
   LocalKey? key,
+  String? title,
 }) {
   final name = state.name ?? state.path;
   final restorationId = state.pageKey.value;
@@ -29,6 +33,7 @@ Page<void> platformPage(
       key: key ?? state.pageKey,
       name: name,
       restorationId: restorationId,
+      title: title,
       child: child,
     ),
     _ => MaterialPage<void>(

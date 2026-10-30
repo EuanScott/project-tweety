@@ -4,6 +4,7 @@ import '../showcases/app_google_sign_in_button_showcase.dart';
 import '../showcases/app_icon_button_showcase.dart';
 import '../showcases/app_list_tile_showcase.dart';
 import '../showcases/app_loading_indicator_showcase.dart';
+import '../showcases/app_pane_header_showcase.dart';
 import '../showcases/app_picker_field_showcase.dart';
 import '../showcases/app_refresh_indicator_showcase.dart';
 import '../showcases/app_segmented_control_showcase.dart';
@@ -73,6 +74,12 @@ final List<GalleryEntry> galleryCatalog = [
     label: 'AppListTile',
     category: .lists,
     showcaseBuilder: (context) => const AppListTileShowcase(),
+  ),
+  GalleryEntry(
+    id: 'app_pane_header',
+    label: 'AppPaneHeader',
+    category: .lists,
+    showcaseBuilder: (context) => const AppPaneHeaderShowcase(),
   ),
   GalleryEntry(
     id: 'app_confirmation_dialog',

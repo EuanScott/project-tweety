@@ -16,8 +16,13 @@ class const DesignBrand({
   required final Color secondaryDark,
   required final Color onSecondaryDark,
   required final Color disabledColor,
-  required final Color error,
-  required final Color onError,
+  required final Color errorLight,
+  required final Color onErrorLight,
+
+  /// The error colour on dark surfaces. It is lighter than [errorLight],
+  /// because a deep red falls short of 4.5:1 as text on a dark page.
+  required final Color errorDark,
+  required final Color onErrorDark,
   required final Color errorContainerLight,
   required final Color onErrorContainerLight,
   required final Color errorContainerDark,

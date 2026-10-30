@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:design_system/design_system.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:project_tweety/data/repositories/log_entry/logs.repository.dart'
@@ -368,7 +369,13 @@ void main() {
       await tester.tap(find.text('Card Title 1'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Entry details'), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(AppPaneHeader),
+          matching: find.text('Entry details'),
+        ),
+        findsOneWidget,
+      );
       expect(find.text('card-1'), findsOneWidget);
       expect(
         currentRoutePath(tester),
@@ -547,6 +554,58 @@ void main() {
       expect(find.byType(SplitPaneLayout), findsOneWidget);
       expect(find.text('Card Title 1'), findsWidgets);
       expect(find.text('card-1'), findsOneWidget);
+    });
+
+    testWidgets(
+      'previews a multi-paragraph description on one flowing line and '
+      'shows its paragraphs in the details',
+      (WidgetTester tester) async {
+        const description = 'First line\nSecond line\r\n\n  \nThird line';
+        replaceLogsRepository(
+          FakeLogsRepository(
+            logs: const [
+              logs_repository.LogEntry(
+                id: 'card-1',
+                title: 'Paragraphs',
+                description: description,
+              ),
+            ],
+          ),
+        );
+
+        await pumpApp(tester, initialLocation: AppRoutes.logsPath);
+
+        expect(find.text('First line Second line Third line'), findsOneWidget);
+
+        await tester.tap(find.text('Paragraphs'));
+        await tester.pumpAndSettle();
+
+        expect(find.text(description), findsOneWidget);
+      },
+    );
+
+    testWidgets('cuts a long multi-paragraph preview at two lines with an '
+        'ellipsis', (WidgetTester tester) async {
+      final paragraphs = List<String>.filled(6, 'A paragraph long enough');
+      replaceLogsRepository(
+        FakeLogsRepository(
+          logs: [
+            logs_repository.LogEntry(
+              id: 'card-1',
+              title: 'Long',
+              description: paragraphs.join('\n\n'),
+            ),
+          ],
+        ),
+      );
+
+      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
+
+      final preview = tester.renderObject<RenderParagraph>(
+        find.text(paragraphs.join(' ')),
+      );
+      expect(preview.didExceedMaxLines, isTrue);
+      expect(preview.overflow, TextOverflow.ellipsis);
     });
   });
 }

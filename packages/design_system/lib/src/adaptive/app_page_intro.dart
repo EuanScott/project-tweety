@@ -9,10 +9,8 @@ import 'grouped_surface.dart';
 /// Cupertino platforms render the text in an inset grouped card with no
 /// header, spaced like an `AppListSection`. Material platforms render plain
 /// text on the page background, as the top intro of a settings list.
-class const AppPageIntro({
-  required final String description,
-  super.key,
-}) extends StatelessWidget {
+class const AppPageIntro({required final String description, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (AppDesignPlatform.of(context).isCupertino) {

@@ -189,11 +189,7 @@ enum _GoogleButtonColors {
     text: Color(0xFFE3E3E3),
   );
 
-  new({
-    required this.fill,
-    required this.stroke,
-    required this.text,
-  });
+  new({required this.fill, required this.stroke, required this.text});
 
   final Color fill;
   final Color stroke;

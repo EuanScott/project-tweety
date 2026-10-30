@@ -91,9 +91,7 @@ void main() {
       expect(changes, isEmpty);
     });
 
-    testWidgets('flips the value and chevron in right-to-left', (
-      tester,
-    ) async {
+    testWidgets('flips the value and chevron in right-to-left', (tester) async {
       await _pumpRow(
         tester,
         platform: TargetPlatform.iOS,

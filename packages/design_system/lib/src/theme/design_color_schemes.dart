@@ -8,6 +8,8 @@ import 'design_brand.dart';
 /// `surfaceContainerHigh` is the neutral navigation surface,
 /// `primaryContainer` is the soft tint behind the selected item, and
 /// `onSurfaceVariant` is the muted ink for unselected items.
+/// `outlineVariant` is a soft, opaque rule for dividers: left unset, Material
+/// resolves it to the full ink colour, which draws a hard line.
 class DesignColorSchemes {
   new _();
 
@@ -16,6 +18,7 @@ class DesignColorSchemes {
   static const double _darkIndicatorTint = 0.24;
   static const double _lightMutedInkOpacity = 0.6;
   static const double _darkMutedInkOpacity = 0.7;
+  static const double _dividerOpacity = 0.12;
 
   /// Builds the light-mode color scheme for a given [brand].
   static ColorScheme light(DesignBrand brand) {
@@ -36,8 +39,8 @@ class DesignColorSchemes {
       onPrimaryContainer: brand.primaryLight,
       secondary: brand.secondaryLight,
       onSecondary: brand.onSecondaryLight,
-      error: brand.error,
-      onError: brand.onError,
+      error: brand.errorLight,
+      onError: brand.onErrorLight,
       errorContainer: brand.errorContainerLight,
       onErrorContainer: brand.onErrorContainerLight,
       surface: brand.surfaceLight,
@@ -49,6 +52,10 @@ class DesignColorSchemes {
       surfaceContainerHigh: navigationSurface,
       surfaceContainerHighest: brand.surfaceVariantLight,
       outline: brand.outline,
+      outlineVariant: Color.alphaBlend(
+        brand.onSurfaceLight.withValues(alpha: _dividerOpacity),
+        brand.surfaceLight,
+      ),
       surfaceTint: Colors.transparent,
     );
   }
@@ -70,8 +77,8 @@ class DesignColorSchemes {
       onPrimaryContainer: brand.onSurfaceDark,
       secondary: brand.secondaryDark,
       onSecondary: brand.onSecondaryDark,
-      error: brand.error,
-      onError: brand.onError,
+      error: brand.errorDark,
+      onError: brand.onErrorDark,
       errorContainer: brand.errorContainerDark,
       onErrorContainer: brand.onErrorContainerDark,
       surface: brand.surfaceVariantDark,
@@ -83,6 +90,10 @@ class DesignColorSchemes {
       surfaceContainerHigh: navigationSurface,
       surfaceContainerHighest: brand.surfaceDark,
       outline: brand.outline,
+      outlineVariant: Color.alphaBlend(
+        brand.onSurfaceDark.withValues(alpha: _dividerOpacity),
+        brand.surfaceVariantDark,
+      ),
       surfaceTint: Colors.transparent,
     );
   }

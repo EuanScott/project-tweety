@@ -44,8 +44,57 @@ void main() {
     );
 
     expect(find.byType(CupertinoTextField), findsOneWidget);
-    expect(find.text('Description'), findsOneWidget);
     expect(find.text('Description is required'), findsOneWidget);
+  });
+
+  testWidgets('draws the Cupertino error in the theme error colour, which '
+      'keeps 4.5:1 on the white row where system red does not', (tester) async {
+    const themeError = Color(0xFFD32F2F);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          platform: TargetPlatform.iOS,
+          colorScheme: const ColorScheme.light(error: themeError),
+        ),
+        home: Scaffold(
+          body: AppTextField(
+            controller: TextEditingController(),
+            label: 'Title',
+            errorText: 'Title is required',
+            onChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      tester.widget<Text>(find.text('Title is required')).style?.color,
+      themeError,
+    );
+  });
+
+  testWidgets('renders a Cupertino field as a grouped row under an upper-case '
+      'section label', (tester) async {
+    await tester.pumpWidget(
+      _onPlatform(
+        TargetPlatform.iOS,
+        AppTextField(
+          controller: TextEditingController(),
+          label: 'Description',
+          onChanged: (_) {},
+        ),
+      ),
+    );
+
+    expect(find.text('DESCRIPTION'), findsOneWidget);
+    expect(
+      find.ancestor(
+        of: find.byType(CupertinoTextField),
+        matching: find.byType(CupertinoListSection),
+      ),
+      findsOneWidget,
+    );
   });
 
   for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {

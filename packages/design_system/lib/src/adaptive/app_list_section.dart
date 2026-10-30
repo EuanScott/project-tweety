@@ -49,12 +49,7 @@ class const AppListSectionContent({
   final String? title,
   super.key,
 }) extends StatelessWidget {
-  static const EdgeInsetsGeometry _cupertinoPadding = .fromSTEB(
-    20,
-    12,
-    14,
-    12,
-  );
+  static const EdgeInsetsGeometry _cupertinoPadding = .fromSTEB(20, 12, 14, 12);
   static const EdgeInsetsGeometry _materialPadding = .symmetric(
     horizontal: 16,
     vertical: 12,
@@ -177,10 +172,7 @@ class const _MaterialListSection({
           ),
         ListTileTheme.merge(
           contentPadding: _rowPadding,
-          child: Column(
-            crossAxisAlignment: .stretch,
-            children: children,
-          ),
+          child: Column(crossAxisAlignment: .stretch, children: children),
         ),
         if (footer case final footer?)
           Padding(

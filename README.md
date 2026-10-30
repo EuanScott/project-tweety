@@ -155,6 +155,10 @@ The rationale is [ADR-0018](docs/decisions/0018-supply-chain-security-checks-in-
 
 ## Project Docs
 
+For an overview of the design and architecture, see the
+[interactive diagram on GitDiagram](https://gitdiagram.com/euanscott/project-tweety). It shows the main parts of the
+project and how they connect.
+
 Broader project guides live under `docs/`. Current guides include:
 
 - [Navigation, deep links, and route guards](docs/testing/navigation.md)

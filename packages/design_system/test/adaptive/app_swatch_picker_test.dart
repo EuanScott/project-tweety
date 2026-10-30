@@ -18,11 +18,7 @@ const _labels = [
 
 final List<AppSwatchOption<String>> _options = [
   for (final label in _labels)
-    AppSwatchOption(
-      value: label,
-      label: label,
-      primary: _primary,
-    ),
+    AppSwatchOption(value: label, label: label, primary: _primary),
 ];
 
 Future<List<String>> _pumpPicker(
@@ -107,28 +103,22 @@ void main() {
     });
 
     for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
-      testWidgets(
-        'marks only the selected tile with a ring and a tick on '
-        '${platform.name}',
-        (tester) async {
-          await _pumpPicker(tester, value: 'Lyng', platform: platform);
+      testWidgets('marks only the selected tile with a ring and a tick on '
+          '${platform.name}', (tester) async {
+        await _pumpPicker(tester, value: 'Lyng', platform: platform);
 
-          expect(_ring, findsOneWidget);
-          expect(_tick, findsOneWidget);
-          expect(
-            find.descendant(of: _tile('Lyng'), matching: _ring),
-            findsOneWidget,
-          );
-          expect(
-            find.descendant(of: _ring, matching: _tick),
-            findsOneWidget,
-          );
-          expect(
-            tester.widget<Text>(find.text('Lyng')).style?.fontWeight,
-            FontWeight.w700,
-          );
-        },
-      );
+        expect(_ring, findsOneWidget);
+        expect(_tick, findsOneWidget);
+        expect(
+          find.descendant(of: _tile('Lyng'), matching: _ring),
+          findsOneWidget,
+        );
+        expect(find.descendant(of: _ring, matching: _tick), findsOneWidget);
+        expect(
+          tester.widget<Text>(find.text('Lyng')).style?.fontWeight,
+          FontWeight.w700,
+        );
+      });
 
       testWidgets('calls onChanged with the tapped option on '
           '${platform.name}', (tester) async {
@@ -202,9 +192,7 @@ void main() {
       await _pumpPicker(tester, width: 326);
 
       final position = tester
-          .state<ScrollableState>(
-            find.byType(Scrollable),
-          )
+          .state<ScrollableState>(find.byType(Scrollable))
           .position;
 
       expect(position.axis, Axis.horizontal);

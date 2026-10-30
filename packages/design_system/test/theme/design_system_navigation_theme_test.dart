@@ -10,9 +10,8 @@ const _unselected = <WidgetState>{};
 void main() {
   group('Navigation bar theme', () {
     test('uses a neutral bar and a soft primary indicator in light', () {
-      final bar = DesignSystemTheme.light(
-        brand: DesignBrands.fjord,
-      ).navigationBarTheme;
+      final bar = DesignSystemTheme.light(brand: DesignBrands.fjord)
+          .navigationBarTheme;
 
       expect(bar.backgroundColor, isSameColorAs(const Color(0xFFEAECED)));
       expect(bar.indicatorColor, isSameColorAs(const Color(0xFFD0DEDE)));
@@ -41,9 +40,8 @@ void main() {
 
   group('Navigation rail theme', () {
     test('uses the Material 3 rail roles in light', () {
-      final rail = DesignSystemTheme.light(
-        brand: DesignBrands.fjord,
-      ).navigationRailTheme;
+      final rail = DesignSystemTheme.light(brand: DesignBrands.fjord)
+          .navigationRailTheme;
 
       expect(rail.backgroundColor, isSameColorAs(const Color(0xFFEAECED)));
       expect(rail.indicatorColor, isSameColorAs(const Color(0xFFD0DEDE)));
@@ -161,9 +159,8 @@ void main() {
 
   group('Navigation drawer theme', () {
     test('uses the navigation bar roles and a round indicator in dark', () {
-      final drawer = DesignSystemTheme.dark(
-        brand: DesignBrands.fjord,
-      ).navigationDrawerTheme;
+      final drawer = DesignSystemTheme.dark(brand: DesignBrands.fjord)
+          .navigationDrawerTheme;
 
       expect(drawer.backgroundColor, isSameColorAs(const Color(0xFF2C2C2C)));
       expect(drawer.indicatorColor, isSameColorAs(const Color(0xFF284949)));
@@ -193,9 +190,8 @@ void main() {
 
   group('App bar theme', () {
     test('uses the neutral surface with a primary title in light', () {
-      final appBar = DesignSystemTheme.light(
-        brand: DesignBrands.fjord,
-      ).appBarTheme;
+      final appBar = DesignSystemTheme.light(brand: DesignBrands.fjord)
+          .appBarTheme;
 
       expect(appBar.backgroundColor, isSameColorAs(const Color(0xFFF4F6F7)));
       expect(appBar.foregroundColor, isSameColorAs(const Color(0xDD000000)));

@@ -12,60 +12,62 @@ class _LogEntryDetailsBodyState extends State<_LogEntryDetailsBody> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final logEntry = widget.logEntry;
 
     return BlocBuilder<LogsBloc, LogsState>(
       builder: (context, state) {
         final isDeleting = state.isDeletingLogEntry(logEntry.id);
         final hasDeleteError = state.hasDeleteErrorFor(logEntry.id);
+        final unsyncedChange = state.unsyncedChanges[logEntry.id];
 
-        return ListView(
-          padding: const .symmetric(vertical: 16),
+        return Column(
+          crossAxisAlignment: .stretch,
           children: [
-            Text(logEntry.title, style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 12),
-            Text(logEntry.description, style: theme.textTheme.bodyLarge),
-            const SizedBox(height: 24),
-            const Divider(),
-            const SizedBox(height: 16),
-            Text(
-              l10n.logEntryDetailsIdLabel,
-              style: theme.textTheme.labelLarge,
-            ),
-            const SizedBox(height: 4),
-            SelectableText(logEntry.id, style: theme.textTheme.bodyMedium),
-            const SizedBox(height: 32),
-            AppButton.primary(
-              onPressed: isDeleting
-                  ? null
-                  : () => context.read<LogsBloc>().add(
-                      LogsEditStarted(logEntry.id),
+            if (PaneLayoutScope.of(context) == PaneLayoutMode.split)
+              AppPaneHeader(title: l10n.logEntryDetailsTitle),
+            Expanded(
+              child: ListView(
+                children: [
+                  _LogEntryDetailsSections(
+                    logEntry: logEntry,
+                    unsyncedChange: unsyncedChange,
+                  ),
+                  if (hasDeleteError)
+                    _LogEntryDetailsError(l10n.logEntryDeleteFailed),
+                  Padding(
+                    padding: const .all(16),
+                    child: AppButtonGroup(
+                      children: [
+                        AppButton.primary(
+                          onPressed: isDeleting
+                              ? null
+                              : () => context.read<LogsBloc>().add(
+                                  LogsEditStarted(logEntry.id),
+                                ),
+                          child: Text(l10n.logEntryEditAction),
+                        ),
+                        if (hasDeleteError)
+                          AppButton.softDestructive(
+                            onPressed: isDeleting
+                                ? null
+                                : () => context.read<LogsBloc>().add(
+                                    LogsDeleteSubmitted(logEntry.id),
+                                  ),
+                            child: Text(l10n.logEntryDeleteRetryAction),
+                          )
+                        else
+                          AppButton.softDestructive(
+                            onPressed: isDeleting || _isConfirmationShowing
+                                ? null
+                                : () => _confirmDelete(context),
+                            child: Text(l10n.logEntryDeleteAction),
+                          ),
+                      ],
                     ),
-              child: Text(l10n.logEntryEditAction),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            if (hasDeleteError) ...[
-              Text(
-                l10n.logEntryDeleteFailed,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-              const SizedBox(height: 12),
-              AppButton.destructive(
-                onPressed: isDeleting
-                    ? null
-                    : () => context.read<LogsBloc>().add(
-                        LogsDeleteSubmitted(logEntry.id),
-                      ),
-                child: Text(l10n.logEntryDeleteRetryAction),
-              ),
-            ] else
-              AppButton.destructive(
-                onPressed: isDeleting || _isConfirmationShowing
-                    ? null
-                    : () => _confirmDelete(context),
-                child: Text(l10n.logEntryDeleteAction),
-              ),
           ],
         );
       },
