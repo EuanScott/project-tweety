@@ -317,5 +317,121 @@ void main() {
 
       expect(find.text('Updated title'), findsOneWidget);
     });
+
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets(
+        'Return in the description starts a new line and keeps focus on '
+        '${platform.name}',
+        (WidgetTester tester) async {
+          replaceLogsRepository(FakeLogsRepository(logs: const []));
+
+          await pumpApp(
+            tester,
+            initialLocation: AppRoutes.logsNewPath,
+            platform: platform,
+          );
+
+          final description = find.byType(AppTextField).last;
+          await tester.showKeyboard(description);
+          await _pressReturn(tester);
+
+          expect(_hasFocus(tester, description), isTrue);
+        },
+      );
+
+      testWidgets(
+        'Return in the title ends editing without moving to the description on '
+        '${platform.name}',
+        (WidgetTester tester) async {
+          replaceLogsRepository(FakeLogsRepository(logs: const []));
+
+          await pumpApp(
+            tester,
+            initialLocation: AppRoutes.logsNewPath,
+            platform: platform,
+          );
+
+          final title = find.byType(AppTextField).first;
+          await tester.showKeyboard(title);
+          await _pressReturn(tester);
+
+          expect(_hasFocus(tester, title), isFalse);
+          expect(_hasFocus(tester, find.byType(AppTextField).last), isFalse);
+        },
+      );
+
+      testWidgets('the description grows with every line on ${platform.name}', (
+        WidgetTester tester,
+      ) async {
+        replaceLogsRepository(FakeLogsRepository(logs: const []));
+
+        await pumpApp(
+          tester,
+          surfaceSize: const Size(400, 1600),
+          initialLocation: AppRoutes.logsNewPath,
+          platform: platform,
+        );
+
+        final description = find.byType(AppTextField).last;
+        String lines(int count) =>
+            List<String>.generate(count, (index) => 'Line $index').join('\n');
+
+        await tester.enterText(description, lines(8));
+        await tester.pumpAndSettle();
+        final eightLineHeight = tester.getSize(description).height;
+
+        await tester.enterText(description, lines(12));
+        await tester.pumpAndSettle();
+
+        expect(
+          tester.getSize(description).height,
+          greaterThan(eightLineHeight),
+        );
+      });
+    }
+
+    testWidgets('keeps the paragraphs of a saved description when reopened', (
+      WidgetTester tester,
+    ) async {
+      replaceLogsRepository(FakeLogsRepository(logs: const []));
+      const paragraphs = 'First paragraph\n\nSecond paragraph';
+
+      await pumpApp(tester, initialLocation: AppRoutes.logsNewPath);
+      await tester.enterText(find.byType(AppTextField).first, 'New title');
+      await tester.enterText(find.byType(AppTextField).last, paragraphs);
+      await tester.tap(find.text('Create entry'));
+      await tester.pumpAndSettle();
+
+      expect(find.text(paragraphs), findsOneWidget);
+
+      await tester.tap(find.text('Edit entry'));
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<AppTextField>(find.byType(AppTextField).last)
+            .controller
+            .text,
+        paragraphs,
+      );
+    });
   });
 }
+
+/// Sends the action the on-screen keyboard was given for its return key,
+/// which is what a person pressing return produces.
+Future<void> _pressReturn(WidgetTester tester) async {
+  final inputAction =
+      tester.testTextInput.setClientArgs!['inputAction']! as String;
+  await tester.testTextInput.receiveAction(
+    TextInputAction.values.byName(inputAction.split('.').last),
+  );
+  await tester.pump();
+}
+
+bool _hasFocus(WidgetTester tester, Finder field) => tester
+    .widget<EditableText>(
+      find.descendant(of: field, matching: find.byType(EditableText)),
+    )
+    .focusNode
+    .hasFocus;

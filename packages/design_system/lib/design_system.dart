@@ -5,6 +5,7 @@
 library;
 
 export 'src/adaptive/app_button.dart';
+export 'src/adaptive/app_button_group.dart';
 export 'src/adaptive/app_confirmation_dialog.dart';
 export 'src/adaptive/app_design_platform.dart';
 export 'src/adaptive/app_floating_action_button.dart';
@@ -15,6 +16,7 @@ export 'src/adaptive/app_list_section.dart';
 export 'src/adaptive/app_list_tile.dart';
 export 'src/adaptive/app_loading_indicator.dart';
 export 'src/adaptive/app_page_intro.dart';
+export 'src/adaptive/app_pane_header.dart';
 export 'src/adaptive/app_primary_action_pane.dart';
 export 'src/adaptive/app_picker_field.dart';
 export 'src/adaptive/app_refresh_indicator.dart';

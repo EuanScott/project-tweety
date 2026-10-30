@@ -9,22 +9,29 @@ import 'package:project_tweety/presentation/extensions/logs_error.extension.dart
 import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
 import 'package:project_tweety/presentation/pages/logs/draft_discard_guard.widget.dart';
+import 'package:project_tweety/presentation/widgets/log_entry_unsynced_marker.widget.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 part 'widgets/log_entry_details_body.widget.dart';
 part 'widgets/log_entry_details_editor.widget.dart';
 part 'widgets/log_entry_details_empty_state.widget.dart';
+part 'widgets/log_entry_details_error.widget.dart';
 part 'widgets/log_entry_details_message.widget.dart';
+part 'widgets/log_entry_details_sections.widget.dart';
 
 class const LogEntryDetailsPage({required final String logEntryId, super.key})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isEditing = context.select(
+      (LogsBloc bloc) => bloc.state.isEditingLogEntry(logEntryId),
+    );
 
     return PageScaffold(
-      title: l10n.logEntryDetailsTitle,
+      title: isEditing ? l10n.logEntryEditTitle : l10n.logEntryDetailsTitle,
       kind: PageKind.detail,
+      bodyPadding: EdgeInsets.zero,
       body: LogEntryDetailsContent(logEntryId: logEntryId),
     );
   }

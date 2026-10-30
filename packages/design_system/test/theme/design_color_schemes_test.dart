@@ -75,5 +75,21 @@ void main() {
         expect(status.warning, const Color(0xFFFFA000));
       }
     });
+
+    test('every theme colour draws dividers as a soft rule in both modes', () {
+      for (final brand in DesignBrands.all) {
+        for (final scheme in [
+          DesignSystemTheme.light(brand: brand).colorScheme,
+          DesignSystemTheme.dark(brand: brand).colorScheme,
+        ]) {
+          final rule = scheme.outlineVariant;
+
+          expect(rule, isNot(const Color(0xFF000000)), reason: brand.name);
+          expect(rule, isNot(const Color(0xFFFFFFFF)), reason: brand.name);
+          expect(rule, isNot(scheme.onSurface), reason: brand.name);
+          expect(rule.a, 1, reason: brand.name);
+        }
+      }
+    });
   });
 }

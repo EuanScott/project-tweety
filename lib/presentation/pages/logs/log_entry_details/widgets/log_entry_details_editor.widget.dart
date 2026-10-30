@@ -60,82 +60,92 @@ class _LogEntryEditorState extends State<LogEntryEditor> {
           final hasSaveError = editor.hasSaveFailed;
           final disabled = isMissing || isSaving;
 
-          return ListView(
-            padding: const .symmetric(vertical: 16),
+          return Column(
+            crossAxisAlignment: .stretch,
             children: [
-              Text(
-                _isCreating ? l10n.logEntryCreateTitle : l10n.logEntryEditTitle,
-                style: Theme.of(context).textTheme.headlineSmall,
+              if (PaneLayoutScope.of(context) == PaneLayoutMode.split)
+                AppPaneHeader(
+                  title: _isCreating
+                      ? l10n.logEntryCreateTitle
+                      : l10n.logEntryEditTitle,
+                ),
+              Expanded(
+                child: ListView(
+                  children: [
+                    AppTextField(
+                      controller: _titleController,
+                      label: l10n.logEntryCreateTitleLabel,
+                      enabled: !disabled,
+                      errorText:
+                          editor.invalidFields.contains(
+                            LogEntryDraftField.title,
+                          )
+                          ? l10n.logEntryCreateTitleRequired
+                          : null,
+                      textInputAction: .done,
+                      onChanged: (_) => _onDraftChanged(context),
+                    ),
+                    AppTextField(
+                      controller: _descriptionController,
+                      label: l10n.logEntryCreateDescriptionLabel,
+                      enabled: !disabled,
+                      minLines: 4,
+                      maxLines: null,
+                      errorText:
+                          editor.invalidFields.contains(
+                            LogEntryDraftField.description,
+                          )
+                          ? l10n.logEntryCreateDescriptionRequired
+                          : null,
+                      textInputAction: .newline,
+                      onChanged: (_) => _onDraftChanged(context),
+                    ),
+                    if (hasSaveError)
+                      _LogEntryDetailsError(
+                        _isCreating
+                            ? l10n.logEntryCreateFailed
+                            : l10n.logEntryEditFailed,
+                      ),
+                    if (isMissing)
+                      _LogEntryDetailsError(l10n.logEntryEditNotFound),
+                    Padding(
+                      padding: const .all(16),
+                      child: AppButtonGroup(
+                        children: isMissing
+                            ? [
+                                AppButton.primary(
+                                  onPressed: context.goLogs,
+                                  child: Text(
+                                    l10n.logEntryEditReturnToLogsAction,
+                                  ),
+                                ),
+                              ]
+                            : [
+                                AppButton.primary(
+                                  onPressed: isSaving
+                                      ? null
+                                      : () => _save(context),
+                                  child: Text(
+                                    _isCreating
+                                        ? l10n.logEntryCreateAction
+                                        : l10n.logEntryEditSaveAction,
+                                  ),
+                                ),
+                                AppButton.secondary(
+                                  onPressed: isSaving
+                                      ? null
+                                      : () => LogsDraftDiscardGuard.discardThen(
+                                          context,
+                                          () => _close(context),
+                                        ),
+                                  child: Text(l10n.logEntryEditCancelAction),
+                                ),
+                              ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
-              AppTextField(
-                controller: _titleController,
-                label: l10n.logEntryCreateTitleLabel,
-                enabled: !disabled,
-                errorText:
-                    editor.invalidFields.contains(LogEntryDraftField.title)
-                    ? l10n.logEntryCreateTitleRequired
-                    : null,
-                textInputAction: .next,
-                onChanged: (_) => _onDraftChanged(context),
-              ),
-              const SizedBox(height: 16),
-              AppTextField(
-                controller: _descriptionController,
-                label: l10n.logEntryCreateDescriptionLabel,
-                enabled: !disabled,
-                minLines: 4,
-                maxLines: 6,
-                errorText:
-                    editor.invalidFields.contains(
-                      LogEntryDraftField.description,
-                    )
-                    ? l10n.logEntryCreateDescriptionRequired
-                    : null,
-                textInputAction: .done,
-                onChanged: (_) => _onDraftChanged(context),
-              ),
-              if (hasSaveError) ...[
-                const SizedBox(height: 16),
-                Text(
-                  _isCreating
-                      ? l10n.logEntryCreateFailed
-                      : l10n.logEntryEditFailed,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ],
-              if (isMissing) ...[
-                const SizedBox(height: 16),
-                Text(
-                  l10n.logEntryEditNotFound,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-                const SizedBox(height: 24),
-                AppButton.primary(
-                  onPressed: context.goLogs,
-                  child: Text(l10n.logEntryEditReturnToLogsAction),
-                ),
-              ] else ...[
-                const SizedBox(height: 24),
-                AppButton.primary(
-                  onPressed: isSaving ? null : () => _save(context),
-                  child: Text(
-                    _isCreating
-                        ? l10n.logEntryCreateAction
-                        : l10n.logEntryEditSaveAction,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                AppButton.secondary(
-                  onPressed: isSaving
-                      ? null
-                      : () => LogsDraftDiscardGuard.discardThen(
-                          context,
-                          () => _close(context),
-                        ),
-                  child: Text(l10n.logEntryEditCancelAction),
-                ),
-              ],
             ],
           );
         },

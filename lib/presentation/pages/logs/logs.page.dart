@@ -10,6 +10,7 @@ import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/extensions/logs_error.extension.dart';
 import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/navigation/tabs/app_tab.model.dart';
+import 'package:project_tweety/presentation/widgets/log_entry_unsynced_marker.widget.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 import 'bloc/logs.bloc.dart';
@@ -83,6 +84,7 @@ class _LogsState extends State<Logs> {
                 return PageScaffold(
                   title: l10n.logEntryCreateTitle,
                   kind: PageKind.detail,
+                  bodyPadding: EdgeInsets.zero,
                   body: const LogEntryEditor(),
                 );
               }
