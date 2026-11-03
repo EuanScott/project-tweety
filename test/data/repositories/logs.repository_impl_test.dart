@@ -270,6 +270,64 @@ void main() {
         expect(await repository.getLogs(), hasLength(1));
       });
 
+      group('saved changes', () {
+        late List<LogsSyncSummary> summariesWhenReported;
+        late StreamSubscription<void> subscription;
+
+        setUp(() {
+          summariesWhenReported = [];
+          subscription = repository.savedChanges
+              .asyncMap((_) async {
+                summariesWhenReported.add(await repository.getSyncSummary());
+              })
+              .listen((_) {});
+        });
+
+        tearDown(() => subscription.cancel());
+
+        test('reports a create, an update and a delete once each, after the '
+            'write is stored', () async {
+          const draft = LogEntryDraft(title: 'Title', description: 'Body');
+
+          await repository.createLogEntry(draft);
+          await pumpEventQueue();
+          await repository.updateLogEntry(logEntryId: 'card-1', draft: draft);
+          await pumpEventQueue();
+          await repository.deleteLogEntry('card-1');
+          await pumpEventQueue();
+          await _untilLength(summariesWhenReported, 3);
+
+          expect(summariesWhenReported.map((s) => s.pendingChanges), [
+            {'card-11': PendingLogEntryChange.created},
+            {
+              'card-11': PendingLogEntryChange.created,
+              'card-1': PendingLogEntryChange.updated,
+            },
+            {
+              'card-11': PendingLogEntryChange.created,
+              'card-1': PendingLogEntryChange.deleted,
+            },
+          ]);
+        });
+
+        test('reports nothing for a write that fails', () async {
+          const invalid = LogEntryDraft(title: ' ', description: ' ');
+          const valid = LogEntryDraft(title: 'Title', description: 'Body');
+
+          await expectLater(
+            repository.createLogEntry(invalid),
+            throwsA(isA<InvalidLogEntryDraftException>()),
+          );
+          await expectLater(
+            repository.updateLogEntry(logEntryId: 'missing', draft: valid),
+            throwsA(isA<LogEntryNotFoundException>()),
+          );
+          await pumpEventQueue();
+
+          expect(summariesWhenReported, isEmpty);
+        });
+      });
+
       group('sync', () {
         Future<void> makeThreeChanges() async {
           await repository.createLogEntry(
@@ -673,6 +731,12 @@ LogEntryDto _remote(String id, {DateTime? updatedAt}) => LogEntryDto(
   updatedAt: updatedAt ?? DateTime.utc(2026, 8, 2),
   userId: FakeSessionHolder().uid,
 );
+
+Future<void> _untilLength(List<Object?> list, int length) async {
+  for (var attempt = 0; attempt < 500 && list.length < length; attempt += 1) {
+    await Future<void>.delayed(const Duration(milliseconds: 2));
+  }
+}
 
 class _FakeLogsDataSource implements LogsDataSource {
   const new({this.logs = const [], this.logsById = const {}});

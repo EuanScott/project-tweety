@@ -9,6 +9,7 @@ import 'package:project_tweety/data/repositories/log_entry/logs.repository.dart'
     as logs_repository;
 import 'package:project_tweety/presentation/navigation/app_routes.constants.dart';
 import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
+import 'package:project_tweety/presentation/pages/logs/bloc/logs_sync.bloc.dart';
 import 'package:project_tweety/presentation/pages/logs/logs.page.dart';
 
 import '../../../support/app_harness.dart';
@@ -161,18 +162,26 @@ void main() {
   group('Logs page sync row', () {
     useAppHarness();
 
-    Future<void> showSync(
+    /// Runs a Sync the fake repository ends with [result]. The bloc emits
+    /// during the first frame's microtasks, so the second frame is the one
+    /// that shows the new state. Settling would never end while a sync spinner
+    /// turns.
+    Future<void> pumpAfterSync(
       WidgetTester tester,
-      LogsSync sync, {
-      Map<String, UnsyncedLogEntryChange> unsyncedChanges = const {},
+      logs_repository.LogsSyncResult result, {
+      Completer<void>? pendingSync,
     }) async {
+      replaceLogsRepository(
+        FakeLogsRepository()
+          ..syncResult = result
+          ..pendingSync = pendingSync,
+      );
+      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
+
       tester
           .element(find.byType(Logs))
-          .read<LogsBloc>()
-          .add(LogsSyncChanged(sync, unsyncedChanges: unsyncedChanges));
-      // The bloc emits during the first frame's microtasks, so the second
-      // frame is the one that shows the new state. Settling would never end
-      // while a sync spinner turns.
+          .read<LogsSyncBloc>()
+          .add(const LogsSyncRequested());
       await tester.pump();
       await tester.pump();
     }
@@ -192,16 +201,18 @@ void main() {
     testWidgets('counts pending changes and marks each unsynced log entry', (
       tester,
     ) async {
-      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
-
-      await showSync(
-        tester,
-        const LogsSync.pending(changeCount: 4),
-        unsyncedChanges: const {
-          'card-1': UnsyncedLogEntryChange.created,
-          'card-2': UnsyncedLogEntryChange.updated,
-        },
+      replaceLogsRepository(
+        FakeLogsRepository()
+          ..syncSummary = const logs_repository.LogsSyncSummary(
+            pendingChanges: {
+              'card-1': logs_repository.PendingLogEntryChange.created,
+              'card-2': logs_repository.PendingLogEntryChange.updated,
+              'card-3': logs_repository.PendingLogEntryChange.deleted,
+              'card-4': logs_repository.PendingLogEntryChange.deleted,
+            },
+          ),
       );
+      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
 
       expect(find.text('4 changes on this device only'), findsOneWidget);
       expect(
@@ -229,23 +240,22 @@ void main() {
     testWidgets('cannot start a second sync while one is running', (
       tester,
     ) async {
-      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
-
-      await showSync(
+      final pendingSync = Completer<void>();
+      await pumpAfterSync(
         tester,
-        const LogsSync.syncing(savedCount: 2, changeCount: 4),
+        const logs_repository.LogsSyncResult(changeCount: 4, savedCount: 4),
+        pendingSync: pendingSync,
       );
 
-      expect(find.text('2 of 4 changes saved'), findsOneWidget);
+      expect(find.text('0 of 4 changes saved'), findsOneWidget);
       expect(syncButton(tester, 'Syncing').onPressed, isNull);
+      pendingSync.complete();
     });
 
     testWidgets('names the retry after a partial sync', (tester) async {
-      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
-
-      await showSync(
+      await pumpAfterSync(
         tester,
-        const LogsSync.partial(savedCount: 3, changeCount: 4),
+        const logs_repository.LogsSyncResult(changeCount: 4, savedCount: 3),
       );
 
       expect(find.text('3 of 4 changes synced'), findsOneWidget);
@@ -253,9 +263,14 @@ void main() {
     });
 
     testWidgets('offers to try again when offline', (tester) async {
-      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
-
-      await showSync(tester, const LogsSync.offline(changeCount: 4));
+      await pumpAfterSync(
+        tester,
+        const logs_repository.LogsSyncResult(
+          changeCount: 4,
+          savedCount: 0,
+          onlyNetworkFailures: true,
+        ),
+      );
 
       expect(find.text("You're offline"), findsOneWidget);
       expect(syncButton(tester, 'Retry').onPressed, isNotNull);
@@ -264,9 +279,10 @@ void main() {
     testWidgets('colours only the icon with the success colour once synced', (
       tester,
     ) async {
-      await pumpApp(tester, initialLocation: AppRoutes.logsPath);
-
-      await showSync(tester, const LogsSync.synced(changeCount: 4));
+      await pumpAfterSync(
+        tester,
+        const logs_repository.LogsSyncResult(changeCount: 4, savedCount: 4),
+      );
 
       final context = tester.element(find.text('Synced just now'));
       final theme = Theme.of(context);

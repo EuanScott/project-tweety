@@ -128,4 +128,8 @@ abstract class LogsRepository {
 
   /// Emits as a download adds log entries to the device.
   Stream<LogsDownloadProgress> get downloadProgress;
+
+  /// Emits after each create, update or delete is stored on the device, so
+  /// a reader of [getSyncSummary] sees it. A write that fails emits nothing.
+  Stream<void> get savedChanges;
 }

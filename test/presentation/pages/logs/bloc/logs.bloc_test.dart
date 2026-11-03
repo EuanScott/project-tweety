@@ -738,284 +738,29 @@ void main() {
       },
     );
 
-    test('starts with every log entry synced and none marked', () {
-      final bloc = LogsBloc(FakeLogsRepository());
+    test('a save that fails after its editor was discarded does not mark the '
+        'reopened editor as submitted', () async {
+      final repository = FakeLogsRepository.gated();
+      final bloc = LogsBloc(repository);
       addTearDown(bloc.close);
 
-      expect(bloc.state.sync, const LogsSync.upToDate());
-      expect(bloc.state.unsyncedChanges, isEmpty);
-    });
+      bloc
+        ..add(const LogsCreateStarted())
+        ..add(const LogsDraftChanged(logEntryDraft))
+        ..add(const LogsCreateSubmitted());
+      await pumpEventQueue();
+      bloc
+        ..add(const LogsDraftDiscarded())
+        ..add(const LogsCreateStarted());
+      await pumpEventQueue();
 
-    blocTest<LogsBloc, LogsState>(
-      'replaces the sync status and the unsynced log entry changes together',
-      build: () => LogsBloc(FakeLogsRepository(logs: const [logEntry])),
-      seed: () => const LogsState(load: LogsLoad.loaded(), items: [logEntry]),
-      act: (bloc) => bloc.add(
-        const LogsSyncChanged(
-          LogsSync.pending(changeCount: 2),
-          unsyncedChanges: {'card-1': UnsyncedLogEntryChange.updated},
-        ),
-      ),
-      expect: () => [
-        const LogsState(
-          load: LogsLoad.loaded(),
-          items: [logEntry],
-          sync: LogsSync.pending(changeCount: 2),
-          unsyncedChanges: {'card-1': UnsyncedLogEntryChange.updated},
-        ),
-      ],
-    );
+      repository.failCreate(StateError('write'));
+      await pumpEventQueue();
 
-    group('sync', () {
-      const twoPending = LogsSyncSummary(
-        pendingChanges: {
-          'card-1': PendingLogEntryChange.updated,
-          'card-2': PendingLogEntryChange.deleted,
-        },
+      expect(
+        bloc.state.editor,
+        const LogsEditor.creating(save: LogsSaveStatus.failed),
       );
-      late FakeLogsRepository repository;
-      late LogsBloc bloc;
-      late List<LogsSync> syncs;
-
-      setUp(() {
-        repository = FakeLogsRepository(logs: const [logEntry]);
-        bloc = LogsBloc(repository);
-        syncs = [];
-        bloc.stream.map((state) => state.sync).distinct().listen(syncs.add);
-      });
-
-      tearDown(() => bloc.close());
-
-      Future<void> settle() => pumpEventQueue();
-
-      test('loading the log entries shows what is pending and marks each '
-          'Card', () async {
-        repository.syncSummary = twoPending;
-
-        bloc.add(const LogsStarted());
-        await settle();
-
-        expect(bloc.state.sync, const LogsSync.pending(changeCount: 2));
-        expect(bloc.state.unsyncedChanges, {
-          'card-1': UnsyncedLogEntryChange.updated,
-        });
-      });
-
-      test('with nothing pending, loading shows the last sync '
-          'time', () async {
-        final lastSyncedAt = DateTime.utc(2026, 10, 9);
-        repository.syncSummary = LogsSyncSummary(lastSyncedAt: lastSyncedAt);
-
-        bloc.add(const LogsStarted());
-        await settle();
-
-        expect(bloc.state.sync, LogsSync.upToDate(lastSyncedAt: lastSyncedAt));
-      });
-
-      test('a saved change refreshes the pending count', () async {
-        bloc.add(const LogsStarted());
-        await settle();
-        repository.syncSummary = const LogsSyncSummary(
-          pendingChanges: {'created-card': PendingLogEntryChange.created},
-        );
-
-        bloc
-          ..add(const LogsCreateStarted())
-          ..add(
-            const LogsDraftChanged(
-              LogEntryDraft(title: 'New', description: 'New'),
-            ),
-          )
-          ..add(const LogsCreateSubmitted());
-        await settle();
-
-        expect(bloc.state.sync, const LogsSync.pending(changeCount: 1));
-        expect(bloc.state.unsyncedChanges, {
-          'created-card': UnsyncedLogEntryChange.created,
-        });
-      });
-
-      test('with nothing pending, a sync says it is already up to '
-          'date', () async {
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(syncs, const [LogsSync.waiting(), LogsSync.alreadyUpToDate()]);
-      });
-
-      test('a full sync shows progress, then synced, and clears the '
-          'markers', () async {
-        repository
-          ..syncSummary = twoPending
-          ..summaryAfterSync = const LogsSyncSummary()
-          ..syncProgress = [1, 2]
-          ..syncResult = const LogsSyncResult(changeCount: 2, savedCount: 2);
-
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(syncs, const [
-          LogsSync.waiting(),
-          LogsSync.syncing(savedCount: 0, changeCount: 2),
-          LogsSync.syncing(savedCount: 1, changeCount: 2),
-          LogsSync.syncing(savedCount: 2, changeCount: 2),
-          LogsSync.synced(changeCount: 2),
-        ]);
-        expect(bloc.state.unsyncedChanges, isEmpty);
-      });
-
-      test('a partial sync names what will try again, and keeps its '
-          'marker', () async {
-        repository
-          ..syncSummary = twoPending
-          ..summaryAfterSync = const LogsSyncSummary(
-            pendingChanges: {'card-1': PendingLogEntryChange.updated},
-          )
-          ..syncResult = const LogsSyncResult(changeCount: 2, savedCount: 1);
-
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(
-          bloc.state.sync,
-          const LogsSync.partial(savedCount: 1, changeCount: 2),
-        );
-        expect(bloc.state.unsyncedChanges, {
-          'card-1': UnsyncedLogEntryChange.updated,
-        });
-      });
-
-      test('nothing saved because of the network says offline', () async {
-        repository
-          ..syncSummary = twoPending
-          ..syncResult = const LogsSyncResult(
-            changeCount: 2,
-            savedCount: 0,
-            onlyNetworkFailures: true,
-          );
-
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(bloc.state.sync, const LogsSync.offline(changeCount: 2));
-      });
-
-      test('nothing saved for any other reason says it could not '
-          'sync', () async {
-        repository
-          ..syncSummary = twoPending
-          ..syncResult = const LogsSyncResult(changeCount: 2, savedCount: 0);
-
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(bloc.state.sync, const LogsSync.failed(changeCount: 2));
-      });
-
-      test('a sync that throws says it could not sync', () async {
-        repository
-          ..syncSummary = twoPending
-          ..syncResult = const LogsSyncResult(changeCount: 2, savedCount: 0)
-          ..syncError = Exception('database closed');
-
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(bloc.state.sync, const LogsSync.failed(changeCount: 2));
-      });
-
-      test('a second press while a sync runs is dropped', () async {
-        repository
-          ..syncSummary = twoPending
-          ..pendingSync = Completer<void>();
-
-        bloc
-          ..add(const LogsSyncRequested())
-          ..add(const LogsSyncRequested());
-        await settle();
-        repository.pendingSync!.complete();
-        await settle();
-
-        expect(repository.syncRequestCount, 1);
-      });
-
-      test('a sync queued behind a download is visibly busy at once, and '
-          'stays busy when the download ends', () async {
-        repository
-          ..syncSummary = twoPending
-          ..queuedSync = Completer<void>();
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(bloc.state.sync.isBusy, isTrue);
-
-        repository.reportDownload(
-          const LogsDownloadProgress.finished(addedCount: 0),
-        );
-        await settle();
-
-        expect(bloc.state.sync.isBusy, isTrue);
-        expect(repository.syncRequestCount, 1);
-
-        repository.queuedSync!.complete();
-        await settle();
-
-        expect(bloc.state.sync.isBusy, isFalse);
-      });
-
-      test('a full sync with changes saved during it shows them as '
-          'pending', () async {
-        repository
-          ..syncSummary = twoPending
-          ..summaryAfterSync = const LogsSyncSummary(
-            pendingChanges: {'card-3': PendingLogEntryChange.updated},
-          )
-          ..syncResult = const LogsSyncResult(changeCount: 2, savedCount: 2);
-
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        expect(bloc.state.sync, const LogsSync.pending(changeCount: 1));
-      });
-
-      test('a change saved during a sync updates the markers and keeps '
-          'the progress', () async {
-        bloc.add(const LogsStarted());
-        await settle();
-        repository
-          ..syncSummary = twoPending
-          ..syncResult = const LogsSyncResult(changeCount: 2, savedCount: 2)
-          ..pendingSync = Completer<void>();
-        bloc.add(const LogsSyncRequested());
-        await settle();
-
-        repository.syncSummary = const LogsSyncSummary(
-          pendingChanges: {
-            'card-1': PendingLogEntryChange.updated,
-            'card-2': PendingLogEntryChange.deleted,
-            'created-card': PendingLogEntryChange.created,
-          },
-        );
-        bloc
-          ..add(const LogsCreateStarted())
-          ..add(
-            const LogsDraftChanged(
-              LogEntryDraft(title: 'New', description: 'New'),
-            ),
-          )
-          ..add(const LogsCreateSubmitted());
-        await settle();
-
-        expect(
-          bloc.state.sync,
-          const LogsSync.syncing(savedCount: 0, changeCount: 2),
-        );
-        expect(
-          bloc.state.unsyncedChanges,
-          containsPair('created-card', UnsyncedLogEntryChange.created),
-        );
-        repository.pendingSync!.complete();
-      });
     });
 
     group('download', () {
@@ -1026,50 +771,24 @@ void main() {
       );
       late FakeLogsRepository repository;
       late LogsBloc bloc;
-      late List<LogsSync> syncs;
 
       setUp(() async {
         repository = FakeLogsRepository(logs: const [logEntry]);
         bloc = LogsBloc(repository)..add(const LogsStarted());
         await pumpEventQueue();
-        syncs = [];
-        bloc.stream.map((state) => state.sync).distinct().listen(syncs.add);
       });
 
       tearDown(() => bloc.close());
 
-      test('shows the entries being added, then how many were added, in one '
-          'list update', () async {
+      test('adds the entries to the list when it ends', () async {
         repository.download(const [downloadedEntry]);
         await pumpEventQueue();
 
-        expect(syncs, const [
-          LogsSync.downloading(logEntryCount: 1),
-          LogsSync.downloaded(logEntryCount: 1),
-        ]);
         expect(bloc.state.items, contains(downloadedEntry));
         expect(bloc.state.items, contains(logEntry));
       });
 
-      test('a download that added entries shows the markers of what is '
-          'still pending', () async {
-        repository.syncSummary = const LogsSyncSummary(
-          pendingChanges: {'card-1': PendingLogEntryChange.updated},
-        );
-
-        repository.download(const [downloadedEntry]);
-        await pumpEventQueue();
-
-        expect(bloc.state.unsyncedChanges, {
-          'card-1': UnsyncedLogEntryChange.updated,
-        });
-      });
-
-      test('a download that ends having added nothing goes back to what is '
-          'pending, and leaves the list alone', () async {
-        repository.syncSummary = const LogsSyncSummary(
-          pendingChanges: {'card-1': PendingLogEntryChange.updated},
-        );
+      test('that added nothing leaves the list alone', () async {
         final readsBefore = repository.collectionReadCount;
 
         repository
@@ -1077,33 +796,17 @@ void main() {
           ..reportDownload(const LogsDownloadProgress.finished(addedCount: 0));
         await pumpEventQueue();
 
-        expect(syncs, const [
-          LogsSync.downloading(logEntryCount: 2),
-          LogsSync.pending(changeCount: 1),
-        ]);
         expect(repository.collectionReadCount, readsBefore);
-      });
-
-      test('a sync cannot start while a download adds entries', () async {
-        repository.reportDownload(
-          const LogsDownloadProgress.adding(logEntryCount: 2),
-        );
-        await pumpEventQueue();
-
-        bloc.add(const LogsSyncRequested());
-        await pumpEventQueue();
-
-        expect(repository.syncRequestCount, 0);
-        expect(bloc.state.sync, const LogsSync.downloading(logEntryCount: 2));
       });
 
       test('stops listening when closed', () async {
         await bloc.close();
+        final readsBefore = repository.collectionReadCount;
 
         repository.download(const [downloadedEntry]);
         await pumpEventQueue();
 
-        expect(syncs, isEmpty);
+        expect(repository.collectionReadCount, readsBefore);
       });
     });
   });

@@ -8,6 +8,7 @@ import 'package:project_tweety/l10n/app_localizations.dart';
 import 'package:project_tweety/presentation/extensions/logs_error.extension.dart';
 import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
+import 'package:project_tweety/presentation/pages/logs/bloc/logs_sync.bloc.dart';
 import 'package:project_tweety/presentation/pages/logs/draft_discard_guard.widget.dart';
 import 'package:project_tweety/presentation/widgets/log_entry_unsynced_marker.widget.dart';
 import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';

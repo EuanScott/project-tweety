@@ -9,7 +9,7 @@ import 'package:project_tweety/data/services/log_entry/log_entry_id.generator.da
 
 import 'logs.repository.dart';
 
-/// It lives as long as the app, so its download stream is never closed.
+/// It lives as long as the app, so its streams are never closed.
 @LazySingleton(as: LogsRepository)
 class LogsRepositoryImpl(
   final LogsDataSource _dataSource,
@@ -17,6 +17,7 @@ class LogsRepositoryImpl(
   final LogsRemoteDataSource _remoteDataSource,
 ) implements LogsRepository {
   final _downloadProgress = StreamController<LogsDownloadProgress>.broadcast();
+  final _savedChanges = StreamController<void>.broadcast();
 
   /// The end of the last sync or download, so the next one starts after it.
   Future<void> _remoteWork = Future<void>.value();
@@ -25,6 +26,9 @@ class LogsRepositoryImpl(
 
   @override
   Stream<LogsDownloadProgress> get downloadProgress => _downloadProgress.stream;
+
+  @override
+  Stream<void> get savedChanges => _savedChanges.stream;
 
   @override
   Future<List<LogEntry>> getLogs() async {
@@ -48,6 +52,7 @@ class LogsRepositoryImpl(
         description: trimmedDraft.description,
       ),
     );
+    _savedChanges.add(null);
     return item.toValue();
   }
 
@@ -67,12 +72,14 @@ class LogsRepositoryImpl(
     if (item == null) {
       throw LogEntryNotFoundException(logEntryId);
     }
+    _savedChanges.add(null);
     return item.toValue();
   }
 
   @override
-  Future<void> deleteLogEntry(String logEntryId) {
-    return _dataSource.deleteLogEntry(logEntryId);
+  Future<void> deleteLogEntry(String logEntryId) async {
+    await _dataSource.deleteLogEntry(logEntryId);
+    _savedChanges.add(null);
   }
 
   @override

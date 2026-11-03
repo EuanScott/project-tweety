@@ -65,6 +65,7 @@ Plain `<name>_test.dart` is fine where no role applies.
 |---|---|---|
 | `lib/data/datasources/**`, `lib/data/repositories/**`, `lib/core/**` | Plain `test()`, construct the subject directly | `test/` mirroring `lib/` |
 | `lib/presentation/pages/**/bloc/**` | `blocTest` from `bloc_test`, fake repository passed to the constructor | `test/presentation/pages/<feature>/bloc/` |
+| The order of a Sync and a Download, which the repository's queue decides | Plain `test()`, a real bloc over the real repository and SQLite | `test/presentation/pages/logs/bloc/logs_sync.flow_test.dart` |
 | A page, a shared widget, or a `packages/design_system` primitive | `testWidgets` | `test/presentation/**` or the package's own `test/` |
 | Whole-app routing, deep links, locale, preferences | `testWidgets` against `MyApp` via `pumpApp` | `test/presentation/**` |
 | Real SQLite on a real device, or persistence across a process relaunch | `testWidgets` with the integration binding | `integration_test/` |
@@ -105,6 +106,8 @@ than open-coding the reset cycle.
   failure, for tests asserting that details derive from the loaded collection.
   `FakeLogsRepository.gated()` leaves writes pending until the test completes
   them, for asserting in-flight state.
+  `savedChanges` emits only after a write succeeds, including a gated write
+  when the test completes it.
 - `fake_auth_repository.dart` — `FakeAuthRepository`, signed in by default
   so `MyApp` tests pass the launch gate. Pass `profile` to set the Profile of
   the signed-in Session. Set `signInResult` to choose what sign-in returns,

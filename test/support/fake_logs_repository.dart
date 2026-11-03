@@ -65,6 +65,11 @@ class FakeLogsRepository implements LogsRepository {
   LogsSyncSummary syncSummary = const LogsSyncSummary();
   LogsSyncSummary? summaryAfterSync;
 
+  /// Leaves each [getSyncSummary] waiting in [heldSummaryReads], oldest first,
+  /// so a test can choose the order the reads answer in.
+  var holdSummaryReads = false;
+  final heldSummaryReads = <Completer<LogsSyncSummary>>[];
+
   /// What [syncLogs] returns, after reporting no progress and then each of
   /// [syncProgress] against its change count.
   LogsSyncResult syncResult = const LogsSyncResult(
@@ -88,6 +93,7 @@ class FakeLogsRepository implements LogsRepository {
   Completer<void>? pendingDownload;
   Object? downloadError;
   final _downloadProgress = StreamController<LogsDownloadProgress>.broadcast();
+  final _savedChanges = StreamController<void>.broadcast();
 
   var collectionReadCount = 0;
   var detailReadCount = 0;
@@ -154,9 +160,12 @@ class FakeLogsRepository implements LogsRepository {
       description: draft.description.trim(),
     );
     _logs.insert(0, logEntry);
+    _savedChanges.add(null);
 
     return Future<LogEntry>.value(logEntry);
   }
+
+  void failCreate(Object error) => _createCompleter.completeError(error);
 
   void completeCreate([LogEntry? logEntry]) {
     _createCompleter.complete(
@@ -167,6 +176,7 @@ class FakeLogsRepository implements LogsRepository {
             description: 'New description',
           ),
     );
+    _savedChanges.add(null);
   }
 
   @override
@@ -194,11 +204,15 @@ class FakeLogsRepository implements LogsRepository {
     if (index >= 0) {
       _logs[index] = logEntry;
     }
+    _savedChanges.add(null);
 
     return Future<LogEntry>.value(logEntry);
   }
 
-  void completeUpdate(LogEntry logEntry) => _updateCompleter.complete(logEntry);
+  void completeUpdate(LogEntry logEntry) {
+    _updateCompleter.complete(logEntry);
+    _savedChanges.add(null);
+  }
 
   @override
   Future<void> deleteLogEntry(String logEntryId) {
@@ -214,14 +228,26 @@ class FakeLogsRepository implements LogsRepository {
     }
 
     _logs.removeWhere((logEntry) => logEntry.id == logEntryId);
+    _savedChanges.add(null);
 
     return Future<void>.value();
   }
 
-  void completeDelete() => _deleteCompleter.complete();
+  void completeDelete() {
+    _deleteCompleter.complete();
+    _savedChanges.add(null);
+  }
 
   @override
-  Future<LogsSyncSummary> getSyncSummary() async => syncSummary;
+  Future<LogsSyncSummary> getSyncSummary() async {
+    if (holdSummaryReads) {
+      final read = Completer<LogsSyncSummary>();
+      heldSummaryReads.add(read);
+      return read.future;
+    }
+
+    return syncSummary;
+  }
 
   @override
   Future<LogsSyncResult> syncLogs({
@@ -259,6 +285,9 @@ class FakeLogsRepository implements LogsRepository {
 
   @override
   Stream<LogsDownloadProgress> get downloadProgress => _downloadProgress.stream;
+
+  @override
+  Stream<void> get savedChanges => _savedChanges.stream;
 
   /// Reports [progress] as a running download would.
   void reportDownload(LogsDownloadProgress progress) =>

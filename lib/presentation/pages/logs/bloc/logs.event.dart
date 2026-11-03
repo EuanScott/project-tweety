@@ -20,17 +20,7 @@ sealed class LogsEvent with _$LogsEvent {
 
   const factory deleteSubmitted(String logEntryId) = LogsDeleteSubmitted;
 
-  /// Pushes every pending change to the Account.
-  const factory syncRequested() = LogsSyncRequested;
-
   /// A download reported how it is adding log entries to the device.
   const factory downloadProgressed(LogsDownloadProgress progress) =
       LogsDownloadProgressed;
-
-  /// Replaces where sync stands and which log entries carry an unsynced change.
-  const factory syncChanged(
-    LogsSync sync, {
-    @Default(<String, UnsyncedLogEntryChange>{})
-    Map<String, UnsyncedLogEntryChange> unsyncedChanges,
-  }) = LogsSyncChanged;
 }

@@ -66,6 +66,10 @@ already holds, including a tombstone, is never changed by a download. It runs
 without anyone asking, each time the Session becomes signed in, and never at the
 same time as a sync. A failed download is retried on the next one. _Avoid_: restore, pull, sync down
 
+**Sync status**:
+Where a Sync or Download stands, as shown in the Sync row. A Sync a person asked
+for takes precedence over a Download.
+
 **Owner**:
 The Account a log entry belongs to. Ownership is permanent for the life of
 the log entry and is not something a person can see or change in the app. A

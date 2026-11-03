@@ -18,7 +18,7 @@ class const _LogsSyncRow() extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final sync = context.select((LogsBloc bloc) => bloc.state.sync);
+    final sync = context.select((LogsSyncBloc bloc) => bloc.state.sync);
     final (:icon, :iconColor, :title, :subtitle) = _describe(sync, l10n, theme);
 
     return Card(
@@ -169,7 +169,7 @@ class const _SyncButton({required final LogsSync sync})
     final l10n = AppLocalizations.of(context)!;
     final onPressed = sync.isBusy
         ? null
-        : () => context.read<LogsBloc>().add(const LogsSyncRequested());
+        : () => context.read<LogsSyncBloc>().add(const LogsSyncRequested());
 
     return switch (sync) {
       LogsSyncWaiting() || LogsSyncSyncing() => AppButton.text(

@@ -18,6 +18,7 @@ import 'package:project_tweety/presentation/pages/access_denied/access_denied.pa
 import 'package:project_tweety/presentation/pages/app_preferences/app_preferences.page.dart';
 import 'package:project_tweety/presentation/pages/logs/logs.page.dart';
 import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
+import 'package:project_tweety/presentation/pages/logs/bloc/logs_sync.bloc.dart';
 import 'package:project_tweety/presentation/pages/route_error/route_error.page.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
@@ -111,8 +112,21 @@ GoRouter createRouter({
           ShellRoute(
             builder: (context, state, child) {
               return PaneLayoutScope(
-                child: BlocProvider(
-                  create: (_) => GetIt.I<LogsBloc>()..add(const LogsStarted()),
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (_) =>
+                          GetIt.I<LogsBloc>()..add(const LogsStarted()),
+                    ),
+                    // Created at once, because a route that does not read it
+                    // yet must not miss a Download or a saved change.
+                    BlocProvider(
+                      lazy: false,
+                      create: (_) =>
+                          GetIt.I<LogsSyncBloc>()
+                            ..add(const LogsSyncRefreshed()),
+                    ),
+                  ],
                   child: child,
                 ),
               );

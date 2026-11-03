@@ -13,12 +13,14 @@ class _LogEntryDetailsBodyState extends State<_LogEntryDetailsBody> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final logEntry = widget.logEntry;
+    final unsyncedChange = context.select(
+      (LogsSyncBloc bloc) => bloc.state.unsyncedChanges[logEntry.id],
+    );
 
     return BlocBuilder<LogsBloc, LogsState>(
       builder: (context, state) {
         final isDeleting = state.isDeletingLogEntry(logEntry.id);
         final hasDeleteError = state.hasDeleteErrorFor(logEntry.id);
-        final unsyncedChange = state.unsyncedChanges[logEntry.id];
 
         return Column(
           crossAxisAlignment: .stretch,

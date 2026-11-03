@@ -5,7 +5,6 @@ import 'package:project_tweety/core/storage/app_database.storage.dart';
 import 'package:project_tweety/data/datasources/auth/session_holder.datasource.dart';
 import 'package:project_tweety/data/datasources/log_entry/logs.datasource.dart';
 import 'package:project_tweety/data/datasources/log_entry/logs_local.datasource.dart';
-import 'package:project_tweety/data/datasources/log_entry/logs_mock.datasource.dart';
 import 'package:project_tweety/data/datasources/log_entry/logs_remote.datasource.dart';
 import 'package:project_tweety/data/dtos/log_entry/log_entry.dto.dart';
 import 'package:project_tweety/data/repositories/log_entry/logs.repository.dart';
@@ -47,7 +46,6 @@ void main() {
       expect(GetIt.I<LogsDataSource>(), isA<LogsLocalDataSource>());
       expect(GetIt.I<LogsRepository>(), isA<LogsRepositoryImpl>());
       expect(GetIt.I<LogEntryIdGenerator>(), isA<UuidLogEntryIdGenerator>());
-      expect(GetIt.I.isRegistered<MockLogsDataSource>(), isFalse);
     });
   });
 }

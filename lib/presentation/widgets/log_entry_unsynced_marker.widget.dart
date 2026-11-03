@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
+import 'package:project_tweety/presentation/pages/logs/bloc/logs_sync.bloc.dart';
 
 /// Marks a log entry whose change has not reached the Account yet.
 class const LogEntryUnsyncedMarker({

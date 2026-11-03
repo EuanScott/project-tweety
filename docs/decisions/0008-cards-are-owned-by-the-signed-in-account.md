@@ -213,3 +213,14 @@ The 2026-10-09 amendment left these points open. They were decided while buildin
   comparison: any local row wins, synced or pending. A synced local row with no remote document is
   kept, because a download only adds. `firestore.rules` already allows the owner to read, so the
   rules do not change.
+
+## Amendment — 2026-11-03: a Sync and a Download overlap
+
+The 2026-10-17 amendment did not say what the sync row shows when a Sync and a Download overlap.
+
+- **A Sync a person asked for wins.** While it waits or runs, the row shows the Sync and not the
+  Download. After the overlap, the row shows the result of the Sync and not `downloaded`.
+- **The log entries still join the list.** The rule covers the row only.
+- **A later Download is not affected.** A Download that starts after the Sync ended, including one
+  that was queued behind it, shows `downloading` and then `downloaded`, even if the row last showed
+  a Sync result.

@@ -82,6 +82,32 @@ sealed class LogsEditor with _$LogsEditor {
     _ => false,
   };
 
+  /// This editor with its save at [save]. Only an editor that can save
+  /// changes; any other stays as it is.
+  LogsEditor withSave(
+    LogsSaveStatus save, {
+    bool? hasSubmitted,
+    Set<LogEntryDraftField>? invalidFields,
+  }) => switch (this) {
+    final LogsEditorCreating editor => editor.copyWith(
+      hasSubmitted: hasSubmitted ?? editor.hasSubmitted,
+      invalidFields: invalidFields ?? editor.invalidFields,
+      save: save,
+    ),
+    final LogsEditorEditing editor => editor.copyWith(
+      hasSubmitted: hasSubmitted ?? editor.hasSubmitted,
+      invalidFields: invalidFields ?? editor.invalidFields,
+      save: save,
+    ),
+    _ => this,
+  };
+
+  LogsEditor get savingDraft => withSave(
+    LogsSaveStatus.saving,
+    hasSubmitted: true,
+    invalidFields: const <LogEntryDraftField>{},
+  );
+
   Set<LogEntryDraftField> get invalidFields => switch (this) {
     LogsEditorCreating(:final invalidFields) ||
     LogsEditorEditing(:final invalidFields) => invalidFields,
@@ -123,50 +149,6 @@ sealed class LogsDetail with _$LogsDetail {
   const factory failure(LogsError error) = LogsDetailFailure;
 }
 
-/// What a sync would push for a log entry that has not reached the Account yet.
-enum UnsyncedLogEntryChange { created, updated }
-
-/// Where a sync, or a background download of log entries, stands.
-///
-/// Counts are changes, so a deleted log entry waiting to sync is counted even
-/// though it has no row in the list.
-@freezed
-sealed class LogsSync with _$LogsSync {
-  const new _();
-
-  const factory upToDate({DateTime? lastSyncedAt}) = LogsSyncUpToDate;
-
-  const factory pending({required int changeCount}) = LogsSyncPending;
-
-  /// A sync was requested and has not started, for example because a
-  /// download is still running. Its change count is not known yet.
-  const factory waiting() = LogsSyncWaiting;
-
-  const factory syncing({required int savedCount, required int changeCount}) =
-      LogsSyncSyncing;
-
-  const factory synced({required int changeCount}) = LogsSyncSynced;
-
-  const factory partial({required int savedCount, required int changeCount}) =
-      LogsSyncPartial;
-
-  const factory offline({required int changeCount}) = LogsSyncOffline;
-
-  const factory failed({required int changeCount}) = LogsSyncFailed;
-
-  const factory alreadyUpToDate() = LogsSyncAlreadyUpToDate;
-
-  const factory downloading({required int logEntryCount}) = LogsSyncDownloading;
-
-  const factory downloaded({required int logEntryCount}) = LogsSyncDownloaded;
-
-  /// Whether a sync or a download is running, so a new sync cannot start.
-  bool get isBusy => switch (this) {
-    LogsSyncWaiting() || LogsSyncSyncing() || LogsSyncDownloading() => true,
-    _ => false,
-  };
-}
-
 @freezed
 abstract class LogsState with _$LogsState {
   const new _();
@@ -182,9 +164,6 @@ abstract class LogsState with _$LogsState {
     /// this changes. The next create starts clears it.
     @Default(LogsOutcome.none()) LogsOutcome outcome,
     @Default(LogsDeletion.idle()) LogsDeletion deletion,
-    @Default(LogsSync.upToDate()) LogsSync sync,
-    @Default(<String, UnsyncedLogEntryChange>{})
-    Map<String, UnsyncedLogEntryChange> unsyncedChanges,
   }) = _LogsState;
 
   /// Whether the list has no loaded result yet, so the page shows progress.

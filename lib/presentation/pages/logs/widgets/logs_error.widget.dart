@@ -17,6 +17,7 @@ class const _LogsError({required final LogsError error})
             AppButton.primary(
               onPressed: () {
                 context.read<LogsBloc>().add(const LogsStarted());
+                context.read<LogsSyncBloc>().add(const LogsSyncRefreshed());
               },
               child: Text(l10n.commonRetryAction),
             ),

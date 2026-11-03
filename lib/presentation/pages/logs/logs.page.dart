@@ -14,6 +14,7 @@ import 'package:project_tweety/presentation/widgets/log_entry_unsynced_marker.wi
 import 'package:project_tweety/presentation/widgets/page_scaffold.widget.dart';
 
 import 'bloc/logs.bloc.dart';
+import 'bloc/logs_sync.bloc.dart';
 import 'log_entry_details/log_entry_details.page.dart';
 import 'draft_discard_guard.widget.dart';
 
@@ -149,6 +150,10 @@ class const _LogsView({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final unsyncedChanges = context.select(
+      (LogsSyncBloc bloc) => bloc.state.unsyncedChanges,
+    );
+
     // TODO: buildWhen and listenWhen for small dedicated UI tasks (snackbar or only conditional rebuilds required)
     return BlocBuilder<LogsBloc, LogsState>(
       builder: (context, state) {
@@ -159,7 +164,7 @@ class const _LogsView({
         return _LogsList(
           key: listKey,
           items: state.items,
-          unsyncedChanges: state.unsyncedChanges,
+          unsyncedChanges: unsyncedChanges,
           selectedLogEntryId: selectedLogEntryId,
           onLogEntrySelected: onLogEntrySelected,
           onRefresh: () => _refreshLogs(context),
@@ -183,6 +188,7 @@ class const _LogsView({
   }
 
   Future<void> _refreshLogs(BuildContext context) async {
+    context.read<LogsSyncBloc>().add(const LogsSyncRefreshed());
     final bloc = context.read<LogsBloc>()..add(const LogsStarted());
 
     await bloc.stream.firstWhere((state) => !state.isLoading);

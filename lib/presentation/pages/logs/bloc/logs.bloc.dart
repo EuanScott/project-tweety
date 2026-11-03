@@ -22,8 +22,6 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
     on<LogsDraftDiscarded>(_onDraftDiscarded);
     on<LogsEditSubmitted>(_onEditSubmitted);
     on<LogsDeleteSubmitted>(_onDeleteSubmitted);
-    on<LogsSyncChanged>(_onSyncChanged);
-    on<LogsSyncRequested>(_onSyncRequested, transformer: droppable());
     on<LogsDownloadProgressed>(
       _onDownloadProgressed,
       transformer: sequential(),
@@ -43,46 +41,20 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
   }
 
   /// Downloaded log entries join the list in one update, when the download
-  /// ends. A download that added nothing leaves the list alone and shows
-  /// nothing ([ADR-0008](../../../../../docs/decisions/0008-cards-are-owned-by-the-signed-in-account.md)).
+  /// ends. A download that added nothing leaves the list alone.
   Future<void> _onDownloadProgressed(
     LogsDownloadProgressed event,
     Emitter<LogsState> emit,
   ) async {
-    switch (event.progress) {
-      case LogsDownloadAdding() when state.sync is LogsSyncWaiting:
-        break;
-      case LogsDownloadAdding(:final logEntryCount):
-        emit(
-          state.copyWith(
-            sync: LogsSync.downloading(logEntryCount: logEntryCount),
-          ),
-        );
-      case LogsDownloadFinished(addedCount: 0):
-        await _refreshSync(emit, endsDownload: true);
-      case LogsDownloadFinished(:final addedCount):
-        try {
-          final items = await _logsRepository.getLogs();
-          final summary = await _logsRepository.getSyncSummary();
-          emit(
-            state.copyWith(
-              load: const LogsLoad.loaded(),
-              items: items,
-              sync: LogsSync.downloaded(logEntryCount: addedCount),
-              unsyncedChanges: _unsyncedChanges(summary),
-            ),
-          );
-        } catch (error, stackTrace) {
-          addError(error, stackTrace);
-          await _refreshSync(emit, endsDownload: true);
-        }
+    if (event.progress case LogsDownloadFinished(:final addedCount)
+        when addedCount > 0) {
+      try {
+        final items = await _logsRepository.getLogs();
+        emit(state.copyWith(load: const LogsLoad.loaded(), items: items));
+      } catch (error, stackTrace) {
+        addError(error, stackTrace);
+      }
     }
-  }
-
-  void _onSyncChanged(LogsSyncChanged event, Emitter<LogsState> emit) {
-    emit(
-      state.copyWith(sync: event.sync, unsyncedChanges: event.unsyncedChanges),
-    );
   }
 
   void _onCreateStarted(LogsCreateStarted event, Emitter<LogsState> emit) {
@@ -101,7 +73,6 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
       final items = await _logsRepository.getLogs();
 
       emit(state.copyWith(load: const LogsLoad.loaded(), items: items));
-      await _refreshSync(emit);
     } catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(
@@ -191,21 +162,9 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
     Emitter<LogsState> emit,
   ) async {
     final editor = state.editor;
-    if (editor is! LogsEditorEditing || _isUpdating) {
-      return;
-    }
-
-    final invalidDraftFields = editor.draft.invalidFields;
-    if (invalidDraftFields.isNotEmpty) {
-      emit(
-        state.copyWith(
-          editor: editor.copyWith(
-            hasSubmitted: true,
-            invalidFields: invalidDraftFields,
-            save: LogsSaveStatus.idle,
-          ),
-        ),
-      );
+    if (editor is! LogsEditorEditing ||
+        editor.isSaving ||
+        _showsInvalidFields(emit, editor, editor.draft)) {
       return;
     }
 
@@ -214,78 +173,26 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
       return;
     }
 
-    final saving = editor.copyWith(
-      hasSubmitted: true,
-      invalidFields: const <LogEntryDraftField>{},
-      save: LogsSaveStatus.saving,
-    );
-    emit(state.copyWith(editor: saving));
+    emit(state.copyWith(editor: editor.savingDraft));
 
-    // A discard while the update runs closes or replaces the editor, so each
-    // outcome changes the editor only while it still edits this log entry.
-    LogsEditorEditing? sameEditor() => switch (state.editor) {
-      final LogsEditorEditing current
-          when current.logEntryId == editor.logEntryId =>
-        current,
-      _ => null,
-    };
-
-    try {
-      final updatedLogEntry = await _logsRepository.updateLogEntry(
+    await _save(
+      emit,
+      isSameEditor: (current) =>
+          current is LogsEditorEditing &&
+          current.logEntryId == editor.logEntryId,
+      write: () => _logsRepository.updateLogEntry(
         logEntryId: editor.logEntryId,
-        draft: saving.draft,
-      );
-      emit(
-        state.copyWith(
-          items: state.items
-              .map(
-                (logEntry) => logEntry.id == editor.logEntryId
-                    ? updatedLogEntry
-                    : logEntry,
-              )
-              .toList(growable: false),
-          editor: sameEditor() == null
-              ? state.editor
-              : const LogsEditor.closed(),
-        ),
-      );
-      await _refreshSync(emit);
-    } on InvalidLogEntryDraftException catch (error, stackTrace) {
-      addError(error, stackTrace);
-      final current = sameEditor();
-      if (current != null) {
-        emit(
-          state.copyWith(
-            editor: current.copyWith(
-              invalidFields: error.invalidFields,
-              save: LogsSaveStatus.idle,
-            ),
-          ),
-        );
-      }
-    } on LogEntryNotFoundException catch (error, stackTrace) {
-      addError(error, stackTrace);
-      final current = sameEditor();
-      if (current != null) {
-        emit(
-          state.copyWith(
-            editor: LogsEditor.missing(
-              logEntryId: current.logEntryId,
-              initialDraft: current.initialDraft,
-              draft: current.draft,
-            ),
-          ),
-        );
-      }
-    } catch (error, stackTrace) {
-      addError(error, stackTrace);
-      final current = sameEditor();
-      if (current != null) {
-        emit(
-          state.copyWith(editor: current.copyWith(save: LogsSaveStatus.failed)),
-        );
-      }
-    }
+        draft: editor.draft,
+      ),
+      withSaved: (updatedLogEntry) => state.copyWith(
+        items: state.items
+            .map(
+              (logEntry) =>
+                  logEntry.id == editor.logEntryId ? updatedLogEntry : logEntry,
+            )
+            .toList(growable: false),
+      ),
+    );
   }
 
   Future<void> _onCreateSubmitted(
@@ -293,71 +200,98 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
     Emitter<LogsState> emit,
   ) async {
     final editor = state.editor;
-    if (editor is! LogsEditorCreating || editor.isSaving) {
+    if (editor is! LogsEditorCreating ||
+        editor.isSaving ||
+        _showsInvalidFields(emit, editor, editor.draft)) {
       return;
     }
 
-    final invalidDraftFields = editor.draft.invalidFields;
-    if (invalidDraftFields.isNotEmpty) {
-      emit(
-        state.copyWith(
-          editor: editor.copyWith(
-            hasSubmitted: true,
-            invalidFields: invalidDraftFields,
-            save: LogsSaveStatus.idle,
-          ),
-        ),
-      );
-      return;
-    }
-
-    final saving = editor.copyWith(
-      hasSubmitted: true,
-      invalidFields: const <LogEntryDraftField>{},
-      save: LogsSaveStatus.saving,
+    emit(
+      state.copyWith(
+        editor: editor.savingDraft,
+        outcome: const LogsOutcome.none(),
+      ),
     );
-    emit(state.copyWith(editor: saving, outcome: const LogsOutcome.none()));
 
-    // A discard while the save runs closes or replaces the editor, so each
-    // outcome changes the editor only while it still creates.
-    LogsEditorCreating? sameEditor() => switch (state.editor) {
-      final LogsEditorCreating current => current,
-      _ => null,
-    };
+    await _save(
+      emit,
+      isSameEditor: (current) => current is LogsEditorCreating,
+      write: () => _logsRepository.createLogEntry(editor.draft),
+      withSaved: (logEntry) => state.copyWith(
+        items: [logEntry, ...state.items],
+        outcome: LogsOutcome.created(logEntry.id),
+      ),
+    );
+  }
+
+  bool _showsInvalidFields(
+    Emitter<LogsState> emit,
+    LogsEditor editor,
+    LogEntryDraft draft,
+  ) {
+    final invalidFields = draft.invalidFields;
+    if (invalidFields.isEmpty) {
+      return false;
+    }
+
+    emit(
+      state.copyWith(
+        editor: editor.withSave(
+          LogsSaveStatus.idle,
+          hasSubmitted: true,
+          invalidFields: invalidFields,
+        ),
+      ),
+    );
+    return true;
+  }
+
+  /// A discard while the save runs closes or replaces the editor, so each
+  /// outcome changes the editor only while [isSameEditor] holds.
+  Future<void> _save(
+    Emitter<LogsState> emit, {
+    required bool Function(LogsEditor current) isSameEditor,
+    required Future<LogEntry> Function() write,
+    required LogsState Function(LogEntry saved) withSaved,
+  }) async {
+    void updateSameEditor(LogsEditor Function(LogsEditor current) update) {
+      if (isSameEditor(state.editor)) {
+        emit(state.copyWith(editor: update(state.editor)));
+      }
+    }
 
     try {
-      final logEntry = await _logsRepository.createLogEntry(saving.draft);
+      final saved = await write();
       emit(
-        state.copyWith(
-          items: [logEntry, ...state.items],
-          editor: sameEditor() == null
-              ? state.editor
-              : const LogsEditor.closed(),
-          outcome: LogsOutcome.created(logEntry.id),
+        withSaved(saved).copyWith(
+          editor: isSameEditor(state.editor)
+              ? const LogsEditor.closed()
+              : state.editor,
         ),
       );
-      await _refreshSync(emit);
     } on InvalidLogEntryDraftException catch (error, stackTrace) {
       addError(error, stackTrace);
-      final current = sameEditor();
-      if (current != null) {
-        emit(
-          state.copyWith(
-            editor: current.copyWith(
-              invalidFields: error.invalidFields,
-              save: LogsSaveStatus.idle,
-            ),
+      updateSameEditor(
+        (current) => current.withSave(
+          LogsSaveStatus.idle,
+          invalidFields: error.invalidFields,
+        ),
+      );
+    } on LogEntryNotFoundException catch (error, stackTrace) {
+      addError(error, stackTrace);
+      updateSameEditor(
+        (current) => switch (current) {
+          final LogsEditorEditing editor => LogsEditor.missing(
+            logEntryId: editor.logEntryId,
+            initialDraft: editor.initialDraft,
+            draft: editor.draft,
           ),
-        );
-      }
+          _ => current.withSave(LogsSaveStatus.failed),
+        },
+      );
     } catch (error, stackTrace) {
       addError(error, stackTrace);
-      final current = sameEditor();
-      if (current != null) {
-        emit(
-          state.copyWith(editor: current.copyWith(save: LogsSaveStatus.failed)),
-        );
-      }
+      updateSameEditor((current) => current.withSave(LogsSaveStatus.failed));
     }
   }
 
@@ -382,7 +316,6 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
           outcome: LogsOutcome.deleted(event.logEntryId),
         ),
       );
-      await _refreshSync(emit);
     } catch (error, stackTrace) {
       addError(error, stackTrace);
       emit(state.copyWith(deletion: LogsDeletion.failed(event.logEntryId)));
@@ -392,111 +325,5 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
   bool get _isUpdating => switch (state.editor) {
     LogsEditorEditing(save: LogsSaveStatus.saving) => true,
     _ => false,
-  };
-
-  Future<void> _onSyncRequested(
-    LogsSyncRequested event,
-    Emitter<LogsState> emit,
-  ) async {
-    if (state.sync.isBusy) {
-      return;
-    }
-
-    emit(state.copyWith(sync: const LogsSync.waiting()));
-
-    var changeCount = 0;
-    try {
-      final result = await _logsRepository.syncLogs(
-        onProgress: (savedCount, total) {
-          changeCount = total;
-          emit(
-            state.copyWith(
-              sync: LogsSync.syncing(
-                savedCount: savedCount,
-                changeCount: total,
-              ),
-            ),
-          );
-        },
-      );
-      final summary = await _logsRepository.getSyncSummary();
-      final stillPending = summary.pendingChanges.length;
-      final outcome = _syncOutcome(result);
-      emit(
-        state.copyWith(
-          // Changes saved during the sync are still pending, so a full
-          // success would overstate what reached the Account.
-          sync: stillPending > 0 && outcome is LogsSyncSynced
-              ? LogsSync.pending(changeCount: stillPending)
-              : outcome,
-          unsyncedChanges: _unsyncedChanges(summary),
-        ),
-      );
-    } catch (error, stackTrace) {
-      addError(error, stackTrace);
-      emit(state.copyWith(sync: LogsSync.failed(changeCount: changeCount)));
-    }
-  }
-
-  /// Re-reads what is pending after a change is saved. A running sync keeps
-  /// its progress, and so does a running download unless [endsDownload]; any
-  /// other state becomes the pending count or the last sync time.
-  Future<void> _refreshSync(
-    Emitter<LogsState> emit, {
-    bool endsDownload = false,
-  }) async {
-    final LogsSyncSummary summary;
-    try {
-      summary = await _logsRepository.getSyncSummary();
-    } catch (error, stackTrace) {
-      addError(error, stackTrace);
-      return;
-    }
-
-    final changeCount = summary.pendingChanges.length;
-    emit(
-      state.copyWith(
-        unsyncedChanges: _unsyncedChanges(summary),
-        sync:
-            state.sync is LogsSyncSyncing ||
-                state.sync is LogsSyncWaiting ||
-                (state.sync.isBusy && !endsDownload)
-            ? state.sync
-            : changeCount == 0
-            ? LogsSync.upToDate(lastSyncedAt: summary.lastSyncedAt)
-            : LogsSync.pending(changeCount: changeCount),
-      ),
-    );
-  }
-
-  static LogsSync _syncOutcome(LogsSyncResult result) {
-    final LogsSyncResult(:changeCount, :savedCount) = result;
-
-    if (changeCount == 0) {
-      return const LogsSync.alreadyUpToDate();
-    }
-    if (savedCount == changeCount) {
-      return LogsSync.synced(changeCount: changeCount);
-    }
-    if (savedCount > 0) {
-      return LogsSync.partial(savedCount: savedCount, changeCount: changeCount);
-    }
-
-    return result.onlyNetworkFailures
-        ? LogsSync.offline(changeCount: changeCount)
-        : LogsSync.failed(changeCount: changeCount);
-  }
-
-  /// A deleted log entry has no row to mark, so only created and edited log entries
-  /// carry a marker.
-  static Map<String, UnsyncedLogEntryChange> _unsyncedChanges(
-    LogsSyncSummary summary,
-  ) => {
-    for (final MapEntry(key: logEntryId, value: change)
-        in summary.pendingChanges.entries)
-      if (change == PendingLogEntryChange.created)
-        logEntryId: UnsyncedLogEntryChange.created
-      else if (change == PendingLogEntryChange.updated)
-        logEntryId: UnsyncedLogEntryChange.updated,
   };
 }
