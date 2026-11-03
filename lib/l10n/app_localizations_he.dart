@@ -130,10 +130,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsTab => 'הגדרות';
 
   @override
-  String get navigationErrorTitle => 'העמוד לא נמצא';
+  String get navigationErrorTitle => 'מעבר לקצה המפה';
 
   @override
-  String get navigationErrorDescription => 'העמוד שחיפשת אינו זמין.';
+  String get navigationErrorDescription => 'בוא נחזיר אותך הביתה.';
 
   @override
   String get navigationErrorGoHome => 'עבור לבית';
@@ -152,6 +152,12 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get settingsAppPreferencesSubtitle => 'ערכת נושא, שפה והגדרות טקסט';
+
+  @override
+  String get settingsRouteErrorPreviewTitle => 'תצוגה מקדימה של עמוד לא נמצא';
+
+  @override
+  String get settingsRouteErrorPreviewSubtitle => 'הצגת העמוד שקישור שבור פותח';
 
   @override
   String get appPreferencesTitle => 'התאמה אישית';

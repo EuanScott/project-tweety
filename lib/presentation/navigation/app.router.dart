@@ -9,7 +9,6 @@ import 'package:project_tweety/core/analytics/analytics.facade.dart';
 import 'package:project_tweety/presentation/navigation/analytics/navigation_analytics.observer.dart';
 import 'package:project_tweety/presentation/navigation/analytics/navigation_analytics_tracker.service.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
-import 'package:project_tweety/presentation/navigation/navigation.extension.dart';
 import 'package:project_tweety/presentation/navigation/route_access.policy.dart';
 import 'package:project_tweety/presentation/navigation/session_notifier.service.dart';
 import 'package:project_tweety/presentation/navigation/app_routes.constants.dart';
@@ -19,6 +18,7 @@ import 'package:project_tweety/presentation/pages/access_denied/access_denied.pa
 import 'package:project_tweety/presentation/pages/app_preferences/app_preferences.page.dart';
 import 'package:project_tweety/presentation/pages/logs/logs.page.dart';
 import 'package:project_tweety/presentation/pages/logs/bloc/logs.bloc.dart';
+import 'package:project_tweety/presentation/pages/route_error/route_error.page.dart';
 import 'package:project_tweety/presentation/pages/home/home.page.dart';
 import 'package:project_tweety/presentation/pages/settings/settings.page.dart';
 import 'package:project_tweety/presentation/pages/sign_in/sign_in.page.dart';
@@ -44,8 +44,12 @@ GoRouter createRouter({
   final routeAccessPolicy = RouteAccessPolicy(
     canAccessSettings: canAccessSettings,
   );
+  final rootNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'rootNavigator',
+  );
 
   return createNavigationRouter<AppTab>(
+    navigatorKey: rootNavigatorKey,
     initialLocation: initialLocation,
     rootPath: AppRoutes.rootPath,
     rootRedirectPath: AppRoutes.homePath,
@@ -58,8 +62,14 @@ GoRouter createRouter({
             platformPage(context, state, const SignInPage()),
       ),
     ],
+    // go_router hands the top-level redirect a location no route matches with
+    // an error set.
     redirect: (context, state) => routeAccessPolicy
-        .sessionAccessDecision(session: session.session, location: state.uri)
+        .locationAccessDecision(
+          session: session.session,
+          location: state.uri,
+          isMatched: state.error == null,
+        )
         .redirectPath,
     refreshListenable: session,
     branches: [
@@ -73,6 +83,17 @@ GoRouter createRouter({
             name: AppRoutes.homeName,
             pageBuilder: (context, state) =>
                 platformPage(context, state, const Home()),
+            routes: [
+              // Above the tab shell, so it covers the tab bar, and over Home,
+              // so leaving it goes back.
+              GoRoute(
+                path: AppRoutes.homeNotFoundChildPath,
+                name: AppRoutes.homeNotFoundName,
+                parentNavigatorKey: rootNavigatorKey,
+                pageBuilder: (context, state) =>
+                    platformPage(context, state, const RouteErrorPage()),
+              ),
+            ],
           ),
           GoRoute(
             path: AppRoutes.accessDeniedPath,
@@ -224,15 +245,7 @@ String? _settingsAccessRedirect({required RouteAccessPolicy policy}) {
 }
 
 Widget _navigationErrorBuilder(BuildContext context, Exception? error) {
-  final l10n = AppLocalizations.of(context)!;
-
-  return NavigationRouteErrorPage(
-    error: error,
-    title: l10n.navigationErrorTitle,
-    description: l10n.navigationErrorDescription,
-    actionLabel: l10n.navigationErrorGoHome,
-    onActionPressed: context.goHome,
-  );
+  return const RouteErrorPage();
 }
 
 List<NavigatorObserver>? _navigationObservers(

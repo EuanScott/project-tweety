@@ -42,6 +42,16 @@ class AppRoutes {
   /// Absolute path for the home tab root.
   static const homePath = '/home';
 
+  /// Named route for the not-found page, shown over Home.
+  static const homeNotFoundName = 'homeNotFound';
+
+  /// Relative child path for the not-found page under [homePath].
+  static const homeNotFoundChildPath = 'not-found';
+
+  /// Absolute path for the not-found page. A location no route matches
+  /// redirects here.
+  static const homeNotFoundPath = '$homePath/$homeNotFoundChildPath';
+
   /// Absolute path for guarded-route access denial.
   static const accessDeniedPath = '/access-denied';
 
@@ -77,4 +87,8 @@ class AppRoutes {
 
   /// Absolute path for directly opening app preferences.
   static const settingsAppPreferencesFullPath = '/settings/app-preferences';
+
+  /// A path no route matches, so going to it shows the route error page as a
+  /// broken link would. Never register a route for it.
+  static const routeErrorPreviewPath = '/page-not-found-preview';
 }

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:project_tweety/domain/entities/app_preferences/app_preferences.entity.dart';
 import 'package:project_tweety/presentation/pages/app_preferences/cubit/app_preferences.cubit.dart';
+import 'package:project_tweety/presentation/pages/route_error/map_scene_palette.model.dart';
 import 'package:project_tweety/presentation/widgets/water_scene/scene_palette.model.dart';
 
 import '../support/app_harness.dart';
@@ -82,6 +83,10 @@ void main() {
       expect(palette.isNight, isTrue);
       expect(Theme.of(context).extension<DesignStatusColors>(), isNotNull);
       expect(Theme.of(context).extension<ScenePalette>(), isNotNull);
+      expect(
+        Theme.of(context).extension<MapScenePalette>(),
+        MapScenePalette.forThemeColour(.lyng, .dark),
+      );
     });
 
     testWidgets('Fjord in light mode keeps the original day scene', (

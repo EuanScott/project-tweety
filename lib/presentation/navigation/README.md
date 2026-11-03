@@ -12,13 +12,13 @@ App-owned in `lib/presentation/navigation`:
 - page builders and nested route trees in `app.router.dart`
 - feature-facing helpers in `navigation.extension.dart`
 - analytics tracker and navigator observers in `analytics/`
+- the route error page, in `lib/presentation/pages/route_error/`
 
 Package-owned in `packages/navigation`:
 
 - tab shell rendering
 - adaptive bottom navigation and navigation rail behavior
 - branch navigator key creation
-- route error page widget
 - generic tab reselect lifecycle
 - `createNavigationRouter<TTab>()`
 
@@ -30,7 +30,8 @@ The package must not import app pages, app localization, app route constants, or
 
 1. The app creates analytics wiring.
 2. The app defines `NavigationBranch<AppTab>` values with `GoRoute` trees and page builders.
-3. The app passes `appTabConfigs`, branches, root redirect data, observers, and the localized error builder into `createNavigationRouter<AppTab>()`.
+3. The app passes `appTabConfigs`, branches, root redirect data, observers, and the error builder into `createNavigationRouter<AppTab>()`.
+   A location that no route matches redirects to `/home/not-found`, the app's not-found page shown over Home. The error builder shows the same page as a fallback, for the one case the redirect does not cover.
 4. The package builds the `GoRouter`, `StatefulShellRoute.indexedStack`, branch navigators, and adaptive navigation shell.
 
 This keeps the route graph easy to scan while moving repeated shell logic out of the app.

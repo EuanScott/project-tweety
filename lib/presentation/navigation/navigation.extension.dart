@@ -33,6 +33,23 @@ extension AppNavigation on BuildContext {
     goNamed(AppRoutes.logsNewName);
   }
 
+  /// Leaves the not-found page. It usually sits over Home, or over the page
+  /// that previewed it, so leaving it goes back. Shown with nothing beneath
+  /// it, it goes to Home instead.
+  void leaveNotFound() {
+    if (canPop()) {
+      pop();
+    } else {
+      goHome();
+    }
+  }
+
+  /// Shows the page a broken link opens, over the current page, through the
+  /// router's own handling of a location no route matches.
+  Future<T?> openRouteErrorPreview<T extends Object?>() {
+    return push<T>(AppRoutes.routeErrorPreviewPath);
+  }
+
   /// Replaces the current Logs branch location with its collection root.
   void goLogs() {
     goNamed(AppRoutes.logsName);

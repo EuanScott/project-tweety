@@ -8,7 +8,6 @@ class _SignInScene extends StatelessWidget {
     required this.fadeAxis,
     required this.isSplit,
     this.scrollOffset = 0,
-    super.key,
   });
 
   final Size compositionSize;

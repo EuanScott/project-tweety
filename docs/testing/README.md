@@ -93,8 +93,8 @@ than open-coding the reset cycle.
 
 - `app_harness.dart` — `useAppHarness()` registers the `setUp`/`tearDown` pair
   (in-memory shared preferences, the system-text-settings channel stub, a real
-  DI container with a working logs fake, a signed-in auth fake, and a tilt
-  fake). `pumpApp(tester, …)` renders `MyApp` at a chosen surface size, locale,
+  DI container with a working logs fake, a signed-in auth fake, a tilt fake
+  and a heading fake). `pumpApp(tester, …)` renders `MyApp` at a chosen surface size, locale,
   platform, brightness, and Session.
   `currentRoutePath(tester)` reads the active `go_router` location.
 - `fake_logs_repository.dart` — one configurable `FakeLogsRepository` backed by
@@ -116,6 +116,10 @@ than open-coding the reset cycle.
 - `fake_device_tilt_service.dart` — `FakeDeviceTiltService`, so the water
   scene never reaches the device sensors. Call `tilt` to move the scene, and
   read `isListening` to check that the sensors would be on.
+- `fake_device_heading_service.dart` — `FakeDeviceHeadingService`, so the
+  route error page's compass never reaches the magnetometer. Call `turnTo` to
+  set the heading, and read `isListening` to check that the sensors would be
+  on.
 - `fake_app_preferences_repository.dart` — `FakeAppPreferencesRepository`, which
   records every save in `savedPreferences`.
 - `in_memory_shared_preferences_async_platform.dart` — the platform fake behind

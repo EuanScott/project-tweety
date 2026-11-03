@@ -96,25 +96,32 @@ void main() {
     testWidgets('shows a navigation error page for unknown routes', (
       WidgetTester tester,
     ) async {
-      await pumpApp(tester, initialLocation: '/missing');
-
-      expect(find.text('Page not found'), findsWidgets);
-      expect(
-        find.text('The page you were looking for is not available.'),
-        findsOneWidget,
+      // The page's scene drifts on its own; Reduce Motion lets the app settle.
+      await pumpApp(
+        tester,
+        initialLocation: '/missing',
+        disableAnimations: true,
       );
+
+      expect(find.text('Off the edge of the map'), findsWidgets);
+      expect(find.text('Let’s point you back home.'), findsOneWidget);
       expect(find.text('Go home'), findsOneWidget);
     });
 
     testWidgets('navigates home from the navigation error page', (
       WidgetTester tester,
     ) async {
-      await pumpApp(tester, initialLocation: '/missing');
+      // The page's scene drifts on its own; Reduce Motion lets the app settle.
+      await pumpApp(
+        tester,
+        initialLocation: '/missing',
+        disableAnimations: true,
+      );
 
       await tester.tap(find.text('Go home'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Page not found'), findsNothing);
+      expect(find.text('Off the edge of the map'), findsNothing);
       expect(find.text('Home'), findsWidgets);
     });
 

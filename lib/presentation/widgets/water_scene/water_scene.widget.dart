@@ -122,41 +122,6 @@ class _SceneGeometry {
   Rect? get headingArea => keepsSkyClear
       ? Rect.fromLTWH(40, 56, math.min(width - 80, 420), 130)
       : null;
-
-  /// The soft-edged wavy bands of [background] that fade the scene out over
-  /// [extent] past its edge, nearest band first. They and their blur stay
-  /// inside the fade, so the scene keeps its full strength and the last band
-  /// is solid by the fade's far edge.
-  _WavesPainter fadePainter(Axis axis, double extent, Color background) {
-    final isVertical = axis == Axis.vertical;
-    final start = isVertical ? height : width;
-    final across = isVertical ? width : height;
-    final amplitude = 0.08 * extent;
-    final blur = 0.06 * extent;
-    // A wave reaches up to 1.35 × its amplitude from its line, and a blur is
-    // visible up to about 3 sigma past its edge.
-    final reach = 1.35 * amplitude + 3 * blur;
-    final top = start + reach;
-    final span = extent - 2 * reach;
-
-    // A sideways fade is laid out as if it ran down, then painted transposed.
-    return _WavesPainter(
-      transposed: !isVertical,
-      fills: [
-        for (final (i, band) in _fadeBands.indexed)
-          _WaveFill(
-            wave: _Wave(
-              y: top + span * i / (_fadeBands.length - 1),
-              amplitude: amplitude,
-              wavelength: band.wavelength * across,
-              phase: band.phase,
-            ),
-            color: background.withValues(alpha: band.alpha),
-            blur: blur,
-          ),
-      ],
-    );
-  }
 }
 
 /// The layered water scene: sky, hills, water, and an optional [subject]
@@ -376,13 +341,28 @@ class _WaterSceneState extends State<WaterScene> {
                 ),
               ),
             ),
-            painted(
-              geometry.fadePainter(
-                widget.fadeAxis,
-                widget.fadeExtent,
-                background,
+            if (isVertical)
+              Positioned(
+                left: 0,
+                right: 0,
+                top: composition.height,
+                height: widget.fadeExtent,
+                child: SceneWavyFade(
+                  axis: Axis.vertical,
+                  background: background,
+                ),
+              )
+            else
+              PositionedDirectional(
+                start: composition.width,
+                width: widget.fadeExtent,
+                top: 0,
+                bottom: 0,
+                child: SceneWavyFade(
+                  axis: Axis.horizontal,
+                  background: background,
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -433,6 +413,69 @@ const List<({double wavelength, double phase, double alpha})> _fadeBands = [
   (wavelength: 0.40, phase: 1.1, alpha: 0.22 / 0.35),
   (wavelength: 0.28, phase: 2.9, alpha: 1),
 ];
+
+/// Fades a scene into [background] over this widget's box, along [axis]:
+/// down, or toward the end edge. Its edge is soft wavy bands, like the water,
+/// so a scene dissolves into the page instead of ending on a straight line.
+///
+/// The bands and their blur stay inside the box: the scene shows at full
+/// strength at the near edge, and the far edge is solid [background].
+class const SceneWavyFade({
+  required final Axis axis,
+  required final Color background,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
+    // The fills run past the box so their ends never show; the clip keeps
+    // them inside it.
+    return IgnorePointer(
+      child: ClipRect(
+        child: LayoutBuilder(
+          builder: (context, constraints) => Transform.flip(
+            flipX: isRtl,
+            child: CustomPaint(
+              size: constraints.biggest,
+              painter: _fadePainter(constraints.biggest),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _WavesPainter _fadePainter(Size size) {
+    final isVertical = axis == Axis.vertical;
+    final extent = isVertical ? size.height : size.width;
+    final across = isVertical ? size.width : size.height;
+    final amplitude = 0.08 * extent;
+    final blur = 0.06 * extent;
+    // A wave reaches up to 1.35 × its amplitude from its line, and a blur is
+    // visible up to about 3 sigma past its edge.
+    final reach = 1.35 * amplitude + 3 * blur;
+    final span = extent - 2 * reach;
+
+    // A sideways fade is laid out as if it ran down, then painted transposed.
+    return _WavesPainter(
+      transposed: !isVertical,
+      fills: [
+        for (final (i, band) in _fadeBands.indexed)
+          _WaveFill(
+            wave: _Wave(
+              y: reach + span * i / (_fadeBands.length - 1),
+              amplitude: amplitude,
+              wavelength: band.wavelength * across,
+              phase: band.phase,
+            ),
+            color: background.withValues(alpha: band.alpha),
+            blur: blur,
+          ),
+      ],
+    );
+  }
+}
 
 /// Fades into [background] with eased stops, so a scene or a scrolled
 /// edge blends into what sits behind it.

@@ -68,7 +68,9 @@ void main() {
             )
             .first,
       );
-      final card = tester.getRect(find.byType(CupertinoListTile));
+      final card = tester.getRect(
+        find.widgetWithText(CupertinoListTile, 'Personalisation'),
+      );
 
       expect(card.top - body.top, 36);
       expect(card.left, 16);
@@ -88,7 +90,35 @@ void main() {
     ) async {
       await _pumpSettings(tester);
 
-      expect(find.byType(CupertinoListTileChevron), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.widgetWithText(CupertinoListTile, 'Personalisation'),
+          matching: find.byType(CupertinoListTileChevron),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('offers a page-not-found preview under personalisation', (
+      tester,
+    ) async {
+      await _pumpSettings(tester);
+
+      final section = find.byType(AppListSection);
+      final personalisation = find.descendant(
+        of: section,
+        matching: find.text('Personalisation'),
+      );
+      final preview = find.descendant(
+        of: section,
+        matching: find.text('Preview page not found'),
+      );
+
+      expect(preview, findsOneWidget);
+      expect(
+        tester.getTopLeft(preview).dy,
+        greaterThan(tester.getTopLeft(personalisation).dy),
+      );
     });
   });
 }

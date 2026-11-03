@@ -133,11 +133,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTab => 'Settings';
 
   @override
-  String get navigationErrorTitle => 'Page not found';
+  String get navigationErrorTitle => 'Off the edge of the map';
 
   @override
-  String get navigationErrorDescription =>
-      'The page you were looking for is not available.';
+  String get navigationErrorDescription => 'Let’s point you back home.';
 
   @override
   String get navigationErrorGoHome => 'Go home';
@@ -157,6 +156,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get settingsAppPreferencesSubtitle =>
       'Theme, language, and text settings';
+
+  @override
+  String get settingsRouteErrorPreviewTitle => 'Preview page not found';
+
+  @override
+  String get settingsRouteErrorPreviewSubtitle =>
+      'See the page a broken link opens';
 
   @override
   String get appPreferencesTitle => 'Personalisation';

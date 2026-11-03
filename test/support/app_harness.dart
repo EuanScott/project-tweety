@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_tweety/core/di/dependency_injection.dart';
+import 'package:project_tweety/core/platform/device_heading.service.dart';
 import 'package:project_tweety/core/platform/device_tilt.service.dart';
 import 'package:project_tweety/core/platform/home_screen_shortcut.service.dart';
 import 'package:project_tweety/data/repositories/auth/auth.repository.dart';
@@ -17,6 +18,7 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 
 import 'fake_auth_repository.dart';
 import 'fake_logs_repository.dart';
+import 'fake_device_heading_service.dart';
 import 'fake_device_tilt_service.dart';
 import 'fake_home_screen_shortcut_service.dart';
 import 'in_memory_shared_preferences_async_platform.dart';
@@ -31,8 +33,9 @@ const systemTextSettingsChannel = MethodChannel(
 /// channel, builds a real DI container, and swaps in a working
 /// [FakeLogsRepository] so tests that do not care about log entries still render.
 /// It also swaps in a signed-in [FakeAuthRepository], so the launch gate lets
-/// tests into the app, and a [FakeDeviceTiltService], so the sign-in scene
-/// never reaches the sensors, and a [FakeHomeScreenShortcutService], so tests
+/// tests into the app, a [FakeDeviceTiltService] and a
+/// [FakeDeviceHeadingService], so the scenes never reach the sensors, and a
+/// [FakeHomeScreenShortcutService], so tests
 /// pick home screen shortcuts without a native side.
 ///
 /// Call once at the top of a `group`.
@@ -56,6 +59,8 @@ void useAppHarness() {
     GetIt.I.registerSingleton<AuthRepository>(FakeAuthRepository());
     await GetIt.I.unregister<DeviceTiltService>();
     GetIt.I.registerSingleton<DeviceTiltService>(FakeDeviceTiltService());
+    await GetIt.I.unregister<DeviceHeadingService>();
+    GetIt.I.registerSingleton<DeviceHeadingService>(FakeDeviceHeadingService());
     await GetIt.I.unregister<HomeScreenShortcutService>();
     GetIt.I.registerSingleton<HomeScreenShortcutService>(
       FakeHomeScreenShortcutService(),

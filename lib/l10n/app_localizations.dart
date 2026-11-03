@@ -334,16 +334,16 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settingsTab;
 
-  /// Title shown when navigation cannot resolve a route
+  /// Heading of the page shown when a link leads to a page that does not exist. The page shows a lost map and a compass.
   ///
   /// In en, this message translates to:
-  /// **'Page not found'**
+  /// **'Off the edge of the map'**
   String get navigationErrorTitle;
 
-  /// Description shown when navigation cannot resolve a route
+  /// Line under the heading of the page shown when a link leads to a page that does not exist
   ///
   /// In en, this message translates to:
-  /// **'The page you were looking for is not available.'**
+  /// **'Let’s point you back home.'**
   String get navigationErrorDescription;
 
   /// Button label to return to the home page after a navigation error
@@ -381,6 +381,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Theme, language, and text settings'**
   String get settingsAppPreferencesSubtitle;
+
+  /// Title for the Settings row that opens the page shown for a link to a page that does not exist
+  ///
+  /// In en, this message translates to:
+  /// **'Preview page not found'**
+  String get settingsRouteErrorPreviewTitle;
+
+  /// Subtitle for the Settings row that previews the page-not-found page
+  ///
+  /// In en, this message translates to:
+  /// **'See the page a broken link opens'**
+  String get settingsRouteErrorPreviewSubtitle;
 
   /// Title for the personalisation page
   ///

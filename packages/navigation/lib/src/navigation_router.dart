@@ -11,6 +11,11 @@ import 'package:navigation/src/navigation_tab_config.dart';
 /// [routes] sit beside the tab shell, so they render without tabs. [redirect]
 /// is the router's top-level redirect, and [refreshListenable] re-runs it
 /// whenever it notifies.
+///
+/// [errorBuilder] builds the page shown when the router cannot resolve a
+/// location. The app supplies the page, and the router wraps it in
+/// [platformPage]. It is required because the package has no default: it holds
+/// no text or theme of its own.
 GoRouter createNavigationRouter<TTab extends Object>({
   required String initialLocation,
   required String rootPath,

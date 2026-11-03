@@ -74,4 +74,5 @@ dart run tool/decisions/adr.dart generate-index
 | [0019](0019-log-entries-keep-the-cards-storage-names.md) | Log entries keep the `cards` storage names | accepted |
 | [0020](0020-ios-control-extension-targets-ios-18.md) | The iOS control extension targets iOS 18 | accepted |
 | [0021](0021-root-agent-context-is-guardrails-and-pointers.md) | Root agent context holds guardrails and pointers; standards live in CODING_STANDARDS.md | accepted |
+| [0022](0022-unknown-locations-show-an-app-owned-page-over-home.md) | Unknown locations show an app-owned page over Home | accepted |
 <!-- adr-index:end -->

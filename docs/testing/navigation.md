@@ -71,11 +71,27 @@ Expected result: Access denied.
 
 - `/` redirects to `/home`
 - `/home`
+- `/home/not-found`, above the tab shell
 - `/access-denied`
 - `/logs`
 - `/logs/:entryId`
 - `/settings`
 - `/settings/app-preferences`
+
+## Unknown Locations
+
+A location that no route matches redirects to `/home/not-found`. The page
+shows over Home, above the tab bar, so "Go home", the iOS swipe-back and the
+Android back button all go back to Home.
+
+One case skips that redirect. A signed-out person with a bad link goes to
+sign-in first, which carries the bad location. After sign-in, go_router does
+not redirect that carried location again. It shows its error page instead.
+That page is the same not-found page, alone, and "Go home" goes to Home.
+
+`test/presentation/navigation/route_error_navigation.flow_test.dart` covers both
+cases, the swipe-back, and the Settings preview row, which opens the page over
+Settings. `route_access.policy_test.dart` covers the redirect target.
 
 ## Important Limitation
 

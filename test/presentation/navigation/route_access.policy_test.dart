@@ -87,4 +87,38 @@ void main() {
       expect(decide(signedIn, '/settings/app-preferences'), isNull);
     });
   });
+
+  group('RouteAccessPolicy.locationAccessDecision', () {
+    const policy = RouteAccessPolicy(canAccessSettings: true);
+    const signedOut = Session.signedOut();
+    const signedIn = Session.signedIn(Profile());
+
+    String? decide(Session session, String location, {bool matched = true}) {
+      return policy
+          .locationAccessDecision(
+            session: session,
+            location: Uri.parse(location),
+            isMatched: matched,
+          )
+          .redirectPath;
+    }
+
+    test('signed in, a matched location: allows', () {
+      expect(decide(signedIn, '/logs'), isNull);
+    });
+
+    test('signed in, an unmatched location: shows not-found over Home', () {
+      expect(
+        decide(signedIn, '/missing/deep/link?x=1', matched: false),
+        '/home/not-found',
+      );
+    });
+
+    test('signed out, an unmatched location: the launch gate comes first', () {
+      expect(
+        decide(signedOut, '/missing', matched: false),
+        '/sign-in?from=%2Fmissing',
+      );
+    });
+  });
 }

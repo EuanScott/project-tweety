@@ -41,6 +41,13 @@ class _SettingsView extends StatelessWidget {
                 unawaited(context.openAppPreferences());
               },
             ),
+            AppListTile(
+              title: Text(l10n.settingsRouteErrorPreviewTitle),
+              subtitle: Text(l10n.settingsRouteErrorPreviewSubtitle),
+              onTap: () {
+                unawaited(context.openRouteErrorPreview());
+              },
+            ),
           ],
         ),
       ],

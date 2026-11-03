@@ -9,7 +9,6 @@
 - `NavigationTabConfig<TTab>` for tab metadata
 - `NavigationBranch<TTab>` for app-provided branch route trees
 - `NavigationNavigatorKeys<TTab>` for root and branch navigator keys
-- `NavigationRouteErrorPage` for generic route-error UI
 - `TabReselectController<TTab>`, `TabReselectScope<TTab>`, and `TabReselectHandler<TTab>`
 
 ## What Consuming Apps Own
@@ -19,7 +18,8 @@ Apps must keep these outside the package:
 - route constants and route names
 - actual `GoRoute` trees and page builders
 - app tab enum values
-- localized tab labels and error text
+- localized tab labels
+- the route error page, passed as `errorBuilder`
 - app navigation extensions
 - analytics facades, trackers, and observers
 
@@ -46,15 +46,8 @@ final router = createNavigationRouter<AppTab>(
       ],
     ),
   ],
-  errorBuilder: (context, error) {
-    return NavigationRouteErrorPage(
-      error: error,
-      title: 'Page not found',
-      description: 'The page is not available.',
-      actionLabel: 'Go home',
-      onActionPressed: () => context.goNamed(AppRoutes.homeName),
-    );
-  },
+  // The app owns this page. See "The Route Error Page" below.
+  errorBuilder: (context, error) => const MyErrorPage(),
 );
 ```
 
@@ -80,6 +73,23 @@ createNavigationRouter<AppTab>(
   redirect: (context, state) => accessPolicy.decide(state.uri),
   refreshListenable: sessionListenable,
 );
+```
+
+## The Route Error Page
+
+The router shows this page when it cannot resolve a location. The package has no default page, because it holds no text or theme of its own. `errorBuilder` is required, so an app without an error page does not compile.
+
+The smallest useful version, with no separate page class. Give it a way out, and use the app's own text and theme:
+
+```dart
+errorBuilder: (context, error) => Scaffold(
+  body: Center(
+    child: FilledButton(
+      onPressed: () => context.goNamed(AppRoutes.homeName),
+      child: const Text('Page not found. Go home'),
+    ),
+  ),
+),
 ```
 
 ## Adaptive Shell

@@ -4,6 +4,10 @@ Status: accepted
 Date: 2026-10-06
 Decision maker: Euan Scott
 
+> Note (2026-11-03): the route error page's map scene also has its own palette
+> for each theme colour and brightness. Read "two scene palettes" below as four:
+> two for the water scene and two for the map scene. The decision is unchanged.
+
 ## Context
 
 A person can choose a theme colour for the app. Light and dark mode stay a

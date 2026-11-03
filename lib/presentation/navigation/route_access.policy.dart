@@ -59,6 +59,24 @@ class RouteAccessPolicy {
     }
   }
 
+  /// The router's top-level decision for [location].
+  ///
+  /// The launch gate comes first. Once it lets a person through, a location
+  /// no route matches, most often a broken deep link, shows the not-found
+  /// page over Home, so leaving it goes back to Home.
+  RouteGuardDecision locationAccessDecision({
+    required Session session,
+    required Uri location,
+    required bool isMatched,
+  }) {
+    final gate = sessionAccessDecision(session: session, location: location);
+    if (gate.redirectPath != null || isMatched) {
+      return gate;
+    }
+
+    return const RouteGuardDecision.redirect(AppRoutes.homeNotFoundPath);
+  }
+
   bool _isInAppLocation(String? location) {
     if (location == null ||
         !location.startsWith('/') ||

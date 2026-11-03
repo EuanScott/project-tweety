@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:design_system/design_system.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:project_tweety/data/repositories/auth/sign_in_result.model.dart';
 import 'package:project_tweety/l10n/app_localizations.dart';
+import 'package:project_tweety/presentation/widgets/scene_layout/scene_layout.widget.dart';
 import 'package:project_tweety/presentation/widgets/water_scene/water_scene.widget.dart';
 
 import 'cubit/sign_in.cubit.dart';
