@@ -5,6 +5,7 @@
 [![Dart](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FEuanScott%2Fproject-tweety%2Fmain%2Fpubspec.yaml&query=%24.environment.sdk&label=dart&logo=dart&color=0175C2)](pubspec.yaml)
 [![CI](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/EuanScott/project-tweety/actions/workflows/ci.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/EuanScott/project-tweety/badge)](https://scorecard.dev/viewer/?uri=github.com/EuanScott/project-tweety)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/16425/badge)](https://www.bestpractices.dev/projects/16425)
 
 A playground project to try out some ideas and work on some blockers that I face in my day job. I'm not really building
 anything to serve a purpose here.
