@@ -16,7 +16,7 @@ dependencies:
   cupertino_ui: ^1.1.4
   design_system:
     path: packages/design_system
-  firebase_auth: ^6.7.0
+  firebase_auth: ^6.7.1
   firebase_core: ^4.15.2
   flutter:
     sdk: flutter
