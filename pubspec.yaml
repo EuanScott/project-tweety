@@ -13,7 +13,7 @@ dependencies:
   bloc_concurrency: ^0.3.0
   cloud_firestore: ^6.10.2
   cupertino_icons: ^2.0.0
-  cupertino_ui: ^1.1.4
+  cupertino_ui: ^1.1.6
   design_system:
     path: packages/design_system
   firebase_auth: ^6.7.1
