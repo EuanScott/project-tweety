@@ -11,13 +11,13 @@ environment:
 dependencies:
   bloc: ^9.0.0
   bloc_concurrency: ^0.3.0
-  cloud_firestore: ^6.10.2
+  cloud_firestore: ^7.1.0
   cupertino_icons: ^2.0.0
   cupertino_ui: ^1.1.4
   design_system:
     path: packages/design_system
-  firebase_auth: ^6.7.1
-  firebase_core: ^4.15.2
+  firebase_auth: ^7.0.1
+  firebase_core: ^5.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.0.0
