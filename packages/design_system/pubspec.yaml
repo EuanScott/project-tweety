@@ -9,7 +9,7 @@ environment:
   flutter: 3.47.8
 
 dependencies:
-  cupertino_ui: ^1.1.4
+  cupertino_ui: ^1.1.6
   flutter:
     sdk: flutter
   google_fonts: ^9.0.0
