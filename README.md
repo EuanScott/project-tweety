@@ -66,6 +66,26 @@ flutter test integration_test/logs_sqlite_smoke.flow_test.dart -d <device-id>
 See [the testing guide](docs/testing/README.md) for what belongs in `test/`,
 `integration_test/`, and `test_driver/`.
 
+### Local development without sign-in
+
+To skip Google sign-in on any emulator or simulator, start the app from the dev entrypoint:
+
+```sh
+flutter run -t lib/main_dev.dart
+```
+
+The app opens signed in as a made-up dev Account. It needs no Firebase emulator and no extra setup.
+
+- Log entries save to the device database as usual.
+- A Sync confirms each change but sends nothing to Firestore. A Download adds nothing.
+- Signing out and signing in again work, without Google.
+
+Use `lib/main.dart` (the default target) to work on real sign-in, Sync or Firestore rules.
+
+The dev entrypoint runs only in debug builds. In any other build mode it throws before the app starts, so you see a blank
+screen and the error in the log. Release builds start from `lib/main.dart`, which never imports the dev code.
+`test/dev/dev_code_isolation.flow_test.dart` fails if any other file in `lib/` imports `lib/dev/`.
+
 ### Pre-commit hook
 
 `.githooks/pre-commit` runs the four repository validators on every commit:

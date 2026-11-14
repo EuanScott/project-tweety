@@ -6,6 +6,7 @@ nearest `AGENTS.md`; for feature details, prefer the linked focused guide.
 ## Start and compose the app
 
 - [App entrypoint](../lib/main.dart) initializes Flutter, starts the app, and owns the root `MaterialApp.router`.
+- [Dev entrypoint](../lib/main_dev.dart) starts the app signed in as a made-up dev Account, with the fakes in [lib/dev](../lib/dev/); debug builds only, and only it may import them.
 - [Startup orchestration](../lib/dart_init.dart) configures dependency injection, then initializes app-level services.
 - [DI source](../lib/core/di/dependency_injection.dart) owns injectable initialization; its generated config is derived output.
 - [Core guidance](../lib/core/AGENTS.md) covers infrastructure boundaries, while [storage](../lib/core/storage/README.md) documents persistence lifecycle and migrations.
